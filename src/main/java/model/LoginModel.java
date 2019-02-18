@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 public class LoginModel {
 
@@ -30,55 +32,48 @@ public class LoginModel {
                 "where v_user_id=?";
 
         int status = 0;
+        String retrievedPassword = null;
 
-        Connection conn = databaseHelper.openConnection();
+        databaseHelper.openConnection();
 
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+        int gid = 0;
 
-            stmt.setString(1, username);
+        Map<String , List<String>> map = databaseHelper.execQuery(query, username);
 
-            ResultSet rs = stmt.executeQuery();
-
-            String retrievedPassword = null;
-
-            int gid = 0;
-
-            while (rs.next()) {
-                retrievedPassword = rs.getString("v_pass");
-                gid = Integer.parseInt(rs.getString("v_gid"));
+        for(Map.Entry<String, List<String>> entry : map.entrySet()){
+            for(String val : entry.getValue()){
+                if(entry.getKey().equals("v_gid"))
+                    gid = Integer.parseInt(val);
+                if(entry.getKey().equals("v_pass"))
+                    retrievedPassword = val;
             }
+        }
+        if (retrievedPassword != null) {
 
-            if (retrievedPassword != null) {
+            if (BCrypt.checkpw(inputPassword, retrievedPassword)) {
 
-                if (BCrypt.checkpw(inputPassword, retrievedPassword)) {
+                switch (gid) {
 
-                    switch (gid) {
+                    case 1:
+                        status = 1;
+                        break;
 
-                        case 1:
-                            status = 1;
-                            break;
+                    case 2:
+                        status = 2;
+                        break;
 
-                        case 2:
-                            status = 2;
-                            break;
+                    case 3:
+                        status = 3;
+                        break;
 
-                        case 3:
-                            status = 3;
-                            break;
+                    case 4:
+                        status = 4;
+                        break;
 
-                        case 4:
-                            status = 4;
-                            break;
-
-                        default:
-                            status = 0;
-                    }
+                    default:
+                        status = 0;
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            databaseHelper.closeConnection(conn);
         }
         return status;
     }
