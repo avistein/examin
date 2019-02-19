@@ -2,11 +2,6 @@ package model;
 
 import database.DatabaseHelper;
 import org.mindrot.jbcrypt.BCrypt;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,23 +27,25 @@ public class LoginModel {
                 "where v_user_id=?";
 
         int status = 0;
-        String retrievedPassword = null;
+        String retrievedPassword ;
 
         databaseHelper.openConnection();
 
-        int gid = 0;
+        int gid;
 
         Map<String , List<String>> map = databaseHelper.execQuery(query, username);
+//        for(Map.Entry<String, List<String>> entry : map.entrySet()){
+//            for(String val : entry.getValue()){
+//                if(entry.getKey().equals("v_gid"))
+//                    gid = Integer.parseInt(val);
+//                if(entry.getKey().equals("v_pass"))
+//                    retrievedPassword = val;
+//            }
+//        }
+        if (map != null) {
 
-        for(Map.Entry<String, List<String>> entry : map.entrySet()){
-            for(String val : entry.getValue()){
-                if(entry.getKey().equals("v_gid"))
-                    gid = Integer.parseInt(val);
-                if(entry.getKey().equals("v_pass"))
-                    retrievedPassword = val;
-            }
-        }
-        if (retrievedPassword != null) {
+            retrievedPassword = map.get("v_pass").get(0);
+            gid = Integer.parseInt(map.get("v_gid").get(0));
 
             if (BCrypt.checkpw(inputPassword, retrievedPassword)) {
 

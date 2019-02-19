@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="821.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="1165.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StudentsListController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -31,10 +31,10 @@
          </children></Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <children>
-            <GridPane layoutX="20.0" layoutY="25.0" prefHeight="90.0" prefWidth="760.0">
+            <GridPane layoutX="20.0" layoutY="25.0" prefHeight="90.0" prefWidth="1123.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="497.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="375.0" minWidth="10.0" prefWidth="263.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="873.0" minWidth="10.0" prefWidth="873.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="375.0" minWidth="10.0" prefWidth="85.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -43,10 +43,12 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="Select Course" />
-                        <ComboBox prefWidth="150.0" />
+                        <Label text="Select Degree" />
+                        <ComboBox fx:id="degreeComboBox" onAction="#handleDegreeComboBox" prefWidth="150.0" />
+                        <Label text="Select Discipline" />
+                        <ComboBox fx:id="disciplineComboBox" onAction="#handleDisciplineComboBox" prefWidth="150.0" />
                         <Label text="Select Semester" />
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="semesterComboBox" onAction="#handleSemesterComboBox" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -62,7 +64,7 @@
                         <Label text="entries" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="254.0" GridPane.columnIndex="1">
+                  <HBox prefHeight="100.0" prefWidth="176.0" GridPane.columnIndex="1">
                      <children>
                         <Button mnemonicParsing="false" text="Add Student" />
                         <Button mnemonicParsing="false" text="Print" />
@@ -80,11 +82,11 @@
                   <CheckBox mnemonicParsing="false" />
                </graphic>
             </TableColumn>
-            <TableColumn minWidth="0.0" prefWidth="137.0" text="Reg. ID" />
-            <TableColumn minWidth="4.0" prefWidth="146.0" text="Name" />
-            <TableColumn prefWidth="142.0" text="Guardian's Name" />
-            <TableColumn prefWidth="136.0" text="Phone" />
-            <TableColumn prefWidth="176.0" text="Action" />
+            <TableColumn minWidth="0.0" prefWidth="215.00001525878906" text="Reg. ID" />
+            <TableColumn minWidth="4.0" prefWidth="198.0" text="Name" />
+            <TableColumn prefWidth="215.0" text="Guardian's Name" />
+            <TableColumn prefWidth="132.0" text="Phone" />
+            <TableColumn prefWidth="188.0" text="Action" />
          </columns>
       </TableView>
        <GridPane GridPane.rowIndex="3">

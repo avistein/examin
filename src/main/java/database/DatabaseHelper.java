@@ -75,7 +75,7 @@ public class DatabaseHelper {
 
         try(PreparedStatement stmt = con.prepareStatement(query)) {
 
-            map = new HashMap<>(params.length);
+
             if(params.length != 0){
                 for(int i = 0; i < params.length; i++)
                     stmt.setString(i+1 , params[i]);
@@ -85,6 +85,7 @@ public class DatabaseHelper {
 
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             int noOfcolumns = resultSetMetaData.getColumnCount();
+            map = new HashMap<>(noOfcolumns);
             for(int i = 1; i <= noOfcolumns; i++)
                 map.put(resultSetMetaData.getColumnName(i), new ArrayList<>());
 
