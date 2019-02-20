@@ -75,6 +75,7 @@ CREATE TABLE `t_batch_details` (
 
 LOCK TABLES `t_batch_details` WRITE;
 /*!40000 ALTER TABLE `t_batch_details` DISABLE KEYS */;
+INSERT INTO `t_batch_details` VALUES ('2015-2019','1','CS101','7');
 /*!40000 ALTER TABLE `t_batch_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,6 +358,7 @@ CREATE TABLE `t_student` (
 
 LOCK TABLES `t_student` WRITE;
 /*!40000 ALTER TABLE `t_student` DISABLE KEYS */;
+INSERT INTO `t_student` VALUES ('Avik',NULL,'Sarkar','CS101','CS10101','1996-10-03','Madhurima Sarkar','2015','1234567890','1234567891','xyzz@gmail.com','Kolkata','Amitava Sarkar');
 /*!40000 ALTER TABLE `t_student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -455,4 +457,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-19 14:34:44
+-- Dump completed on 2019-02-20 13:03:45

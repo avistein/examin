@@ -75,18 +75,19 @@
                </children>
             </GridPane>
          </children></Pane>
-      <TableView prefHeight="205.0" prefWidth="821.0" GridPane.rowIndex="2">
+      <TableView fx:id="studentTable" prefHeight="205.0" prefWidth="821.0" GridPane.rowIndex="2">
          <columns>
             <TableColumn prefWidth="84.0">
                <graphic>
                   <CheckBox mnemonicParsing="false" />
                </graphic>
             </TableColumn>
-            <TableColumn minWidth="0.0" prefWidth="215.00001525878906" text="Reg. ID" />
-            <TableColumn minWidth="4.0" prefWidth="198.0" text="Name" />
-            <TableColumn prefWidth="215.0" text="Guardian's Name" />
-            <TableColumn prefWidth="132.0" text="Phone" />
-            <TableColumn prefWidth="188.0" text="Action" />
+            <TableColumn fx:id="regIdCol" minWidth="0.0" prefWidth="144.00003051757812" text="Reg. ID" />
+            <TableColumn fx:id="rollNoCol" minWidth="0.0" prefWidth="144.00003051757812" text="Roll No." />
+            <TableColumn fx:id="nameCol" minWidth="4.0" prefWidth="240.0" text="Name" />
+            <TableColumn fx:id="guardianNameCol" prefWidth="240.0" text="Guardian's Name" />
+            <TableColumn fx:id="contactNoCol" prefWidth="183.0" text="Contact No." />
+            <TableColumn fx:id="actionCol" prefWidth="142.0" text="Action" />
          </columns>
       </TableView>
        <GridPane GridPane.rowIndex="3">

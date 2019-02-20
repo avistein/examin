@@ -91,7 +91,8 @@ public class DatabaseHelper {
 
             while(resultSet.next()){
                 for(int i = 1; i <= noOfcolumns; i++){
-                    map.get(resultSetMetaData.getColumnName(i)).add(resultSet.getString(i));
+                    //if(resultSet.getString(i) != null)
+                        map.get(resultSetMetaData.getColumnName(i)).add(resultSet.getString(i));
                 }
             }
 

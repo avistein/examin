@@ -5,11 +5,11 @@ import database.DatabaseHelper;
 import java.util.List;
 import java.util.Map;
 
-public class AdminModel {
+public class StudentListModel {
 
     private DatabaseHelper databaseHelper;
 
-    public AdminModel(){
+    public StudentListModel(){
         databaseHelper = new DatabaseHelper();
         databaseHelper.openConnection();
     }
