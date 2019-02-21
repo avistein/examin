@@ -1,15 +1,15 @@
-package model;
+package service;
 
 import database.DatabaseHelper;
 import org.mindrot.jbcrypt.BCrypt;
 import java.util.List;
 import java.util.Map;
 
-public class LoginModel {
+public class LoginService {
 
     private DatabaseHelper databaseHelper;
 
-    public LoginModel() {
+    public LoginService() {
         databaseHelper = new DatabaseHelper();
     }
 
@@ -72,6 +72,7 @@ public class LoginModel {
                 }
             }
         }
+        databaseHelper.closeConnection();
         return status;
     }
 

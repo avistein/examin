@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ImportCSVModalController">
+   <children>
+      <Button fx:id="uploadButton" layoutX="274.0" layoutY="188.0" mnemonicParsing="false" onAction="#handleUploadButtonAction" text="Upload" />
+      <Label layoutX="261.0" layoutY="141.0" text="Attach CSV file" />
+   </children>
+</AnchorPane>

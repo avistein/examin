@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="1165.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StudentsListController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="1165.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StudentController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -66,10 +66,10 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="176.0" GridPane.columnIndex="1">
                      <children>
-                        <Button mnemonicParsing="false" text="Add Student" />
-                        <Button mnemonicParsing="false" text="Print" />
-                        <Button mnemonicParsing="false" text="Import" />
-                        <Button mnemonicParsing="false" text="Export" />
+                        <Button fx:id="addStudentButton" mnemonicParsing="false" text="Add Student" />
+                        <Button fx:id="printButton" mnemonicParsing="false" text="Print" />
+                        <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImportButtonAction" text="Import" />
+                        <Button fx:id="exportButton" mnemonicParsing="false" text="Export" />
                      </children>
                   </HBox>
                </children>
@@ -84,10 +84,15 @@
             </TableColumn>
             <TableColumn fx:id="regIdCol" minWidth="0.0" prefWidth="144.00003051757812" text="Reg. ID" />
             <TableColumn fx:id="rollNoCol" minWidth="0.0" prefWidth="144.00003051757812" text="Roll No." />
-            <TableColumn fx:id="nameCol" minWidth="4.0" prefWidth="240.0" text="Name" />
-            <TableColumn fx:id="guardianNameCol" prefWidth="240.0" text="Guardian's Name" />
-            <TableColumn fx:id="contactNoCol" prefWidth="183.0" text="Contact No." />
-            <TableColumn fx:id="actionCol" prefWidth="142.0" text="Action" />
+            <TableColumn fx:id="nameCol" minWidth="4.0" prefWidth="298.0" text="Name">
+               <columns>
+                  <TableColumn fx:id="firstNameCol" prefWidth="100.0" text="First" />
+                  <TableColumn fx:id="middleNameCol" prefWidth="100.0" text="Middle" />
+                  <TableColumn fx:id="lastNameCol" prefWidth="100.0" text="Last" />
+               </columns></TableColumn>
+            <TableColumn fx:id="guardianNameCol" prefWidth="229.0" text="Guardian's Name" />
+            <TableColumn fx:id="contactNoCol" prefWidth="151.0" text="Contact No." />
+            <TableColumn fx:id="actionCol" prefWidth="127.0" text="Action" />
          </columns>
       </TableView>
        <GridPane GridPane.rowIndex="3">

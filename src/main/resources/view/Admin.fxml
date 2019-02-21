@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <ScrollPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <content>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0">
@@ -34,7 +33,7 @@
                   <Label layoutX="14.0" layoutY="19.0" text="Dashboard / Students" />
                </children>
             </Pane>
-            <Pane fx:id="studentListPane" layoutX="202.0" layoutY="146.0" prefHeight="619.0" prefWidth="1165.0" />
+            <Pane fx:id="listPane" layoutX="202.0" layoutY="146.0" prefHeight="619.0" prefWidth="1165.0" />
             <!--<ScrollPane fx:id="studentListPane" layoutX="202.0" layoutY="146.0" prefHeight="619.0" prefWidth="1165.0" />-->
              <!--<fx:include fx:id="studentList" source="StudentsList.fxml"/>-->
       

@@ -12,27 +12,27 @@ public class AdminController{
 
 
     @FXML
-    private Pane studentListPane;
+    private Pane listPane;
 
     @FXML
     private void handleStudentListButtonAction(ActionEvent event) throws Exception{
        // studentListPane.setVisible(true);
         Parent studentsListFxml = FXMLLoader.load(getClass().getResource("/view/StudentsList.fxml"));
-        studentListPane.getChildren().removeAll();
-        studentListPane.getChildren().setAll(studentsListFxml);
+        listPane.getChildren().removeAll();
+        listPane.getChildren().setAll(studentsListFxml);
     }
 
     @FXML
     private void handleProfessorListButtonAction(ActionEvent event) throws Exception{
         Parent studentsListFxml = FXMLLoader.load(getClass().getResource("/view/ProfessorsList.fxml"));
-        studentListPane.getChildren().removeAll();
-        studentListPane.getChildren().setAll(studentsListFxml);
+        listPane.getChildren().removeAll();
+        listPane.getChildren().setAll(studentsListFxml);
     }
 
     @FXML
     private void handleExamCellMemberListButtonAction(ActionEvent event) throws Exception{
         Parent studentsListFxml = FXMLLoader.load(getClass().getResource("/view/ExamCellMembersList.fxml"));
-        studentListPane.getChildren().removeAll();
-        studentListPane.getChildren().setAll(studentsListFxml);
+        listPane.getChildren().removeAll();
+        listPane.getChildren().setAll(studentsListFxml);
     }
 }

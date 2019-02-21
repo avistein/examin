@@ -1,6 +1,7 @@
 package database;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
@@ -75,7 +76,6 @@ public class DatabaseHelper {
 
         try(PreparedStatement stmt = con.prepareStatement(query)) {
 
-
             if(params.length != 0){
                 for(int i = 0; i < params.length; i++)
                     stmt.setString(i+1 , params[i]);
@@ -102,6 +102,19 @@ public class DatabaseHelper {
         }
 
         return map;
+    }
+
+    public void load(File file, String tableName){
+        openConnection();
+       final String query = "LOAD DATA INFILE '"+file.getName()+"' INTO TABLE "
+               + tableName + " FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES ";
+       try(PreparedStatement stmt = con.prepareStatement(query)){
+            stmt.execute();
+       }
+       catch (SQLException e){
+           e.printStackTrace();
+       }
+        closeConnection();
     }
 }
 
