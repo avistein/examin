@@ -30,7 +30,7 @@
          <children>
             <HBox prefHeight="61.0" prefWidth="1165.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="65.0" prefWidth="213.0" text="Student Registration">
+                  <Label fx:id="studentRegistrationLabel" alignment="CENTER" prefHeight="65.0" prefWidth="213.0" text="Student Registration">
                      <font>
                         <Font size="18.0" />
                      </font></Label>
@@ -63,7 +63,7 @@
                   <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label prefHeight="39.0" prefWidth="149.0" text="Office Details:">
+                  <Label fx:id="officeDetailsLabel" prefHeight="39.0" prefWidth="149.0" text="Office Details:">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
@@ -73,7 +73,7 @@
                   </Label>
                   <HBox prefHeight="35.0" prefWidth="1162.0" spacing="60.0" GridPane.rowIndex="1">
                      <children>
-                        <Label prefHeight="37.0" prefWidth="151.0" text="Batch">
+                        <Label fx:id="batchLabel" prefHeight="37.0" prefWidth="151.0" text="Batch">
                            <HBox.margin>
                               <Insets left="20.0" top="5.0" />
                            </HBox.margin>
@@ -81,7 +81,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="152.0" text="Degree">
+                        <Label fx:id="degreeLabel" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="152.0" text="Degree">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
@@ -92,7 +92,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="177.0" layoutY="10.0" prefHeight="50.0" prefWidth="152.0" text="Discipline">
+                        <Label fx:id="disciplineLabel" layoutX="177.0" layoutY="10.0" prefHeight="50.0" prefWidth="152.0" text="Discipline">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
@@ -103,7 +103,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="10.0" layoutY="17.0" prefHeight="50.0" prefWidth="152.0" text="Curresnt Semester">
+                        <Label fx:id="currentSemesterLabel" layoutX="10.0" layoutY="17.0" prefHeight="50.0" prefWidth="152.0" text="Curresnt Semester">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
@@ -114,7 +114,7 @@
                               <Insets left="10.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="511.0" layoutY="10.0" prefHeight="50.0" prefWidth="152.0" text="Current Semester">
+                        <Label fx:id="academicYearLabel" layoutX="511.0" layoutY="10.0" prefHeight="50.0" prefWidth="152.0" text="Academic Year">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
@@ -132,14 +132,14 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                      <children>
-                        <TextField prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox layoutX="174.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox layoutX="339.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="batchTextField" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="degreeComboBox" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="disciplineComboBox" layoutX="174.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="currentSemesterComboBox" layoutX="339.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="academicYearTextField" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                   </HBox>
-                  <Label prefHeight="49.0" prefWidth="191.0" text="Personal Details:" GridPane.rowIndex="6">
+                  <Label fx:id="personalDetailsLabel" prefHeight="49.0" prefWidth="191.0" text="Personal Details:" GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
@@ -149,7 +149,7 @@
                   </Label>
                   <HBox prefWidth="200.0" spacing="25.0" GridPane.rowIndex="7">
                      <children>
-                        <Label prefHeight="47.0" prefWidth="179.0" text="First Name">
+                        <Label fx:id="firstNameLabel" prefHeight="47.0" prefWidth="179.0" text="First Name">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -159,7 +159,7 @@
                            <padding>
                               <Insets left="6.0" />
                            </padding></Label>
-                        <Label layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Middle Name">
+                        <Label fx:id="middleNameLabel" layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Middle Name">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -167,7 +167,7 @@
                               <Insets left="20.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="189.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Last Name">
+                        <Label fx:id="lastNameLabel" layoutX="189.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Last Name">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -175,7 +175,7 @@
                               <Insets left="30.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="368.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Date of Birth">
+                        <Label fx:id="dateOfBirthLabel" layoutX="368.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Date of Birth">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -183,7 +183,7 @@
                               <Insets left="40.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="547.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Gender">
+                        <Label fx:id="genderLabel" layoutX="547.0" layoutY="10.0" prefHeight="47.0" prefWidth="179.0" text="Gender">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -195,18 +195,18 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0" GridPane.rowIndex="8">
                      <children>
-                        <TextField prefHeight="40.0" prefWidth="200.0">
+                        <TextField fx:id="firstNameTextField" prefHeight="40.0" prefWidth="200.0">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                         </TextField>
-                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <TextField layoutX="159.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <DatePicker prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="middleNameTextField" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="lastNameTextField" layoutX="159.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <DatePicker fx:id="dateOfBirthTextField" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="genderComboBox" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                   </HBox>
-                  <Label prefHeight="50.0" prefWidth="210.0" text="Contact Details:" GridPane.rowIndex="10">
+                  <Label fx:id="contactDetailsLabel" prefHeight="50.0" prefWidth="210.0" text="Contact Details:" GridPane.rowIndex="10">
                      <padding>
                         <Insets left="15.0" />
                      </padding>
@@ -216,7 +216,7 @@
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="60.0" GridPane.rowIndex="11">
                      <children>
-                        <Label prefHeight="47.0" prefWidth="180.0" text="Email id">
+                        <Label fx:id="emailIdLabel" prefHeight="47.0" prefWidth="180.0" text="Email id">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -224,7 +224,7 @@
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="180.0" text="Contact No.">
+                        <Label fx:id="contactNoLabel" layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="180.0" text="Contact No.">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -232,7 +232,7 @@
                               <Insets left="60.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="190.0" layoutY="10.0" prefHeight="47.0" prefWidth="180.0" text="Address">
+                        <Label fx:id="addressLabel" layoutX="190.0" layoutY="10.0" prefHeight="47.0" prefWidth="180.0" text="Address">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -247,15 +247,15 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="35.0" GridPane.rowIndex="12">
                      <children>
-                        <TextField prefHeight="48.0" prefWidth="250.0" />
-                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="48.0" prefWidth="250.0" />
-                        <TextArea prefHeight="48.0" prefWidth="250.0" />
+                        <TextField fx:id="emailIdTextField" prefHeight="48.0" prefWidth="250.0" />
+                        <TextField fx:id="contactNoTextField" layoutX="10.0" layoutY="10.0" prefHeight="48.0" prefWidth="250.0" />
+                        <TextArea fx:id="addressTextField" prefHeight="48.0" prefWidth="250.0" />
                      </children>
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </HBox>
-                  <Label prefHeight="38.0" prefWidth="227.0" text="Guardian's Details:" GridPane.rowIndex="14">
+                  <Label fx:id="guardianDetailsLabel" prefHeight="38.0" prefWidth="227.0" text="Guardian's Details:" GridPane.rowIndex="14">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -265,7 +265,7 @@
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.rowIndex="15">
                      <children>
-                        <Label prefHeight="43.0" prefWidth="179.0" text="Father's/Guardian's Name">
+                        <Label fx:id="fatherGuardianNameLabel" prefHeight="43.0" prefWidth="179.0" text="Father's/Guardian's Name">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -275,14 +275,14 @@
                            <padding>
                               <Insets left="10.0" />
                            </padding></Label>
-                        <Label layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="193.0" text="Mother's Name">
+                        <Label fx:id="motherNameLabel" layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="193.0" text="Mother's Name">
                            <font>
                               <Font size="14.0" />
                            </font>
                            <padding>
                               <Insets left="20.0" />
                            </padding></Label>
-                        <Label layoutX="38.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" text="Parent's Contact No">
+                        <Label fx:id="ParentContactNoLabel" layoutX="38.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" text="Parent's Contact No">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -293,15 +293,15 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="16">
                      <children>
-                        <TextField prefHeight="40.0" prefWidth="200.0" />
-                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <TextField layoutX="159.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="fatherGuardianNameTextField" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="motherNameTextField" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="ParentContactNoTextField" layoutX="159.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </HBox>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="137.0" text="Submit" GridPane.rowIndex="17">
+                  <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="137.0" text="Submit" GridPane.rowIndex="17">
                      <GridPane.margin>
                         <Insets left="560.0" top="25.0" />
                      </GridPane.margin>
@@ -311,7 +311,7 @@
                   </Button>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="3">
                      <children>
-                        <Label prefHeight="30.0" prefWidth="197.0" text="Registration Number">
+                        <Label fx:id="registrationNumberLabel" prefHeight="30.0" prefWidth="197.0" text="Registration Number">
                            <HBox.margin>
                               <Insets left="15.0" />
                            </HBox.margin>
@@ -319,7 +319,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label layoutX="10.0" layoutY="10.0" prefHeight="38.0" prefWidth="175.0" text="Roll No.">
+                        <Label fx:id="rollNoLabel" layoutX="10.0" layoutY="10.0" prefHeight="38.0" prefWidth="175.0" text="Roll No.">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -331,8 +331,8 @@
                   </HBox>
                   <HBox layoutX="10.0" layoutY="109.0" prefHeight="100.0" prefWidth="200.0" spacing="15.0" GridPane.rowIndex="4">
                      <children>
-                        <TextField prefHeight="40.0" prefWidth="200.0" />
-                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="registrationNumberTextField" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField fx:id="rollNoTextField" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                      <GridPane.margin>
                         <Insets left="10.0" />
