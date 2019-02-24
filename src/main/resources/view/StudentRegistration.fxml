@@ -103,7 +103,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label layoutX="10.0" layoutY="17.0" prefHeight="50.0" prefWidth="152.0" text="Academic Year">
+                        <Label layoutX="10.0" layoutY="17.0" prefHeight="50.0" prefWidth="152.0" text="Curresnt Semester">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
@@ -135,8 +135,8 @@
                         <TextField prefHeight="40.0" prefWidth="200.0" />
                         <ComboBox prefHeight="40.0" prefWidth="200.0" />
                         <ComboBox layoutX="174.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                         <ComboBox layoutX="339.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <TextField layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                   </HBox>
                   <Label prefHeight="49.0" prefWidth="191.0" text="Personal Details:" GridPane.rowIndex="6">
