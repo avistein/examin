@@ -2,27 +2,53 @@ package model;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class Student {
+import java.io.Serializable;
 
-    private final SimpleStringProperty firstName;
-    private final SimpleStringProperty middleName;
-    private final SimpleStringProperty lastName;
-    private final SimpleStringProperty dob;
-    private final SimpleStringProperty gender;
-    private final SimpleStringProperty regYear;
-    private final SimpleStringProperty email;
-    private final SimpleStringProperty address;
-    private final SimpleStringProperty motherName;
-    private final SimpleStringProperty guardianContactNo;
-    private final SimpleStringProperty regId;
-    private final SimpleStringProperty rollNo;
-    private final SimpleStringProperty contactNo;
-    private final SimpleStringProperty guardianName;
+public class Student extends Batch implements Serializable {
+
+    private SimpleStringProperty firstName;
+    private SimpleStringProperty middleName;
+    private SimpleStringProperty lastName ;
+    private SimpleStringProperty dob;
+    private SimpleStringProperty gender;
+    private SimpleStringProperty regYear;
+    private SimpleStringProperty email;
+    private SimpleStringProperty address;
+    private SimpleStringProperty motherName;
+    private SimpleStringProperty guardianContactNo;
+    private SimpleStringProperty regId;
+    private SimpleStringProperty rollNo;
+    private SimpleStringProperty contactNo;
+    private SimpleStringProperty guardianName;
+    private SimpleStringProperty currSemester;
+
+
+    public Student(){
+        this.firstName = new SimpleStringProperty("");
+        this.middleName= new SimpleStringProperty("");
+        this.lastName = new SimpleStringProperty("");
+        this.dob = new SimpleStringProperty("");
+        this.gender = new SimpleStringProperty("");
+        this.regYear = new SimpleStringProperty("");
+        this.email = new SimpleStringProperty("");
+        this.address = new SimpleStringProperty("");
+        this.motherName = new SimpleStringProperty("");
+        this.guardianContactNo = new SimpleStringProperty("");
+        this.regId = new SimpleStringProperty("");
+        this.rollNo = new SimpleStringProperty("");
+        this.contactNo = new SimpleStringProperty("");
+        this.guardianName = new SimpleStringProperty("");
+        this.currSemester = new SimpleStringProperty("");
+    }
 
     public Student(String fName, String mName, String lName,String dob, String gender,
                    String regYear, String email, String address,  String motherName,
                    String guardianContactNo, String regId, String rollNo,
-                   String contactNo, String guardianName ){
+                   String contactNo, String guardianName, String batchId, String courseId,
+                   String currSemester, String batchName, String discipline, String degree, String duration,
+                   String deptName){
+
+        super(batchId, courseId, batchName, discipline, degree, duration, deptName);
         this.firstName = new SimpleStringProperty(fName);
         this.middleName= new SimpleStringProperty(mName);
         this.lastName = new SimpleStringProperty(lName);
@@ -37,6 +63,7 @@ public class Student {
         this.rollNo = new SimpleStringProperty(rollNo);
         this.contactNo = new SimpleStringProperty(contactNo);
         this.guardianName = new SimpleStringProperty(guardianName);
+        this.currSemester = new SimpleStringProperty(currSemester);
     }
 
     public String getFirstName() {
@@ -151,6 +178,12 @@ public class Student {
         guardianName.set(gName);
     }
 
+        public String getCurrSemester() {
+        return currSemester.get();
+    }
 
+    public void setCurrSemester(String currSemester) {
+        this.currSemester.set(currSemester);
+    }
 
 }

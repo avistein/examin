@@ -3,13 +3,21 @@ package model;
 import javafx.beans.property.SimpleStringProperty;
 
 
-public class Course {
+public class Course  {
 
-    private final SimpleStringProperty discipline;
-    private final SimpleStringProperty degree;
-    private final SimpleStringProperty courseId;
-    private final SimpleStringProperty duration;
-    private final SimpleStringProperty deptName;
+    private SimpleStringProperty discipline;
+    private SimpleStringProperty degree ;
+    private SimpleStringProperty courseId;
+    private SimpleStringProperty duration;
+    private SimpleStringProperty deptName;
+
+    public Course(){
+        this.discipline = new SimpleStringProperty("");
+        this.degree = new SimpleStringProperty("");
+        this.courseId = new SimpleStringProperty("");
+        this.duration = new SimpleStringProperty("");
+        this.deptName = new SimpleStringProperty("");
+    }
 
     public Course(String discipline, String degree, String courseId, String duration,
                   String deptName){

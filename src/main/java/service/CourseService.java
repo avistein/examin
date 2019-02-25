@@ -14,12 +14,12 @@ public class CourseService {
         databaseHelper = new DatabaseHelper();
     }
 
-    public List<Course> getCourseData(String additionalQuery, String... params){
-        String query = "SELECT v_course_id, v_discipline,v_degree, v_duration," +
-                "v_dept_name from t_course " + additionalQuery;
+    @SuppressWarnings("Duplicates")
+    public List<Course> getCourseData(){
+        String query = "SELECT * from t_course";
         databaseHelper.openConnection();
         List<Course> list = new ArrayList<>();
-        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
+        Map<String, List<String>> map = databaseHelper.execQuery(query);
         for(int i = 0; i < map.get("v_course_id").size(); i ++){
 
             String discipline = map.get("v_discipline").get(i);

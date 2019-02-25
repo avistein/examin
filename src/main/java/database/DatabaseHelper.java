@@ -104,17 +104,24 @@ public class DatabaseHelper {
         return map;
     }
 
-    public void load(File file, String tableName){
-        openConnection();
-       final String query = "LOAD DATA INFILE '"+file.getName()+"' INTO TABLE "
-               + tableName + " FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES ";
-       try(PreparedStatement stmt = con.prepareStatement(query)){
-            stmt.execute();
+
+    public void batchInsert(String sql, List<List<String>> list){
+
+
+       try(PreparedStatement stmt = con.prepareStatement(sql)){
+
+            for(List<String> row : list){
+                int i = 1;
+                for(String data : row) {
+                    stmt.setString(i++, data);
+                }
+                    stmt.addBatch();
+            }
+            stmt.executeBatch();
        }
        catch (SQLException e){
            e.printStackTrace();
        }
-        closeConnection();
     }
 }
 
