@@ -3,3 +3,4 @@ out/
 build/
 *.iml
 .idea/
+src/main/configs/
