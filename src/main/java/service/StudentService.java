@@ -67,7 +67,7 @@ public class StudentService {
     }
 
 
-    public void loadToDataBase(File file, Map<String, String> map) {
+    public boolean loadToDataBase(File file, Map<String, String> map) {
 
         BatchService batchService = new BatchService();
         Map<String, String> columnNameMapping = new HashMap<>();
@@ -157,9 +157,11 @@ public class StudentService {
         }
 
         databaseHelper.openConnection();
-        databaseHelper.batchInsert(sql1, listOfStudents);
-        databaseHelper.batchInsert(sql2, studentEnrollmentList);
+        boolean t_studentStatus = databaseHelper.batchInsert(sql1, listOfStudents);
+        boolean t_student_enrollmentStatus = databaseHelper.batchInsert(sql2, studentEnrollmentList);
         databaseHelper.closeConnection();
+        return t_studentStatus & t_student_enrollmentStatus;
+
     }
 
 }

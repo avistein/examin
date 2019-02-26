@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
+import static java.sql.Statement.EXECUTE_FAILED;
+
 public class DatabaseHelper {
 
     private Connection con;
@@ -105,9 +107,9 @@ public class DatabaseHelper {
     }
 
 
-    public void batchInsert(String sql, List<List<String>> list){
+    public boolean batchInsert(String sql, List<List<String>> list){
 
-
+        int[] status = new int[list.size()];
        try(PreparedStatement stmt = con.prepareStatement(sql)){
 
             for(List<String> row : list){
@@ -117,11 +119,21 @@ public class DatabaseHelper {
                 }
                     stmt.addBatch();
             }
-            stmt.executeBatch();
+            status = stmt.executeBatch();
        }
        catch (SQLException e){
            e.printStackTrace();
        }
+
+        if(list.size() == status.length) {
+
+            for (int i : status) {
+                if(i == EXECUTE_FAILED || i == 0)
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
 

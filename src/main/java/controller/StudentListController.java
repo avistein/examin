@@ -250,10 +250,12 @@ public class StudentListController {
         Stage parentStage = (Stage) importButton.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ImportStudentCSVModal.fxml"));
         Parent root = loader.load();
+        ImportStudentCSVModalController importStudentCSVModalController = loader.getController();
         importStudentListModalWindow.setScene(new Scene(root));
         importStudentListModalWindow.initOwner(parentStage);
-        importStudentListModalWindow.show();
+        importStudentListModalWindow.showAndWait();
+        boolean tableUpdateStatus = importStudentCSVModalController.getTableUpdateStatus();
+        if(tableUpdateStatus)
+            populateTable();
     }
-
-
 }

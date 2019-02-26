@@ -6,6 +6,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
@@ -22,6 +27,22 @@ public class ImportStudentCSVModalController {
 
     private StudentService studentService;
     private File file;
+    private boolean tableUpdateStatus;
+
+    @FXML
+    private GridPane mainGridPane;
+
+    @FXML
+    private AnchorPane statusAnchorPane;
+
+    @FXML
+    private ImageView statusImageView;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
+
+    @FXML
+    private Label statusLabel;
 
     @FXML
     private Button chooseFileButton;
@@ -92,6 +113,7 @@ public class ImportStudentCSVModalController {
 
     public void initialize(){
         studentService = new StudentService();
+        tableUpdateStatus = false;
         Text text1 = new Text("File must be comma delimited CSV file\n");
         Text text2 = new Text("Open excel save as comma delimited CSV file\n");
         Text text3 = new Text("Make sure there is no heading or any other content" +
@@ -143,9 +165,27 @@ public class ImportStudentCSVModalController {
         map.put("regId" , regIdComboBox.getValue());
         map.put("rollNo", rollNoComboBox.getValue());
 
-        studentService.loadToDataBase(file, map);
+        mainGridPane.setOpacity(0.5);
+        statusAnchorPane.setVisible(true);
+
+        tableUpdateStatus = studentService.loadToDataBase(file, map);
+
+        progressIndicator.setVisible(false);
+        if(tableUpdateStatus){
+            statusImageView.setImage(new Image("/png/success.png"));
+            statusLabel.setText("Success!");
+        }
+        else{
+            statusImageView.setImage(new Image("/png/error.png"));
+            statusLabel.setText("Failed");
+        }
     }
 
+    @FXML
+    private void handleStatusAnchorPaneMouseClickedAction(){
+        mainGridPane.setOpacity(1);
+        statusAnchorPane.setVisible(false);
+    }
 
     @SuppressWarnings("Duplicates")
     private void setComboBoxes(List<String> list){
@@ -288,5 +328,10 @@ public class ImportStudentCSVModalController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("CSV", "*.csv"));
     }
+
+    public boolean getTableUpdateStatus(){
+        return tableUpdateStatus;
+    }
+
 }
 
