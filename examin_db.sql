@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8mb4 ;
+ SET NAMES utf8 ;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -16,67 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `examin_db`
+-- Table structure for table `t_batch`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `examin_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-
-USE `examin_db`;
-
---
--- Table structure for table `t_academic_bg`
---
-
-DROP TABLE IF EXISTS `t_academic_bg`;
+DROP TABLE IF EXISTS `t_batch`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `t_academic_bg` (
-  `v_reg_id` varchar(255) NOT NULL,
-  `v_exam_name` varchar(255) NOT NULL,
-  `v_percentage_grade` varchar(5) NOT NULL,
-  `v_board_univ` varchar(255) NOT NULL,
-  `v_year_of_passing` varchar(4) NOT NULL,
-  PRIMARY KEY (`v_reg_id`,`v_exam_name`),
-  CONSTRAINT `fk_reg_id` FOREIGN KEY (`v_reg_id`) REFERENCES `t_student` (`v_reg_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `t_academic_bg`
---
-
-LOCK TABLES `t_academic_bg` WRITE;
-/*!40000 ALTER TABLE `t_academic_bg` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_academic_bg` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `t_batch_details`
---
-
-DROP TABLE IF EXISTS `t_batch_details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `t_batch_details` (
+CREATE TABLE `t_batch` (
   `v_batch_id` varchar(255) NOT NULL,
+  `v_batch_name` varchar(255) NOT NULL,
   `v_course_id` varchar(255) NOT NULL,
-  `v_reg_id` varchar(255) NOT NULL,
-  `v_semester` varchar(2) NOT NULL,
-  PRIMARY KEY (`v_reg_id`),
-  KEY `fk_course` (`v_course_id`),
-  CONSTRAINT `fk_batch_reg_id` FOREIGN KEY (`v_reg_id`) REFERENCES `t_student` (`v_reg_id`),
-  CONSTRAINT `fk_course` FOREIGN KEY (`v_course_id`) REFERENCES `t_course` (`v_course_id`)
+  PRIMARY KEY (`v_batch_id`),
+  KEY `fk_course_id_idx` (`v_course_id`),
+  CONSTRAINT `fk_coursesId` FOREIGN KEY (`v_course_id`) REFERENCES `t_course` (`v_course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_batch_details`
+-- Dumping data for table `t_batch`
 --
 
-LOCK TABLES `t_batch_details` WRITE;
-/*!40000 ALTER TABLE `t_batch_details` DISABLE KEYS */;
-INSERT INTO `t_batch_details` VALUES ('2015-2019','1','CS101','7');
-/*!40000 ALTER TABLE `t_batch_details` ENABLE KEYS */;
+LOCK TABLES `t_batch` WRITE;
+/*!40000 ALTER TABLE `t_batch` DISABLE KEYS */;
+INSERT INTO `t_batch` VALUES ('1','2015-2019','1'),('10','2017-2021','4'),('11','2015-2019','9'),('2','2015-2018','2'),('3','2015-2019','3'),('4','2016-2020','1'),('5','2015-2019','4'),('6','2015-2019','8'),('7','2019-2021','5'),('8','2017-2020','6'),('9','2015-2018','7');
+/*!40000 ALTER TABLE `t_batch` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -129,7 +92,7 @@ CREATE TABLE `t_course` (
 
 LOCK TABLES `t_course` WRITE;
 /*!40000 ALTER TABLE `t_course` DISABLE KEYS */;
-INSERT INTO `t_course` VALUES ('CSE','B.Tech','1','8','Computer Science'),('CS','B.Sc','2','6','Computer Science');
+INSERT INTO `t_course` VALUES ('CSE','B.Tech','1','8','Computer Science'),('CS','B.Sc','2','6','Computer Science'),('CE','B.Tech','3','8','Civil'),('ME','B.Tech','4','8','Mechanical'),('ECE','M.Tech','5','4','Electronics'),('Math','B.Sc','6','6','Maths'),('Hindi','B.A','7','6','Humanities'),('EE','B.Tech','8','8','Electrical'),('IT','B.Tech','9','8','Computer Science');
 /*!40000 ALTER TABLE `t_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +116,7 @@ CREATE TABLE `t_department` (
 
 LOCK TABLES `t_department` WRITE;
 /*!40000 ALTER TABLE `t_department` DISABLE KEYS */;
-INSERT INTO `t_department` VALUES ('Computer Science','Dennis Ritchie Building');
+INSERT INTO `t_department` VALUES ('Civil','C'),('Computer Science','Dennis Ritchie Building'),('Electrical','A'),('Electronics','B'),('Humanities','F'),('Maths','E'),('Mechanical','D');
 /*!40000 ALTER TABLE `t_department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,6 +311,7 @@ CREATE TABLE `t_student` (
   `v_email_id` varchar(255) NOT NULL,
   `v_address` varchar(255) NOT NULL,
   `v_father_guardian_name` varchar(255) NOT NULL,
+  `v_gender` varchar(255) NOT NULL,
   PRIMARY KEY (`v_reg_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -358,7 +322,7 @@ CREATE TABLE `t_student` (
 
 LOCK TABLES `t_student` WRITE;
 /*!40000 ALTER TABLE `t_student` DISABLE KEYS */;
-INSERT INTO `t_student` VALUES ('Avik',NULL,'Sarkar','CS101','CS10101','1996-10-03','Madhurima Sarkar','2015','1234567890','1234567891','xyzz@gmail.com','Kolkata','Amitava Sarkar');
+INSERT INTO `t_student` VALUES ('Babu','','Sarkar','101','12','1996-01-01','Dipa Sarkar','2015','7026123689','7523145986','babu33@gmail.com','Barasat',' Sunil Sarkar','Male'),('Debu','nath','Basak','102','32','1998-02-02','Tania Basak','2016','7032569845','7021425632','debu94@gmail.com','Fulia','Tapan Basak','Male'),('Tania','','Debnath','105','56','1998-03-03','Papia Debnath','2015','7526963254','7023698514','tania94@gmail.com','Dumdum','Goutam Debnath','Female'),('Sunita ','','Ghosh','109','51','1994-05-05','fuli Ghosh','2015','7032564585','7524698745','Sghosh45@gmail.com','santipur','BIBHASH GHOSH','Female'),('Sunil','','Biswas','125','33','1996-03-03','supu biswas','2015','7894561258','9874563214','fh34@fnail.cm','kalyani','SUNIL BISWAS','Male'),('Ganesh ','','Basak','126','55','1995-04-02','srija basak','2015','7412589658','9874156874','dgjkfer@gfmail.com','barasat','SOUVIK BASAK','Male'),('Mohan','chandra','Roy','145','22','1998-02-06','priya Roy','2015','8563214563','7456321458','th45@gmail.com','madanpur','DEBU ROY','Male'),('Dipa','','Ghosh','456','44','1995-06-01','anuja ghosh','2017','7563214785','9874563214','dp12@gmail.com','barackpur','RAJA GHOSH','Female'),('Ananta','','Sarkar','525','15','1995-09-09','kali Sarkar','2016','8965214563','4569874569','pbask@gmail.com','habra','SANJAY SARKAR','Male'),('Ram','','Basak','562','17','1997-06-02',' mou basak','2017','8456321456','7421569874','sg@gmail.com','ranaghat','RANJIT BASAK','Male'),('Avik',NULL,'Sarkar','CS101','CS10101','1996-10-03','Madhurima Sarkar','2015','1234567890','1234567891','xyzz@gmail.com','Kolkata','Amitava Sarkar',''),('Sourav',NULL,'Debnath','CS102','CS10102','1998-03-01','XYZ Debnath','2015','2345678901','7383829290','abc@gmail.com','Habra','MNO Debnath',''),('Pronab','Kanti','Mondal','CS103','CS10103','1996-10-21','ABC Mondal','2015','1374834394','4578345384','efg@gmail.com','Habra','ABCD Mondal','');
 /*!40000 ALTER TABLE `t_student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -387,6 +351,34 @@ CREATE TABLE `t_student_attend_exam` (
 LOCK TABLES `t_student_attend_exam` WRITE;
 /*!40000 ALTER TABLE `t_student_attend_exam` DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_student_attend_exam` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_student_enrollment_details`
+--
+
+DROP TABLE IF EXISTS `t_student_enrollment_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `t_student_enrollment_details` (
+  `v_batch_id` varchar(255) NOT NULL,
+  `v_reg_id` varchar(255) NOT NULL,
+  `v_curr_semester` varchar(2) NOT NULL,
+  PRIMARY KEY (`v_reg_id`,`v_batch_id`),
+  KEY `fk_batch_id_idx` (`v_batch_id`),
+  CONSTRAINT `fk_batch_id` FOREIGN KEY (`v_batch_id`) REFERENCES `t_batch` (`v_batch_id`),
+  CONSTRAINT `fk_reg_id` FOREIGN KEY (`v_reg_id`) REFERENCES `t_student` (`v_reg_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_student_enrollment_details`
+--
+
+LOCK TABLES `t_student_enrollment_details` WRITE;
+/*!40000 ALTER TABLE `t_student_enrollment_details` DISABLE KEYS */;
+INSERT INTO `t_student_enrollment_details` VALUES ('3','101','7'),('4','102','3'),('1','105','6'),('5','109','4'),('6','125','7'),('11','126','7'),('9','145','3'),('10','456','3'),('7','525','3'),('8','562','3'),('1','CS101','7'),('1','CS102','7'),('2','CS103','6');
+/*!40000 ALTER TABLE `t_student_enrollment_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -457,4 +449,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-20 13:03:45
+-- Dump completed on 2019-02-26 23:08:46
