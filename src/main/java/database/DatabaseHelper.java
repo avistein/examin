@@ -1,11 +1,11 @@
 package database;
 
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import java.sql.*;
+import java.util.*;
 
 public class DatabaseHelper {
 
@@ -39,7 +39,10 @@ public class DatabaseHelper {
         password = props.getProperty("jdbc.password");
     }
 
-    public Connection openConnection(){
+    /**
+     * Opens a Database connection
+     */
+    public void openConnection(){
 
         try {
             con = DriverManager.getConnection(url, username, password);
@@ -47,17 +50,71 @@ public class DatabaseHelper {
         catch (SQLException e){
             e.printStackTrace();
         }
-        return con;
     }
 
-    public void closeConnection(Connection connection){
+    /**
+     * Closes a Database connection
+     */
+    public void closeConnection(){
         try {
-            connection.close();
+            con.close();
         }
         catch (SQLException e){
             e.printStackTrace();
         }
     }
 
+    /**
+     * Executes a select query using PreparedStatement
+     * @param query SQL Select query
+     * @param params Columns to retrieve
+     * @return A map with each column name as key and column values as ArrayList
+     */
+    public Map<String, List<String>> execQuery(String query, String ...params){
+
+        Map<String, List<String>> map = null;
+
+        try(PreparedStatement stmt = con.prepareStatement(query)) {
+
+            if(params.length != 0){
+                for(int i = 0; i < params.length; i++)
+                    stmt.setString(i+1 , params[i]);
+            }
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            int noOfcolumns = resultSetMetaData.getColumnCount();
+            map = new HashMap<>(noOfcolumns);
+            for(int i = 1; i <= noOfcolumns; i++)
+                map.put(resultSetMetaData.getColumnName(i), new ArrayList<>());
+
+            while(resultSet.next()){
+                for(int i = 1; i <= noOfcolumns; i++){
+                    //if(resultSet.getString(i) != null)
+                        map.get(resultSetMetaData.getColumnName(i)).add(resultSet.getString(i));
+                }
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return map;
+    }
+
+    public void load(File file, String tableName){
+        openConnection();
+       final String query = "LOAD DATA INFILE '"+file.getName()+"' INTO TABLE "
+               + tableName + " FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES ";
+       try(PreparedStatement stmt = con.prepareStatement(query)){
+            stmt.execute();
+       }
+       catch (SQLException e){
+           e.printStackTrace();
+       }
+        closeConnection();
+    }
 }
 

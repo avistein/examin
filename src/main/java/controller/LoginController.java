@@ -7,11 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import util.SceneSetterUtil;
-import model.LoginModel;
+import service.LoginService;
 
 public class LoginController {
 
-    private LoginModel loginModel;
+    private LoginService loginService;
 
     @FXML
     private TextField userNameField;
@@ -32,7 +32,7 @@ public class LoginController {
     private Button sendPasswordButton;
 
     public LoginController() {
-        loginModel = new LoginModel();
+        loginService = new LoginService();
     }
 
     @FXML
@@ -42,9 +42,9 @@ public class LoginController {
 
         String password = passwordField.getText();
 
-        int alertType = loginModel.authenticateLogin(username, password);
+        int status = loginService.authenticateLogin(username, password);
 
-        switch (alertType){
+        switch (status){
 
             case 0:
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -81,7 +81,7 @@ public class LoginController {
     private void handleSendPasswordAction(ActionEvent event) throws Exception{
 
         String username = forgotPasswordUserNameField.getText();
-        loginModel.resetPassword(username);
+        loginService.resetPassword(username);
     }
 
     @FXML
