@@ -20,9 +20,9 @@
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="305.0" minHeight="10.0" prefHeight="74.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="566.0" minHeight="10.0" prefHeight="545.0" vgrow="SOMETIMES" />
-      <RowConstraints />
+    
+    <RowConstraints maxHeight="566.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="554.0" minHeight="327.0" prefHeight="554.0" />
 
   </rowConstraints>
    <children>
@@ -133,9 +133,9 @@
                      </GridPane.margin>
                      <children>
                         <TextField fx:id="batchTextField" prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox fx:id="degreeComboBox" prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox fx:id="disciplineComboBox" layoutX="174.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox fx:id="currentSemesterComboBox" layoutX="339.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="degreeComboBox" onAction="#handleDegreeComboBox" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="disciplineComboBox" layoutX="174.0" layoutY="10.0" onAction="#handleDisciplineComboBox" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="currentSemesterComboBox" layoutX="339.0" layoutY="10.0" onAction="#handleCurrentSemesterComboBox" prefHeight="40.0" prefWidth="200.0" />
                         <TextField fx:id="academicYearTextField" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                   </HBox>
@@ -202,8 +202,8 @@
                         </TextField>
                         <TextField fx:id="middleNameTextField" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
                         <TextField fx:id="lastNameTextField" layoutX="159.0" layoutY="10.0" prefHeight="40.0" prefWidth="200.0" />
-                        <DatePicker fx:id="dateOfBirthTextField" prefHeight="40.0" prefWidth="200.0" />
-                        <ComboBox fx:id="genderComboBox" prefHeight="40.0" prefWidth="200.0" />
+                        <DatePicker fx:id="dateOfBirthTextField" onAction="#handleDateOfBirthDatePicker" prefHeight="40.0" prefWidth="200.0" />
+                        <ComboBox fx:id="genderComboBox" onAction="#handleGenderComboBox" prefHeight="40.0" prefWidth="200.0" />
                      </children>
                   </HBox>
                   <Label fx:id="contactDetailsLabel" prefHeight="50.0" prefWidth="210.0" text="Contact Details:" GridPane.rowIndex="10">
@@ -301,7 +301,7 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </HBox>
-                  <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" prefHeight="46.0" prefWidth="137.0" text="Submit" GridPane.rowIndex="17">
+                  <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" onAction="#handleStudentRegistrationSubmitButtonAction" prefHeight="46.0" prefWidth="137.0" text="Submit" GridPane.rowIndex="17">
                      <GridPane.margin>
                         <Insets left="560.0" top="25.0" />
                      </GridPane.margin>
