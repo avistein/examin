@@ -5,10 +5,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,14 +21,17 @@ import model.Student;
 import service.BatchService;
 import service.CourseService;
 import service.StudentService;
-import util.SceneSetterUtil;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class StudentListController {
+/**
+ * Controller class for StudentsList.fxml
+ *
+ * @author Avik Sarkar
+ */
+public class StudentsListController {
 
     private StudentService studentService;
 
@@ -53,13 +54,6 @@ public class StudentListController {
 
     @FXML
     private Label titleLabel;
-
-    @FXML
-    private Button addStudentButton;
-
-
-    @FXML
-    private Button exportButton;
 
     @FXML
     private Button importButton;
@@ -118,6 +112,9 @@ public class StudentListController {
     @FXML
     private TableColumn<Student, String> regYearCol;
 
+    /**
+     *
+     */
     @SuppressWarnings("Duplicates")
     @FXML
     public void initialize() {
@@ -139,9 +136,14 @@ public class StudentListController {
         }
     }
 
+
+    /**
+     * Callback method for DegreeComboBox.
+     * Clears all other comboBoxes,table items and sets the disciplineComboBoxes.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleDegreeComboBox(ActionEvent event) {
+    private void handleDegreeComboBox() {
 
         disciplineComboBox.getSelectionModel().clearSelection();
         disciplineComboBox.getItems().clear();
@@ -154,6 +156,10 @@ public class StudentListController {
 
         studentObsList.clear();
 
+        /*
+        If 'all' is chosen , disable other comboBoxes
+        and display all students data.
+         */
         if(degreeComboBox.getValue().equals("all")){
             disciplineComboBox.setDisable(true);
             batchNameComboBox.setDisable(true);
@@ -166,6 +172,7 @@ public class StudentListController {
             batchNameComboBox.setDisable(false);
             semesterComboBox.setDisable(false);
 
+            //Add every discipline which comes under the selected degree
             if (!listOfCourses.isEmpty()) {
                 List<String> items = new ArrayList<>();
                 for (Course course : listOfCourses) {
@@ -175,14 +182,18 @@ public class StudentListController {
                 }
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 disciplineComboBox.setItems(options);
-
             }
         }
     }
 
+    /**
+     * Callback method for disciplineComboBox.
+     * Clears batchNameComboBox,semesterComboBox & table items and sets
+     * the batchNameComboBoxes.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleDisciplineComboBox(ActionEvent event) {
+    private void handleDisciplineComboBox() {
 
         batchNameComboBox.getSelectionModel().clearSelection();
         batchNameComboBox.getItems().clear();
@@ -193,10 +204,10 @@ public class StudentListController {
         studentObsList.clear();
 
         if (disciplineComboBox.getValue() != null) {
-            //System.out.println(event.toString());
             String additionalQuery = "where v_degree=? and v_discipline =?";
             listOfBatches = batchService.getBatchData(additionalQuery, degreeComboBox.getValue()
                     , disciplineComboBox.getValue());
+            //Add unique batch names to the batchComboBox
             if (!listOfBatches.isEmpty()) {
                 List<String> items = new ArrayList<>();
                 for (Batch batch : listOfBatches) {
@@ -211,20 +222,28 @@ public class StudentListController {
 
     }
 
+    /**
+     * Callback method for batchNameComboBox.
+     * Clears semesterComboBox & table items and sets
+     * the semesterComboBoxes.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleBatchNameComboBox(ActionEvent event) {
+    private void handleBatchNameComboBox() {
 
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
         studentObsList.clear();
 
         if (batchNameComboBox.getValue() != null) {
-            //System.out.println(event.toString());
             if (!listOfCourses.isEmpty()) {
 
                 List<String> items = new ArrayList<>();
                 int totalSemesters = 0;
+                /*
+                Get the total no.of semesters for the selected Degree,discipline &
+                set the semesterComboBox with semester values from 1 to total no.
+                 */
                 for (Course course : listOfCourses) {
                     if (course.getDegree().equals(degreeComboBox.getValue())
                             && course.getDiscipline().equals(disciplineComboBox.getValue()))
@@ -239,8 +258,13 @@ public class StudentListController {
         }
     }
 
+    /**
+     * Callback method for semesterComboBox.
+     * Clears table items and populate the tableView.
+     * the semesterComboBoxes.
+     */
     @FXML
-    private void handleSemesterComboBox(ActionEvent event) {
+    private void handleSemesterComboBox() {
 
         studentObsList.clear();
 

@@ -2,7 +2,11 @@ package model;
 
 import javafx.beans.property.SimpleStringProperty;
 
-
+/**
+ * POJO class for Course entity.
+ *
+ * @author Avik Sarkar
+ */
 public class Course  {
 
     private SimpleStringProperty discipline;

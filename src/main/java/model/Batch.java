@@ -2,6 +2,11 @@ package model;
 
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * POJO class for Batch entity.
+ *
+ * @author Avik Sarkar
+ */
 public class Batch extends Course {
 
     private SimpleStringProperty batchId;

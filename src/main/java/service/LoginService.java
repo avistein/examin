@@ -5,6 +5,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class to
+ *
+ * @author Avik Sarkar
+ */
 public class LoginService {
 
     private DatabaseHelper databaseHelper;

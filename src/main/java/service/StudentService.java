@@ -7,9 +7,7 @@ import com.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 import database.DatabaseHelper;
 import model.Batch;
 import model.Student;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class to
+ *
+ * @author Avik Sarkar
+ */
 public class StudentService {
 
     private DatabaseHelper databaseHelper;

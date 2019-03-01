@@ -2,12 +2,15 @@ package service;
 
 import database.DatabaseHelper;
 import model.Batch;
-import model.Course;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service class to
+ *
+ * @author Avik Sarkar
+ */
 public class BatchService {
 
     private DatabaseHelper databaseHelper;

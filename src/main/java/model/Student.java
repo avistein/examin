@@ -1,8 +1,13 @@
 package model;
 
 import javafx.beans.property.SimpleStringProperty;
-
 import java.io.Serializable;
+
+/**
+ * POJO class for Student entity.
+ *
+ * @author Avik Sarkar
+ */
 
 public class Student extends Batch implements Serializable {
 
