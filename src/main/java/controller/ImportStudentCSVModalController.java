@@ -167,8 +167,9 @@ public class ImportStudentCSVModalController {
 
         mainGridPane.setOpacity(0.5);
         statusAnchorPane.setVisible(true);
+        progressIndicator.setVisible(true);
 
-        tableUpdateStatus = studentService.loadToDataBase(file, map);
+        tableUpdateStatus = studentService.addStudentFromCSVToDataBase(file, map);
 
         progressIndicator.setVisible(false);
         if(tableUpdateStatus){

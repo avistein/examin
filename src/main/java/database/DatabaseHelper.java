@@ -19,7 +19,7 @@ public class DatabaseHelper {
     public DatabaseHelper(){
         Properties props = new Properties();
         try {
-            FileInputStream in = new FileInputStream("src/main/configs/db.properties");
+            FileInputStream in = new FileInputStream("src/main/resources/configs/db.properties");
             props.load(in);
             in.close();
         }
@@ -135,5 +135,22 @@ public class DatabaseHelper {
         }
         return false;
     }
+
+    public boolean insert(String sql, String ...params){
+
+        try(PreparedStatement stmt = con.prepareStatement(sql)){
+            if(params.length != 0){
+                for(int i = 0; i < params.length; i++)
+                    stmt.setString(i+1 , params[i]);
+            }
+            stmt.execute();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 }
 

@@ -3,4 +3,6 @@ out/
 build/
 *.iml
 .idea/
-src/main/configs/
+.git/
+.gradle/
+*.properties

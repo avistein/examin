@@ -36,6 +36,8 @@ public class StudentService {
 
             String firstName = map.get("v_first_name").get(i);
             String middleName = map.get("v_middle_name").get(i);
+            if(middleName == null)
+                middleName = "";
             String lastName = map.get("v_last_name").get(i);
             String dob = map.get("d_dob").get(i);
             String gender = map.get("v_gender").get(i);
@@ -67,7 +69,7 @@ public class StudentService {
     }
 
 
-    public boolean loadToDataBase(File file, Map<String, String> map) {
+    public boolean addStudentFromCSVToDataBase(File file, Map<String, String> map) {
 
         BatchService batchService = new BatchService();
         Map<String, String> columnNameMapping = new HashMap<>();
@@ -162,6 +164,29 @@ public class StudentService {
         databaseHelper.closeConnection();
         return t_studentStatus & t_student_enrollmentStatus;
 
+    }
+
+    public boolean addStudentToDatabase(Student student){
+        String sql1 = "INSERT INTO t_student (v_first_name, v_middle_name" +
+                ", v_last_name, v_reg_id, v_roll_no, d_dob, v_mother_name, v_reg_year" +
+                ", v_contact_no, v_father_guardian_name, v_email_id, v_address" +
+                ", v_guardian_contact_no, v_gender) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+                ", ?, ?, ?, ?)";
+
+        final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
+                ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
+
+        databaseHelper.openConnection();
+        boolean t_studentStatus = databaseHelper.insert(sql1, student.getFirstName(), student.getMiddleName()
+                , student.getLastName(), student.getRegId(), student.getRollNo()
+                , student.getDob(), student.getMotherName(), student.getRegYear()
+                , student.getContactNo(), student.getGuardianName(), student.getEmail()
+                , student.getAddress(), student.getGuardianContactNo(), student.getGender());
+
+        boolean t_student_enrollmentStatus = databaseHelper.insert(sql2, student.getBatchId()
+                , student.getRegId(), student.getCurrSemester());
+
+        return t_studentStatus & t_student_enrollmentStatus;
     }
 
 }

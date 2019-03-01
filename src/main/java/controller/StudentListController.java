@@ -1,14 +1,20 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Batch;
@@ -17,9 +23,12 @@ import model.Student;
 import service.BatchService;
 import service.CourseService;
 import service.StudentService;
+import util.SceneSetterUtil;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class StudentListController {
 
@@ -35,14 +44,19 @@ public class StudentListController {
 
     private List<Course> listOfCourses;
 
+    private FilteredList<Student> studentFilteredItems;
+
+    private ObservableList<Student> studentObsList;
+
     @FXML
-    private Label titleLabel ;
+    private GridPane studentListGridPane;
+
+    @FXML
+    private Label titleLabel;
 
     @FXML
     private Button addStudentButton;
 
-    @FXML
-    private Button printButton;
 
     @FXML
     private Button exportButton;
@@ -64,6 +78,9 @@ public class StudentListController {
 
     @FXML
     private TableView<Student> studentTable;
+
+    @FXML
+    private TextField searchTextField;
 
     @FXML
     private TableColumn<Student, String> regIdCol;
@@ -98,20 +115,25 @@ public class StudentListController {
     @FXML
     private TableColumn<Student, String> batchCol;
 
+    @FXML
+    private TableColumn<Student, String> regYearCol;
+
     @SuppressWarnings("Duplicates")
     @FXML
     public void initialize() {
         studentService = new StudentService();
         courseService = new CourseService();
         batchService = new BatchService();
+        studentObsList = FXCollections.observableArrayList();
         listOfCourses = courseService.getCourseData();
-
-        if(!listOfCourses.isEmpty()) {
+        initCol();
+        if (!listOfCourses.isEmpty()) {
             List<String> items = new ArrayList<>();
-            for (Course course: listOfCourses) {
-                if(!items.contains(course.getDegree()))
+            for (Course course : listOfCourses) {
+                if (!items.contains(course.getDegree()))
                     items.add(course.getDegree());
             }
+            items.add("all");
             ObservableList<String> options = FXCollections.observableArrayList(items);
             degreeComboBox.setItems(options);
         }
@@ -119,7 +141,7 @@ public class StudentListController {
 
     @SuppressWarnings("Duplicates")
     @FXML
-    private void  handleDegreeComboBox(ActionEvent event){
+    private void handleDegreeComboBox(ActionEvent event) {
 
         disciplineComboBox.getSelectionModel().clearSelection();
         disciplineComboBox.getItems().clear();
@@ -130,35 +152,51 @@ public class StudentListController {
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
 
-        studentTable.getItems().clear();
+        studentObsList.clear();
 
-       // System.out.println(event.toString());
-        if (!listOfCourses.isEmpty()) {
-            List<String> items = new ArrayList<>();
-            for (Course course : listOfCourses) {
-                if (course.getDegree().equals(degreeComboBox.getValue()))
-                    if (!items.contains(course.getDiscipline()))
-                        items.add(course.getDiscipline());
+        if(degreeComboBox.getValue().equals("all")){
+            disciplineComboBox.setDisable(true);
+            batchNameComboBox.setDisable(true);
+            semesterComboBox.setDisable(true);
+            populateTable();
+        }
+        else if(degreeComboBox.getValue() != null){
+
+            disciplineComboBox.setDisable(false);
+            batchNameComboBox.setDisable(false);
+            semesterComboBox.setDisable(false);
+
+            if (!listOfCourses.isEmpty()) {
+                List<String> items = new ArrayList<>();
+                for (Course course : listOfCourses) {
+                    if (course.getDegree().equals(degreeComboBox.getValue()))
+                        if (!items.contains(course.getDiscipline()))
+                            items.add(course.getDiscipline());
+                }
+                ObservableList<String> options = FXCollections.observableArrayList(items);
+                disciplineComboBox.setItems(options);
+
             }
-            ObservableList<String> options = FXCollections.observableArrayList(items);
-            disciplineComboBox.setItems(options);
-
         }
     }
 
+    @SuppressWarnings("Duplicates")
     @FXML
-    private void handleDisciplineComboBox(ActionEvent event){
+    private void handleDisciplineComboBox(ActionEvent event) {
 
         batchNameComboBox.getSelectionModel().clearSelection();
         batchNameComboBox.getItems().clear();
-        studentTable.getItems().clear();
 
-        if(disciplineComboBox.getValue() != null) {
+        semesterComboBox.getSelectionModel().clearSelection();
+        semesterComboBox.getItems().clear();
+
+        studentObsList.clear();
+
+        if (disciplineComboBox.getValue() != null) {
             //System.out.println(event.toString());
             String additionalQuery = "where v_degree=? and v_discipline =?";
             listOfBatches = batchService.getBatchData(additionalQuery, degreeComboBox.getValue()
                     , disciplineComboBox.getValue());
-
             if (!listOfBatches.isEmpty()) {
                 List<String> items = new ArrayList<>();
                 for (Batch batch : listOfBatches) {
@@ -175,13 +213,13 @@ public class StudentListController {
 
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleBatchNameComboBox(ActionEvent event){
+    private void handleBatchNameComboBox(ActionEvent event) {
 
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
-        studentTable.getItems().clear();
+        studentObsList.clear();
 
-        if(batchNameComboBox.getValue() != null) {
+        if (batchNameComboBox.getValue() != null) {
             //System.out.println(event.toString());
             if (!listOfCourses.isEmpty()) {
 
@@ -202,19 +240,21 @@ public class StudentListController {
     }
 
     @FXML
-    private void handleSemesterComboBox(ActionEvent event){
+    private void handleSemesterComboBox(ActionEvent event) {
 
-        studentTable.getItems().clear();
+        studentObsList.clear();
 
-        if(semesterComboBox.getValue() != null) {
+        if (semesterComboBox.getValue() != null) {
             //System.out.println(event.toString());
-            initCol();
+            titleLabel.setText("List of " + batchNameComboBox.getValue() + " " + degreeComboBox.getValue() +
+                    " " + disciplineComboBox.getValue() + " Semester" + semesterComboBox.getValue() +
+                    " students");
             populateTable();
         }
 
     }
 
-    private void initCol(){
+    private void initCol() {
 
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
@@ -227,19 +267,66 @@ public class StudentListController {
         semesterCol.setCellValueFactory(new PropertyValueFactory<>("currSemester"));
         disciplineCol.setCellValueFactory(new PropertyValueFactory<>("discipline"));
         batchCol.setCellValueFactory(new PropertyValueFactory<>("batchName"));
+        regYearCol.setCellValueFactory(new PropertyValueFactory<>("regYear"));
 
     }
 
-    private void populateTable(){
+    private void populateTable() {
+        String additionalQuery = "";
+        if(degreeComboBox.getValue().equals("all")){
+            listOfStudents = studentService.getStudentData(additionalQuery);
+        }
+        else {
+            additionalQuery = "where v_degree=? and v_discipline=? " +
+                    "and v_batch_name=? and v_curr_semester=?";
+            listOfStudents = studentService.getStudentData(additionalQuery
+                    , degreeComboBox.getValue(), disciplineComboBox.getValue()
+                    , batchNameComboBox.getValue(), semesterComboBox.getValue());
+        }
+        studentObsList.setAll(listOfStudents);
+        studentFilteredItems = new FilteredList<>(studentObsList, null);
+        searchTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                studentFilteredItems.setPredicate(new Predicate<Student>() {
+                    @Override
+                    public boolean test(Student student) {
 
-        String additionalQuery = "where v_degree=? and v_discipline=? " +
-                "and v_batch_name=? and v_curr_semester=?";
-        listOfStudents = studentService.getStudentData(additionalQuery
-                , degreeComboBox.getValue(), disciplineComboBox.getValue()
-                , batchNameComboBox.getValue(), semesterComboBox.getValue());
+                        if (newValue == null || newValue.isEmpty())
+                            return true;
+                        String lowerCaseFilter = newValue.toLowerCase();
 
-        ObservableList<Student> items = FXCollections.observableArrayList(listOfStudents);
-        studentTable.setItems(items);
+                        if (student.getFirstName().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getMiddleName().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getLastName().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getRollNo().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getRegId().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getDegree().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getDiscipline().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getCurrSemester().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getBatchName().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getRegYear().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getGuardianName().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        else if (student.getContactNo().toLowerCase().contains(lowerCaseFilter))
+                            return true;
+                        return false;
+                    }
+                });
+            }
+        });
+
+        studentTable.setItems(studentFilteredItems);
     }
 
     @FXML
@@ -255,7 +342,16 @@ public class StudentListController {
         importStudentListModalWindow.initOwner(parentStage);
         importStudentListModalWindow.showAndWait();
         boolean tableUpdateStatus = importStudentCSVModalController.getTableUpdateStatus();
-        if(tableUpdateStatus)
+        if (tableUpdateStatus)
             populateTable();
+    }
+
+    @FXML
+    private void handleAddStudentButtonAction() throws IOException {
+        Pane listPane = (Pane) studentListGridPane.getParent();
+        Parent studentRegistrationFxml = FXMLLoader.load(getClass()
+                .getResource("/view/StudentRegistration.fxml"));
+        listPane.getChildren().removeAll();
+        listPane.getChildren().setAll(studentRegistrationFxml);
     }
 }
