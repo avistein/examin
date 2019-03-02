@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<GridPane fx:controller="controller.LoginController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-    <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
-    <!-- <gridLinesVisible>true</gridLinesVisible> -->
-    <Text text="Welcome"
-          GridPane.columnIndex="0" GridPane.rowIndex="0"
-          GridPane.columnSpan="2"/>
-
-    <Label text="User Name:"
-           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-
-    <TextField fx:id="userNameField"
-               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-    <Label text="Password:"
-           GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-
-    <PasswordField fx:id="passwordField"
-                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-    <HBox spacing="10" alignment="bottom_right"
-          GridPane.columnIndex="1" GridPane.rowIndex="4">
-        <Button text="Sign In" fx:id="signInButton"
-                onAction="#handleSignInButtonAction"/>
-        <Button text="Forgot Password" fx:id="forgotPasswordButton"
-                onAction="#handleForgotPasswordAction"/>
-    </HBox>
-
-</GridPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+   <children>
+      <GridPane fx:id="mainGridPane" alignment="center" hgap="10" prefHeight="400.0" prefWidth="400.0" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <padding>
+            <Insets bottom="10" left="25" right="25" top="25" />
+         </padding>
+          <!-- <gridLinesVisible>true</gridLinesVisible> -->
+          <Text text="Welcome" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+      
+          <Label text="User Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      
+          <TextField fx:id="userNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      
+          <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+      
+          <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      
+          <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+              <Button fx:id="signInButton" onAction="#handleSignInButtonAction" text="Sign In" />
+              <Button fx:id="forgotPasswordButton" onAction="#handleForgotPasswordAction" text="Forgot Password" />
+          </HBox>
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+      
+      </GridPane>
+      <AnchorPane fx:id="spinnerAnchorPane" prefHeight="400.0" prefWidth="400.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox layoutX="174.0" layoutY="174.0" prefHeight="52.0" prefWidth="53.0">
+               <children>
+                  <ProgressIndicator fx:id="progressIndicator" visible="false" />
+                  <Label text="Label" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

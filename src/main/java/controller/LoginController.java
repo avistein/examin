@@ -2,16 +2,30 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import util.SceneSetterUtil;
 import service.LoginService;
 
 public class LoginController {
 
     private LoginService loginService;
+
+    private Stage mainStage;
+
+    @FXML
+    private GridPane mainGridPane;
+
+    @FXML
+    private AnchorPane spinnerAnchorPane;
 
     @FXML
     private TextField userNameField;
@@ -22,28 +36,21 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    @FXML
-    private Button signInButton;
-
-    @FXML
-    private Button forgotPasswordButton;
-
-    @FXML
-    private Button sendPasswordButton;
-
     public LoginController() {
         loginService = new LoginService();
+        mainStage = new Stage();
+        mainStage.setTitle("examin - Examination Management Tool");
     }
 
     @FXML
     private void handleSignInButtonAction(ActionEvent event) throws Exception{
-
+        mainGridPane.setOpacity(0.5);
+        spinnerAnchorPane.setVisible(true);
         String username = userNameField.getText();
 
         String password = passwordField.getText();
 
-        int status = loginService.authenticateLogin(username, password);
-
+        int status = loginService.authenticateLogin(username.trim(), password);
         switch (status){
 
             case 0:
@@ -54,20 +61,44 @@ public class LoginController {
                 break;
 
             case 1:
-                SceneSetterUtil.setScene("/view/Admin.fxml","Admin Panel", event);
+                FXMLLoader loader = new FXMLLoader(getClass()
+                        .getResource("/view/Admin.fxml"));
+                Parent root = loader.load();
+                AdminController adminController = loader.getController();
+                adminController.setAdminProfileDetails(username.trim());
+                mainStage.setScene(new Scene(root, 1024, 768));
+                ((Node)event.getSource()).getScene().getWindow().hide();
+                mainStage.setMaximized(true);
+                mainStage.show();
                 break;
 
             case 2:
-                SceneSetterUtil.setScene("/view/ExamCellMember.fxml","Admin Panel", event);
+                root = FXMLLoader.load(SceneSetterUtil
+                        .class.getResource("/view/ExamCellMember.fxml"));
+                mainStage.setScene(new Scene(root, 1024, 768));
+                ((Node)event.getSource()).getScene().getWindow().hide();
+                mainStage.setMaximized(true);
+                mainStage.show();
                 break;
 
             case 3:
-                SceneSetterUtil.setScene("/view/ProfessorHOD.fxml","Admin Panel", event);
+                root = FXMLLoader.load(SceneSetterUtil
+                        .class.getResource("/view/ProfessorHOD.fxml"));
+                mainStage.setScene(new Scene(root, 1024, 768));
+                ((Node)event.getSource()).getScene().getWindow().hide();
+                mainStage.setMaximized(true);
+                mainStage.show();
                 break;
 
             case 4:
-                SceneSetterUtil.setScene("/view/Professor.fxml","Admin Panel", event);
+                root = FXMLLoader.load(SceneSetterUtil
+                        .class.getResource("/view/Professor.fxml"));
+                mainStage.setScene(new Scene(root, 1024, 768));
+                ((Node)event.getSource()).getScene().getWindow().hide();
+                mainStage.setMaximized(true);
+                mainStage.show();
                 break;
+
         }
 
     }
@@ -78,7 +109,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleSendPasswordAction(ActionEvent event) throws Exception{
+    private void handleSendPasswordAction(){
 
         String username = forgotPasswordUserNameField.getText();
         loginService.resetPassword(username);

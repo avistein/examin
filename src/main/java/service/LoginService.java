@@ -1,9 +1,8 @@
 package service;
 
-import database.DatabaseHelper;
+import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service class to
@@ -12,10 +11,10 @@ import java.util.Map;
  */
 public class LoginService {
 
-    private DatabaseHelper databaseHelper;
+    private UserService userService;
 
     public LoginService() {
-        databaseHelper = new DatabaseHelper();
+        userService = new UserService();
     }
 
     /**
@@ -28,29 +27,19 @@ public class LoginService {
      */
     public int authenticateLogin(String username, String inputPassword) {
 
-        final String query = "select v_pass,v_gid from t_login_details " +
-                "where v_user_id=?";
+        final String additionalQuery = "where v_user_id=?";
 
         int status = 0;
         String retrievedPassword ;
 
-        databaseHelper.openConnection();
-
         int gid;
 
-        Map<String , List<String>> map = databaseHelper.execQuery(query, username);
-//        for(Map.Entry<String, List<String>> entry : map.entrySet()){
-//            for(String val : entry.getValue()){
-//                if(entry.getKey().equals("v_gid"))
-//                    gid = Integer.parseInt(val);
-//                if(entry.getKey().equals("v_pass"))
-//                    retrievedPassword = val;
-//            }
-//        }
-        if (map != null) {
+        List<User> users = userService.getLoginDetails(additionalQuery, username);
 
-            retrievedPassword = map.get("v_pass").get(0);
-            gid = Integer.parseInt(map.get("v_gid").get(0));
+        if (!users.isEmpty()) {
+
+            retrievedPassword = users.get(0).getPassword();
+            gid = Integer.parseInt(users.get(0).getGid());
 
             if (BCrypt.checkpw(inputPassword, retrievedPassword)) {
 
@@ -77,7 +66,6 @@ public class LoginService {
                 }
             }
         }
-        databaseHelper.closeConnection();
         return status;
     }
 

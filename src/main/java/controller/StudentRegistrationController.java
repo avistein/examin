@@ -80,7 +80,7 @@ public class StudentRegistrationController {
     private TextField contactNoTextField;
 
     @FXML
-    private TextField addressTextField;
+    private TextArea addressTextArea;
 
     @FXML
     private TextField guardianNameTextField;
@@ -93,12 +93,6 @@ public class StudentRegistrationController {
 
     @FXML
     private ImageView statusImageView;
-
-    @FXML
-    private Button addAnotherButton;
-
-    @FXML
-    private Button cancelButton;
 
     @FXML
     private ProgressIndicator progressIndicator;
@@ -239,7 +233,7 @@ public class StudentRegistrationController {
             String gender = genderChoiceBox.getValue();
             String email = emailTextField.getText().trim();
             String contactNo = contactNoTextField.getText().trim();
-            String address = addressTextField.getText().trim();
+            String address = addressTextArea.getText().trim();
             String guardianName = guardianNameTextField.getText().trim();
             String motherName = motherNameTextField.getText().trim();
             String guardianContactNo = guardianContactNoTextField.getText().trim();
@@ -341,7 +335,7 @@ public class StudentRegistrationController {
             alert.show();
             return false;
         }
-        else if (addressTextField.getText().isEmpty()) {
+        else if (addressTextArea.getText().isEmpty()) {
             alert.setContentText("Address cannot be empty!");
             alert.show();
             return false;
@@ -363,7 +357,7 @@ public class StudentRegistrationController {
     }
 
     @FXML
-    private void handleAddAnotherButtonAction(){
+    private void handleAddAnotherAndResetButtonAction(){
         statusAnchorPane.setVisible(false);
         mainGridPane.setOpacity(1);
         firstNameTextField.clear();
@@ -379,7 +373,7 @@ public class StudentRegistrationController {
         genderChoiceBox.getSelectionModel().clearSelection();
         dobDatePicker.getEditor().clear();
         emailTextField.clear();
-        addressTextField.clear();
+        addressTextArea.clear();
         contactNoTextField.clear();
         guardianNameTextField.clear();
         motherNameTextField.clear();
@@ -387,7 +381,7 @@ public class StudentRegistrationController {
     }
 
     @FXML
-    private void handleCancelButtonAction() throws IOException {
+    private void handleBackAndCancelButtonAction() throws IOException {
         statusAnchorPane.setVisible(false);
         mainGridPane.setOpacity(1);
         Pane listPane = (Pane)rootAnchorPane.getParent();
@@ -396,4 +390,5 @@ public class StudentRegistrationController {
         listPane.getChildren().removeAll();
         listPane.getChildren().setAll(studentRegistrationFxml);
     }
+
 }

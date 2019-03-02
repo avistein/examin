@@ -378,4 +378,25 @@ public class StudentsListController {
         listPane.getChildren().removeAll();
         listPane.getChildren().setAll(studentRegistrationFxml);
     }
+
+    @FXML
+    private void handleMouseClickOnTableViewItem() throws IOException{
+        Student student = studentTable.getSelectionModel().getSelectedItem();
+
+        if(student != null) {
+
+            Stage viewStudentModalWindow = new Stage();
+            viewStudentModalWindow.setTitle("Student");
+            viewStudentModalWindow.initModality(Modality.WINDOW_MODAL);
+            Stage parentStage = (Stage) importButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass()
+                    .getResource("/view/ViewStudentModal.fxml"));
+            Parent root = loader.load();
+            ViewStudentModalController viewStudentModalController = loader.getController();
+            viewStudentModalWindow.setScene(new Scene(root));
+            viewStudentModalWindow.initOwner(parentStage);
+            viewStudentModalController.setStudentPojo(student);
+            viewStudentModalWindow.show();
+        }
+    }
 }

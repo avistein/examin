@@ -183,7 +183,7 @@ public class Student extends Batch implements Serializable {
         guardianName.set(gName);
     }
 
-        public String getCurrSemester() {
+    public String getCurrSemester() {
         return currSemester.get();
     }
 
