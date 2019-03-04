@@ -1,6 +1,9 @@
 package controller;
 
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,15 +12,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import model.User;
+import service.UserService;
 import util.SceneSetterUtil;
-import service.LoginService;
+import command.LoginCommand;
+
+import java.io.IOException;
+import java.util.List;
 
 public class LoginController {
 
-    private LoginService loginService;
+    private LoginCommand loginCommand;
 
     private Stage mainStage;
 
@@ -25,7 +33,7 @@ public class LoginController {
     private GridPane mainGridPane;
 
     @FXML
-    private AnchorPane spinnerAnchorPane;
+    private StackPane statusStackPane;
 
     @FXML
     private TextField userNameField;
@@ -36,71 +44,131 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    private UserService userService;
+
     public LoginController() {
-        loginService = new LoginService();
+        loginCommand = new LoginCommand();
+        userService = new UserService();
         mainStage = new Stage();
         mainStage.setTitle("examin - Examination Management Tool");
+        mainStage.setResizable(false);
     }
 
     @FXML
-    private void handleSignInButtonAction(ActionEvent event) throws Exception{
-        mainGridPane.setOpacity(0.5);
-        spinnerAnchorPane.setVisible(true);
-        String username = userNameField.getText();
+    private void handleSignInButtonAction(ActionEvent event1){
 
+        Stage loginStage = (Stage)((Node)event1.getSource())
+                .getScene().getWindow();
+        mainGridPane.setOpacity(0.5);
+        //this should display a progress spinner before database connection
+        statusStackPane.setVisible(true);
+
+        String username = userNameField.getText().trim();
         String password = passwordField.getText();
 
-        int status = loginService.authenticateLogin(username.trim(), password);
-        switch (status){
+        Task<List<User>> usersTask = userService.getUsersTask("where v_user_id=?", username);
+        new Thread(usersTask).start();
+        //saveThread.setDaemon(true);
+       //saveThread.start();
+        usersTask.setOnSucceeded(new EventHandler<>() {
 
-            case 0:
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("Invalid Username or Password");
-                alert.show();
-                break;
+            @Override
+            public void handle(WorkerStateEvent event){
 
-            case 1:
-                FXMLLoader loader = new FXMLLoader(getClass()
-                        .getResource("/view/Admin.fxml"));
-                Parent root = loader.load();
-                AdminController adminController = loader.getController();
-                adminController.setAdminProfileDetails(username.trim());
-                mainStage.setScene(new Scene(root, 1024, 768));
-                ((Node)event.getSource()).getScene().getWindow().hide();
-                mainStage.setMaximized(true);
-                mainStage.show();
-                break;
+                statusStackPane.setVisible(false);
+                mainGridPane.setOpacity(0.5);
 
-            case 2:
-                root = FXMLLoader.load(SceneSetterUtil
-                        .class.getResource("/view/ExamCellMember.fxml"));
-                mainStage.setScene(new Scene(root, 1024, 768));
-                ((Node)event.getSource()).getScene().getWindow().hide();
-                mainStage.setMaximized(true);
-                mainStage.show();
-                break;
+                int status = 0;
 
-            case 3:
-                root = FXMLLoader.load(SceneSetterUtil
-                        .class.getResource("/view/ProfessorHOD.fxml"));
-                mainStage.setScene(new Scene(root, 1024, 768));
-                ((Node)event.getSource()).getScene().getWindow().hide();
-                mainStage.setMaximized(true);
-                mainStage.show();
-                break;
+                if(!usersTask.getValue().isEmpty()) {
+                    status = loginCommand.authenticateLogin(password
+                            , usersTask.getValue().get(0));
+                }
 
-            case 4:
-                root = FXMLLoader.load(SceneSetterUtil
-                        .class.getResource("/view/Professor.fxml"));
-                mainStage.setScene(new Scene(root, 1024, 768));
-                ((Node)event.getSource()).getScene().getWindow().hide();
-                mainStage.setMaximized(true);
-                mainStage.show();
-                break;
+                Parent root;
 
-        }
+                switch (status){
 
+                    case 0:
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setContentText("Invalid Username or Password");
+                        alert.show();
+                        break;
+
+                    case 1:
+                        FXMLLoader loader = new FXMLLoader(getClass()
+                                .getResource("/view/Admin.fxml"));
+                        try {
+                            root = loader.load();
+                            AdminController adminController = loader
+                                    .getController();
+                            adminController.setAdminProfileDetails
+                                    (username.trim());
+                            mainStage.setScene(new Scene(root, 1024
+                                    , 768));
+                            loginStage.hide();
+                            mainStage.setMaximized(true);
+                            mainStage.show();
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();
+                        }
+
+                        break;
+
+                    case 2:
+                        try {
+                            root = FXMLLoader.load(SceneSetterUtil
+                                    .class.getResource("/view/ExamCellMember.fxml"));
+                            mainStage.setScene(new Scene(root, 1024
+                                    , 768));
+                            loginStage.hide();
+                            mainStage.setMaximized(true);
+                            mainStage.show();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+
+                    case 3:
+
+                        try {
+                            root = FXMLLoader.load(SceneSetterUtil
+                                    .class.getResource("/view/ProfessorHOD.fxml"));
+                            mainStage.setScene(new Scene(root, 1024
+                                    , 768));
+                            loginStage.hide();
+                            mainStage.setMaximized(true);
+                            mainStage.show();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+
+                    case 4:
+                        try {
+                            root = FXMLLoader.load(SceneSetterUtil
+                                    .class.getResource("/view/Professor.fxml"));
+                            mainStage.setScene(new Scene(root, 1024
+                                    , 768));
+                            loginStage.hide();
+                            mainStage.setMaximized(true);
+                            mainStage.show();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+
+                }
+            }
+        });
     }
 
     @FXML
@@ -112,7 +180,7 @@ public class LoginController {
     private void handleSendPasswordAction(){
 
         String username = forgotPasswordUserNameField.getText();
-        loginService.resetPassword(username);
+        loginCommand.resetPassword(username);
     }
 
     @FXML

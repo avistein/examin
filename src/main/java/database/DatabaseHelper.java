@@ -50,7 +50,7 @@ public class DatabaseHelper {
     /**
      * This method creates a Database connection
      */
-    public void openConnection(){
+    private void openConnection(){
 
         try {
             con = DriverManager.getConnection(url, username, password);
@@ -63,7 +63,7 @@ public class DatabaseHelper {
     /**
      * This method closes a Database connection
      */
-    public void closeConnection(){
+    private void closeConnection(){
         try {
             con.close();
         }
@@ -83,6 +83,8 @@ public class DatabaseHelper {
 
         Map<String, List<String>> map = null;
 
+        openConnection();
+
         try(PreparedStatement stmt = con.prepareStatement(query)) {
 
             if(params.length != 0){
@@ -101,7 +103,7 @@ public class DatabaseHelper {
             while(resultSet.next()){
                 for(int i = 1; i <= noOfColumns; i++){
                     //if(resultSet.getString(i) != null)
-                        map.get(resultSetMetaData.getColumnName(i)).add(resultSet.getString(i));
+                    map.get(resultSetMetaData.getColumnName(i)).add(resultSet.getString(i));
                 }
             }
 
@@ -109,9 +111,12 @@ public class DatabaseHelper {
         catch (SQLException e){
             e.printStackTrace();
         }
-
+        finally {
+            closeConnection();
+        }
         return map;
     }
+
 
     /**
      * Method to execute a bunch of INSERT commands.
@@ -122,21 +127,24 @@ public class DatabaseHelper {
     public boolean batchInsert(String sql, List<List<String>> list){
 
         int[] status = new int[list.size()];
-       try(PreparedStatement stmt = con.prepareStatement(sql)){
+        openConnection();
+        try(PreparedStatement stmt = con.prepareStatement(sql)){
 
             for(List<String> row : list){
                 int i = 1;
                 for(String data : row) {
                     stmt.setString(i++, data);
                 }
-                    stmt.addBatch();
+                stmt.addBatch();
             }
             status = stmt.executeBatch();
-       }
-       catch (SQLException e){
-           e.printStackTrace();
-       }
-
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            closeConnection();
+        }
         if(list.size() == status.length) {
 
             for (int i : status) {
@@ -155,21 +163,32 @@ public class DatabaseHelper {
      *      *        normally VALUES parameters.
      * @return Status of the operation.
      */
-    public boolean insert(String sql, String ...params){
+    public boolean insertUpdateDelete(String sql, String ...params){
 
+        boolean status;
+        openConnection();
         try(PreparedStatement stmt = con.prepareStatement(sql)){
             if(params.length != 0){
                 for(int i = 0; i < params.length; i++)
                     stmt.setString(i+1 , params[i]);
             }
-            stmt.execute();
+            stmt.executeUpdate();
+            status = true;
         }
         catch (SQLException e){
             e.printStackTrace();
-            return false;
+            status = false;
         }
-        return true;
+        finally {
+            closeConnection();
+        }
+        return status;
     }
+
+
+
+
+
 
 }
 

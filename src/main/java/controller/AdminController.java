@@ -1,14 +1,15 @@
 package controller;
 
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import model.ExamCellMember;
-import model.User;
 import service.ExamCellMemberService;
-import service.UserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class AdminController{
     private Label userIdLabel;
 
     @FXML
-    private Pane listPane;
+    private StackPane contentStackPane;
 
     @FXML
     private Label nameLabel;
@@ -55,8 +56,8 @@ public class AdminController{
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentsList.fxml"));
         subTitleLabel.setText("Student");
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
     /**
@@ -69,8 +70,8 @@ public class AdminController{
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ProfessorsList.fxml"));
         subTitleLabel.setText("Professor");
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
     /**
@@ -83,8 +84,8 @@ public class AdminController{
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ExamCellMembersList.fxml"));
         subTitleLabel.setText("Exam Cell Member");
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
     @FXML
@@ -92,8 +93,8 @@ public class AdminController{
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/AcademicAdministration.fxml"));
         subTitleLabel.setText("Academic Administration");
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
     @FXML
@@ -123,13 +124,26 @@ public class AdminController{
 
     void setAdminProfileDetails(String userId){
 
-        String additionalQuery = "where v_emp_id=?";
-        List<ExamCellMember> examCellMember = examCellMemberService
-                .getExamCellMemberData(additionalQuery, userId);
-        admin = examCellMember.get(0);
-        userIdLabel.setText(userId);
-        nameLabel.setText(admin.getFirstName() + " " + admin.getMiddleName()
-                + " " + admin.getLastName());
+        final String additionalQuery = "where v_emp_id=?";
+        Task<List<ExamCellMember>> examCellMembersTask = examCellMemberService
+                .getExamCellMembersTask(additionalQuery, userId);
+
+        new Thread(examCellMembersTask).start();
+
+        examCellMembersTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                admin = examCellMembersTask.getValue().get(0);
+                userIdLabel.setText(userId);
+                nameLabel.setText(admin.getFirstName() + " " + admin.getMiddleName()
+                        + " " + admin.getLastName());
+            }
+        });
+
+
+
+
+
     }
 
 }

@@ -2,6 +2,9 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -9,8 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
@@ -37,7 +40,7 @@ public class ImportStudentCSVModalController {
     private GridPane mainGridPane;
 
     @FXML
-    private AnchorPane statusAnchorPane;
+    private StackPane statusStackPane;
 
     @FXML
     private ImageView statusImageView;
@@ -115,6 +118,7 @@ public class ImportStudentCSVModalController {
     private ComboBox<String> rollNoComboBox;
 
     public void initialize(){
+
         studentService = new StudentService();
         tableUpdateStatus = false;
         Text text1 = new Text("File must be comma delimited CSV file\n");
@@ -186,22 +190,31 @@ public class ImportStudentCSVModalController {
 
 
         mainGridPane.setOpacity(0.5);
-        statusAnchorPane.setVisible(true);
+        statusStackPane.setVisible(true);
         progressIndicator.setVisible(true);
 
-        //Load data from CSV to DataBase and save the load status.
-        tableUpdateStatus = studentService.addStudentFromCSVToDataBase(file, map);
+        Task<Boolean> studentFromCsvToDatabaseTask = studentService
+                .getAddStudentFromCsvToDataBaseTask(file, map);
+        new Thread(studentFromCsvToDatabaseTask).start();
 
-        progressIndicator.setVisible(false);
+        studentFromCsvToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                tableUpdateStatus = studentFromCsvToDatabaseTask.getValue();
+                progressIndicator.setVisible(false);
+                statusImageView.setVisible(true);
+                statusLabel.setVisible(true);
+                if(tableUpdateStatus){
+                    statusImageView.setImage(new Image("/png/success.png"));
+                    statusLabel.setText("Success!");
+                }
+                else{
+                    statusImageView.setImage(new Image("/png/error.png"));
+                    statusLabel.setText("Failed");
+                }
+            }
+        });
 
-        if(tableUpdateStatus){
-            statusImageView.setImage(new Image("/png/success.png"));
-            statusLabel.setText("Success!");
-        }
-        else{
-            statusImageView.setImage(new Image("/png/error.png"));
-            statusLabel.setText("Failed");
-        }
     }
 
     /**
@@ -211,10 +224,16 @@ public class ImportStudentCSVModalController {
      * mainGridPane will be normal from faded.
      */
     @FXML
-    private void handleStatusAnchorPaneMouseClickedAction(){
+    private void handleStatusStackPaneMouseClickedAction(){
 
         mainGridPane.setOpacity(1);
-        statusAnchorPane.setVisible(false);
+        progressIndicator.setVisible(false);
+        statusImageView.setVisible(false);
+        statusLabel.setVisible(false);
+        statusStackPane.setVisible(false);
+        unSetComboBoxes();
+        chosenFileLabel.setText("");
+        submitButton.setDisable(true);
     }
 
     /**

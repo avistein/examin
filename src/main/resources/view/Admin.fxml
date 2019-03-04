@@ -3,141 +3,149 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
-   <content>
-      <SplitPane dividerPositions="0.15557729941291584" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="766.0" prefWidth="151.0">
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="165.0" prefWidth="165.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="598.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="160.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="396.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #222051;" GridPane.rowIndex="1">
                <children>
-                  <SplitPane dividerPositions="0.20680628272251309" layoutX="-11.0" layoutY="32.0" orientation="VERTICAL" prefHeight="766.0" prefWidth="152.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                        <VBox alignment="TOP_CENTER" prefHeight="147.0" prefWidth="162.0" style="-fx-background-color: #222051;">
-                           <children>
-                              <ImageView fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../png/placeholder.png" />
-                                 </image>
-                              </ImageView>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <Label text="ID - " textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font></Label>
-                                    <Label fx:id="userIdLabel" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font></Label>
-                                 </children></HBox>
-                           </children>
-                           <padding>
-                              <Insets top="15.0" />
-                           </padding>
-                        </VBox>
-                        <VBox prefHeight="768.0" prefWidth="155.0" style="-fx-background-color: #222051;">
-                           <children>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="200.0" text="Dashboard" />
-                              <Button fx:id="studentListButton" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student" />
-                              <Button fx:id="professorListButton" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor" />
-                              <Button fx:id="examCellMemberListButton" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Cell Member" />
-                              <Button fx:id="academicAdministrationButton" layoutX="10.0" layoutY="289.0" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration" />
-                              <Button fx:id="examsListButton" layoutX="10.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exams" />
-                              <Button fx:id="marksListButton" layoutX="10.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks" />
-                              <Button fx:id="noticesListButton" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notices" />
-                              <Button fx:id="reportsListButton" mnemonicParsing="false" onAction="#handleReportsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Reports" />
-                              <Button fx:id="adminSettingsButton" mnemonicParsing="false" onAction="#handleAdminSettingsButtonAction" prefHeight="44.0" prefWidth="200.0" text="Settings" />
-                           </children>
-                        </VBox>
-                    </items>
-                  </SplitPane>
+                  <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="200.0" text="Dashboard" />
+                  <Button fx:id="studentListButton" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student" />
+                  <Button fx:id="professorListButton" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor" />
+                  <Button fx:id="examCellMemberListButton" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Cell Member" />
+                  <Button fx:id="academicAdministrationButton" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration" />
+                  <Button fx:id="examsListButton" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exams" />
+                  <Button fx:id="marksListButton" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks" />
+                  <Button fx:id="noticesListButton" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notices" />
+                  <Button fx:id="reportsListButton" mnemonicParsing="false" onAction="#handleReportsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Reports" />
+                  <Button fx:id="adminSettingsButton" mnemonicParsing="false" onAction="#handleAdminSettingsButtonAction" prefHeight="44.0" prefWidth="200.0" text="Settings" />
                </children>
-            </AnchorPane>
-            <GridPane prefHeight="766.0" prefWidth="864.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="377.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="724.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="724.0" minHeight="10.0" prefHeight="676.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #222051;">
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="3.0" style="-fx-background-color: #55547D;" GridPane.rowIndex="1">
+                  <ImageView fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../png/placeholder.png" />
+                     </image>
+                  </ImageView>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="Dashboard /" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
+                        <Label text="ID - " textFill="WHITE">
                            <font>
-                              <Font name="System Italic" size="14.0" />
+                              <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="subTitleLabel" textFill="WHITE">
+                        <Label fx:id="userIdLabel" textFill="WHITE">
                            <font>
-                              <Font name="System Italic" size="14.0" />
-                           </font></Label>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </HBox>
-                  <Pane fx:id="listPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="733.0" minWidth="10.0" prefWidth="733.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="423.0" minWidth="10.0" prefWidth="127.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #222051;">
-                           <children>
-                              <Label text="Name :" textFill="WHITE">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="nameLabel" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font></Label>
-                              <Label layoutX="10.0" layoutY="10.0" text="Role :" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin></Label>
-                              <Label fx:id="roleLabel" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font></Label>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #222051;" GridPane.columnIndex="1">
-                           <children>
-                              <Button mnemonicParsing="false" text="Logout" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </GridPane>
                </children>
-            </GridPane>
-        </items>
-      </SplitPane>
-   </content>
-</ScrollPane>
+            </VBox>
+         </children>
+      </GridPane>
+      <GridPane GridPane.columnIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="464.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="134.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="48.0" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="48.0" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="464.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <StackPane fx:id="contentStackPane" prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </StackPane>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #222051;">
+               <children>
+                  <Label text="Name :" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nameLabel" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="10.0" text="Role :" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="roleLabel" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #222051;" GridPane.columnIndex="1">
+               <children>
+                  <Button mnemonicParsing="false" text="Logout" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="3.0" style="-fx-background-color: #55547D;" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
+               <children>
+                  <Label text="Dashboard /" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="subTitleLabel" textFill="WHITE">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </HBox>
+         </children>
+      </GridPane>
+   </children>
+</GridPane>

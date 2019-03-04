@@ -1,11 +1,19 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import model.Student;
+import service.StudentService;
+
+import java.util.Optional;
 
 public class ViewStudentModalController {
 
+    private Student student;
+
+    private StudentService studentService;
 
     @FXML
     private Label nameLabel;
@@ -57,7 +65,7 @@ public class ViewStudentModalController {
 
     @FXML
     private void initialize(){
-
+        studentService = new StudentService();
     }
 
     @FXML
@@ -67,27 +75,35 @@ public class ViewStudentModalController {
 
     @FXML
     private void handleDeleteButtonAction(){
-
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("Delete");
+//        alert.setHeaderText("Are you really want to delete?");
+//        Optional<ButtonType> result = alert.showAndWait();
+//        if(result.get() == ButtonType.OK){
+//            studentService.deleteStudent(student);
+//        }
     }
 
     void setStudentPojo(Student student){
-        nameLabel.setText(student.getFirstName() + " " + student.getMiddleName()
-                + " " + student.getLastName());
-        genderLabel.setText(student.getGender());
-        dobLabel.setText(student.getDob());
-        regIdLabel.setText(student.getRegId());
-        rollNoLabel.setText(student.getRollNo());
-        regYearLabel.setText(student.getRegYear());
-        batchNameLabel.setText(student.getBatchName());
-        disciplineLabel.setText(student.getDiscipline());
-        degreeLabel.setText(student.getDegree());
-        currSemesterLabel.setText(student.getCurrSemester());
-        motherNameLabel.setText(student.getMotherName());
-        guardianNameLabel.setText(student.getGuardianName());
-        contactNoLabel.setText(student.getContactNo());
-        emailLabel.setText(student.getEmail());
-        guardianContactNoLabel.setText(student.getGuardianContactNo());
-        addressLabel.setText(student.getAddress());
+        this.student = student;
+        nameLabel.setText(this.student.getFirstName() + " "
+                + this.student.getMiddleName() + " " +
+                this.student.getLastName());
+        genderLabel.setText(this.student.getGender());
+        dobLabel.setText(this.student.getDob());
+        regIdLabel.setText(this.student.getRegId());
+        rollNoLabel.setText(this.student.getRollNo());
+        regYearLabel.setText(this.student.getRegYear());
+        batchNameLabel.setText(this.student.getBatchName());
+        disciplineLabel.setText(this.student.getDiscipline());
+        degreeLabel.setText(this.student.getDegree());
+        currSemesterLabel.setText(this.student.getCurrSemester());
+        motherNameLabel.setText(this.student.getMotherName());
+        guardianNameLabel.setText(this.student.getGuardianName());
+        contactNoLabel.setText(this.student.getContactNo());
+        emailLabel.setText(this.student.getEmail());
+        guardianContactNoLabel.setText(this.student.getGuardianContactNo());
+        addressLabel.setText(this.student.getAddress());
     }
 
 

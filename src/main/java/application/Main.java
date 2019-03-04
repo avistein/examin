@@ -13,6 +13,7 @@ public class Main extends Application{
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         primaryStage.setTitle("examin - Examination Management Tool");
         primaryStage.setScene(new Scene(root,400,400));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

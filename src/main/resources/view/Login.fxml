@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
@@ -48,15 +49,14 @@
          </rowConstraints>
       
       </GridPane>
-      <AnchorPane fx:id="spinnerAnchorPane" prefHeight="400.0" prefWidth="400.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="statusStackPane" prefHeight="400.0" prefWidth="400.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox layoutX="174.0" layoutY="174.0" prefHeight="52.0" prefWidth="53.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <ProgressIndicator fx:id="progressIndicator" visible="false" />
-                  <Label text="Label" />
+                  <ProgressIndicator prefHeight="58.0" prefWidth="375.0" />
                </children>
             </VBox>
          </children>
-      </AnchorPane>
+      </StackPane>
    </children>
 </AnchorPane>

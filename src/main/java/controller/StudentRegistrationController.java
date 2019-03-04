@@ -2,6 +2,9 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import model.Batch;
 import model.Course;
 import model.Student;
@@ -45,9 +49,6 @@ public class StudentRegistrationController {
 
     @FXML
     private ComboBox<String> semesterComboBox;
-
-    @FXML
-    private Button submitButton;
 
     @FXML
     private TextField regYearTextField;
@@ -101,7 +102,7 @@ public class StudentRegistrationController {
     private Label statusLabel;
 
     @FXML
-    private AnchorPane statusAnchorPane;
+    private StackPane statusStackPane;
 
     @FXML
     private AnchorPane rootAnchorPane;
@@ -110,22 +111,33 @@ public class StudentRegistrationController {
     private GridPane mainGridPane;
 
     @FXML
+    private HBox buttonsHbox;
+
+    @FXML
     private void initialize() {
         courseService = new CourseService();
         batchService = new BatchService();
         studentService = new StudentService();
-        listOfCourses = courseService.getCourseData();
-        if (!listOfCourses.isEmpty()) {
-            List<String> items = new ArrayList<>();
-            for (Course course : listOfCourses) {
-                if (!items.contains(course.getDegree()))
-                    items.add(course.getDegree());
+        Task<List<Course>> coursesTask = courseService
+                .getCoursesTask("");
+        new Thread(coursesTask).start();
+        coursesTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                listOfCourses = coursesTask.getValue();
+                if (!listOfCourses.isEmpty()) {
+                    List<String> items = new ArrayList<>();
+                    for (Course course : listOfCourses) {
+                        if (!items.contains(course.getDegree()))
+                            items.add(course.getDegree());
+                    }
+                    ObservableList<String> options = FXCollections.observableArrayList(items);
+                    degreeComboBox.setItems(options);
+                }
+                genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
+                        , "Female", "Others"));
             }
-            ObservableList<String> options = FXCollections.observableArrayList(items);
-            degreeComboBox.setItems(options);
-        }
-        genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
-                , "Female", "Others"));
+        });
 
     }
 
@@ -191,20 +203,27 @@ public class StudentRegistrationController {
         batchNameComboBox.getItems().clear();
 
         if (disciplineComboBox.getValue() != null) {
-            //System.out.println(event.toString());
-            String additionalQuery = "where v_degree=? and v_discipline =?";
-            listOfBatches = batchService.getBatchData(additionalQuery, degreeComboBox.getValue()
-                    , disciplineComboBox.getValue());
-            if (!listOfBatches.isEmpty()) {
-                List<String> items = new ArrayList<>();
-                for (Batch batch : listOfBatches) {
-                    if (!items.contains(batch.getBatchName()))
-                        items.add(batch.getBatchName());
-                }
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                batchNameComboBox.setItems(options);
+            final String additionalQuery = "where v_degree=? and v_discipline =?";
+            Task<List<Batch>> batchesTask = batchService
+                    .getBatchesTask(additionalQuery, degreeComboBox.getValue()
+                            , disciplineComboBox.getValue());
+            new Thread(batchesTask).start();
+            batchesTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    listOfBatches = batchesTask.getValue();
+                    if (!listOfBatches.isEmpty()) {
+                        List<String> items = new ArrayList<>();
+                        for (Batch batch : listOfBatches) {
+                            if (!items.contains(batch.getBatchName()))
+                                items.add(batch.getBatchName());
+                        }
+                        ObservableList<String> options = FXCollections.observableArrayList(items);
+                        batchNameComboBox.setItems(options);
 
-            }
+                    }
+                }
+            });
         }
     }
 
@@ -216,7 +235,7 @@ public class StudentRegistrationController {
         if (validate()) {
 
             mainGridPane.setOpacity(0.5);
-            statusAnchorPane.setVisible(true);
+            statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
 
             String degree = degreeComboBox.getValue();
@@ -249,21 +268,30 @@ public class StudentRegistrationController {
 
             }
 
-
-            boolean status = studentService.addStudentToDatabase(new Student(firstName, middleName
-                    , lastName, dob, gender, regYear, email, address, motherName
-                    , guardianContactNo, regId, rollNo, contactNo, guardianName
-                    , batchId, courseId, currSemester, batchName, discipline, degree, ""
-                    , ""));
-
-            progressIndicator.setVisible(false);
-            if (status) {
-                statusImageView.setImage(new Image("/png/success.png"));
-                statusLabel.setText("Added Successfully!");
-            } else {
-                statusImageView.setImage(new Image("/png/error.png"));
-                statusLabel.setText("Failed!");
-            }
+            Task<Boolean> addStudentToDatabaseTask = studentService
+                    .getAddStudentToDatabaseTask(new Student(firstName, middleName
+                            , lastName, dob, gender, regYear, email, address, motherName
+                            , guardianContactNo, regId, rollNo, contactNo, guardianName
+                            , batchId, courseId, currSemester, batchName, discipline, degree, ""
+                            , ""));
+            new Thread(addStudentToDatabaseTask).start();
+            addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    boolean status = addStudentToDatabaseTask.getValue();
+                    progressIndicator.setVisible(false);
+                    buttonsHbox.setVisible(true);
+                    statusImageView.setVisible(true);
+                    statusLabel.setVisible(true);
+                    if (status) {
+                        statusImageView.setImage(new Image("/png/success.png"));
+                        statusLabel.setText("Added Successfully!");
+                    } else {
+                        statusImageView.setImage(new Image("/png/error.png"));
+                        statusLabel.setText("Failed!");
+                    }
+                }
+            });
 
         }
     }
@@ -358,7 +386,11 @@ public class StudentRegistrationController {
 
     @FXML
     private void handleAddAnotherAndResetButtonAction(){
-        statusAnchorPane.setVisible(false);
+        statusStackPane.setVisible(false);
+        progressIndicator.setVisible(false);
+        buttonsHbox.setVisible(false);
+        statusImageView.setVisible(false);
+        statusLabel.setVisible(false);
         mainGridPane.setOpacity(1);
         firstNameTextField.clear();
         middleNameTextField.clear();
@@ -382,13 +414,12 @@ public class StudentRegistrationController {
 
     @FXML
     private void handleBackAndCancelButtonAction() throws IOException {
-        statusAnchorPane.setVisible(false);
-        mainGridPane.setOpacity(1);
-        Pane listPane = (Pane)rootAnchorPane.getParent();
+
+        StackPane contentStackPane = (StackPane)rootAnchorPane.getParent();
         Parent studentRegistrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentsList.fxml"));
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentRegistrationFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
 }

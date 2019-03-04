@@ -5,6 +5,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Batch;
@@ -71,7 +75,7 @@ public class StudentsListController {
     private ComboBox<String> semesterComboBox;
 
     @FXML
-    private TableView<Student> studentTable;
+    private TableView<Student> studentTableView;
 
     @FXML
     private TextField searchTextField;
@@ -122,18 +126,28 @@ public class StudentsListController {
         courseService = new CourseService();
         batchService = new BatchService();
         studentObsList = FXCollections.observableArrayList();
-        listOfCourses = courseService.getCourseData();
-        initCol();
-        if (!listOfCourses.isEmpty()) {
-            List<String> items = new ArrayList<>();
-            for (Course course : listOfCourses) {
-                if (!items.contains(course.getDegree()))
-                    items.add(course.getDegree());
+
+        Task<List<Course>> coursesTask = courseService
+                .getCoursesTask("");
+        new Thread(coursesTask).start();
+        coursesTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                initCol();
+                listOfCourses = coursesTask.getValue();
+                if (!listOfCourses.isEmpty()) {
+                    List<String> items = new ArrayList<>();
+                    for (Course course : listOfCourses) {
+                        if (!items.contains(course.getDegree()))
+                            items.add(course.getDegree());
+                    }
+                    items.add("all");
+                    ObservableList<String> options = FXCollections.observableArrayList(items);
+                    degreeComboBox.setItems(options);
+                }
             }
-            items.add("all");
-            ObservableList<String> options = FXCollections.observableArrayList(items);
-            degreeComboBox.setItems(options);
-        }
+        });
+
     }
 
 
@@ -204,20 +218,32 @@ public class StudentsListController {
         studentObsList.clear();
 
         if (disciplineComboBox.getValue() != null) {
-            String additionalQuery = "where v_degree=? and v_discipline =?";
-            listOfBatches = batchService.getBatchData(additionalQuery, degreeComboBox.getValue()
-                    , disciplineComboBox.getValue());
-            //Add unique batch names to the batchComboBox
-            if (!listOfBatches.isEmpty()) {
-                List<String> items = new ArrayList<>();
-                for (Batch batch : listOfBatches) {
-                    if (!items.contains(batch.getBatchName()))
-                        items.add(batch.getBatchName());
-                }
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                batchNameComboBox.setItems(options);
 
-            }
+            final String additionalQuery = "where v_degree=? and v_discipline =?";
+            Task<List<Batch>> batchesTask = batchService.getBatchesTask(additionalQuery, degreeComboBox.getValue()
+                    , disciplineComboBox.getValue());
+
+            new Thread(batchesTask).start();
+
+            batchesTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+
+                    listOfBatches = batchesTask.getValue();
+                    //Add unique batch names to the batchComboBox
+                    if (!listOfBatches.isEmpty()) {
+                        List<String> items = new ArrayList<>();
+                        for (Batch batch : listOfBatches) {
+                            if (!items.contains(batch.getBatchName()))
+                                items.add(batch.getBatchName());
+                        }
+                        ObservableList<String> options = FXCollections.observableArrayList(items);
+                        batchNameComboBox.setItems(options);
+
+                    }
+                }
+            });
+
         }
 
     }
@@ -297,65 +323,81 @@ public class StudentsListController {
 
     private void populateTable() {
         String additionalQuery = "";
+        Task<List<Student>> studentsTask;
         if(degreeComboBox.getValue().equals("all")){
-            listOfStudents = studentService.getStudentData(additionalQuery);
+            studentsTask = studentService.getStudentTask(additionalQuery);
         }
-        else {
+        else{
+
             additionalQuery = "where v_degree=? and v_discipline=? " +
                     "and v_batch_name=? and v_curr_semester=?";
-            listOfStudents = studentService.getStudentData(additionalQuery
+            studentsTask = studentService.getStudentTask(additionalQuery
                     , degreeComboBox.getValue(), disciplineComboBox.getValue()
                     , batchNameComboBox.getValue(), semesterComboBox.getValue());
         }
-        studentObsList.setAll(listOfStudents);
-        studentFilteredItems = new FilteredList<>(studentObsList, null);
-        searchTextField.textProperty().addListener(new ChangeListener<String>() {
+
+
+
+        new Thread(studentsTask).start();
+
+        studentsTask.setOnSucceeded(new EventHandler<>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                studentFilteredItems.setPredicate(new Predicate<Student>() {
+            public void handle(WorkerStateEvent event) {
+
+                listOfStudents = studentsTask.getValue();
+                studentObsList.setAll(listOfStudents);
+                studentFilteredItems = new FilteredList<>(studentObsList, null);
+                searchTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public boolean test(Student student) {
+                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                        studentFilteredItems.setPredicate(new Predicate<>() {
+                            @Override
+                            public boolean test(Student student) {
 
-                        if (newValue == null || newValue.isEmpty())
-                            return true;
-                        String lowerCaseFilter = newValue.toLowerCase();
+                                if (newValue == null || newValue.isEmpty())
+                                    return true;
+                                String lowerCaseFilter = newValue.toLowerCase();
 
-                        if (student.getFirstName().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getMiddleName().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getLastName().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getRollNo().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getRegId().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getDegree().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getDiscipline().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getCurrSemester().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getBatchName().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getRegYear().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getGuardianName().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        else if (student.getContactNo().toLowerCase().contains(lowerCaseFilter))
-                            return true;
-                        return false;
+                                if (student.getFirstName().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getMiddleName().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getLastName().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getRollNo().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getRegId().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getDegree().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getDiscipline().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getCurrSemester().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getBatchName().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getRegYear().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getGuardianName().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                else if (student.getContactNo().toLowerCase().contains(lowerCaseFilter))
+                                    return true;
+                                return false;
+                            }
+                        });
                     }
                 });
+
+                studentTableView.setItems(studentFilteredItems);
             }
         });
 
-        studentTable.setItems(studentFilteredItems);
     }
 
     @FXML
     private void handleImportButtonAction() throws IOException {
         Stage importStudentListModalWindow = new Stage();
+        importStudentListModalWindow.setResizable(false);
         importStudentListModalWindow.setTitle("Import Student List");
         importStudentListModalWindow.initModality(Modality.WINDOW_MODAL);
         Stage parentStage = (Stage) importButton.getScene().getWindow();
@@ -372,16 +414,16 @@ public class StudentsListController {
 
     @FXML
     private void handleAddStudentButtonAction() throws IOException {
-        Pane listPane = (Pane) studentListGridPane.getParent();
+        StackPane contentStackPane = (StackPane) studentListGridPane.getParent();
         Parent studentRegistrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentRegistration.fxml"));
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentRegistrationFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
     @FXML
     private void handleMouseClickOnTableViewItem() throws IOException{
-        Student student = studentTable.getSelectionModel().getSelectedItem();
+        Student student = studentTableView.getSelectionModel().getSelectedItem();
 
         if(student != null) {
 
