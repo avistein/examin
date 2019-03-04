@@ -27,20 +27,19 @@ public class ExamCellMemberService {
                 List<ExamCellMember> list = new ArrayList<>();
                 for (int i = 0; i < map.get("v_emp_id").size(); i++) {
 
-                    String empId= map.get("v_emp_id").get(i);
-                    String firstName = map.get("v_first_name").get(i);
-                    String middleName = map.get("v_middle_name").get(i);
-                    if(middleName == null)
-                        middleName = "";
-                    String lastName = map.get("v_last_name").get(i);
-                    String dob = map.get("d_dob").get(i);
-                    String doj = map.get("d_date_of_joining").get(i);
-                    String email = map.get("v_email_id").get(i);
-                    String address = map.get("v_address").get(i);
-                    String contactNo = map.get("v_contact_no").get(i);
+                    ExamCellMember examCellMember = new ExamCellMember();
 
-                    list.add(new ExamCellMember(empId, firstName, middleName, lastName
-                            , dob, doj, email, address, contactNo));
+                    examCellMember.setEmpId(map.get("v_emp_id").get(i));
+                    examCellMember.setFirstName( map.get("v_first_name").get(i));
+                    examCellMember.setMiddleName(map.get("v_middle_name").get(i));
+                    examCellMember.setLastName(map.get("v_last_name").get(i));
+                    examCellMember.setDob(map.get("d_dob").get(i));
+                    examCellMember.setDoj(map.get("d_date_of_joining").get(i));
+                    examCellMember.setEmail(map.get("v_email_id").get(i));
+                    examCellMember.setAddress(map.get("v_address").get(i));
+                    examCellMember.setContactNo(map.get("v_contact_no").get(i));
+
+                    list.add(examCellMember);
                 }
                 return list;
             }

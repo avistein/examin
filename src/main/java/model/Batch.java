@@ -17,15 +17,6 @@ public class Batch extends Course {
         this.batchName = new SimpleStringProperty("");
     }
 
-    public Batch(String batchId, String courseId, String batchName,
-                 String discipline, String degree, String duration, String deptName){
-
-        super(discipline, degree, courseId, duration, deptName);
-        this.batchId = new SimpleStringProperty(batchId);
-        this.batchName = new SimpleStringProperty(batchName);
-    }
-
-
 
     public String getBatchId(){
         return this.batchId.get();

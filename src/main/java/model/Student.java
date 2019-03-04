@@ -46,30 +46,6 @@ public class Student extends Batch implements Serializable {
         this.currSemester = new SimpleStringProperty("");
     }
 
-    public Student(String fName, String mName, String lName,String dob, String gender,
-                   String regYear, String email, String address,  String motherName,
-                   String guardianContactNo, String regId, String rollNo,
-                   String contactNo, String guardianName, String batchId, String courseId,
-                   String currSemester, String batchName, String discipline, String degree, String duration,
-                   String deptName){
-
-        super(batchId, courseId, batchName, discipline, degree, duration, deptName);
-        this.firstName = new SimpleStringProperty(fName);
-        this.middleName= new SimpleStringProperty(mName);
-        this.lastName = new SimpleStringProperty(lName);
-        this.dob = new SimpleStringProperty(dob);
-        this.gender = new SimpleStringProperty(gender);
-        this.regYear = new SimpleStringProperty(regYear);
-        this.email = new SimpleStringProperty(email);
-        this.address = new SimpleStringProperty(address);
-        this.motherName = new SimpleStringProperty(motherName);
-        this.guardianContactNo = new SimpleStringProperty(guardianContactNo);
-        this.regId = new SimpleStringProperty(regId);
-        this.rollNo = new SimpleStringProperty(rollNo);
-        this.contactNo = new SimpleStringProperty(contactNo);
-        this.guardianName = new SimpleStringProperty(guardianName);
-        this.currSemester = new SimpleStringProperty(currSemester);
-    }
 
     public String getFirstName() {
         return this.firstName.get();

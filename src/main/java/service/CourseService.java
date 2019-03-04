@@ -32,13 +32,15 @@ public class CourseService {
                 List<Course> list = new ArrayList<>();
                 for(int i = 0; i < map.get("v_course_id").size(); i ++){
 
-                    String discipline = map.get("v_discipline").get(i);
-                    String degree = map.get("v_degree").get(i);
-                    String courseId = map.get("v_course_id").get(i);
-                    String duration = map.get("v_duration").get(i);
-                    String deptName = map.get("v_dept_name").get(i);
+                    Course course = new Course();
 
-                    list.add(new Course(discipline, degree, courseId, duration, deptName));
+                    course.setCourseId( map.get("v_course_id").get(i));
+                    course.setDiscipline(map.get("v_discipline").get(i));
+                    course.setDegree(map.get("v_degree").get(i));
+                    course.setDuration(map.get("v_duration").get(i));
+                    course.setDeptName( map.get("v_dept_name").get(i));
+
+                    list.add(course);
                 }
                 return list;
             }

@@ -33,8 +33,11 @@ public class StudentService {
     @SuppressWarnings("Duplicates")
     public Task<List<Student>> getStudentTask(String additionalQuery, final String ...params){
 
-        final String query = "SELECT * FROM t_student natural join t_student_enrollment_details" +
-        " natural join t_course natural join t_batch " + additionalQuery;
+        final String query = "SELECT v_reg_id, v_first_name, v_middle_name, v_last_name,d_dob, v_gender, v_reg_year" +
+                ",v_email_id, v_address, v_mother_name, v_guardian_contact_no, v_roll_no, v_contact_no" +
+                ", v_father_guardian_name, v_curr_semester, v_batch_name, v_discipline, v_degree, v_dept_name " +
+                "FROM t_student natural join t_student_enrollment_details natural join t_course natural join" +
+                " t_batch " + additionalQuery;
 
         Task<List<Student>> studentTask = new Task<>() {
             @Override
@@ -43,35 +46,32 @@ public class StudentService {
                 List<Student>list = new ArrayList<>();
                 for (int i = 0; i < map.get("v_reg_id").size(); i++) {
 
-                    String firstName = map.get("v_first_name").get(i);
-                    String middleName = map.get("v_middle_name").get(i);
-                    if(middleName == null)
-                        middleName = "";
-                    String lastName = map.get("v_last_name").get(i);
-                    String dob = map.get("d_dob").get(i);
-                    String gender = map.get("v_gender").get(i);
-                    String regYear = map.get("v_reg_year").get(i);
-                    String email = map.get("v_email_id").get(i);
-                    String address = map.get("v_address").get(i);
-                    String motherName = map.get("v_mother_name").get(i);
-                    String guardianContactNo = map.get("v_guardian_contact_no").get(i);
-                    String regId = map.get("v_reg_id").get(i);
-                    String rollNo = map.get("v_roll_no").get(i);
-                    String contactNo = map.get("v_contact_no").get(i);
-                    String guardianName = map.get("v_father_guardian_name").get(i);
-                    String batchId = map.get("v_batch_id").get(i);
-                    String courseId = map.get("v_course_id").get(i);
-                    String currSemester = map.get("v_curr_semester").get(i);
-                    String batchName = map.get("v_batch_name").get(i);
-                    String discipline = map.get("v_discipline").get(i);
-                    String degree = map.get("v_degree").get(i);
-                    String duration = map.get("v_duration").get(i);
-                    String deptName = map.get("v_dept_name").get(i);
-                    list.add(new Student(firstName, middleName, lastName, dob, gender,
-                            regYear, email, address, motherName, guardianContactNo,
-                            regId, rollNo, contactNo, guardianName, batchId, courseId,
-                            currSemester, batchName, discipline, degree, duration,
-                            deptName));
+                    Student student = new Student();
+
+                    student.setFirstName(map.get("v_first_name").get(i));
+                    student.setMiddleName(map.get("v_middle_name").get(i));
+//                    if(middleName == null)
+//                        middleName = "";
+                    student.setLastName(map.get("v_last_name").get(i));
+                    student.setDob(map.get("d_dob").get(i));
+                    student.setGender(map.get("v_gender").get(i));
+                    student.setRegYear(map.get("v_reg_year").get(i));
+
+                    student.setEmail(map.get("v_email_id").get(i));
+                    student.setAddress(map.get("v_address").get(i));
+                    student.setMotherName(map.get("v_mother_name").get(i));
+                    student.setGuardianContactNo(map.get("v_guardian_contact_no").get(i));
+                    student.setRegId(map.get("v_reg_id").get(i));
+                    student.setRollNo(map.get("v_roll_no").get(i));
+                    student.setContactNo(map.get("v_contact_no").get(i));
+                    student.setGuardianName(map.get("v_father_guardian_name").get(i));
+                    student.setCurrSemester(map.get("v_curr_semester").get(i));
+                    student.setBatchName(map.get("v_batch_name").get(i));
+                    student.setDiscipline(map.get("v_discipline").get(i));
+                    student.setDegree(map.get("v_degree").get(i));
+                    student.setDeptName(map.get("v_dept_name").get(i));
+
+                    list.add(student);
                 }
                 return list;
             }

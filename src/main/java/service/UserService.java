@@ -24,11 +24,15 @@ public class UserService {
                 Map<String, List<String>> map = databaseHelper.execQuery(query, params);
                 List<User> list = new ArrayList<>();
                 for (int i = 0; i < map.get("v_user_id").size(); i++) {
-                    String userId = map.get("v_user_id").get(i);
-                    String password = map.get("v_pass").get(i);
-                    String hashAlgo = map.get("v_hash_algo").get(i);
-                    String gid = map.get("v_gid").get(i);
-                    list.add(new User(userId, password, hashAlgo, gid));
+
+                    User user = new User();
+
+                    user.setUserId(map.get("v_user_id").get(i));
+                    user.setPassword(map.get("v_pass").get(i));
+                    user.setHashAlgo(map.get("v_hash_algo").get(i));
+                    user.setGid(map.get("v_gid").get(i));
+
+                    list.add(user);
                 }
                 return list;
             }

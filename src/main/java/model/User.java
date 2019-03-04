@@ -9,12 +9,12 @@ public class User {
     private SimpleStringProperty hashAlgo;
     private SimpleStringProperty gid;
 
-    public User(String userId, String password, String hashAlgo, String gid){
+    public User(){
 
-        this.userId = new SimpleStringProperty(userId);
-        this.password = new SimpleStringProperty(password);
-        this.hashAlgo = new SimpleStringProperty(hashAlgo);
-        this.gid = new SimpleStringProperty(gid);
+        this.userId = new SimpleStringProperty("");
+        this.password = new SimpleStringProperty("");
+        this.hashAlgo = new SimpleStringProperty("");
+        this.gid = new SimpleStringProperty("");
     }
 
     public String getUserId(){

@@ -239,43 +239,41 @@ public class StudentRegistrationController {
             statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
 
-            String degree = degreeComboBox.getValue();
-            String discipline = disciplineComboBox.getValue();
-            String batchName = batchNameComboBox.getValue();
-            String currSemester = semesterComboBox.getValue();
-            String regYear = regYearTextField.getText().trim();
-            String regId = regIdTextField.getText().trim();
-            String rollNo = rollNoTextField.getText().trim();
-            String firstName = firstNameTextField.getText().trim();
-            String middleName = middleNameTextField.getText().trim();
-            String lastName = lastNameTextField.getText().trim();
-            String dob = dobDatePicker.getValue().toString();
-            String gender = genderChoiceBox.getValue();
-            String email = emailTextField.getText().trim();
-            String contactNo = contactNoTextField.getText().trim();
-            String address = addressTextArea.getText().trim();
-            String guardianName = guardianNameTextField.getText().trim();
-            String motherName = motherNameTextField.getText().trim();
-            String guardianContactNo = guardianContactNoTextField.getText().trim();
-            String batchId = "";
-            String courseId = "";
+            Student student = new Student();
+            student.setFirstName(firstNameTextField.getText().trim());
+            student.setMiddleName(middleNameTextField.getText().trim());
+            student.setLastName(lastNameTextField.getText().trim());
+            student.setDob(dobDatePicker.getValue().toString());
+            student.setGender(genderChoiceBox.getValue());
+            student.setRegYear(regYearTextField.getText().trim());
+            student.setEmail(emailTextField.getText().trim());
+            student.setAddress(addressTextArea.getText().trim());
+            student.setMotherName(motherNameTextField.getText().trim());
+            student.setGuardianContactNo(guardianContactNoTextField.getText().trim());
+            student.setRegId(regIdTextField.getText().trim());
+            student.setRollNo(rollNoTextField.getText().trim());
+            student.setContactNo(contactNoTextField.getText().trim());
+            student.setGuardianName(guardianNameTextField.getText().trim());
+            student.setCurrSemester(semesterComboBox.getValue());
+            student.setBatchName(batchNameComboBox.getValue());
+            student.setDiscipline(disciplineComboBox.getValue());
+            student.setDegree(degreeComboBox.getValue());
+
             for (Batch batch : listOfBatches) {
 
-                if (batch.getDiscipline().equals(discipline) && batch.getDegree().equals(degree)
-                        && batch.getBatchName().equals(batchName)) {
-                    batchId = batch.getBatchId();
-                    courseId = batch.getCourseId();
+                if (batch.getDiscipline().equals(disciplineComboBox.getValue()) &&
+                        batch.getDegree().equals(degreeComboBox.getValue()) &&
+                        batch.getBatchName().equals(batchNameComboBox.getValue())) {
+                    student.setBatchId(batch.getBatchId());
                 }
 
             }
 
             Task<Integer> addStudentToDatabaseTask = studentService
-                    .getAddStudentToDatabaseTask(new Student(firstName, middleName
-                            , lastName, dob, gender, regYear, email, address, motherName
-                            , guardianContactNo, regId, rollNo, contactNo, guardianName
-                            , batchId, courseId, currSemester, batchName, discipline, degree, ""
-                            , ""));
+                    .getAddStudentToDatabaseTask(student);
+
             new Thread(addStudentToDatabaseTask).start();
+
             addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
                 @Override
                 public void handle(WorkerStateEvent event) {

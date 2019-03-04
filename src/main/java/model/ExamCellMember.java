@@ -14,21 +14,17 @@ public class ExamCellMember {
     private SimpleStringProperty address;
     private SimpleStringProperty contactNo;
 
-    public ExamCellMember(String empId, String fName, String mName, String lName,
-                          String dob, String doj, String email, String address,
-                          String contactNo){
-
-        this.empId = new SimpleStringProperty(empId);
-        this.firstName = new SimpleStringProperty(fName);
-        this.middleName= new SimpleStringProperty(mName);
-        this.lastName = new SimpleStringProperty(lName);
-        this.dob = new SimpleStringProperty(dob);
-        this.doj = new SimpleStringProperty(doj);
-        this.email = new SimpleStringProperty(email);
-        this.address = new SimpleStringProperty(address);
-        this.contactNo = new SimpleStringProperty(contactNo);
+    public ExamCellMember(){
+        this.empId = new SimpleStringProperty("");
+        this.firstName = new SimpleStringProperty("");
+        this.middleName= new SimpleStringProperty("");
+        this.lastName = new SimpleStringProperty("");
+        this.dob = new SimpleStringProperty("");
+        this.doj = new SimpleStringProperty("");
+        this.email = new SimpleStringProperty("");
+        this.address = new SimpleStringProperty("");
+        this.contactNo = new SimpleStringProperty("");
     }
-
 
     public String getEmpId() {
         return empId.get();

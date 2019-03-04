@@ -23,14 +23,6 @@ public class Course  {
         this.deptName = new SimpleStringProperty("");
     }
 
-    public Course(String discipline, String degree, String courseId, String duration,
-                  String deptName){
-        this.discipline = new SimpleStringProperty(discipline);
-        this.degree = new SimpleStringProperty(degree);
-        this.courseId = new SimpleStringProperty(courseId);
-        this.duration = new SimpleStringProperty(duration);
-        this.deptName = new SimpleStringProperty(deptName);
-    }
 
     public String getDiscipline(){
         return this.discipline.get();

@@ -35,16 +35,16 @@ public class BatchService {
                 List<Batch> list = new ArrayList<>();
                 for(int i = 0; i < map.get("v_batch_id").size(); i ++){
 
-                    String courseId = map.get("v_course_id").get(i);
-                    String batchId = map.get("v_batch_id").get(i);
-                    String batchName = map.get("v_batch_name").get(i);
-                    String discipline = map.get("v_discipline").get(i);
-                    String degree = map.get("v_degree").get(i);
-                    String duration = map.get("v_duration").get(i);
-                    String deptName = map.get("v_dept_name").get(i);
+                    Batch batch = new Batch();
+                    batch.setCourseId( map.get("v_course_id").get(i));
+                    batch.setBatchId(map.get("v_batch_id").get(i));
+                    batch.setBatchName(map.get("v_batch_name").get(i));
+                    batch.setDiscipline(map.get("v_discipline").get(i));
+                    batch.setDegree(map.get("v_degree").get(i));
+                    batch.setDuration(map.get("v_duration").get(i));
+                    batch.setDeptName( map.get("v_dept_name").get(i));
 
-                    list.add(new Batch(batchId, courseId, batchName,
-                            discipline, degree, duration, deptName));
+                    list.add(batch);
                 }
                 return list;
             }
@@ -62,16 +62,16 @@ public class BatchService {
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
         for(int i = 0; i < map.get("v_batch_id").size(); i ++){
 
-            String courseId = map.get("v_course_id").get(i);
-            String batchId = map.get("v_batch_id").get(i);
-            String batchName = map.get("v_batch_name").get(i);
-            String discipline = map.get("v_discipline").get(i);
-            String degree = map.get("v_degree").get(i);
-            String duration = map.get("v_duration").get(i);
-            String deptName = map.get("v_dept_name").get(i);
+            Batch batch = new Batch();
+            batch.setCourseId( map.get("v_course_id").get(i));
+            batch.setBatchId(map.get("v_batch_id").get(i));
+            batch.setBatchName(map.get("v_batch_name").get(i));
+            batch.setDiscipline(map.get("v_discipline").get(i));
+            batch.setDegree(map.get("v_degree").get(i));
+            batch.setDuration(map.get("v_duration").get(i));
+            batch.setDeptName( map.get("v_dept_name").get(i));
 
-            list.add(new Batch(batchId, courseId, batchName,
-                    discipline, degree, duration, deptName));
+            list.add(batch);
         }
         return list;
     }
