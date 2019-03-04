@@ -4,8 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
-import static java.sql.Statement.EXECUTE_FAILED;
-
+import static util.ConstantsUtil.*;
 /**
  * Helper class to create,close database connection and
  * implement SELECT,INSERT,UPDATE,DELETE.
@@ -124,7 +123,7 @@ public class DatabaseHelper {
      * @param list The list containing list of entity attributes to be inserted.
      * @return Status of the operation.
      */
-    public boolean batchInsert(String sql, List<List<String>> list){
+    public int batchInsert(String sql, List<List<String>> list){
 
         int[] status = new int[list.size()];
         openConnection();
@@ -142,18 +141,22 @@ public class DatabaseHelper {
         catch (SQLException e){
             e.printStackTrace();
         }
+
         finally {
             closeConnection();
         }
         if(list.size() == status.length) {
-
+            int rowsAffected = 0;
             for (int i : status) {
-                if(i == EXECUTE_FAILED || i == 0)
-                    return false;
+                if(i == 1)
+                    rowsAffected++;
             }
-            return true;
+            if(rowsAffected == list.size())
+                return SUCCESS;
+            else
+                return DATA_ALREADY_EXIST_ERROR;
         }
-        return false;
+        return DATABASE_ERROR;
     }
 
     /**
@@ -163,21 +166,28 @@ public class DatabaseHelper {
      *      *        normally VALUES parameters.
      * @return Status of the operation.
      */
-    public boolean insertUpdateDelete(String sql, String ...params){
+    public int insertUpdateDelete(String sql, String ...params){
 
-        boolean status;
+        int rowsAffected = 0;
+        int status = DATABASE_ERROR;
         openConnection();
         try(PreparedStatement stmt = con.prepareStatement(sql)){
             if(params.length != 0){
                 for(int i = 0; i < params.length; i++)
                     stmt.setString(i+1 , params[i]);
             }
-            stmt.executeUpdate();
-            status = true;
+            rowsAffected = stmt.executeUpdate();
+            if(rowsAffected > 0)
+                status = SUCCESS;
+            else
+                status = DATA_INEXISTENT_ERROR;
+        }
+        catch(SQLIntegrityConstraintViolationException e){
+            e.printStackTrace();
+            status = DATA_ALREADY_EXIST_ERROR;
         }
         catch (SQLException e){
             e.printStackTrace();
-            status = false;
         }
         finally {
             closeConnection();

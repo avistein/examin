@@ -25,6 +25,7 @@ import util.ValidatorUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import static util.ConstantsUtil.*;
 
 public class StudentRegistrationController {
 
@@ -268,7 +269,7 @@ public class StudentRegistrationController {
 
             }
 
-            Task<Boolean> addStudentToDatabaseTask = studentService
+            Task<Integer> addStudentToDatabaseTask = studentService
                     .getAddStudentToDatabaseTask(new Student(firstName, middleName
                             , lastName, dob, gender, regYear, email, address, motherName
                             , guardianContactNo, regId, rollNo, contactNo, guardianName
@@ -278,17 +279,21 @@ public class StudentRegistrationController {
             addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
-                    boolean status = addStudentToDatabaseTask.getValue();
+                    int status = addStudentToDatabaseTask.getValue();
                     progressIndicator.setVisible(false);
                     buttonsHbox.setVisible(true);
                     statusImageView.setVisible(true);
                     statusLabel.setVisible(true);
-                    if (status) {
+                    if (status == DATABASE_ERROR) {
+                        statusImageView.setImage(new Image("/png/critical error.png"));
+                        statusLabel.setText("Database Error!");
+                    }
+                    else if (status == SUCCESS) {
                         statusImageView.setImage(new Image("/png/success.png"));
                         statusLabel.setText("Added Successfully!");
                     } else {
                         statusImageView.setImage(new Image("/png/error.png"));
-                        statusLabel.setText("Failed!");
+                        statusLabel.setText("Student already exists!");
                     }
                 }
             });

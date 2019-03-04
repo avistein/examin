@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import static util.ConstantsUtil.*;
 /**
  * Service class to
  *
@@ -79,11 +79,11 @@ public class StudentService {
         return studentTask;
     }
 
-    public Task<Boolean> getAddStudentFromCsvToDataBaseTask
+    public Task<Integer> getAddStudentFromCsvToDataBaseTask
             (final File file, final Map<String, String> map){
-        Task<Boolean> addStudentFromCsvToDataBaseTask = new Task<>() {
+        Task<Integer> addStudentFromCsvToDataBaseTask = new Task<>() {
             @Override
-            protected Boolean call(){
+            protected Integer call(){
 
                 BatchService batchService = new BatchService();
                 Map<String, String> columnNameMapping = new HashMap<>();
@@ -169,21 +169,27 @@ public class StudentService {
                     singleStudentDetails.add(student.getGender());
                     listOfStudents.add(singleStudentDetails);
                 }
-                boolean t_studentStatus = databaseHelper.batchInsert(sql1, listOfStudents);
-                boolean t_student_enrollmentStatus = databaseHelper.batchInsert(sql2, studentEnrollmentList);
+                int tStudentStatus = databaseHelper.batchInsert(sql1, listOfStudents);
+                int tStudentEnrollmentStatus = databaseHelper.batchInsert(sql2, studentEnrollmentList);
 
-                return t_studentStatus & t_student_enrollmentStatus;
-
+                if(tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tStudentStatus == SUCCESS &&
+                        tStudentEnrollmentStatus == SUCCESS)
+                    return SUCCESS;
+                else
+                    return DATA_ALREADY_EXIST_ERROR;
             }
         };
         return addStudentFromCsvToDataBaseTask;
     }
 
 
-    public Task<Boolean>  getAddStudentToDatabaseTask(final Student student){
-        Task<Boolean> addStudentToDatabaseTask = new Task<>() {
+    public Task<Integer>  getAddStudentToDatabaseTask(final Student student){
+        Task<Integer> addStudentToDatabaseTask = new Task<>() {
             @Override
-            protected Boolean call() {
+            protected Integer call() {
 
                 final String sql1 = "INSERT INTO t_student (v_first_name, v_middle_name" +
                         ", v_last_name, v_reg_id, v_roll_no, d_dob, v_mother_name, v_reg_year" +
@@ -194,37 +200,56 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
                         ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
 
-                boolean t_studentStatus = databaseHelper.insertUpdateDelete(sql1, student.getFirstName(), student.getMiddleName()
+                int tStudentStatus = databaseHelper.insertUpdateDelete(sql1, student.getFirstName(), student.getMiddleName()
                         , student.getLastName(), student.getRegId(), student.getRollNo()
                         , student.getDob(), student.getMotherName(), student.getRegYear()
                         , student.getContactNo(), student.getGuardianName(), student.getEmail()
                         , student.getAddress(), student.getGuardianContactNo(), student.getGender());
 
-                boolean t_student_enrollmentStatus = databaseHelper.insertUpdateDelete(sql2, student.getBatchId()
+                int tStudentEnrollmentStatus = databaseHelper.insertUpdateDelete(sql2, student.getBatchId()
                         , student.getRegId(), student.getCurrSemester());
 
-                return t_studentStatus & t_student_enrollmentStatus;
+                if(tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tStudentStatus == SUCCESS &&
+                        tStudentEnrollmentStatus== SUCCESS)
+                    return SUCCESS;
+                else
+                    return DATA_ALREADY_EXIST_ERROR;
 
             }
         };
         return addStudentToDatabaseTask;
     }
 
+    public Task<Integer> getDeleteStudentTask(final Student student){
 
-//    public boolean deleteStudent(Student student){
-//        final String sql1 = "DELETE FROM t_login_details where v_user_id=?";
-//        final String sql2 = "DELETE FROM t_student_enrollment_details where v_reg_id=?";
-//        final String sql3 = "DELETE FROM t_student where v_reg_id=?";
-//        databaseHelper.openConnection();
-//        boolean t_loginDetailsStatus = databaseHelper.insertUpdateDelete
+        //final String sql1 = "DELETE FROM t_login_details where v_user_id=?";
+        final String sql2 = "DELETE FROM t_student_enrollment_details where v_reg_id=?";
+        final String sql3 = "DELETE FROM t_student where v_reg_id=?";
+        Task<Integer> deleteStudentTask = new Task<>() {
+            @Override
+            protected Integer call()  {
+//                boolean t_loginDetailsStatus = databaseHelper.insertUpdateDelete
 //                (sql1, student.getRegId());
-//        boolean t_student_enrollmentStatus = databaseHelper.insertUpdateDelete
-//                (sql2, student.getRegId());
-//        boolean t_studentStatus = databaseHelper.insertUpdateDelete
-//                (sql3, student.getRegId());
-//
-//        return t_studentStatus & t_student_enrollmentStatus & t_loginDetailsStatus;
-//    }
+                int tStudentEnrollmentStatus = databaseHelper.insertUpdateDelete
+                        (sql2, student.getRegId());
+                int tStudentStatus = databaseHelper.insertUpdateDelete
+                        (sql3, student.getRegId());
+
+                if(tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tStudentStatus == SUCCESS &&
+                        tStudentEnrollmentStatus== SUCCESS)
+                    return SUCCESS;
+                else
+                    return DATA_INEXISTENT_ERROR;
+            }
+        };
+        return deleteStudentTask;
+    }
 
 }
 

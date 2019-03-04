@@ -19,7 +19,7 @@ import model.User;
 import service.UserService;
 import util.SceneSetterUtil;
 import command.LoginCommand;
-
+import static util.ConstantsUtil.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -78,7 +78,7 @@ public class LoginController {
                 statusStackPane.setVisible(false);
                 mainGridPane.setOpacity(0.5);
 
-                int status = 0;
+                int status = LOGIN_ERROR;
 
                 if(!usersTask.getValue().isEmpty()) {
                     status = loginCommand.authenticateLogin(password
@@ -89,14 +89,17 @@ public class LoginController {
 
                 switch (status){
 
-                    case 0:
+                    case LOGIN_ERROR:
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setContentText("Invalid Username or Password");
                         alert.show();
+                        mainGridPane.setOpacity(1);
+                        userNameField.clear();
+                        passwordField.clear();
                         break;
 
-                    case 1:
+                    case ADMIN_GID:
                         FXMLLoader loader = new FXMLLoader(getClass()
                                 .getResource("/view/Admin.fxml"));
                         try {
@@ -117,7 +120,7 @@ public class LoginController {
 
                         break;
 
-                    case 2:
+                    case EXAM_CELL_MEMBER_GID:
                         try {
                             root = FXMLLoader.load(SceneSetterUtil
                                     .class.getResource("/view/ExamCellMember.fxml"));
@@ -133,7 +136,7 @@ public class LoginController {
 
                         break;
 
-                    case 3:
+                    case PROFESSOR_HOD_GID:
 
                         try {
                             root = FXMLLoader.load(SceneSetterUtil
@@ -150,7 +153,7 @@ public class LoginController {
 
                         break;
 
-                    case 4:
+                    case PROFESSOR_GID:
                         try {
                             root = FXMLLoader.load(SceneSetterUtil
                                     .class.getResource("/view/Professor.fxml"));

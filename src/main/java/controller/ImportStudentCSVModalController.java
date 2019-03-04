@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static util.ConstantsUtil.*;
 
 /**
  * Controller class for ImportStudentCSVModal.fxml.
@@ -193,24 +194,31 @@ public class ImportStudentCSVModalController {
         statusStackPane.setVisible(true);
         progressIndicator.setVisible(true);
 
-        Task<Boolean> studentFromCsvToDatabaseTask = studentService
+        Task<Integer> studentFromCsvToDatabaseTask = studentService
                 .getAddStudentFromCsvToDataBaseTask(file, map);
         new Thread(studentFromCsvToDatabaseTask).start();
 
         studentFromCsvToDatabaseTask.setOnSucceeded(new EventHandler<>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                tableUpdateStatus = studentFromCsvToDatabaseTask.getValue();
+                int status = studentFromCsvToDatabaseTask.getValue();
                 progressIndicator.setVisible(false);
                 statusImageView.setVisible(true);
                 statusLabel.setVisible(true);
-                if(tableUpdateStatus){
+                if(status == DATABASE_ERROR){
+                    statusImageView.setImage(new Image("/png/critical error.png"));
+                    statusLabel.setText("Database Error!");
+                    tableUpdateStatus = false;
+                }
+                else if(status == SUCCESS){
                     statusImageView.setImage(new Image("/png/success.png"));
-                    statusLabel.setText("Success!");
+                    statusLabel.setText("Successfully added all students!");
+                    tableUpdateStatus = true;
                 }
                 else{
                     statusImageView.setImage(new Image("/png/error.png"));
-                    statusLabel.setText("Failed");
+                    statusLabel.setText("One or more students already exist!");
+                    tableUpdateStatus = true;
                 }
             }
         });

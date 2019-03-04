@@ -1,17 +1,27 @@
 package controller;
 
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import model.Student;
 import service.StudentService;
-
+import static util.ConstantsUtil.*;
 import java.util.Optional;
 
 public class ViewStudentModalController {
 
     private Student student;
+
+    private boolean studentDeletedStatus;
 
     private StudentService studentService;
 
@@ -64,8 +74,24 @@ public class ViewStudentModalController {
     private Label addressLabel;
 
     @FXML
+    private GridPane mainGridPane;
+
+    @FXML
+    private StackPane statusStackPane;
+
+    @FXML
+    private ImageView statusImageView;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
+
+    @FXML
+    private Label statusLabel;
+
+    @FXML
     private void initialize(){
         studentService = new StudentService();
+        studentDeletedStatus = false;
     }
 
     @FXML
@@ -75,13 +101,42 @@ public class ViewStudentModalController {
 
     @FXML
     private void handleDeleteButtonAction(){
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Delete");
-//        alert.setHeaderText("Are you really want to delete?");
-//        Optional<ButtonType> result = alert.showAndWait();
-//        if(result.get() == ButtonType.OK){
-//            studentService.deleteStudent(student);
-//        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete");
+        alert.setHeaderText("Are you really want to delete?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == ButtonType.OK){
+            mainGridPane.setOpacity(0.5);
+            statusStackPane.setVisible(true);
+            progressIndicator.setVisible(true);
+            Task<Integer> deleteStudentTask = studentService
+                    .getDeleteStudentTask(student);
+            new Thread(deleteStudentTask).start();
+            deleteStudentTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    int status = deleteStudentTask.getValue();
+                    progressIndicator.setVisible(false);
+                    statusImageView.setVisible(true);
+                    statusLabel.setVisible(true);
+                    if(status == DATABASE_ERROR){
+                        statusImageView.setImage(new Image("/png/critical error.png"));
+                        statusLabel.setText("Database Error!");
+                        studentDeletedStatus = false;
+                    }
+                    else if(status == SUCCESS){
+                        statusImageView.setImage(new Image("/png/success.png"));
+                        statusLabel.setText("Successfully Deleted!");
+                        studentDeletedStatus = true;
+                    }
+                    else {
+                        statusImageView.setImage(new Image("/png/error.png"));
+                        statusLabel.setText("Student not found!");
+                        studentDeletedStatus = false;
+                    }
+                }
+            });
+        }
     }
 
     void setStudentPojo(Student student){
@@ -106,5 +161,8 @@ public class ViewStudentModalController {
         addressLabel.setText(this.student.getAddress());
     }
 
+    boolean getStudentDeletedStatus(){
+        return studentDeletedStatus;
+    }
 
 }

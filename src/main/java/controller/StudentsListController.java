@@ -438,7 +438,9 @@ public class StudentsListController {
             viewStudentModalWindow.setScene(new Scene(root));
             viewStudentModalWindow.initOwner(parentStage);
             viewStudentModalController.setStudentPojo(student);
-            viewStudentModalWindow.show();
+            viewStudentModalWindow.showAndWait();
+            if(viewStudentModalController.getStudentDeletedStatus())
+                studentObsList.remove(student);
         }
     }
 }
