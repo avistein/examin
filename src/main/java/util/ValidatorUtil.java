@@ -3,10 +3,21 @@ package util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ *
+ * @author Avik Sarkar
+ */
 public final class ValidatorUtil {
 
     private ValidatorUtil(){}
 
+    /**
+     * This method matches the email with regex provided.
+     * @param email the email to be  matched.
+     * @return The status of the matching operation.
+     * @link http://emailregex.com/
+     */
     public static boolean validateEmail(String email){
 
         String regex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+" +
@@ -17,7 +28,7 @@ public final class ValidatorUtil {
                 "[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]" +
                 "[0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\" +
                 "x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-" +
-                "\\x7f])+)\\])";
+                "\\x7f])+)])";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email.trim());
         return matcher.matches();

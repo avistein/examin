@@ -6,13 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         primaryStage.setTitle("examin - Examination Management Tool");
-        primaryStage.setScene(new Scene(root,500,500));
+        primaryStage.setScene(new Scene(root,400,400));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

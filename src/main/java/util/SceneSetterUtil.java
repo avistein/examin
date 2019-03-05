@@ -7,6 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ *
+ *
+ * @author Avik Sarkar
+ */
 public final class SceneSetterUtil {
 
     public static void setScene(String path, String title, ActionEvent event) throws Exception{

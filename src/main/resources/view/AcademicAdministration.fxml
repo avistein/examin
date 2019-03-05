@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="675.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AcademicAdministrationController">
+   <children>
+      <TabPane prefHeight="660.0" prefWidth="1212.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab text="Departments">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                 <children>
+                                    <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="586.0" minHeight="10.0" prefHeight="577.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                             <children>
+                                                <Label text="Add Department" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="582.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <TableView prefHeight="200.0" prefWidth="200.0">
+                                            <columns>
+                                              <TableColumn prefWidth="75.0" text="C1" />
+                                              <TableColumn prefWidth="75.0" text="C2" />
+                                            </columns>
+                                          </TableView>
+                                          <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Courses">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                 <children>
+                                    <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="586.0" minHeight="10.0" prefHeight="577.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                             <children>
+                                                <Label text="Add Course" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="582.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <TableView prefHeight="200.0" prefWidth="200.0">
+                                             <columns>
+                                                <TableColumn prefWidth="75.0" text="C1" />
+                                                <TableColumn prefWidth="75.0" text="C2" />
+                                             </columns>
+                                          </TableView>
+                                          <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Subjects">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                 <children>
+                                    <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="586.0" minHeight="10.0" prefHeight="577.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                             <children>
+                                                <Label text="Add Subject" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="582.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <TableView prefHeight="200.0" prefWidth="200.0">
+                                             <columns>
+                                                <TableColumn prefWidth="75.0" text="C1" />
+                                                <TableColumn prefWidth="75.0" text="C2" />
+                                             </columns>
+                                          </TableView>
+                                          <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Classrooms">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <items>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                 <children>
+                                    <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="586.0" minHeight="10.0" prefHeight="577.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                             <children>
+                                                <Label text="Add Classroom" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="582.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <TableView prefHeight="200.0" prefWidth="200.0">
+                                             <columns>
+                                                <TableColumn prefWidth="75.0" text="C1" />
+                                                <TableColumn prefWidth="75.0" text="C2" />
+                                             </columns>
+                                          </TableView>
+                                          <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

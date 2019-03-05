@@ -2,6 +2,9 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -9,19 +12,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import service.StudentService;
 import util.CSVUtil;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static util.ConstantsUtil.*;
 
+/**
+ * Controller class for ImportStudentCSVModal.fxml.
+ *
+ * @author Avik Sarkar
+ */
 public class ImportStudentCSVModalController {
 
 
@@ -33,7 +41,7 @@ public class ImportStudentCSVModalController {
     private GridPane mainGridPane;
 
     @FXML
-    private AnchorPane statusAnchorPane;
+    private StackPane statusStackPane;
 
     @FXML
     private ImageView statusImageView;
@@ -110,8 +118,8 @@ public class ImportStudentCSVModalController {
     @FXML
     private ComboBox<String> rollNoComboBox;
 
-
     public void initialize(){
+
         studentService = new StudentService();
         tableUpdateStatus = false;
         Text text1 = new Text("File must be comma delimited CSV file\n");
@@ -123,16 +131,26 @@ public class ImportStudentCSVModalController {
         csvInstructionsTextFlow.getChildren().addAll(text1, text2, text3, text4);
     }
 
+    /**
+     * Callback method for choosing a file from the directories.
+     */
     @FXML
     private void handleChooseFileButtonAction(){
         FileChooser fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         file = fileChooser.showOpenDialog(chooseFileButton.getScene().getWindow());
+
+        /*
+        If a file is chosen get the column names from the file and set ComboBoxes
+        with the column names' list else unset ComboBoxes.
+         */
         if(file != null) {
             chosenFileLabel.setText(file.getName());
             List<String> list = CSVUtil.getColumnNames(file);
-            setComboBoxes(list);
-            submitButton.setDisable(false);
+            if(list.size() == 18) {
+                setComboBoxes(list);
+                submitButton.setDisable(false);
+            }
         }
         else{
             chosenFileLabel.setText("");
@@ -141,11 +159,19 @@ public class ImportStudentCSVModalController {
         }
     }
 
+    /**
+     * Callback method for submitButton.
+     */
     @FXML
     private void handleSubmitButtonAction(){
 
+        /*
+        Create a HashMap and set up the following :
+        Key : Student's Attribute.
+        Value : The name of the column extracted from the CSV file corresponding
+                to that attribute.
+         */
         Map<String, String> map = new HashMap<>();
-
         map.put("firstName", firstNameComboBox.getValue());
         map.put("middleName", middleNameComboBox.getValue());
         map.put("lastName", lastNameComboBox.getValue());
@@ -165,31 +191,68 @@ public class ImportStudentCSVModalController {
         map.put("regId" , regIdComboBox.getValue());
         map.put("rollNo", rollNoComboBox.getValue());
 
+
         mainGridPane.setOpacity(0.5);
-        statusAnchorPane.setVisible(true);
+        statusStackPane.setVisible(true);
         progressIndicator.setVisible(true);
 
-        tableUpdateStatus = studentService.addStudentFromCSVToDataBase(file, map);
+        Task<Integer> studentFromCsvToDatabaseTask = studentService
+                .getAddStudentFromCsvToDataBaseTask(file, map);
+        new Thread(studentFromCsvToDatabaseTask).start();
 
-        progressIndicator.setVisible(false);
-        if(tableUpdateStatus){
-            statusImageView.setImage(new Image("/png/success.png"));
-            statusLabel.setText("Success!");
-        }
-        else{
-            statusImageView.setImage(new Image("/png/error.png"));
-            statusLabel.setText("Failed");
-        }
+        studentFromCsvToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                int status = studentFromCsvToDatabaseTask.getValue();
+                progressIndicator.setVisible(false);
+                statusImageView.setVisible(true);
+                statusLabel.setVisible(true);
+                if(status == DATABASE_ERROR){
+                    statusImageView.setImage(new Image("/png/critical error.png"));
+                    statusLabel.setText("Database Error!");
+                    tableUpdateStatus = false;
+                }
+                else if(status == SUCCESS){
+                    statusImageView.setImage(new Image("/png/success.png"));
+                    statusLabel.setText("Successfully added all students!");
+                    tableUpdateStatus = true;
+                }
+                else{
+                    statusImageView.setImage(new Image("/png/error.png"));
+                    statusLabel.setText("One or more students already exist!");
+                    tableUpdateStatus = true;
+                }
+            }
+        });
+
     }
 
+    /**
+     * Callback method for statusAnchorPane Mouse Clicked.
+     *
+     * On clicking the statusAnchorPane it will go away and
+     * mainGridPane will be normal from faded.
+     */
     @FXML
-    private void handleStatusAnchorPaneMouseClickedAction(){
+    private void handleStatusStackPaneMouseClickedAction(){
+
         mainGridPane.setOpacity(1);
-        statusAnchorPane.setVisible(false);
+        progressIndicator.setVisible(false);
+        statusImageView.setVisible(false);
+        statusLabel.setVisible(false);
+        statusStackPane.setVisible(false);
+        unSetComboBoxes();
+        chosenFileLabel.setText("");
+        submitButton.setDisable(true);
     }
 
+    /**
+     * Method for setting the ComboBoxes list of items.
+     * @param list List of columns extracted from the CSV file.
+     */
     @SuppressWarnings("Duplicates")
     private void setComboBoxes(List<String> list){
+
         ObservableList<String>  options = FXCollections.observableArrayList(list);
 
         firstNameComboBox.setDisable(false);
@@ -263,9 +326,11 @@ public class ImportStudentCSVModalController {
         guardianContactNoComboBox.setDisable(false);
         guardianContactNoComboBox.setItems(options);
         guardianContactNoComboBox.setValue(list.get(17));
-
     }
 
+    /**
+     * Method for disabling and un-setting the ComboBoxes.
+     */
     @SuppressWarnings("Duplicates")
     private void unSetComboBoxes(){
 
@@ -322,15 +387,27 @@ public class ImportStudentCSVModalController {
 
         guardianContactNoComboBox.setDisable(true);
         guardianContactNoComboBox.setValue("");
-
     }
+
+    /**
+     * Method for configuring the fileChooser
+     *
+     */
     private void configureFileChooser(FileChooser fileChooser){
+
         fileChooser.setTitle("Import CSV file");
+        //only .csv files can be chosen
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("CSV", "*.csv"));
     }
 
-    public boolean getTableUpdateStatus(){
+    /**
+     * This method returns the status of the TableView updation.
+     * @return The status which determines whether the TableView in
+     * StudentsList.fxml will be updated or not.
+     */
+    boolean getTableUpdateStatus(){
+
         return tableUpdateStatus;
     }
 

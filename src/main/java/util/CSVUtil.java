@@ -1,14 +1,18 @@
 package util;
 
 import com.opencsv.CSVReader;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class CSVUtil {
+/**
+ *
+ *
+ * @author Avik Sarkar
+ */
+public final class CSVUtil {
 
     public static List<String> getColumnNames(File file) {
         List<String> listOfColumns = null;

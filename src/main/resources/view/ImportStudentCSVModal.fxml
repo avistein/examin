@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
@@ -169,16 +170,16 @@
             </GridPane>
          </children>
       </GridPane>
-      <AnchorPane fx:id="statusAnchorPane" onMouseClicked="#handleStatusAnchorPaneMouseClickedAction" prefHeight="450.0" prefWidth="727.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="statusStackPane" onMouseClicked="#handleStatusStackPaneMouseClickedAction" prefHeight="450.0" prefWidth="727.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" layoutX="314.0" layoutY="170.0" prefHeight="110.0" prefWidth="100.0">
+            <VBox alignment="CENTER" prefHeight="110.0" prefWidth="100.0">
                <children>
-                  <ProgressIndicator fx:id="progressIndicator" prefHeight="45.0" prefWidth="89.0" />
-                  <ImageView fx:id="statusImageView" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="statusLabel" />
+                  <ProgressIndicator fx:id="progressIndicator" prefHeight="45.0" prefWidth="89.0" visible="false" />
+                  <ImageView fx:id="statusImageView" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                  <Label fx:id="statusLabel" visible="false" />
                </children>
             </VBox>
          </children>
-      </AnchorPane>
+      </StackPane>
    </children>
 </AnchorPane>

@@ -2,6 +2,11 @@ package model;
 
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * POJO class for Batch entity.
+ *
+ * @author Avik Sarkar
+ */
 public class Batch extends Course {
 
     private SimpleStringProperty batchId;
@@ -11,15 +16,6 @@ public class Batch extends Course {
         this.batchId = new SimpleStringProperty("");
         this.batchName = new SimpleStringProperty("");
     }
-
-    public Batch(String batchId, String courseId, String batchName,
-                 String discipline, String degree, String duration, String deptName){
-
-        super(discipline, degree, courseId, duration, deptName);
-        this.batchId = new SimpleStringProperty(batchId);
-        this.batchName = new SimpleStringProperty(batchName);
-    }
-
 
 
     public String getBatchId(){

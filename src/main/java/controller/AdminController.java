@@ -1,38 +1,150 @@
 package controller;
 
-
-import javafx.event.ActionEvent;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import model.ExamCellMember;
+import service.ExamCellMemberService;
 
+import java.io.IOException;
+import java.util.List;
 
+/**
+ * Controller class for Admin.fxml.
+ * Loads the individual fxml upon clicking the buttons on left side.
+ * @author Avik Sarkar
+ */
 public class AdminController{
 
+    private ExamCellMemberService examCellMemberService;
+
+    private ExamCellMember admin;
 
     @FXML
-    private Pane listPane;
+    private Label userIdLabel;
 
     @FXML
-    private void handleStudentListButtonAction(ActionEvent event) throws Exception{
-       // studentListPane.setVisible(true);
-        Parent studentsListFxml = FXMLLoader.load(getClass().getResource("/view/StudentsList.fxml"));
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+    private StackPane contentStackPane;
+
+    @FXML
+    private Label nameLabel;
+
+    @FXML
+    private Label roleLabel;
+
+    @FXML
+    private Label subTitleLabel;
+
+    @FXML
+    private void initialize(){
+        roleLabel.setText("Admin");
+        examCellMemberService = new ExamCellMemberService();
+    }
+
+    /**
+     * Callback method for handling studentListButton.
+     * Opens StudentsList.fxml upon clicking studentListButton.
+     */
+    @FXML
+    private void handleStudentListButtonAction() throws IOException {
+
+        Parent studentsListFxml = FXMLLoader.load(getClass()
+                .getResource("/view/StudentsList.fxml"));
+        subTitleLabel.setText("Student");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
+    }
+
+    /**
+     * Callback method for handling professorListButtonAction.
+     * Opens StudentsList.fxml upon clicking professorListButtonAction.
+     */
+    @FXML
+    private void handleProfessorListButtonAction() throws IOException{
+
+        Parent studentsListFxml = FXMLLoader.load(getClass()
+                .getResource("/view/ProfessorsList.fxml"));
+        subTitleLabel.setText("Professor");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
+    }
+
+    /**
+     * Callback method for handling examCellMemberListButton.
+     * Opens StudentsList.fxml upon clicking examCellMemberListButton.
+     */
+    @FXML
+    private void handleExamCellMemberListButtonAction() throws IOException{
+
+        Parent studentsListFxml = FXMLLoader.load(getClass()
+                .getResource("/view/ExamCellMembersList.fxml"));
+        subTitleLabel.setText("Exam Cell Member");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
     @FXML
-    private void handleProfessorListButtonAction(ActionEvent event) throws Exception{
-        Parent studentsListFxml = FXMLLoader.load(getClass().getResource("/view/ProfessorsList.fxml"));
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+    private void handleAcademicAdministrationButtonAction() throws IOException{
+        Parent studentsListFxml = FXMLLoader.load(getClass()
+                .getResource("/view/AcademicAdministration.fxml"));
+        subTitleLabel.setText("Academic Administration");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
     @FXML
-    private void handleExamCellMemberListButtonAction(ActionEvent event) throws Exception{
-        Parent studentsListFxml = FXMLLoader.load(getClass().getResource("/view/ExamCellMembersList.fxml"));
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentsListFxml);
+    private void handleExamsListButtonAction(){
+
     }
+
+    @FXML
+    private void handleMarksListButtonAction(){
+
+    }
+
+    @FXML
+    private void handleNoticesListButtonAction(){
+
+    }
+
+    @FXML
+    private void handleReportsListButtonAction(){
+
+    }
+
+    @FXML
+    private void handleAdminSettingsButtonAction(){
+
+    }
+
+    void setAdminProfileDetails(String userId){
+
+        final String additionalQuery = "where v_emp_id=?";
+        Task<List<ExamCellMember>> examCellMembersTask = examCellMemberService
+                .getExamCellMembersTask(additionalQuery, userId);
+
+        new Thread(examCellMembersTask).start();
+
+        examCellMembersTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                admin = examCellMembersTask.getValue().get(0);
+                userIdLabel.setText(userId);
+                nameLabel.setText(admin.getFirstName() + " " + admin.getMiddleName()
+                        + " " + admin.getLastName());
+            }
+        });
+
+
+
+
+
+    }
+
 }
+

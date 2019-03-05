@@ -2,6 +2,9 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import model.Batch;
 import model.Course;
 import model.Student;
@@ -21,6 +25,7 @@ import util.ValidatorUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import static util.ConstantsUtil.*;
 
 public class StudentRegistrationController {
 
@@ -45,9 +50,6 @@ public class StudentRegistrationController {
 
     @FXML
     private ComboBox<String> semesterComboBox;
-
-    @FXML
-    private Button submitButton;
 
     @FXML
     private TextField regYearTextField;
@@ -80,7 +82,7 @@ public class StudentRegistrationController {
     private TextField contactNoTextField;
 
     @FXML
-    private TextField addressTextField;
+    private TextArea addressTextArea;
 
     @FXML
     private TextField guardianNameTextField;
@@ -95,19 +97,13 @@ public class StudentRegistrationController {
     private ImageView statusImageView;
 
     @FXML
-    private Button addAnotherButton;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
     private ProgressIndicator progressIndicator;
 
     @FXML
     private Label statusLabel;
 
     @FXML
-    private AnchorPane statusAnchorPane;
+    private StackPane statusStackPane;
 
     @FXML
     private AnchorPane rootAnchorPane;
@@ -116,22 +112,33 @@ public class StudentRegistrationController {
     private GridPane mainGridPane;
 
     @FXML
+    private HBox buttonsHbox;
+
+    @FXML
     private void initialize() {
         courseService = new CourseService();
         batchService = new BatchService();
         studentService = new StudentService();
-        listOfCourses = courseService.getCourseData();
-        if (!listOfCourses.isEmpty()) {
-            List<String> items = new ArrayList<>();
-            for (Course course : listOfCourses) {
-                if (!items.contains(course.getDegree()))
-                    items.add(course.getDegree());
+        Task<List<Course>> coursesTask = courseService
+                .getCoursesTask("");
+        new Thread(coursesTask).start();
+        coursesTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                listOfCourses = coursesTask.getValue();
+                if (!listOfCourses.isEmpty()) {
+                    List<String> items = new ArrayList<>();
+                    for (Course course : listOfCourses) {
+                        if (!items.contains(course.getDegree()))
+                            items.add(course.getDegree());
+                    }
+                    ObservableList<String> options = FXCollections.observableArrayList(items);
+                    degreeComboBox.setItems(options);
+                }
+                genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
+                        , "Female", "Others"));
             }
-            ObservableList<String> options = FXCollections.observableArrayList(items);
-            degreeComboBox.setItems(options);
-        }
-        genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
-                , "Female", "Others"));
+        });
 
     }
 
@@ -197,20 +204,27 @@ public class StudentRegistrationController {
         batchNameComboBox.getItems().clear();
 
         if (disciplineComboBox.getValue() != null) {
-            //System.out.println(event.toString());
-            String additionalQuery = "where v_degree=? and v_discipline =?";
-            listOfBatches = batchService.getBatchData(additionalQuery, degreeComboBox.getValue()
-                    , disciplineComboBox.getValue());
-            if (!listOfBatches.isEmpty()) {
-                List<String> items = new ArrayList<>();
-                for (Batch batch : listOfBatches) {
-                    if (!items.contains(batch.getBatchName()))
-                        items.add(batch.getBatchName());
-                }
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                batchNameComboBox.setItems(options);
+            final String additionalQuery = "where v_degree=? and v_discipline =?";
+            Task<List<Batch>> batchesTask = batchService
+                    .getBatchesTask(additionalQuery, degreeComboBox.getValue()
+                            , disciplineComboBox.getValue());
+            new Thread(batchesTask).start();
+            batchesTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    listOfBatches = batchesTask.getValue();
+                    if (!listOfBatches.isEmpty()) {
+                        List<String> items = new ArrayList<>();
+                        for (Batch batch : listOfBatches) {
+                            if (!items.contains(batch.getBatchName()))
+                                items.add(batch.getBatchName());
+                        }
+                        ObservableList<String> options = FXCollections.observableArrayList(items);
+                        batchNameComboBox.setItems(options);
 
-            }
+                    }
+                }
+            });
         }
     }
 
@@ -222,54 +236,65 @@ public class StudentRegistrationController {
         if (validate()) {
 
             mainGridPane.setOpacity(0.5);
-            statusAnchorPane.setVisible(true);
+            statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
 
-            String degree = degreeComboBox.getValue();
-            String discipline = disciplineComboBox.getValue();
-            String batchName = batchNameComboBox.getValue();
-            String currSemester = semesterComboBox.getValue();
-            String regYear = regYearTextField.getText().trim();
-            String regId = regIdTextField.getText().trim();
-            String rollNo = rollNoTextField.getText().trim();
-            String firstName = firstNameTextField.getText().trim();
-            String middleName = middleNameTextField.getText().trim();
-            String lastName = lastNameTextField.getText().trim();
-            String dob = dobDatePicker.getValue().toString();
-            String gender = genderChoiceBox.getValue();
-            String email = emailTextField.getText().trim();
-            String contactNo = contactNoTextField.getText().trim();
-            String address = addressTextField.getText().trim();
-            String guardianName = guardianNameTextField.getText().trim();
-            String motherName = motherNameTextField.getText().trim();
-            String guardianContactNo = guardianContactNoTextField.getText().trim();
-            String batchId = "";
-            String courseId = "";
+            Student student = new Student();
+            student.setFirstName(firstNameTextField.getText().trim());
+            student.setMiddleName(middleNameTextField.getText().trim());
+            student.setLastName(lastNameTextField.getText().trim());
+            student.setDob(dobDatePicker.getValue().toString());
+            student.setGender(genderChoiceBox.getValue());
+            student.setRegYear(regYearTextField.getText().trim());
+            student.setEmail(emailTextField.getText().trim());
+            student.setAddress(addressTextArea.getText().trim());
+            student.setMotherName(motherNameTextField.getText().trim());
+            student.setGuardianContactNo(guardianContactNoTextField.getText().trim());
+            student.setRegId(regIdTextField.getText().trim());
+            student.setRollNo(rollNoTextField.getText().trim());
+            student.setContactNo(contactNoTextField.getText().trim());
+            student.setGuardianName(guardianNameTextField.getText().trim());
+            student.setCurrSemester(semesterComboBox.getValue());
+            student.setBatchName(batchNameComboBox.getValue());
+            student.setDiscipline(disciplineComboBox.getValue());
+            student.setDegree(degreeComboBox.getValue());
+
             for (Batch batch : listOfBatches) {
 
-                if (batch.getDiscipline().equals(discipline) && batch.getDegree().equals(degree)
-                        && batch.getBatchName().equals(batchName)) {
-                    batchId = batch.getBatchId();
-                    courseId = batch.getCourseId();
+                if (batch.getDiscipline().equals(disciplineComboBox.getValue()) &&
+                        batch.getDegree().equals(degreeComboBox.getValue()) &&
+                        batch.getBatchName().equals(batchNameComboBox.getValue())) {
+                    student.setBatchId(batch.getBatchId());
                 }
 
             }
 
+            Task<Integer> addStudentToDatabaseTask = studentService
+                    .getAddStudentToDatabaseTask(student);
 
-            boolean status = studentService.addStudentToDatabase(new Student(firstName, middleName
-                    , lastName, dob, gender, regYear, email, address, motherName
-                    , guardianContactNo, regId, rollNo, contactNo, guardianName
-                    , batchId, courseId, currSemester, batchName, discipline, degree, ""
-                    , ""));
+            new Thread(addStudentToDatabaseTask).start();
 
-            progressIndicator.setVisible(false);
-            if (status) {
-                statusImageView.setImage(new Image("/png/success.png"));
-                statusLabel.setText("Added Successfully!");
-            } else {
-                statusImageView.setImage(new Image("/png/error.png"));
-                statusLabel.setText("Failed!");
-            }
+            addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    int status = addStudentToDatabaseTask.getValue();
+                    progressIndicator.setVisible(false);
+                    buttonsHbox.setVisible(true);
+                    statusImageView.setVisible(true);
+                    statusLabel.setVisible(true);
+                    if (status == DATABASE_ERROR) {
+                        statusImageView.setImage(new Image("/png/critical error.png"));
+                        statusLabel.setText("Database Error!");
+                    }
+                    else if (status == SUCCESS) {
+                        statusImageView.setImage(new Image("/png/success.png"));
+                        statusLabel.setText("Added Successfully!");
+                    } else {
+                        statusImageView.setImage(new Image("/png/error.png"));
+                        statusLabel.setText("Student already exists!");
+                    }
+                }
+            });
 
         }
     }
@@ -341,7 +366,7 @@ public class StudentRegistrationController {
             alert.show();
             return false;
         }
-        else if (addressTextField.getText().isEmpty()) {
+        else if (addressTextArea.getText().isEmpty()) {
             alert.setContentText("Address cannot be empty!");
             alert.show();
             return false;
@@ -363,8 +388,12 @@ public class StudentRegistrationController {
     }
 
     @FXML
-    private void handleAddAnotherButtonAction(){
-        statusAnchorPane.setVisible(false);
+    private void handleAddAnotherAndResetButtonAction(){
+        statusStackPane.setVisible(false);
+        progressIndicator.setVisible(false);
+        buttonsHbox.setVisible(false);
+        statusImageView.setVisible(false);
+        statusLabel.setVisible(false);
         mainGridPane.setOpacity(1);
         firstNameTextField.clear();
         middleNameTextField.clear();
@@ -379,7 +408,7 @@ public class StudentRegistrationController {
         genderChoiceBox.getSelectionModel().clearSelection();
         dobDatePicker.getEditor().clear();
         emailTextField.clear();
-        addressTextField.clear();
+        addressTextArea.clear();
         contactNoTextField.clear();
         guardianNameTextField.clear();
         motherNameTextField.clear();
@@ -387,13 +416,13 @@ public class StudentRegistrationController {
     }
 
     @FXML
-    private void handleCancelButtonAction() throws IOException {
-        statusAnchorPane.setVisible(false);
-        mainGridPane.setOpacity(1);
-        Pane listPane = (Pane)rootAnchorPane.getParent();
+    private void handleBackAndCancelButtonAction() throws IOException {
+
+        StackPane contentStackPane = (StackPane)rootAnchorPane.getParent();
         Parent studentRegistrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentsList.fxml"));
-        listPane.getChildren().removeAll();
-        listPane.getChildren().setAll(studentRegistrationFxml);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
+
 }
