@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Avik Sarkar
  */
-public class Course  {
+public class Course extends Department {
 
     private SimpleStringProperty discipline;
     private SimpleStringProperty degree ;

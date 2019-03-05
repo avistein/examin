@@ -22,10 +22,10 @@ public class Department {
 
     public String getDeptName() { return this.deptName.get(); }
 
-    public void setDeptName(String dept) { this.deptName.set(dept); }
+    public void setDeptName(String deptName) { this.deptName.set(deptName); }
 
     public String getBuilding() { return this.building.get(); }
 
-    public void setBuildinge(String build) { this.building.set(build); }
+    public void setBuilding(String building) { this.building.set(building); }
 
 }

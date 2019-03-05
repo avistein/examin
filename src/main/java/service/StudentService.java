@@ -50,13 +50,10 @@ public class StudentService {
 
                     student.setFirstName(map.get("v_first_name").get(i));
                     student.setMiddleName(map.get("v_middle_name").get(i));
-//                    if(middleName == null)
-//                        middleName = "";
                     student.setLastName(map.get("v_last_name").get(i));
                     student.setDob(map.get("d_dob").get(i));
                     student.setGender(map.get("v_gender").get(i));
                     student.setRegYear(map.get("v_reg_year").get(i));
-
                     student.setEmail(map.get("v_email_id").get(i));
                     student.setAddress(map.get("v_address").get(i));
                     student.setMotherName(map.get("v_mother_name").get(i));

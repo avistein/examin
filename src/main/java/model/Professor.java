@@ -43,7 +43,7 @@ public class Professor extends Department implements Serializable {
         this.department = new SimpleStringProperty("");
         this.highestQualification = new SimpleStringProperty("");
         this.profId = new SimpleStringProperty("");
-        this.hodStatus = new SimpleBooleanProperty();
+        this.hodStatus = new SimpleBooleanProperty(false);
     }
 
 
@@ -111,20 +111,36 @@ public class Professor extends Department implements Serializable {
         this.contactNo.set(contactNo);
     }
 
-    public String getDepartment() { return department.get(); }
+    public String getDepartment() {
+        return department.get();
+    }
 
-    public void setDepartment(String deptName) { this.department.set(deptName);}
+    public void setDepartment(String deptName) {
+        this.department.set(deptName);
+    }
 
-    public String getHighestQualification() { return highestQualification.get(); }
+    public String getHighestQualification() {
+        return highestQualification.get();
+    }
 
-    public void setHighestQualification(String hq) { this.highestQualification.set(hq); }
+    public void setHighestQualification(String hq) {
+        this.highestQualification.set(hq);
+    }
 
-    public String getProfId() { return profId.get(); }
+    public String getProfId() {
+        return profId.get();
+    }
 
-    public void setProfId(String profId) { this.profId.set(profId); }
+    public void setProfId(String profId) {
+        this.profId.set(profId);
+    }
 
-    public Boolean getHodStatus() { return this.hodStatus.get(); }
+    public Boolean getHodStatus() {
+        return this.hodStatus.get();
+    }
 
-    public void setHdStatus(Boolean status) { this.hodStatus.set(status); }
+    public void setHodStatus(boolean status) {
+        this.hodStatus.set(status);
+    }
 
 }

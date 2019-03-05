@@ -147,8 +147,10 @@ public class ImportStudentCSVModalController {
         if(file != null) {
             chosenFileLabel.setText(file.getName());
             List<String> list = CSVUtil.getColumnNames(file);
-            setComboBoxes(list);
-            submitButton.setDisable(false);
+            if(list.size() == 18) {
+                setComboBoxes(list);
+                submitButton.setDisable(false);
+            }
         }
         else{
             chosenFileLabel.setText("");
