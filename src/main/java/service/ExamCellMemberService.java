@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * @author Avik Sarkar
+ */
 public class ExamCellMemberService {
 
     private DatabaseHelper databaseHelper;

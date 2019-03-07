@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="165.0" prefWidth="165.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="598.0" />
@@ -39,7 +38,7 @@
                   <Button fx:id="professorListButton" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor" />
                   <Button fx:id="examCellMemberListButton" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Cell Member" />
                   <Button fx:id="academicAdministrationButton" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration" />
-                  <Button fx:id="examsListButton" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exams" />
+                  <Button fx:id="examsListButton" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exams Administration" />
                   <Button fx:id="marksListButton" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks" />
                   <Button fx:id="noticesListButton" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notices" />
                   <Button fx:id="reportsListButton" mnemonicParsing="false" onAction="#handleReportsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Reports" />

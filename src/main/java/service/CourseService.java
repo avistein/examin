@@ -3,9 +3,13 @@ package service;
 import database.DatabaseHelper;
 import javafx.concurrent.Task;
 import model.Course;
+import model.Department;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static util.ConstantsUtil.*;
 
 /**
  * Service class to
@@ -47,5 +51,87 @@ public class CourseService {
         };
         return courseTask;
     }
+
+    public Task<Integer>  getAddCourseToDatabaseTask(final Course course){
+        Task<Integer> addCourseToDatabaseTask = new Task<>() {
+            @Override
+            protected Integer call() {
+
+                final String sql = "INSERT INTO t_course(v_dept_name, v_course_id" +
+                        ", v_degree, v_discipline, v_duration) VALUES(?, ?, ?, ?, ?)";
+
+                int tCourseStatus = databaseHelper.insert(sql, course.getDeptName()
+                        , course.getCourseId(), course.getDegree(), course.getDiscipline()
+                        , course.getDuration());
+
+                if(tCourseStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tCourseStatus == SUCCESS)
+                    return SUCCESS;
+                else
+                    return DATA_ALREADY_EXIST_ERROR;
+
+            }
+        };
+        return addCourseToDatabaseTask;
+    }
+
+
+    public Task<Integer>  getUpdateCourseTask(final Course course){
+        Task<Integer> updateCourseTask = new Task<>() {
+            @Override
+            protected Integer call() {
+
+                final String sql = "UPDATE t_course SET v_degree=?, v_discipline=?, v_duration=? " +
+                        "WHERE v_course_id=?";
+
+                int tCourseStatus = databaseHelper.updateDelete(sql, course.getDegree(), course.getDiscipline()
+                        , course.getDuration(), course.getCourseId());
+
+                if(tCourseStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tCourseStatus == SUCCESS)
+                    return SUCCESS;
+                else if(tCourseStatus == DATA_DEPENDENCY_ERROR)
+                    return DATA_DEPENDENCY_ERROR;
+                else
+                    return DATA_INEXISTENT_ERROR;
+            }
+        };
+        return updateCourseTask;
+    }
+
+    @SuppressWarnings("Duplicates")
+    public Task<Integer>  getDeleteCourseTask(final String param){
+        Task<Integer> deleteCourseTask = new Task<>() {
+            @Override
+            protected Integer call() {
+
+                final String sql = "DELETE FROM t_course WHERE v_course_id=?";
+
+                int tCourseStatus = databaseHelper.updateDelete(sql, param);
+
+                if(tCourseStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tCourseStatus == SUCCESS)
+                    return SUCCESS;
+                else if(tCourseStatus == DATA_DEPENDENCY_ERROR)
+                    return DATA_DEPENDENCY_ERROR;
+                else
+                    return DATA_INEXISTENT_ERROR;
+            }
+        };
+        return deleteCourseTask;
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

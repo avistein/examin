@@ -22,4 +22,10 @@ public final class ConstantsUtil {
 
     public static final int DATA_INEXISTENT_ERROR = -4;
 
+    public static final int DATA_DEPENDENCY_ERROR = -5;
+
+    public static final int ADD_CHOICE = 1;
+
+    public static final int EDIT_CHOICE = 2;
+
 }

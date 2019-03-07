@@ -12,20 +12,28 @@ import javafx.beans.property.SimpleStringProperty;
 public class Department {
 
     private final SimpleStringProperty deptName;
-    private final SimpleStringProperty building;
+    private final SimpleStringProperty buildingName;
 
     public Department(){
 
         this.deptName = new SimpleStringProperty("");
-        this.building= new SimpleStringProperty("");
+        this.buildingName= new SimpleStringProperty("");
     }
 
-    public String getDeptName() { return this.deptName.get(); }
+    public String getDeptName() {
+        return this.deptName.get();
+    }
 
-    public void setDeptName(String deptName) { this.deptName.set(deptName); }
+    public void setDeptName(String deptName) {
+        this.deptName.set(deptName);
+    }
 
-    public String getBuilding() { return this.building.get(); }
+    public String getBuildingName() {
+        return this.buildingName.get();
+    }
 
-    public void setBuilding(String building) { this.building.set(building); }
+    public void setBuildingName(String buildingName) {
+        this.buildingName.set(buildingName);
+    }
 
 }
