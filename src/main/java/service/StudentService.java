@@ -76,47 +76,13 @@ public class StudentService {
         return studentTask;
     }
 
-    public Task<Integer> getAddStudentFromCsvToDataBaseTask
-            (final File file, final Map<String, String> map){
-        Task<Integer> addStudentFromCsvToDataBaseTask = new Task<>() {
+    public Task<Integer> getAddStudentFromMemoryToDataBaseTask(List<Student> list){
+        Task<Integer> addStudentFromMemoryToDataBaseTask = new Task<>() {
             @Override
             protected Integer call(){
 
                 BatchService batchService = new BatchService();
-                Map<String, String> columnNameMapping = new HashMap<>();
-                List<Student> list = new ArrayList<>();
-                columnNameMapping.put(map.get("firstName"), "firstName");
-                columnNameMapping.put(map.get("middleName"), "middleName");
-                columnNameMapping.put(map.get("lastName"), "lastName");
-                columnNameMapping.put(map.get("regId"), "regId");
-                columnNameMapping.put(map.get("rollNo"), "rollNo");
-                columnNameMapping.put(map.get("dob"), "dob");
-                columnNameMapping.put(map.get("gender"), "gender");
-                columnNameMapping.put(map.get("regYear"), "regYear");
-                columnNameMapping.put(map.get("email"), "email");
-                columnNameMapping.put(map.get("address"), "address");
-                columnNameMapping.put(map.get("motherName"), "motherName");
-                columnNameMapping.put(map.get("guardianContactNo"), "guardianContactNo");
-                columnNameMapping.put(map.get("contactNo"), "contactNo");
-                columnNameMapping.put(map.get("guardianName"), "guardianName");
-                columnNameMapping.put(map.get("currSemester"), "currSemester");
-                columnNameMapping.put(map.get("discipline"), "discipline");
-                columnNameMapping.put(map.get("degree"), "degree");
-                columnNameMapping.put(map.get("batchName"), "batchName");
 
-                HeaderColumnNameTranslateMappingStrategy<Student> strategy = new
-                        HeaderColumnNameTranslateMappingStrategy<>();
-                strategy.setType(Student.class);
-                strategy.setColumnMapping(columnNameMapping);
-
-                try (CSVReader reader = new CSVReader(new FileReader(file))) {
-
-                    CsvToBean<Student> csvToBean = new CsvToBeanBuilder<Student>(reader)
-                            .withMappingStrategy(strategy).withSkipLines(1).build();
-                    list = csvToBean.parse();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 final String sql1 = "INSERT INTO t_student (v_first_name, v_middle_name" +
                         ", v_last_name, v_reg_id, v_roll_no, d_dob, v_mother_name, v_reg_year" +
                         ", v_contact_no, v_father_guardian_name, v_email_id, v_address" +
@@ -179,7 +145,57 @@ public class StudentService {
                     return DATA_ALREADY_EXIST_ERROR;
             }
         };
-        return addStudentFromCsvToDataBaseTask;
+        return addStudentFromMemoryToDataBaseTask;
+    }
+
+
+    public Task<List<Student>>  getLoadStudentFromCsvToMemoryTask(final File file, final Map<String, String> map) {
+
+        Task<List<Student>> loadStudentFromCsvToMemoryTask = new Task<>() {
+            @Override
+            protected List<Student> call() throws Exception {
+
+                Map<String, String> columnNameMapping = new HashMap<>();
+
+                List<Student> listOfStudentsFromCsv = new ArrayList<>();
+
+                columnNameMapping.put(map.get("firstName"), "firstName");
+                columnNameMapping.put(map.get("middleName"), "middleName");
+                columnNameMapping.put(map.get("lastName"), "lastName");
+                columnNameMapping.put(map.get("regId"), "regId");
+                columnNameMapping.put(map.get("rollNo"), "rollNo");
+                columnNameMapping.put(map.get("dob"), "dob");
+                columnNameMapping.put(map.get("gender"), "gender");
+                columnNameMapping.put(map.get("regYear"), "regYear");
+                columnNameMapping.put(map.get("email"), "email");
+                columnNameMapping.put(map.get("address"), "address");
+                columnNameMapping.put(map.get("motherName"), "motherName");
+                columnNameMapping.put(map.get("guardianContactNo"), "guardianContactNo");
+                columnNameMapping.put(map.get("contactNo"), "contactNo");
+                columnNameMapping.put(map.get("guardianName"), "guardianName");
+                columnNameMapping.put(map.get("currSemester"), "currSemester");
+                columnNameMapping.put(map.get("discipline"), "discipline");
+                columnNameMapping.put(map.get("degree"), "degree");
+                columnNameMapping.put(map.get("batchName"), "batchName");
+
+                HeaderColumnNameTranslateMappingStrategy<Student> strategy = new
+                        HeaderColumnNameTranslateMappingStrategy<>();
+                strategy.setType(Student.class);
+                strategy.setColumnMapping(columnNameMapping);
+
+                try (CSVReader reader = new CSVReader(new FileReader(file))) {
+
+                    CsvToBean<Student> csvToBean = new CsvToBeanBuilder<Student>(reader)
+                            .withMappingStrategy(strategy).withSkipLines(1).build();
+                    listOfStudentsFromCsv = csvToBean.parse();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return listOfStudentsFromCsv;
+            }
+        };
+        return loadStudentFromCsvToMemoryTask;
     }
 
 

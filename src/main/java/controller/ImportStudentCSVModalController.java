@@ -6,10 +6,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,9 +14,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
+import model.Student;
 import service.StudentService;
 import util.CSVUtil;
+import util.ValidatorUtil;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,35 +197,241 @@ public class ImportStudentCSVModalController {
         statusStackPane.setVisible(true);
         progressIndicator.setVisible(true);
 
-        Task<Integer> studentFromCsvToDatabaseTask = studentService
-                .getAddStudentFromCsvToDataBaseTask(file, map);
-        new Thread(studentFromCsvToDatabaseTask).start();
+        Task<List<Student>> loadStudentFromCsvToMemoryTask = studentService
+                .getLoadStudentFromCsvToMemoryTask(file, map);
+        new Thread(loadStudentFromCsvToMemoryTask).start();
 
-        studentFromCsvToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+        loadStudentFromCsvToMemoryTask.setOnSucceeded(new EventHandler<>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                int status = studentFromCsvToDatabaseTask.getValue();
-                progressIndicator.setVisible(false);
-                statusImageView.setVisible(true);
-                statusLabel.setVisible(true);
-                if(status == DATABASE_ERROR){
-                    statusImageView.setImage(new Image("/png/critical error.png"));
-                    statusLabel.setText("Database Error!");
-                    tableUpdateStatus = false;
+
+                List<Student> listOfStudentsFromCsv = new ArrayList<>();
+                listOfStudentsFromCsv.addAll(loadStudentFromCsvToMemoryTask.getValue());
+
+                int currRowInCsv = 1;
+                boolean csvDataStatus = false;
+                for(Student student : listOfStudentsFromCsv){
+
+                    csvDataStatus = validate(student, currRowInCsv++);
+                    if(!csvDataStatus) {
+
+                        deactivateProgressAndStatus();
+                        break;
+                    }
                 }
-                else if(status == SUCCESS){
-                    statusImageView.setImage(new Image("/png/success.png"));
-                    statusLabel.setText("Successfully added all students!");
-                    tableUpdateStatus = true;
-                }
-                else{
-                    statusImageView.setImage(new Image("/png/error.png"));
-                    statusLabel.setText("One or more students already exist!");
-                    tableUpdateStatus = true;
+
+                if(csvDataStatus) {
+
+                    Task<Integer> addStudentFromMemoryToDataBaseTask = studentService
+                            .getAddStudentFromMemoryToDataBaseTask(listOfStudentsFromCsv);
+                    new Thread(addStudentFromMemoryToDataBaseTask).start();
+
+                    addStudentFromMemoryToDataBaseTask.setOnSucceeded(new EventHandler<>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+                            int status = addStudentFromMemoryToDataBaseTask.getValue();
+                            progressIndicator.setVisible(false);
+                            statusImageView.setVisible(true);
+                            statusLabel.setVisible(true);
+                            if (status == DATABASE_ERROR) {
+                                statusImageView.setImage(new Image("/png/critical error.png"));
+                                statusLabel.setText("Database Error!");
+                                tableUpdateStatus = false;
+                            } else if (status == SUCCESS) {
+                                statusImageView.setImage(new Image("/png/success.png"));
+                                statusLabel.setText("Successfully added all students!");
+                                tableUpdateStatus = true;
+                            } else {
+                                statusImageView.setImage(new Image("/png/error.png"));
+                                statusLabel.setText("One or more students already exist!");
+                                tableUpdateStatus = true;
+                            }
+                        }
+                    });
                 }
             }
         });
+    }
 
+    private boolean validate(Student student, int currStudentIndex) {
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (student.getDegree() == null || student.getDegree().trim().isEmpty()) {
+            alert.setContentText("Degree cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateAcademicItem(student.getDegree().trim())) {
+            alert.setContentText("Invalid Degree in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getDiscipline() == null || student.getDiscipline().trim().isEmpty()) {
+            alert.setContentText("Discipline cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateAcademicItem(student.getDiscipline().trim())) {
+            alert.setContentText("Invalid Discipline in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getBatchName() == null || student.getBatchName().trim().isEmpty()) {
+            alert.setContentText("Batch cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateBatchName(student.getBatchName().trim())) {
+            alert.setContentText("Invalid Batch in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getCurrSemester() == null || student.getCurrSemester().trim().isEmpty()) {
+            alert.setContentText("Semester cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateSemester(student.getCurrSemester().trim())) {
+            alert.setContentText("Invalid Semester in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+
+        else if (student.getRegYear() == null || student.getRegYear().trim().isEmpty()) {
+            alert.setContentText("Registration Year cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        } else if (!ValidatorUtil.validateRegYear(student.getBatchName(), student.getRegYear())) {
+            alert.setContentText("Invalid Registration Year or not within batch range in Row : "
+                    + currStudentIndex + "!");
+            System.out.println(student.getBatchName());
+            System.out.println(student.getRegYear());
+            alert.show();
+            return false;
+        } else if (student.getRegId() == null || student.getRegId().trim().isEmpty()) {
+            alert.setContentText("Registration ID cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateId(student.getRegId().trim())) {
+            alert.setContentText("Invalid Registration ID in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+
+        else if (student.getRollNo() == null || student.getRollNo().trim().isEmpty()) {
+            alert.setContentText("Roll No. cannot be empty in Row : " + currStudentIndex + "!");
+            return false;
+        }
+        else if (!ValidatorUtil.validateId(student.getRollNo().trim())) {
+            alert.setContentText("Invalid Roll No. in Row : " + currStudentIndex + "!");
+            return false;
+        }
+
+        else if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
+            alert.setContentText("First Name cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateName(student.getFirstName().trim())) {
+            alert.setContentText("Invalid First Name in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!student.getMiddleName().trim().isEmpty()) {
+
+            if(!ValidatorUtil.validateName(student.getMiddleName().trim())) {
+                alert.setContentText("Invalid Middle Name in Row : " + currStudentIndex + "!");
+                alert.show();
+                return false;
+            }
+            else
+                return true;
+        }
+        else if (!student.getLastName().trim().isEmpty()) {
+
+            if(!ValidatorUtil.validateName(student.getLastName().trim())) {
+                alert.setContentText("Invalid Last Name in Row : " + currStudentIndex + "!");
+                alert.show();
+                return false;
+            }
+            else
+                return true;
+        }
+        else if (student.getDob() == null || student.getDob().trim().isEmpty()) {
+            alert.setContentText("DOB cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateDateFormat(student.getDob().trim())) {
+            alert.setContentText("Invalid DOB format in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getGender() == null || student.getGender().trim().isEmpty()) {
+            alert.setContentText("Gender cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateGender(student.getGender().trim())) {
+            alert.setContentText("Invalid Gender in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+            alert.setContentText("Email ID cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateEmail(student.getEmail().trim())) {
+            alert.setContentText("Invalid Email ID in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getContactNo() == null || student.getContactNo().trim().isEmpty()) {
+            alert.setContentText("Contact No. cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateContactNo(student.getContactNo().trim())) {
+            alert.setContentText("Invalid Contact No. in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (student.getAddress() == null || student.getAddress().trim().isEmpty()) {
+            alert.setContentText("Address cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        } else if (student.getGuardianName() == null || student.getGuardianName().trim().isEmpty()) {
+            alert.setContentText("Guardian/Father's Name cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!ValidatorUtil.validateName(student.getGuardianName().trim())) {
+            alert.setContentText("Invalid Guardian/Father's Name in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        else if (!student.getMotherName().trim().isEmpty()) {
+
+            if(!ValidatorUtil.validateName(student.getMotherName().trim())) {
+                alert.setContentText("Invalid Mother's Name in Row : " + currStudentIndex + "!");
+                alert.show();
+                return false;
+            }
+            else
+                return true;
+        }
+        else if (student.getGuardianContactNo() == null || student.getGuardianContactNo().trim().isEmpty()) {
+            alert.setContentText("Guardian Contact No. cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        } else if (!ValidatorUtil.validateContactNo(student.getGuardianContactNo().trim())) {
+            alert.setContentText("Invalid Guardian Contact No. in Row : " + currStudentIndex + "!");
+            alert.show();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -235,6 +442,11 @@ public class ImportStudentCSVModalController {
      */
     @FXML
     private void handleStatusStackPaneMouseClickedAction(){
+
+        deactivateProgressAndStatus();
+    }
+
+    private void deactivateProgressAndStatus(){
 
         mainGridPane.setOpacity(1);
         progressIndicator.setVisible(false);
