@@ -166,7 +166,37 @@ public class DatabaseHelper {
      *      *        normally VALUES parameters.
      * @return Status of the operation.
      */
-    public int insertUpdateDelete(String sql, String ...params){
+    @SuppressWarnings("Duplicates")
+    public int insert(String sql, String ...params){
+
+        int rowsAffected = 0;
+        int status = DATABASE_ERROR;
+        openConnection();
+        try(PreparedStatement stmt = con.prepareStatement(sql)){
+            if(params.length != 0){
+                for(int i = 0; i < params.length; i++)
+                    stmt.setString(i+1 , params[i]);
+            }
+            rowsAffected = stmt.executeUpdate();
+            if(rowsAffected > 0)
+                status = SUCCESS;
+        }
+        catch(SQLIntegrityConstraintViolationException e){
+            e.printStackTrace();
+            status = DATA_ALREADY_EXIST_ERROR;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            closeConnection();
+        }
+        return status;
+    }
+
+
+    @SuppressWarnings("Duplicates")
+    public int updateDelete(String sql, String ...params){
 
         int rowsAffected = 0;
         int status = DATABASE_ERROR;
@@ -184,7 +214,7 @@ public class DatabaseHelper {
         }
         catch(SQLIntegrityConstraintViolationException e){
             e.printStackTrace();
-            status = DATA_ALREADY_EXIST_ERROR;
+            status = DATA_DEPENDENCY_ERROR;
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -194,11 +224,6 @@ public class DatabaseHelper {
         }
         return status;
     }
-
-
-
-
-
 
 }
 

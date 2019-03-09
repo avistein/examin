@@ -213,13 +213,13 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
                         ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
 
-                int tStudentStatus = databaseHelper.insertUpdateDelete(sql1, student.getFirstName(), student.getMiddleName()
+                int tStudentStatus = databaseHelper.insert(sql1, student.getFirstName(), student.getMiddleName()
                         , student.getLastName(), student.getRegId(), student.getRollNo()
                         , student.getDob(), student.getMotherName(), student.getRegYear()
                         , student.getContactNo(), student.getGuardianName(), student.getEmail()
                         , student.getAddress(), student.getGuardianContactNo(), student.getGender());
 
-                int tStudentEnrollmentStatus = databaseHelper.insertUpdateDelete(sql2, student.getBatchId()
+                int tStudentEnrollmentStatus = databaseHelper.updateDelete(sql2, student.getBatchId()
                         , student.getRegId(), student.getCurrSemester());
 
                 if(tStudentStatus == DATABASE_ERROR ||
@@ -244,11 +244,11 @@ public class StudentService {
         Task<Integer> deleteStudentTask = new Task<>() {
             @Override
             protected Integer call()  {
-//                boolean t_loginDetailsStatus = databaseHelper.insertUpdateDelete
+//                boolean t_loginDetailsStatus = databaseHelper.insert
 //                (sql1, student.getRegId());
-                int tStudentEnrollmentStatus = databaseHelper.insertUpdateDelete
+                int tStudentEnrollmentStatus = databaseHelper.updateDelete
                         (sql2, student.getRegId());
-                int tStudentStatus = databaseHelper.insertUpdateDelete
+                int tStudentStatus = databaseHelper.updateDelete
                         (sql3, student.getRegId());
 
                 if(tStudentStatus == DATABASE_ERROR ||
@@ -257,6 +257,9 @@ public class StudentService {
                 else if(tStudentStatus == SUCCESS &&
                         tStudentEnrollmentStatus== SUCCESS)
                     return SUCCESS;
+                else if(tStudentStatus == DATA_DEPENDENCY_ERROR ||
+                        tStudentEnrollmentStatus == DATA_DEPENDENCY_ERROR)
+                    return DATA_DEPENDENCY_ERROR;
                 else
                     return DATA_INEXISTENT_ERROR;
             }

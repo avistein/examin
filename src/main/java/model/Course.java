@@ -13,14 +13,13 @@ public class Course extends Department {
     private SimpleStringProperty degree ;
     private SimpleStringProperty courseId;
     private SimpleStringProperty duration;
-    private SimpleStringProperty deptName;
 
     public Course(){
+
         this.discipline = new SimpleStringProperty("");
         this.degree = new SimpleStringProperty("");
         this.courseId = new SimpleStringProperty("");
         this.duration = new SimpleStringProperty("");
-        this.deptName = new SimpleStringProperty("");
     }
 
 
@@ -54,14 +53,6 @@ public class Course extends Department {
 
     public void setDuration(String duration) {
         this.duration.set(duration);
-    }
-
-    public String getDeptName(){
-        return this.deptName.get();
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName.set(deptName);
     }
 
 }

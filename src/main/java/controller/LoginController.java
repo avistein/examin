@@ -55,9 +55,8 @@ public class LoginController {
     }
 
     @FXML
-    private void handleSignInButtonAction(ActionEvent event1){
-
-        Stage loginStage = (Stage)((Node)event1.getSource())
+    private void handleSignInButtonAction(ActionEvent event){
+        Stage loginStage = (Stage)((Node)event.getSource())
                 .getScene().getWindow();
         mainGridPane.setOpacity(0.5);
         //this should display a progress spinner before database connection

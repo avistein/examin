@@ -129,6 +129,11 @@ public class ViewStudentModalController {
                         statusLabel.setText("Successfully Deleted!");
                         studentDeletedStatus = true;
                     }
+                    else if(status == DATA_DEPENDENCY_ERROR){
+                        statusImageView.setImage(new Image("/png/error.png"));
+                        statusLabel.setText("Cannot delete student!");
+                        studentDeletedStatus = false;
+                    }
                     else {
                         statusImageView.setImage(new Image("/png/error.png"));
                         statusLabel.setText("Student not found!");
