@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import model.ExamCellMember;
@@ -41,9 +42,27 @@ public class AdminController{
     private Label subTitleLabel;
 
     @FXML
+    private Button dashboardButton;
+
+    @FXML
     private void initialize(){
         roleLabel.setText("Admin");
         examCellMemberService = new ExamCellMemberService();
+        dashboardButton.fire();
+    }
+
+    /**
+     * Callback method for handling Dashboard.
+     * Opens AdminDashboard.fxml upon clicking Dashboard button.
+     */
+    @FXML
+    private void handleDashboardButtonAction() throws IOException {
+
+        Parent dashboardFxml = FXMLLoader.load(getClass()
+                .getResource("/view/AdminDashboard.fxml"));
+        subTitleLabel.setText("");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(dashboardFxml);
     }
 
     /**

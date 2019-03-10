@@ -148,15 +148,17 @@ public class ImportStudentCSVModalController {
         if(file != null) {
             chosenFileLabel.setText(file.getName());
             List<String> list = CSVUtil.getColumnNames(file);
-            if(list.size() == 18) {
+            if (list.size() == 18) {
                 setComboBoxes(list);
                 submitButton.setDisable(false);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("CSV file should have 18 columns!");
+                alert.show();
+                chosenFileLabel.setText("");
+                submitButton.setDisable(true);
+                unSetComboBoxes();
             }
-        }
-        else{
-            chosenFileLabel.setText("");
-            submitButton.setDisable(true);
-            unSetComboBoxes();
         }
     }
 

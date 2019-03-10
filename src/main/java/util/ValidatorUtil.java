@@ -103,7 +103,7 @@ public final class ValidatorUtil {
 
     public static boolean validateAcademicItem(String item) {
 
-        String regex = "^([a-zA-z0-9]+[ '.]?)+$";
+        String regex = "^([a-zA-z0-9]+[ '.\\-]*(\\([a-zA-z0-9]+[ '.\\-]*[a-zA-z0-9]+\\))?)+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(item);
         return matcher.matches();

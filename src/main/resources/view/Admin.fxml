@@ -13,10 +13,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="165.0" prefWidth="165.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="598.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="165.0" prefWidth="187.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="576.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -33,16 +33,128 @@
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #222051;" GridPane.rowIndex="1">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="200.0" text="Dashboard" />
-                  <Button fx:id="studentListButton" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student" />
-                  <Button fx:id="professorListButton" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor" />
-                  <Button fx:id="examCellMemberListButton" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Cell Member" />
-                  <Button fx:id="academicAdministrationButton" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration" />
-                  <Button fx:id="examsListButton" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exams Administration" />
-                  <Button fx:id="marksListButton" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks" />
-                  <Button fx:id="noticesListButton" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notices" />
-                  <Button fx:id="reportsListButton" mnemonicParsing="false" onAction="#handleReportsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Reports" />
-                  <Button fx:id="adminSettingsButton" mnemonicParsing="false" onAction="#handleAdminSettingsButtonAction" prefHeight="44.0" prefWidth="200.0" text="Settings" />
+                  <Button fx:id="dashboardButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleDashboardButtonAction" prefHeight="44.0" prefWidth="200.0" text="Dashboard">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/dashboard.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="studentListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/students.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="professorListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/prof.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="examCellMemberListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Cell Member">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/prof.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="officeMembersListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="127.0" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Office Member">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/prof.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="academicAdministrationButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/admin.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="examsListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Administration">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/subjects.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="marksListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/marks.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="noticesListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notices">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/notices.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="reportsListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleReportsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Reports">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/reports.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
+                  <Button fx:id="adminSettingsButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleAdminSettingsButtonAction" prefHeight="44.0" prefWidth="200.0" text="Settings">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../png/settings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></Button>
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #222051;">
