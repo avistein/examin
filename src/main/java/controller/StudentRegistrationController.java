@@ -22,12 +22,24 @@ import service.BatchService;
 import service.CourseService;
 import service.StudentService;
 import util.ValidatorUtil;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import static util.ConstantsUtil.*;
 
+import static util.ConstantsUtil.DATABASE_ERROR;
+import static util.ConstantsUtil.SUCCESS;
+
+/**
+ * Controller class for a single student registration.
+ * for StudentRegistration.fxml
+ * @author Avik Sarkar
+ */
 public class StudentRegistrationController {
+
+    /*--------------------Declaration and Initialization of variables--------------
+    The @FXML components are initialized when FXML document is being loaded.
+     */
 
     private CourseService courseService;
 
@@ -114,19 +126,32 @@ public class StudentRegistrationController {
     @FXML
     private HBox buttonsHbox;
 
+    /*---------------------End of declaration and initialization--------------------*/
+
+    /**
+     * This method is called once the whole FXML document is done loading.
+     */
     @FXML
     private void initialize() {
+
         courseService = new CourseService();
         batchService = new BatchService();
         studentService = new StudentService();
+
         Task<List<Course>> coursesTask = courseService
                 .getCoursesTask("");
         new Thread(coursesTask).start();
+
         coursesTask.setOnSucceeded(new EventHandler<>() {
             @Override
             public void handle(WorkerStateEvent event) {
+
+                //get the list of courses to get the list of degrees
                 listOfCourses = coursesTask.getValue();
+
+                //only when any course is present in the listofcourses then only set the the degree combo box
                 if (!listOfCourses.isEmpty()) {
+
                     List<String> items = new ArrayList<>();
                     for (Course course : listOfCourses) {
                         if (!items.contains(course.getDegree()))
@@ -135,6 +160,8 @@ public class StudentRegistrationController {
                     ObservableList<String> options = FXCollections.observableArrayList(items);
                     degreeComboBox.setItems(options);
                 }
+
+                //set items in the gender choice box
                 genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
                         , "Female", "Others"));
             }
@@ -142,32 +169,47 @@ public class StudentRegistrationController {
 
     }
 
+    /**
+     * This method handles an item selection in the BatchNameComboBox.
+     * Also sets the items in the Semester combo box.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleBatchNameComboBox() {
+
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
 
+        //execute only if a batch name is selected
         if (batchNameComboBox.getValue() != null) {
-            //System.out.println(event.toString());
+
             if (!listOfCourses.isEmpty()) {
 
                 List<String> items = new ArrayList<>();
+
                 int totalSemesters = 0;
+
                 for (Course course : listOfCourses) {
+
                     if (course.getDegree().equals(degreeComboBox.getValue())
                             && course.getDiscipline().equals(disciplineComboBox.getValue()))
+
+                        //get the duration of the particular course
                         totalSemesters = Integer.parseInt(course.getDuration());
                 }
+
+                //set the semester items from 1 to totalSemesters
                 for (int i = 1; i <= totalSemesters; i++)
                     items.add(Integer.toString(i));
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 semesterComboBox.setItems(options);
-
             }
         }
     }
 
+    /**
+     * Callback method for handling the Degree ComboBox.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleDegreeComboBox() {
@@ -181,21 +223,30 @@ public class StudentRegistrationController {
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
 
+        //only if a degree is selected
         if (degreeComboBox.getValue() != null) {
+
+            //only if there is any course in the db
             if (!listOfCourses.isEmpty()) {
+
                 List<String> items = new ArrayList<>();
                 for (Course course : listOfCourses) {
+
+                    //sets the discipline items for particular degree
                     if (course.getDegree().equals(degreeComboBox.getValue()))
+
                         if (!items.contains(course.getDiscipline()))
                             items.add(course.getDiscipline());
                 }
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 disciplineComboBox.setItems(options);
-
             }
         }
     }
 
+    /**
+     * Callback method for handling Discipline ComboBox.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleDisciplineComboBox() {
@@ -203,19 +254,30 @@ public class StudentRegistrationController {
         batchNameComboBox.getSelectionModel().clearSelection();
         batchNameComboBox.getItems().clear();
 
+        //only if an discipline is selected this will be executed
         if (disciplineComboBox.getValue() != null) {
+
             final String additionalQuery = "where v_degree=? and v_discipline =?";
+
             Task<List<Batch>> batchesTask = batchService
                     .getBatchesTask(additionalQuery, degreeComboBox.getValue()
                             , disciplineComboBox.getValue());
             new Thread(batchesTask).start();
+
             batchesTask.setOnSucceeded(new EventHandler<>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
+
                     listOfBatches = batchesTask.getValue();
+
+                    //only if there is any batch in the db
                     if (!listOfBatches.isEmpty()) {
+
                         List<String> items = new ArrayList<>();
+
                         for (Batch batch : listOfBatches) {
+
+                            //sets the batch name items for particular degree and discipline
                             if (!items.contains(batch.getBatchName()))
                                 items.add(batch.getBatchName());
                         }
@@ -228,13 +290,16 @@ public class StudentRegistrationController {
         }
     }
 
-
-
+    /**
+     * Callback method to handle Submit button.
+     */
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleSubmitButtonAction() {
+
         if (validate()) {
 
+            //fades the bg and display loading spinner
             mainGridPane.setOpacity(0.5);
             statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
@@ -259,11 +324,13 @@ public class StudentRegistrationController {
             student.setDiscipline(disciplineComboBox.getValue());
             student.setDegree(degreeComboBox.getValue());
 
+            //get the batch ids for the respective degree,discipline and batch chosen
             for (Batch batch : listOfBatches) {
 
                 if (batch.getDiscipline().equals(disciplineComboBox.getValue()) &&
                         batch.getDegree().equals(degreeComboBox.getValue()) &&
                         batch.getBatchName().equals(batchNameComboBox.getValue())) {
+
                     student.setBatchId(batch.getBatchId());
                 }
 
@@ -271,25 +338,31 @@ public class StudentRegistrationController {
 
             Task<Integer> addStudentToDatabaseTask = studentService
                     .getAddStudentToDatabaseTask(student);
-
             new Thread(addStudentToDatabaseTask).start();
 
             addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
+
                     int status = addStudentToDatabaseTask.getValue();
+
+                    //hides the loading spinner and shows status
                     progressIndicator.setVisible(false);
                     buttonsHbox.setVisible(true);
                     statusImageView.setVisible(true);
                     statusLabel.setVisible(true);
+
+                    //display several status
                     if (status == DATABASE_ERROR) {
+
                         statusImageView.setImage(new Image("/png/critical error.png"));
                         statusLabel.setText("Database Error!");
-                    }
-                    else if (status == SUCCESS) {
+                    } else if (status == SUCCESS) {
+
                         statusImageView.setImage(new Image("/png/success.png"));
                         statusLabel.setText("Added Successfully!");
                     } else {
+
                         statusImageView.setImage(new Image("/png/error.png"));
                         statusLabel.setText("Student already exists!");
                     }
@@ -299,87 +372,107 @@ public class StudentRegistrationController {
         }
     }
 
-
+    /**
+     * This method validates a single student and displays msg if validation fails.
+     *
+     * @return the validation status
+     */
     private boolean validate() {
+
         Alert alert = new Alert(Alert.AlertType.ERROR);
         if (degreeComboBox.getValue() == null) {
+
             alert.setContentText("Please select a degree!");
             alert.show();
             return false;
         } else if (disciplineComboBox.getValue() == null) {
+
             alert.setContentText("Please select a discipline!");
             alert.show();
             return false;
         } else if (batchNameComboBox.getValue() == null) {
+
             alert.setContentText("Please select a batch!");
             alert.show();
             return false;
         } else if (semesterComboBox.getValue() == null) {
+
             alert.setContentText("Please select a semester!");
             alert.show();
             return false;
         } else if (regYearTextField.getText().isEmpty()) {
+
             alert.setContentText("Registration Year cannot be empty!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateRegYear(batchNameComboBox.getValue()
-                ,regYearTextField.getText())) {
+                , regYearTextField.getText())) {
+
             alert.setContentText("Invalid Registration Year or not within batch range!");
             alert.show();
             return false;
         } else if (regIdTextField.getText().isEmpty()) {
+
             alert.setContentText("Registration ID cannot be empty!");
             alert.show();
             return false;
         } else if (rollNoTextField.getText().isEmpty()) {
+
             alert.setContentText("Roll No. cannot be empty!");
             return false;
         } else if (firstNameTextField.getText().isEmpty()) {
+
             alert.setContentText("First Name cannot be empty!");
             alert.show();
             return false;
         } else if (dobDatePicker.getValue() == null) {
+
             alert.setContentText("Please choose a date of birth!");
             alert.show();
             return false;
         } else if (genderChoiceBox.getValue() == null) {
+
             alert.setContentText("Please select a gender!");
             alert.show();
             return false;
         } else if (emailTextField.getText().isEmpty()) {
+
             alert.setContentText("Email ID cannot be empty!");
             alert.show();
             return false;
-        }
-        else if (!ValidatorUtil.validateEmail(emailTextField.getText())) {
+        } else if (!ValidatorUtil.validateEmail(emailTextField.getText())) {
+
             alert.setContentText("Invalid Email ID !");
             alert.show();
             return false;
-        }
-        else if (contactNoTextField.getText().isEmpty()) {
+        } else if (contactNoTextField.getText().isEmpty()) {
+
             alert.setContentText("Contact No. cannot be empty!");
             alert.show();
             return false;
-        }
-        else if (!ValidatorUtil.validateContactNo(contactNoTextField.getText())) {
+        } else if (!ValidatorUtil.validateContactNo(contactNoTextField.getText())) {
+
             alert.setContentText("Invalid Contact No.!");
             alert.show();
             return false;
-        }
-        else if (addressTextArea.getText().isEmpty()) {
+        } else if (addressTextArea.getText().isEmpty()) {
+
             alert.setContentText("Address cannot be empty!");
             alert.show();
             return false;
         } else if (guardianNameTextField.getText().isEmpty()) {
+
             alert.setContentText("Guardian/Father's Name cannot be empty!");
             alert.show();
             return false;
         } else if (guardianContactNoTextField.getText().isEmpty()) {
+
             alert.setContentText("Guardian Contact No. cannot be empty!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateContactNo(guardianContactNoTextField
                 .getText())) {
+
             alert.setContentText("Invalid Guardian Contact No.!");
             alert.show();
             return false;
@@ -387,8 +480,13 @@ public class StudentRegistrationController {
         return true;
     }
 
+    /**
+     * Callback method to handle Add Another button and Reset button.
+     * Deactivates loading spinner and status and clears the textfields and the comboboxes.
+     */
+    @SuppressWarnings("Duplicates")
     @FXML
-    private void handleAddAnotherAndResetButtonAction(){
+    private void handleAddAnotherAndResetButtonAction() {
         statusStackPane.setVisible(false);
         progressIndicator.setVisible(false);
         buttonsHbox.setVisible(false);
@@ -415,14 +513,19 @@ public class StudentRegistrationController {
         guardianContactNoTextField.clear();
     }
 
+    /**
+     * Callback method to handle Back and Cancel button.
+     * Opens the StudentsList scene on clicking on them.
+     *
+     * @throws IOException Load exception while loading the fxml document.
+     */
     @FXML
     private void handleBackAndCancelButtonAction() throws IOException {
 
-        StackPane contentStackPane = (StackPane)rootAnchorPane.getParent();
+        StackPane contentStackPane = (StackPane) rootAnchorPane.getParent();
         Parent studentRegistrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentsList.fxml"));
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
-
 }

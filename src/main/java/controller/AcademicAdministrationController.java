@@ -25,8 +25,14 @@ import java.util.List;
 
 import static util.ConstantsUtil.*;
 
+/**
+ * Controller class for AcademicAdministration.fxml
+ *
+ * @author Avik Sarkar
+ */
 public class AcademicAdministrationController {
 
+    /*------------------Declaration & initialization of items common to all tabs-----------*/
 
     @FXML
     private TabPane academicAdministrationTabPane;
@@ -45,6 +51,9 @@ public class AcademicAdministrationController {
 
     @FXML
     private Tab classRoomsTab;
+
+    /*--------------------------End of initialization----------------------------------------*/
+
 
     /*-------------Initialization and declaration of Department tab's components.------------*/
 

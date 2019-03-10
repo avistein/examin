@@ -37,6 +37,8 @@ import java.util.function.Predicate;
  */
 public class StudentsListController {
 
+    /*--------------------Declaration and initialization of variables--------------------*/
+
     private StudentService studentService;
 
     private CourseService courseService;
@@ -116,32 +118,53 @@ public class StudentsListController {
     @FXML
     private TableColumn<Student, String> regYearCol;
 
+
+    /*------------------------------End of initialization-------------------------------*/
+
     /**
-     *
+     *  This method is called once the FXML document is loaded.
      */
     @SuppressWarnings("Duplicates")
     @FXML
     public void initialize() {
+
         studentService = new StudentService();
         courseService = new CourseService();
         batchService = new BatchService();
+
+        //initialize this for the studentTableView
         studentObsList = FXCollections.observableArrayList();
 
+        //get the list of courses available in the db
         Task<List<Course>> coursesTask = courseService
                 .getCoursesTask("");
         new Thread(coursesTask).start();
+
         coursesTask.setOnSucceeded(new EventHandler<>() {
             @Override
             public void handle(WorkerStateEvent event) {
+
+                //initialize columns of the studentTableView
                 initCol();
+
                 listOfCourses = coursesTask.getValue();
+
+                //only if there's any course in the db
                 if (!listOfCourses.isEmpty()) {
+
                     List<String> items = new ArrayList<>();
+
                     for (Course course : listOfCourses) {
+
+                        //add only unique degree items to degree combobox
                         if (!items.contains(course.getDegree()))
+
                             items.add(course.getDegree());
                     }
+
+                    //choosing this will display students from all degrees
                     items.add("all");
+
                     ObservableList<String> options = FXCollections.observableArrayList(items);
                     degreeComboBox.setItems(options);
                 }
@@ -168,19 +191,19 @@ public class StudentsListController {
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
 
+        //clears the tableView
         studentObsList.clear();
 
         /*
         If 'all' is chosen , disable other comboBoxes
         and display all students data.
          */
-        if(degreeComboBox.getValue().equals("all")){
+        if (degreeComboBox.getValue().equals("all")) {
             disciplineComboBox.setDisable(true);
             batchNameComboBox.setDisable(true);
             semesterComboBox.setDisable(true);
             populateTable();
-        }
-        else if(degreeComboBox.getValue() != null){
+        } else if (degreeComboBox.getValue() != null) {
 
             disciplineComboBox.setDisable(false);
             batchNameComboBox.setDisable(false);
@@ -188,9 +211,13 @@ public class StudentsListController {
 
             //Add every discipline which comes under the selected degree
             if (!listOfCourses.isEmpty()) {
+
                 List<String> items = new ArrayList<>();
                 for (Course course : listOfCourses) {
+
                     if (course.getDegree().equals(degreeComboBox.getValue()))
+
+                        //add the disciplines to the discipline comboBox for particular degree
                         if (!items.contains(course.getDiscipline()))
                             items.add(course.getDiscipline());
                 }
@@ -217,12 +244,14 @@ public class StudentsListController {
 
         studentObsList.clear();
 
+        //only if a discipline is selected
         if (disciplineComboBox.getValue() != null) {
 
             final String additionalQuery = "where v_degree=? and v_discipline =?";
+
+            //get all batches for particular degree and discipline
             Task<List<Batch>> batchesTask = batchService.getBatchesTask(additionalQuery, degreeComboBox.getValue()
                     , disciplineComboBox.getValue());
-
             new Thread(batchesTask).start();
 
             batchesTask.setOnSucceeded(new EventHandler<>() {
@@ -230,16 +259,19 @@ public class StudentsListController {
                 public void handle(WorkerStateEvent event) {
 
                     listOfBatches = batchesTask.getValue();
-                    //Add unique batch names to the batchComboBox
+
                     if (!listOfBatches.isEmpty()) {
+
                         List<String> items = new ArrayList<>();
+
                         for (Batch batch : listOfBatches) {
+
+                            //Add unique batch names to the batchComboBox
                             if (!items.contains(batch.getBatchName()))
                                 items.add(batch.getBatchName());
                         }
                         ObservableList<String> options = FXCollections.observableArrayList(items);
                         batchNameComboBox.setItems(options);
-
                     }
                 }
             });
@@ -304,6 +336,9 @@ public class StudentsListController {
 
     }
 
+    /**
+     * This method initializes the columns of the Student Table.
+     */
     private void initCol() {
 
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -321,13 +356,20 @@ public class StudentsListController {
 
     }
 
+    /**
+     * This method populates and updates the Student Table.
+     */
     private void populateTable() {
+
         String additionalQuery = "";
+
         Task<List<Student>> studentsTask;
-        if(degreeComboBox.getValue().equals("all")){
+
+
+        if (degreeComboBox.getValue().equals("all")) {
+
             studentsTask = studentService.getStudentTask(additionalQuery);
-        }
-        else{
+        } else {
 
             additionalQuery = "where v_degree=? and v_discipline=? " +
                     "and v_batch_name=? and v_curr_semester=?";
@@ -335,8 +377,6 @@ public class StudentsListController {
                     , degreeComboBox.getValue(), disciplineComboBox.getValue()
                     , batchNameComboBox.getValue(), semesterComboBox.getValue());
         }
-
-
 
         new Thread(studentsTask).start();
 
@@ -394,24 +434,46 @@ public class StudentsListController {
 
     }
 
+    /**
+     * Callback method for ImportButton to import the students from the Csv file.
+     * @throws IOException Load exception while loading the Fxml document.
+     */
     @FXML
     private void handleImportButtonAction() throws IOException {
+
+        //create a new stage first
         Stage importStudentListModalWindow = new Stage();
         importStudentListModalWindow.setResizable(false);
         importStudentListModalWindow.setTitle("Import Student List");
         importStudentListModalWindow.initModality(Modality.WINDOW_MODAL);
+
+        //get the stage where the Import Button is situated
         Stage parentStage = (Stage) importButton.getScene().getWindow();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ImportStudentCSVModal.fxml"));
         Parent root = loader.load();
+
+        //get the controller
         ImportStudentCSVModalController importStudentCSVModalController = loader.getController();
+
         importStudentListModalWindow.setScene(new Scene(root));
         importStudentListModalWindow.initOwner(parentStage);
+
+        /*
+        showAndWait() since we need to get the status for updating the table from the Import Student controller.
+        The application thread is blocked here and goes to execute the Import modal operations and only when the Import
+        modal window is closed , the tableUpdateStatus is sent from the Import modal controller.
+         */
         importStudentListModalWindow.showAndWait();
         boolean tableUpdateStatus = importStudentCSVModalController.getTableUpdateStatus();
         if (tableUpdateStatus)
             populateTable();
     }
 
+    /**
+     * Callback method
+     * @throws IOException
+     */
     @FXML
     private void handleAddStudentButtonAction() throws IOException {
         StackPane contentStackPane = (StackPane) studentListGridPane.getParent();
@@ -422,10 +484,10 @@ public class StudentsListController {
     }
 
     @FXML
-    private void handleMouseClickOnTableViewItem() throws IOException{
+    private void handleMouseClickOnTableViewItem() throws IOException {
         Student student = studentTableView.getSelectionModel().getSelectedItem();
 
-        if(student != null) {
+        if (student != null) {
 
             Stage viewStudentModalWindow = new Stage();
             viewStudentModalWindow.setTitle("Student");
@@ -439,7 +501,7 @@ public class StudentsListController {
             viewStudentModalWindow.initOwner(parentStage);
             viewStudentModalController.setStudentPojo(student);
             viewStudentModalWindow.showAndWait();
-            if(viewStudentModalController.getStudentDeletedStatus())
+            if (viewStudentModalController.getStudentDeletedStatus())
                 studentObsList.remove(student);
         }
     }

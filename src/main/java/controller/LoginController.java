@@ -1,5 +1,6 @@
 package controller;
 
+import command.LoginCommand;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -18,12 +19,21 @@ import javafx.stage.Stage;
 import model.User;
 import service.UserService;
 import util.SceneSetterUtil;
-import command.LoginCommand;
-import static util.ConstantsUtil.*;
+
 import java.io.IOException;
 import java.util.List;
 
+import static util.ConstantsUtil.*;
+
+/**
+ * Controller class for handling Login job.
+ * for Login.fxml
+ *
+ * @author Avik Sarkar
+ */
 public class LoginController {
+
+    /*--------------------Declaration and initialization of variables--------------------*/
 
     private LoginCommand loginCommand;
 
@@ -46,7 +56,13 @@ public class LoginController {
 
     private UserService userService;
 
-    public LoginController() {
+    /*-------------------------------End of initialization--------------------------------*/
+
+    /**
+     * This method is called once the FXML document is loaded.
+     */
+    @FXML
+    public void initialize() {
         loginCommand = new LoginCommand();
         userService = new UserService();
         mainStage = new Stage();
@@ -54,11 +70,21 @@ public class LoginController {
         mainStage.setResizable(false);
     }
 
+    /**
+     * Callback method for handle Sign In button click event and set the panel  or display error msg.
+     *
+     * @param event The event containing the click on the Sign in button
+     */
     @FXML
-    private void handleSignInButtonAction(ActionEvent event){
-        Stage loginStage = (Stage)((Node)event.getSource())
+    private void handleSignInButtonAction(ActionEvent event) {
+
+        //get the stage of the Login screen
+        Stage loginStage = (Stage) ((Node) event.getSource())
                 .getScene().getWindow();
+
+        //Background faded once the Sign In button is clicked.
         mainGridPane.setOpacity(0.5);
+
         //this should display a progress spinner before database connection
         statusStackPane.setVisible(true);
 
@@ -68,25 +94,29 @@ public class LoginController {
         Task<List<User>> usersTask = userService.getUsersTask("where v_user_id=?", username);
         new Thread(usersTask).start();
         //saveThread.setDaemon(true);
-       //saveThread.start();
+        //saveThread.start();
         usersTask.setOnSucceeded(new EventHandler<>() {
 
             @Override
-            public void handle(WorkerStateEvent event){
+            public void handle(WorkerStateEvent event) {
 
+                //db connection and work done, so deactivate Status.
                 statusStackPane.setVisible(false);
-                mainGridPane.setOpacity(0.5);
+                mainGridPane.setOpacity(1);
 
+                //by default status is login err.
                 int status = LOGIN_ERROR;
 
-                if(!usersTask.getValue().isEmpty()) {
+                //authenticates the username and password of the user
+                if (!usersTask.getValue().isEmpty()) {
                     status = loginCommand.authenticateLogin(password
                             , usersTask.getValue().get(0));
                 }
 
                 Parent root;
 
-                switch (status){
+                //Open different panel for different types of user on successful  login.
+                switch (status) {
 
                     case LOGIN_ERROR:
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -112,8 +142,7 @@ public class LoginController {
                             loginStage.hide();
                             mainStage.setMaximized(true);
                             mainStage.show();
-                        }
-                        catch (IOException e){
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
 
@@ -173,21 +202,37 @@ public class LoginController {
         });
     }
 
+    /**
+     * Callback method to set the Forgot Password scene
+     *
+     * @param event The click event containing the Forgot Password button click event.
+     * @throws Exception Load exception while loading the fxml document.
+     */
     @FXML
-    private void handleForgotPasswordAction(ActionEvent event) throws Exception{
-        SceneSetterUtil.setScene("/view/ForgotPassword.fxml","Reset Password", event);
+    private void handleForgotPasswordAction(ActionEvent event) throws Exception {
+        SceneSetterUtil.setScene("/view/ForgotPassword.fxml", "Reset Password", event);
     }
 
+    /**
+     * Callback method to send the user a new password on clicking the Send Password button.
+     */
     @FXML
-    private void handleSendPasswordAction(){
+    private void handleSendPasswordAction() {
 
         String username = forgotPasswordUserNameField.getText();
         loginCommand.resetPassword(username);
     }
 
+    /**
+     * Callback method to get back the Login window once reset password job is done or as
+     * per the user's choice.
+     *
+     * @param event Click event of the backtoLoginHyperlink
+     * @throws Exception Load exception while loading the fxml document.
+     */
     @FXML
-    private void handleBackToLoginHyperlinkAction(ActionEvent event) throws Exception{
-        SceneSetterUtil.setScene("/view/Login.fxml","Login", event);
+    private void handleBackToLoginHyperlinkAction(ActionEvent event) throws Exception {
+        SceneSetterUtil.setScene("/view/Login.fxml", "Login", event);
     }
 }
 
