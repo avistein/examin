@@ -17,9 +17,12 @@ import java.util.List;
 /**
  * Controller class for Admin.fxml.
  * Loads the individual fxml upon clicking the buttons on left side.
+ *
  * @author Avik Sarkar
  */
-public class AdminController{
+public class AdminController {
+
+    /*---------------------Initialization and declaration of variables-----------------------*/
 
     private ExamCellMemberService examCellMemberService;
 
@@ -40,8 +43,13 @@ public class AdminController{
     @FXML
     private Label subTitleLabel;
 
+    /*--------------------------End of Initialization-------------------------------------*/
+
+    /**
+     * This method is called once all the components in the fxml has been loaded successfully
+     */
     @FXML
-    private void initialize(){
+    private void initialize() {
         roleLabel.setText("Admin");
         examCellMemberService = new ExamCellMemberService();
     }
@@ -65,7 +73,7 @@ public class AdminController{
      * Opens StudentsList.fxml upon clicking professorListButtonAction.
      */
     @FXML
-    private void handleProfessorListButtonAction() throws IOException{
+    private void handleProfessorListButtonAction() throws IOException {
 
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ProfessorsList.fxml"));
@@ -79,7 +87,7 @@ public class AdminController{
      * Opens StudentsList.fxml upon clicking examCellMemberListButton.
      */
     @FXML
-    private void handleExamCellMemberListButtonAction() throws IOException{
+    private void handleExamCellMemberListButtonAction() throws IOException {
 
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ExamCellMembersList.fxml"));
@@ -88,8 +96,13 @@ public class AdminController{
         contentStackPane.getChildren().setAll(studentsListFxml);
     }
 
+    /**
+     * Callback method for handling clicking event on Academic Administration Button
+     *
+     * @throws IOException Load exception on loading the fxml
+     */
     @FXML
-    private void handleAcademicAdministrationButtonAction() throws IOException{
+    private void handleAcademicAdministrationButtonAction() throws IOException {
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/AcademicAdministration.fxml"));
         subTitleLabel.setText("Academic Administration");
@@ -98,31 +111,36 @@ public class AdminController{
     }
 
     @FXML
-    private void handleExamsListButtonAction(){
+    private void handleExamsListButtonAction() {
 
     }
 
     @FXML
-    private void handleMarksListButtonAction(){
+    private void handleMarksListButtonAction() {
 
     }
 
     @FXML
-    private void handleNoticesListButtonAction(){
+    private void handleNoticesListButtonAction() {
 
     }
 
     @FXML
-    private void handleReportsListButtonAction(){
+    private void handleReportsListButtonAction() {
 
     }
 
     @FXML
-    private void handleAdminSettingsButtonAction(){
+    private void handleAdminSettingsButtonAction() {
 
     }
 
-    void setAdminProfileDetails(String userId){
+    /**
+     * This method sets the details of the admin in the admin panel
+     *
+     * @param userId The userId used to login to the system
+     */
+    void setAdminProfileDetails(String userId) {
 
         final String additionalQuery = "where v_emp_id=?";
         Task<List<ExamCellMember>> examCellMembersTask = examCellMemberService
@@ -139,10 +157,6 @@ public class AdminController{
                         + " " + admin.getLastName());
             }
         });
-
-
-
-
 
     }
 
