@@ -24,6 +24,7 @@ import model.Student;
 import service.BatchService;
 import service.CourseService;
 import service.StudentService;
+import util.UISetterUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -443,21 +444,15 @@ public class StudentsListController {
 
         //create a new stage first
         Stage importStudentListModalWindow = new Stage();
-        importStudentListModalWindow.setResizable(false);
-        importStudentListModalWindow.setTitle("Import Student List");
-        importStudentListModalWindow.initModality(Modality.WINDOW_MODAL);
 
         //get the stage where the Import Button is situated
         Stage parentStage = (Stage) importButton.getScene().getWindow();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ImportStudentCSVModal.fxml"));
-        Parent root = loader.load();
+        FXMLLoader loader = UISetterUtil.setModalWindow("/view/ImportStudentCSVModal.fxml"
+                , importStudentListModalWindow, parentStage, "Import Student List");
 
         //get the controller
         ImportStudentCSVModalController importStudentCSVModalController = loader.getController();
-
-        importStudentListModalWindow.setScene(new Scene(root));
-        importStudentListModalWindow.initOwner(parentStage);
 
         /*
         showAndWait() since we need to get the status for updating the table from the Import Student controller.
@@ -465,6 +460,7 @@ public class StudentsListController {
         modal window is closed , the tableUpdateStatus is sent from the Import modal controller.
          */
         importStudentListModalWindow.showAndWait();
+
         boolean tableUpdateStatus = importStudentCSVModalController.getTableUpdateStatus();
         if (tableUpdateStatus && degreeComboBox.getValue() != null){
 
@@ -497,17 +493,13 @@ public class StudentsListController {
         if (student != null) {
 
             Stage viewStudentModalWindow = new Stage();
-            viewStudentModalWindow.setTitle("Student");
-            viewStudentModalWindow.initModality(Modality.WINDOW_MODAL);
             Stage parentStage = (Stage) importButton.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass()
-                    .getResource("/view/ViewStudentModal.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = UISetterUtil.setModalWindow("/view/ViewStudentModal.fxml"
+                    , viewStudentModalWindow, parentStage, "Student");
             ViewStudentModalController viewStudentModalController = loader.getController();
-            viewStudentModalWindow.setScene(new Scene(root));
-            viewStudentModalWindow.initOwner(parentStage);
             viewStudentModalController.setStudentPojo(student);
             viewStudentModalWindow.showAndWait();
+
             if (viewStudentModalController.getStudentDeletedStatus())
                 studentObsList.remove(student);
         }

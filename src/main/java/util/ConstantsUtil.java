@@ -28,4 +28,17 @@ public final class ConstantsUtil {
 
     public static final int EDIT_CHOICE = 2;
 
+    public static final String USER_HOME = System.getProperty("user.home");
+
+    public static  final String LINE_SEPARATOR = System.getProperty("line.separator");
+
+    public static  final String FILE_SEPARATOR = System.getProperty("file.separator");
+
+    public static  final String PROJECT_NAME = "examin - Examination Management Tool";
+
+    public static  final String ROOT_DIR = "examin";
+
+    public static  final String CONFIG_DIR = "configs";
+
+    public static  final String SETTINGS_DIR = "settings";
 }

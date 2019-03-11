@@ -33,7 +33,7 @@
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #222051;" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="dashboardButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleDashboardButtonAction" prefHeight="44.0" prefWidth="200.0" text="Dashboard">
+                  <Button id="dashboardButton" fx:id="dashboardButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleDashboardButtonAction" prefHeight="44.0" prefWidth="200.0" text="Dashboard">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -44,7 +44,7 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
-                  <Button fx:id="studentListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student">
+                  <Button id="studentButton" fx:id="studentListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -55,7 +55,7 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
-                  <Button fx:id="professorListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor">
+                  <Button id="professorButton" fx:id="professorListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -89,7 +89,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Button>
-                  <Button fx:id="academicAdministrationButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration">
+                  <Button id="academicAdministrationButton" fx:id="academicAdministrationButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>

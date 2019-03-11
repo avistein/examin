@@ -244,7 +244,7 @@ public class AcademicAdministrationController {
     /**
      * Initialization of Departments Tab
      */
-    private void initDepartmentsTab(){
+    private void initDepartmentsTab() {
 
         populateDeptTable();
     }
@@ -390,8 +390,8 @@ public class AcademicAdministrationController {
     @FXML
     private void handleDeleteDeptButtonAction() {
 
-        //display a loading spinner to indicate that delete is taking place
-        activateDeptListProgressIndicator();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Do you really want to delete?");
 
         //get the selected department from the table
         Department department = deptTableView.getSelectionModel()
@@ -400,39 +400,48 @@ public class AcademicAdministrationController {
         //Trigger delete only when a department is selected in the table.
         if (department != null) {
 
-            Task<Integer> deleteDepartmentTask = departmentService
-                    .getDeleteDepartmentTask(department.getDeptName());
-            new Thread(deleteDepartmentTask).start();
+            alert.showAndWait();
+            ButtonType result = alert.getResult();
 
-            deleteDepartmentTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
+            if (result == ButtonType.OK) {
 
-                    int status = deleteDepartmentTask.getValue();
+                //display a loading spinner to indicate that delete is taking place
+                activateDeptListProgressIndicator();
 
-                    //delete operation finished on database, disable the loading spinner and show status
-                    deactivateDeptListProgressIndicator();
+                Task<Integer> deleteDepartmentTask = departmentService
+                        .getDeleteDepartmentTask(department.getDeptName());
+                new Thread(deleteDepartmentTask).start();
 
-                    if (status == DATABASE_ERROR) {
+                deleteDepartmentTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
 
-                        deptListStatusImageView.setImage(new Image("/png/critical error.png"));
-                        deptListStatusLabel.setText("Database Error!");
-                    } else if (status == SUCCESS) {
+                        int status = deleteDepartmentTask.getValue();
 
-                        deptListStatusImageView.setImage(new Image("/png/success.png"));
-                        deptListStatusLabel.setText("Deleted Successfully!");
-                        populateDeptTable();
-                    } else if (status == DATA_DEPENDENCY_ERROR) {
+                        //delete operation finished on database, disable the loading spinner and show status
+                        deactivateDeptListProgressIndicator();
 
-                        deptListStatusImageView.setImage(new Image("/png/error.png"));
-                        deptListStatusLabel.setText("Cannot delete department!");
-                    } else if (status == DATA_INEXISTENT_ERROR) {
+                        if (status == DATABASE_ERROR) {
 
-                        deptListStatusImageView.setImage(new Image("/png/error.png"));
-                        deptListStatusLabel.setText("Department doesn't exist!");
+                            deptListStatusImageView.setImage(new Image("/png/critical error.png"));
+                            deptListStatusLabel.setText("Database Error!");
+                        } else if (status == SUCCESS) {
+
+                            deptListStatusImageView.setImage(new Image("/png/success.png"));
+                            deptListStatusLabel.setText("Deleted Successfully!");
+                            populateDeptTable();
+                        } else if (status == DATA_DEPENDENCY_ERROR) {
+
+                            deptListStatusImageView.setImage(new Image("/png/error.png"));
+                            deptListStatusLabel.setText("Cannot delete department!");
+                        } else if (status == DATA_INEXISTENT_ERROR) {
+
+                            deptListStatusImageView.setImage(new Image("/png/error.png"));
+                            deptListStatusLabel.setText("Department doesn't exist!");
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -771,8 +780,8 @@ public class AcademicAdministrationController {
     @FXML
     private void handleDeleteCourseButtonAction() {
 
-        //display a loading spinner to indicate that delete is taking place
-        activateCourseListProgressIndicator();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Do you really want to delete?");
 
         //get the selected course from the table
         Course course = courseTableView.getSelectionModel()
@@ -781,39 +790,48 @@ public class AcademicAdministrationController {
         //Trigger delete only when a course is selected in the table.
         if (course != null) {
 
-            Task<Integer> deleteCourseTask = courseService
-                    .getDeleteCourseTask(course.getCourseId());
-            new Thread(deleteCourseTask).start();
+            alert.showAndWait();
+            ButtonType result = alert.getResult();
 
-            deleteCourseTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
+            if (result == ButtonType.OK) {
 
-                    int status = deleteCourseTask.getValue();
+                //display a loading spinner to indicate that delete is taking place
+                activateCourseListProgressIndicator();
 
-                    //delete operation finished on database, disable the loading spinner and show status
-                    deactivateCourseListProgressIndicator();
+                Task<Integer> deleteCourseTask = courseService
+                        .getDeleteCourseTask(course.getCourseId());
+                new Thread(deleteCourseTask).start();
 
-                    if (status == DATABASE_ERROR) {
+                deleteCourseTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
 
-                        courseListStatusImageView.setImage(new Image("/png/critical error.png"));
-                        courseListStatusLabel.setText("Database Error!");
-                    } else if (status == SUCCESS) {
+                        int status = deleteCourseTask.getValue();
 
-                        courseListStatusImageView.setImage(new Image("/png/success.png"));
-                        courseListStatusLabel.setText("Deleted Successfully!");
-                        populateCourseTable();
-                    } else if (status == DATA_DEPENDENCY_ERROR) {
+                        //delete operation finished on database, disable the loading spinner and show status
+                        deactivateCourseListProgressIndicator();
 
-                        courseListStatusImageView.setImage(new Image("/png/error.png"));
-                        courseListStatusLabel.setText("Cannot delete course!");
-                    } else if (status == DATA_INEXISTENT_ERROR) {
+                        if (status == DATABASE_ERROR) {
 
-                        courseListStatusImageView.setImage(new Image("/png/error.png"));
-                        courseListStatusLabel.setText("Course doesn't exist!");
+                            courseListStatusImageView.setImage(new Image("/png/critical error.png"));
+                            courseListStatusLabel.setText("Database Error!");
+                        } else if (status == SUCCESS) {
+
+                            courseListStatusImageView.setImage(new Image("/png/success.png"));
+                            courseListStatusLabel.setText("Deleted Successfully!");
+                            populateCourseTable();
+                        } else if (status == DATA_DEPENDENCY_ERROR) {
+
+                            courseListStatusImageView.setImage(new Image("/png/error.png"));
+                            courseListStatusLabel.setText("Cannot delete course!");
+                        } else if (status == DATA_INEXISTENT_ERROR) {
+
+                            courseListStatusImageView.setImage(new Image("/png/error.png"));
+                            courseListStatusLabel.setText("Course doesn't exist!");
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 

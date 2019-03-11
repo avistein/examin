@@ -6,9 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -17,10 +15,13 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.ExamCellMember;
 import service.ExamCellMemberService;
+import util.UISetterUtil;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import static util.ConstantsUtil.PROJECT_NAME;
 
 /**
  * Controller class for Admin.fxml.
@@ -64,6 +65,7 @@ public class AdminController {
      */
     @FXML
     private void initialize() {
+
         roleLabel.setText("Admin");
         examCellMemberService = new ExamCellMemberService();
         dashboardButton.fire();
@@ -132,6 +134,7 @@ public class AdminController {
      */
     @FXML
     private void handleAcademicAdministrationButtonAction() throws IOException {
+
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/AcademicAdministration.fxml"));
         subTitleLabel.setText("Academic Administration");
@@ -165,24 +168,21 @@ public class AdminController {
     }
 
     @FXML
-    private void handleLogOutButtonAction(ActionEvent event) throws IOException{
+    private void handleLogOutButtonAction(ActionEvent event) throws IOException {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Do you really want to logout?");
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
 
             Stage adminPanelStage = (Stage) logOutButton.getScene().getWindow();
             adminPanelStage.hide();
             Stage loginStage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-            loginStage.setTitle("examin - Examination Management Tool");
-            loginStage.setScene(new Scene(root, 400, 400));
-            loginStage.setResizable(false);
+            UISetterUtil.setStage("/view/Login.fxml", loginStage
+                    , PROJECT_NAME, 400, 400);
             loginStage.show();
         }
     }
-
 
 
     /**

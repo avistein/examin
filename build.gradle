@@ -16,7 +16,7 @@ plugins {
 
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_10
 
 repositories {
     mavenCentral()

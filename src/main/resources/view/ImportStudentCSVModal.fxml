@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportStudentCSVModalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportStudentCSVModalController">
    <children>
       <GridPane fx:id="mainGridPane" layoutX="30.0" layoutY="32.0" prefHeight="450.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -36,6 +37,7 @@
                            <children>
                               <Label text="Attach CSV file" />
                               <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButtonAction" text="Choose File" />
+                              <Hyperlink fx:id="sampleCsvHyperLink" onAction="#handleSampleCsvHyperLinkAction" text="Get Sample CSV" />
                               <Label fx:id="chosenFileLabel" />
                            </children>
                         </VBox>

@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
+
 import static util.ConstantsUtil.*;
+
 /**
  * Helper class to create,close database connection and
  * implement SELECT,INSERT,UPDATE,DELETE.
@@ -21,23 +23,24 @@ public class DatabaseHelper {
     /**
      * Public constructor to get the db.properties file and setup the DB connection
      */
-    public DatabaseHelper(){
+    public DatabaseHelper() {
         Properties props = new Properties();
         try {
-            FileInputStream in = new FileInputStream("src/main/resources/configs/db.properties");
+
+            String dbPropertiesFilePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR
+                    + CONFIG_DIR + FILE_SEPARATOR + "db.properties";
+            FileInputStream in = new FileInputStream(dbPropertiesFilePath);
             props.load(in);
             in.close();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         String driver = props.getProperty("jdbc.driver");
-        try{
+        try {
             if (driver != null) {
                 Class.forName(driver);
             }
-        }
-        catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -49,12 +52,11 @@ public class DatabaseHelper {
     /**
      * This method creates a Database connection
      */
-    private void openConnection(){
+    private void openConnection() {
 
         try {
             con = DriverManager.getConnection(url, username, password);
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -62,33 +64,33 @@ public class DatabaseHelper {
     /**
      * This method closes a Database connection
      */
-    private void closeConnection(){
+    private void closeConnection() {
         try {
             con.close();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Executes a select query using PreparedStatement
-     * @param query SQL Select query
+     *
+     * @param query  SQL Select query
      * @param params Varags for PreparedStatement containing
      *               normally WHERE clause parameters
      * @return A map with each column name as key and column values as ArrayList
      */
-    public Map<String, List<String>> execQuery(String query, String ...params){
+    public Map<String, List<String>> execQuery(String query, String... params) {
 
         Map<String, List<String>> map = null;
 
         openConnection();
 
-        try(PreparedStatement stmt = con.prepareStatement(query)) {
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
 
-            if(params.length != 0){
-                for(int i = 0; i < params.length; i++)
-                    stmt.setString(i+1 , params[i]);
+            if (params.length != 0) {
+                for (int i = 0; i < params.length; i++)
+                    stmt.setString(i + 1, params[i]);
             }
 
             ResultSet resultSet = stmt.executeQuery();
@@ -96,21 +98,19 @@ public class DatabaseHelper {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
             int noOfColumns = resultSetMetaData.getColumnCount();
             map = new HashMap<>(noOfColumns);
-            for(int i = 1; i <= noOfColumns; i++)
+            for (int i = 1; i <= noOfColumns; i++)
                 map.put(resultSetMetaData.getColumnName(i), new ArrayList<>());
 
-            while(resultSet.next()){
-                for(int i = 1; i <= noOfColumns; i++){
+            while (resultSet.next()) {
+                for (int i = 1; i <= noOfColumns; i++) {
                     //if(resultSet.getString(i) != null)
                     map.get(resultSetMetaData.getColumnName(i)).add(resultSet.getString(i));
                 }
             }
 
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             closeConnection();
         }
         return map;
@@ -119,39 +119,37 @@ public class DatabaseHelper {
 
     /**
      * Method to execute a bunch of INSERT commands.
-     * @param sql The sql command to be executed containing INSERT statements.
+     *
+     * @param sql  The sql command to be executed containing INSERT statements.
      * @param list The list containing list of entity attributes to be inserted.
      * @return Status of the operation.
      */
-    public int batchInsert(String sql, List<List<String>> list){
+    public int batchInsert(String sql, List<List<String>> list) {
 
         int[] status = new int[list.size()];
         openConnection();
-        try(PreparedStatement stmt = con.prepareStatement(sql)){
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
 
-            for(List<String> row : list){
+            for (List<String> row : list) {
                 int i = 1;
-                for(String data : row) {
+                for (String data : row) {
                     stmt.setString(i++, data);
                 }
                 stmt.addBatch();
             }
             status = stmt.executeBatch();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        finally {
+        } finally {
             closeConnection();
         }
-        if(list.size() == status.length) {
+        if (list.size() == status.length) {
             int rowsAffected = 0;
             for (int i : status) {
-                if(i == 1)
+                if (i == 1)
                     rowsAffected++;
             }
-            if(rowsAffected == list.size())
+            if (rowsAffected == list.size())
                 return SUCCESS;
             else
                 return DATA_ALREADY_EXIST_ERROR;
@@ -161,34 +159,32 @@ public class DatabaseHelper {
 
     /**
      * Method to execute a single INSERT command.
-     * @param sql The sql command to be executed containing INSERT statements.
+     *
+     * @param sql    The sql command to be executed containing INSERT statements.
      * @param params Varags for PreparedStatement containing
-     *      *        normally VALUES parameters.
+     *               *        normally VALUES parameters.
      * @return Status of the operation.
      */
     @SuppressWarnings("Duplicates")
-    public int insert(String sql, String ...params){
+    public int insert(String sql, String... params) {
 
         int rowsAffected = 0;
         int status = DATABASE_ERROR;
         openConnection();
-        try(PreparedStatement stmt = con.prepareStatement(sql)){
-            if(params.length != 0){
-                for(int i = 0; i < params.length; i++)
-                    stmt.setString(i+1 , params[i]);
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            if (params.length != 0) {
+                for (int i = 0; i < params.length; i++)
+                    stmt.setString(i + 1, params[i]);
             }
             rowsAffected = stmt.executeUpdate();
-            if(rowsAffected > 0)
+            if (rowsAffected > 0)
                 status = SUCCESS;
-        }
-        catch(SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             status = DATA_ALREADY_EXIST_ERROR;
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             closeConnection();
         }
         return status;
@@ -196,30 +192,27 @@ public class DatabaseHelper {
 
 
     @SuppressWarnings("Duplicates")
-    public int updateDelete(String sql, String ...params){
+    public int updateDelete(String sql, String... params) {
 
         int rowsAffected = 0;
         int status = DATABASE_ERROR;
         openConnection();
-        try(PreparedStatement stmt = con.prepareStatement(sql)){
-            if(params.length != 0){
-                for(int i = 0; i < params.length; i++)
-                    stmt.setString(i+1 , params[i]);
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            if (params.length != 0) {
+                for (int i = 0; i < params.length; i++)
+                    stmt.setString(i + 1, params[i]);
             }
             rowsAffected = stmt.executeUpdate();
-            if(rowsAffected > 0)
+            if (rowsAffected > 0)
                 status = SUCCESS;
             else
                 status = DATA_INEXISTENT_ERROR;
-        }
-        catch(SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             status = DATA_DEPENDENCY_ERROR;
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             closeConnection();
         }
         return status;

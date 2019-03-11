@@ -7,6 +7,8 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -19,7 +21,10 @@ import service.StudentService;
 import util.CSVUtil;
 import util.ValidatorUtil;
 
+import java.awt.*;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +71,9 @@ public class ImportStudentCSVModalController {
 
     @FXML
     private Label chosenFileLabel;
+
+    @FXML
+    private Hyperlink sampleCsvHyperLink;
 
     @FXML
     private ComboBox<String> firstNameComboBox;
@@ -176,6 +184,14 @@ public class ImportStudentCSVModalController {
         }
     }
 
+    @FXML
+    private void handleSampleCsvHyperLinkAction(){
+
+//        Path path = Paths.get("/csv/studentSample.csv");
+//        System.out.println(path.toString());
+////        File sampleCsvFile = new File("");
+////        Desktop.getDesktop().open(sampleCsvFile);
+    }
 
     /**
      * Callback method for submitButton.

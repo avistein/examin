@@ -6,6 +6,8 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -14,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.Holiday;
 import service.*;
 import util.CSVUtil;
@@ -141,6 +144,8 @@ public class AdminDashboardController {
 
     private File file;
 
+    private Scene adminPanelScene;
+
     @FXML
     private void initialize() {
 
@@ -166,11 +171,17 @@ public class AdminDashboardController {
     @FXML
     private void handleTotalStudentsVboxOnMouseClickedAction() {
 
+        adminPanelScene = chooseFileButton.getScene();
+        Button studentListButton = (Button)(adminPanelScene.lookup("#studentButton"));
+        studentListButton.fire();
     }
 
     @FXML
     private void handleTotalProfessorsVboxOnMouseClickedAction() {
 
+        adminPanelScene = chooseFileButton.getScene();
+        Button professorListButton = (Button)(adminPanelScene.lookup("#professorButton"));
+        professorListButton.fire();
     }
 
     @FXML
@@ -185,27 +196,37 @@ public class AdminDashboardController {
 
     @FXML
     private void handleTotalDepartmentsVboxOnMouseClickedAction() {
-
+        adminPanelScene = chooseFileButton.getScene();
+        Button academicAdministrationButton = (Button)(adminPanelScene.lookup("#academicAdministrationButton"));
+        academicAdministrationButton.fire();
     }
 
     @FXML
     private void handleTotalCoursesVboxOnMouseClickedAction() {
-
+        adminPanelScene = chooseFileButton.getScene();
+        Button academicAdministrationButton = (Button)(adminPanelScene.lookup("#academicAdministrationButton"));
+        academicAdministrationButton.fire();
     }
 
     @FXML
     private void handleTotalBatchesVboxOnMouseClickedAction() {
-
+        adminPanelScene = chooseFileButton.getScene();
+        Button academicAdministrationButton = (Button)(adminPanelScene.lookup("#academicAdministrationButton"));
+        academicAdministrationButton.fire();
     }
 
     @FXML
     private void handleTotalSubjectsVboxOnMouseClickedAction() {
-
+        adminPanelScene = chooseFileButton.getScene();
+        Button academicAdministrationButton = (Button)(adminPanelScene.lookup("#academicAdministrationButton"));
+        academicAdministrationButton.fire();
     }
 
     @FXML
     private void handleTotalClassroomsVboxOnMouseClickedAction() {
-
+        adminPanelScene = chooseFileButton.getScene();
+        Button academicAdministrationButton = (Button)(adminPanelScene.lookup("#academicAdministrationButton"));
+        academicAdministrationButton.fire();
     }
 
     @SuppressWarnings("Duplicates")

@@ -1,11 +1,12 @@
 package application;
 
+import controller.PropertiesFileNotFoundController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import util.ValidatorUtil;
+import util.UISetterUtil;
+import static util.ConstantsUtil.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Main extends Application {
 
@@ -13,14 +14,27 @@ public class Main extends Application {
         launch(args);
     }
 
-    @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-        primaryStage.setTitle("examin - Examination Management Tool");
-        primaryStage.setScene(new Scene(root, 400, 400));
-        primaryStage.setResizable(false);
-        System.out.println(ValidatorUtil.validateRegYear("2015-2019", "2015"));
-        primaryStage.show();
+
+        boolean proceedToMainAppStatus = true;
+        if(Files.notExists(Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "db.properties"))){
+            Stage propertiesFileNotFoundModal = new Stage();
+
+            PropertiesFileNotFoundController propertiesFileNotFoundController = UISetterUtil.setModalWindow("/view/PropertiesFileNotFound.fxml"
+                    , propertiesFileNotFoundModal, primaryStage, PROJECT_NAME).getController();
+
+            propertiesFileNotFoundModal.showAndWait();
+
+            proceedToMainAppStatus = propertiesFileNotFoundController.getFileLoadingStatus();
+        }
+
+        if(proceedToMainAppStatus) {
+            UISetterUtil.setStage("/view/Login.fxml", primaryStage
+                    , PROJECT_NAME, 400, 400);
+            primaryStage.show();
+        }
+        else
+            primaryStage.hide();
     }
 }
 
