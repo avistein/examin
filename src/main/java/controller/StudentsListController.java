@@ -466,8 +466,15 @@ public class StudentsListController {
          */
         importStudentListModalWindow.showAndWait();
         boolean tableUpdateStatus = importStudentCSVModalController.getTableUpdateStatus();
-        if (tableUpdateStatus)
-            populateTable();
+        if (tableUpdateStatus && degreeComboBox.getValue() != null){
+
+            if(degreeComboBox.getValue().equals("all"))
+                populateTable();
+            else if(disciplineComboBox.getValue() != null && batchNameComboBox.getValue() != null
+                    && semesterComboBox.getValue() != null)
+                populateTable();
+        }
+
     }
 
     /**
