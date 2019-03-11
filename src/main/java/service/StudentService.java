@@ -267,5 +267,20 @@ public class StudentService {
         return deleteStudentTask;
     }
 
+    public Task<Integer> getStudentsCountTask(){
+
+        final String query = "SELECT v_reg_id FROM t_student";
+
+        Task<Integer> studentsCountTask = new Task<>() {
+            @Override
+            protected Integer call(){
+
+                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                return map.get("v_reg_id").size();
+            }
+        };
+        return studentsCountTask;
+    }
+
 }
 

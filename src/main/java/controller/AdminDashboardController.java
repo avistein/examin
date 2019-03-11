@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import model.Holiday;
-import service.HolidayService;
+import service.*;
 import util.CSVUtil;
 import util.ValidatorUtil;
 
@@ -127,6 +127,16 @@ public class AdminDashboardController {
 
     private HolidayService holidayService;
 
+    private StudentService studentService;
+
+    private BatchService batchService;
+
+    private CourseService courseService;
+
+    private DepartmentService departmentService;
+
+    private ExamCellMemberService examCellMemberService;
+
     private ObservableList<Holiday> holidayObsList;
 
     private File file;
@@ -135,7 +145,19 @@ public class AdminDashboardController {
     private void initialize() {
 
         holidayService = new HolidayService();
+        studentService = new StudentService();
+        batchService = new BatchService();
+        courseService = new CourseService();
+        departmentService = new DepartmentService();
+        examCellMemberService = new ExamCellMemberService();
+
         holidayObsList = FXCollections.observableArrayList();
+
+        updateTotalBatchesCount();
+        updateTotalCoursesCount();
+        updateTotalDeptsCount();
+        updateTotalExamCellMembersCount();
+        updateTotalStudentsCount();
 
         initHolidayCols();
         populateHolidayTable();
@@ -185,6 +207,87 @@ public class AdminDashboardController {
     private void handleTotalClassroomsVboxOnMouseClickedAction() {
 
     }
+
+    @SuppressWarnings("Duplicates")
+    private void updateTotalStudentsCount(){
+
+        Task<Integer> studentsCountTask = studentService.getStudentsCountTask();
+        new Thread(studentsCountTask).start();
+
+        studentsCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalStudents = studentsCountTask.getValue();
+                totalStudentsLabel.setText(Integer.toString(totalStudents));
+            }
+        });
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void updateTotalBatchesCount(){
+
+        Task<Integer> batchesCountTask = batchService.getBatchesCountTask();
+        new Thread(batchesCountTask).start();
+
+        batchesCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalBatches = batchesCountTask.getValue();
+                totalBatchesLabel.setText(Integer.toString(totalBatches));
+            }
+        });
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void updateTotalDeptsCount(){
+
+        Task<Integer> deptsCountTask = departmentService.getDepartmentsCountTask();
+        new Thread(deptsCountTask).start();
+
+        deptsCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalDepts = deptsCountTask.getValue();
+                totalDeptsLabel.setText(Integer.toString(totalDepts));
+            }
+        });
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void updateTotalCoursesCount(){
+
+        Task<Integer> coursesCountTask = courseService.getCoursesCountTask();
+        new Thread(coursesCountTask).start();
+
+        coursesCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalCourses = coursesCountTask.getValue();
+                totalCoursesLabel.setText(Integer.toString(totalCourses));
+            }
+        });
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void updateTotalExamCellMembersCount(){
+
+        Task<Integer> examCellMembersCountTask = examCellMemberService.getExamCellMembersCountTask();
+        new Thread(examCellMembersCountTask).start();
+
+        examCellMembersCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalExamCellMembers = examCellMembersCountTask.getValue();
+                totalExamCellMembersLabel.setText(Integer.toString(totalExamCellMembers));
+            }
+        });
+    }
+
 
     @FXML
     private void handleChooseFileButtonAction() {

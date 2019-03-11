@@ -51,4 +51,19 @@ public class ExamCellMemberService {
         return exaCellMemberTask;
     }
 
+    public Task<Integer> getExamCellMembersCountTask(){
+
+        final String query = "SELECT v_emp_id FROM t_exam_cell_member";
+
+        Task<Integer> examCellMembersCountTask = new Task<>() {
+            @Override
+            protected Integer call(){
+
+                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                return map.get("v_emp_id").size();
+            }
+        };
+        return examCellMembersCountTask;
+    }
+
 }

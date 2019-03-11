@@ -114,4 +114,19 @@ public class DepartmentService {
         return deleteDepartmentTask;
     }
 
+    public Task<Integer> getDepartmentsCountTask(){
+
+        final String query = "SELECT v_dept_name FROM t_department";
+
+        Task<Integer> departmentsCountTask = new Task<>() {
+            @Override
+            protected Integer call(){
+
+                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                return map.get("v_dept_name").size();
+            }
+        };
+        return departmentsCountTask;
+    }
+
 }

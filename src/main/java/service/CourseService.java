@@ -124,7 +124,20 @@ public class CourseService {
         return deleteCourseTask;
     }
 
+    public Task<Integer> getCoursesCountTask(){
 
+        final String query = "SELECT v_course_id FROM t_course";
+
+        Task<Integer> examCoursesCountTask = new Task<>() {
+            @Override
+            protected Integer call(){
+
+                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                return map.get("v_course_id").size();
+            }
+        };
+        return examCoursesCountTask;
+    }
 
 
 

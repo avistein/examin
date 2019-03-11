@@ -76,4 +76,18 @@ public class BatchService {
         return list;
     }
 
+    public Task<Integer> getBatchesCountTask(){
+
+        final String query = "SELECT v_batch_id FROM t_batch";
+
+        Task<Integer> batchesCountTask = new Task<>() {
+            @Override
+            protected Integer call(){
+
+                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                return map.get("v_batch_id").size();
+            }
+        };
+        return batchesCountTask;
+    }
 }
