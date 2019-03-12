@@ -50,7 +50,7 @@
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                            <children>
                               <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButtonAction" text="Choose File" />
-                              <Hyperlink text="Get Sample CSV" />
+                              <Hyperlink onAction="#handleSampleCsvHyperlinkAction" text="Get Sample CSV" />
                               <Label fx:id="fileChosenLabel" text="Label" />
                            </children>
                         </VBox>

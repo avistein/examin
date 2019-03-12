@@ -17,14 +17,21 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import model.Student;
+import service.FileHandlingService;
 import service.StudentService;
 import util.CSVUtil;
 import util.ValidatorUtil;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +51,7 @@ public class ImportStudentCSVModalController {
     private StudentService studentService;
     private File file;
     private boolean tableUpdateStatus;
-
+    private FileHandlingService fileHandlingService;
     @FXML
     private GridPane mainGridPane;
 
@@ -138,6 +145,7 @@ public class ImportStudentCSVModalController {
 
         studentService = new StudentService();
 
+        fileHandlingService = new FileHandlingService();
         //by default table of the studentList will not be updated
         tableUpdateStatus = false;
 
@@ -185,12 +193,28 @@ public class ImportStudentCSVModalController {
     }
 
     @FXML
-    private void handleSampleCsvHyperLinkAction(){
+    private void handleSampleCsvHyperLinkAction() {
 
-//        Path path = Paths.get("/csv/studentSample.csv");
-//        System.out.println(path.toString());
-////        File sampleCsvFile = new File("");
-////        Desktop.getDesktop().open(sampleCsvFile);
+        String sampleCsvFilePath = "/csv/studentSample.csv";
+        String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR
+                + CSV_DIR + FILE_SEPARATOR + "studentSample.csv";
+
+        try {
+
+            if (Files.notExists(Paths.get(filePath))) {
+                //get the content of the sampleCsv File as InputStream
+                InputStream in = getClass().getResourceAsStream(sampleCsvFilePath);
+
+
+                Task<Boolean> createAndWriteToFileTask = fileHandlingService.getCreateAndWriteToFileTask
+                        (in.readAllBytes(), CSV_DIR, "studentSample.csv");
+                new Thread(createAndWriteToFileTask).start();
+
+            }
+            Desktop.getDesktop().open(new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -304,7 +328,8 @@ public class ImportStudentCSVModalController {
 
     /**
      * This method validates a particular student.
-     * @param student The student from Csv file.
+     *
+     * @param student          The student from Csv file.
      * @param currStudentIndex Current index of the student in the csv file.
      * @return The validation status.
      */
@@ -458,7 +483,7 @@ public class ImportStudentCSVModalController {
 
     /**
      * Callback method for statusAnchorPane Mouse Clicked.
-     *
+     * <p>
      * On clicking the statusAnchorPane it will go away and
      * mainGridPane will be normal from faded.
      */

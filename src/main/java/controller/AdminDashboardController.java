@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,8 +24,14 @@ import service.*;
 import util.CSVUtil;
 import util.ValidatorUtil;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 import static util.ConstantsUtil.*;
 
@@ -140,6 +148,8 @@ public class AdminDashboardController {
 
     private ExamCellMemberService examCellMemberService;
 
+    private FileHandlingService fileHandlingService;
+
     private ObservableList<Holiday> holidayObsList;
 
     private File file;
@@ -155,6 +165,7 @@ public class AdminDashboardController {
         courseService = new CourseService();
         departmentService = new DepartmentService();
         examCellMemberService = new ExamCellMemberService();
+        fileHandlingService = new FileHandlingService();
 
         holidayObsList = FXCollections.observableArrayList();
 
@@ -337,6 +348,34 @@ public class AdminDashboardController {
             }
         }
     }
+
+    @FXML
+    private void handleSampleCsvHyperlinkAction() {
+
+        String sampleCsvFilePath = "/csv/holidaySample.csv";
+        String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR
+                + CSV_DIR + FILE_SEPARATOR + "holidaySample.csv";
+
+        try {
+
+            if (Files.notExists(Paths.get(filePath))) {
+                //get the content of the sampleCsv File as InputStream
+                InputStream in = getClass().getResourceAsStream(sampleCsvFilePath);
+
+                Task<Boolean> createAndWriteToFileTask = fileHandlingService.getCreateAndWriteToFileTask
+                        (in.readAllBytes(), CSV_DIR, "holidaySample.csv");
+                new Thread(createAndWriteToFileTask).start();
+
+            }
+            Desktop.getDesktop().open(new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
     @SuppressWarnings("Duplicates")
     @FXML

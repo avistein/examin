@@ -40,5 +40,7 @@ public final class ConstantsUtil {
 
     public static  final String CONFIG_DIR = "configs";
 
+    public static  final String CSV_DIR = "csv";
+
     public static  final String SETTINGS_DIR = "settings";
 }

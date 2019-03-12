@@ -8,7 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import static util.ConstantsUtil.*;
+
+import static util.ConstantsUtil.ROOT_DIR;
 
 public class FileHandlingService {
 
@@ -20,7 +21,6 @@ public class FileHandlingService {
             protected Boolean call() {
 
                 final String userHome = System.getProperty("user.home");
-
                 final Path dirPath = Paths.get(userHome, ROOT_DIR, dirName);
                 final Path filePath = Paths.get(userHome, ROOT_DIR, dirName, fileName);
 
@@ -63,6 +63,4 @@ public class FileHandlingService {
 
         return createAndCopyFileTask;
     }
-
-
 }
