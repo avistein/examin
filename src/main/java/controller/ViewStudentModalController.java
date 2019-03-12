@@ -4,6 +4,9 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -12,9 +15,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import model.Student;
 import service.StudentService;
 import static util.ConstantsUtil.*;
+
+import java.io.IOException;
 import java.util.Optional;
 
 public class ViewStudentModalController {
@@ -95,8 +102,28 @@ public class ViewStudentModalController {
     }
 
     @FXML
-    private void handleEditButtonAction(){
+    private void handleEditButtonAction() throws IOException {
 
+
+        Stage modalStage = (Stage)mainGridPane.getScene().getWindow();
+
+        modalStage.hide();
+        Stage mainStage = (Stage)modalStage.getOwner();
+
+        Scene mainScene = mainStage.getScene();
+
+        StackPane contentStackPane = (StackPane) mainScene.lookup("#contentStackPane");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/StudentRegistration.fxml"));
+
+        Parent studentRegistrationFxml = loader.load();
+
+        StudentRegistrationController studentRegistrationController = loader.getController();
+
+        studentRegistrationController.setStudentPojo(student);
+        studentRegistrationController.setEditSignal(EDIT_CHOICE);
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
     @FXML
@@ -144,7 +171,7 @@ public class ViewStudentModalController {
         }
     }
 
-    void setStudentPojo(Student student){
+    public void setStudentPojo(Student student){
         this.student = student;
         nameLabel.setText(this.student.getFirstName() + " "
                 + this.student.getMiddleName() + " " +
@@ -166,7 +193,7 @@ public class ViewStudentModalController {
         addressLabel.setText(this.student.getAddress());
     }
 
-    boolean getStudentDeletedStatus(){
+    public boolean getStudentDeletedStatus(){
         return studentDeletedStatus;
     }
 

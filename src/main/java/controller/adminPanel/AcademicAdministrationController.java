@@ -1,4 +1,4 @@
-package controller;
+package controller.adminPanel;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

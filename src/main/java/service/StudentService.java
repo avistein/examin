@@ -219,7 +219,7 @@ public class StudentService {
                         , student.getContactNo(), student.getGuardianName(), student.getEmail()
                         , student.getAddress(), student.getGuardianContactNo(), student.getGender());
 
-                int tStudentEnrollmentStatus = databaseHelper.updateDelete(sql2, student.getBatchId()
+                int tStudentEnrollmentStatus = databaseHelper.insert(sql2, student.getBatchId()
                         , student.getRegId(), student.getCurrSemester());
 
                 if(tStudentStatus == DATABASE_ERROR ||
@@ -265,6 +265,39 @@ public class StudentService {
             }
         };
         return deleteStudentTask;
+    }
+
+    public Task<Integer> getUpdateStudentTask(final Student student){
+
+        final String sql1 = "UPDATE t_student SET v_first_name=?, v_middle_name=?, v_last_name=?, d_dob=?, v_mother_name=?" +
+                ", v_reg_year=?, v_contact_no=?, v_father_guardian_name=?, v_email_id=?, v_address=?, v_guardian_contact_no=?" +
+                ", v_gender=? where v_reg_id=?";
+
+        final String sql2 = "UPDATE t_student_enrollment_details SET v_batch_id=?, v_curr_semester=? where v_reg_id=?";
+        Task<Integer> updateStudentTask = new Task<>() {
+            @Override
+            protected Integer call()  {
+
+                int tStudentStatus = databaseHelper.updateDelete
+                        (sql1, student.getFirstName(), student.getMiddleName(),student.getLastName(), student.getDob()
+                                , student.getMotherName(), student.getRegYear(), student.getContactNo(), student.getGuardianName()
+                                , student.getEmail(), student.getAddress(), student.getGuardianContactNo(), student.getGender()
+                                , student.getRegId());
+
+                int tStudentEnrollmentStatus = databaseHelper.updateDelete(sql2, student.getBatchId(), student.getCurrSemester()
+                        , student.getRegId());
+
+                if(tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR)
+                    return DATABASE_ERROR;
+                else if(tStudentStatus == SUCCESS &&
+                        tStudentEnrollmentStatus== SUCCESS)
+                    return SUCCESS;
+                else
+                    return DATA_INEXISTENT_ERROR;
+            }
+        };
+        return updateStudentTask;
     }
 
     public Task<Integer> getStudentsCountTask(){

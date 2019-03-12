@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.AdminPanelController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="165.0" prefWidth="187.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="576.0" />
@@ -37,7 +37,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/dashboard.png" />
+                              <Image url="@../../png/dashboard.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -48,7 +48,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/students.png" />
+                              <Image url="@../../png/students.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -59,7 +59,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/prof.png" />
+                              <Image url="@../../png/prof.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -70,7 +70,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/prof.png" />
+                              <Image url="@../../png/prof.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -81,7 +81,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/prof.png" />
+                              <Image url="@../../png/prof.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -93,7 +93,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/admin.png" />
+                              <Image url="@../../png/admin.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -104,7 +104,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/subjects.png" />
+                              <Image url="@../../png/subjects.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -115,7 +115,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/marks.png" />
+                              <Image url="@../../png/marks.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -126,7 +126,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/notices.png" />
+                              <Image url="@../../png/notices.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -137,7 +137,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/reports.png" />
+                              <Image url="@../../png/reports.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -148,7 +148,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../png/settings.png" />
+                              <Image url="@../../png/settings.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -164,7 +164,7 @@
                <children>
                   <ImageView fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/placeholder.png" />
+                        <Image url="@../../png/placeholder.png" />
                      </image>
                   </ImageView>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -196,7 +196,7 @@
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="464.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <StackPane fx:id="contentStackPane" prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+            <StackPane id="contentStackPane" fx:id="contentStackPane" prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>

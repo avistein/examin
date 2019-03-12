@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane gridLinesVisible="true" prefHeight="667.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminDashboardController">
+<GridPane gridLinesVisible="true" prefHeight="667.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.DashboardController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -238,7 +238,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/students.png" />
+                        <Image url="@../../png/students.png" />
                      </image></ImageView>
                   <Label fx:id="totalStudentsLabel" />
                   <Label text="Total Students" />
@@ -254,7 +254,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/prof.png" />
+                        <Image url="@../../png/prof.png" />
                      </image></ImageView>
                   <Label fx:id="totalProfessorsLabel" />
                   <Label text="Total Professors" />
@@ -270,7 +270,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/prof.png" />
+                        <Image url="@../../png/prof.png" />
                      </image></ImageView>
                   <Label fx:id="totalExamCellMembersLabel" />
                   <Label text="Total Exam Cell Members" />
@@ -286,7 +286,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/admin.png" />
+                        <Image url="@../../png/admin.png" />
                      </image></ImageView>
                   <Label fx:id="totalOfficeMembersLabel" />
                   <Label text="Total Office Members" />
@@ -302,7 +302,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/departments.png" />
+                        <Image url="@../../png/departments.png" />
                      </image>
                   </ImageView>
                   <Label fx:id="totalDeptsLabel" />
@@ -319,7 +319,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/courses.png" />
+                        <Image url="@../../png/courses.png" />
                      </image>
                   </ImageView>
                   <Label fx:id="totalCoursesLabel" />
@@ -336,7 +336,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/batches.png" />
+                        <Image url="@../../png/batches.png" />
                      </image></ImageView>
                   <Label fx:id="totalBatchesLabel" />
                   <Label text="Total Batches" />
@@ -352,7 +352,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/subjects.png" />
+                        <Image url="@../../png/subjects.png" />
                      </image></ImageView>
                   <Label fx:id="totalSubjectsLabel" />
                   <Label text="Total Subjects" />
@@ -368,7 +368,7 @@
                <children>
                   <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../png/classrooms.png" />
+                        <Image url="@../../png/classrooms.png" />
                      </image></ImageView>
                   <Label fx:id="totalClassroomsLabel" />
                   <Label text="Total Classrooms" />

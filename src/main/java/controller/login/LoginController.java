@@ -1,6 +1,7 @@
-package controller;
+package controller.login;
 
 import command.LoginCommand;
+import controller.adminPanel.AdminPanelController;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -120,11 +121,11 @@ public class LoginController {
 
                     case ADMIN_GID:
 
-                        FXMLLoader loader = UISetterUtil.setStage("/view/Admin.fxml", mainStage
+                        FXMLLoader loader = UISetterUtil.setStage("/view/adminPanel/AdminPanel.fxml", mainStage
                                 , PROJECT_NAME, 768, 1024);
-                        AdminController adminController = loader
+                        AdminPanelController adminPanelController = loader
                                 .getController();
-                        adminController.setAdminProfileDetails
+                        adminPanelController.setAdminProfileDetails
                                 (username.trim());
                         mainStage.show();
                         loginStage.hide();
@@ -132,7 +133,7 @@ public class LoginController {
 
                     case EXAM_CELL_MEMBER_GID:
 
-                        loader = UISetterUtil.setStage("/view/ExamCellMember.fxml", mainStage
+                        loader = UISetterUtil.setStage("/view/examCellMemberPanel/ExamCellMemberPanel.fxml", mainStage
                                 , PROJECT_NAME, 768, 1024);
                         mainStage.show();
                         loginStage.hide();
@@ -141,7 +142,7 @@ public class LoginController {
 
                     case PROFESSOR_HOD_GID:
 
-                        loader = UISetterUtil.setStage("/view/ProfessorHOD.fxml", mainStage
+                        loader = UISetterUtil.setStage("/view/professorHodPanel/ProfessorHodPanel.fxml", mainStage
                                 , PROJECT_NAME, 768, 1024);
                         mainStage.show();
                         loginStage.hide();
@@ -150,7 +151,7 @@ public class LoginController {
 
                     case PROFESSOR_GID:
 
-                        loader = UISetterUtil.setStage("/view/Professor.fxml", mainStage
+                        loader = UISetterUtil.setStage("/view/professorPanel/ProfessorPanel.fxml", mainStage
                                 , PROJECT_NAME, 768, 1024);
                         mainStage.show();
                         loginStage.hide();
@@ -168,7 +169,7 @@ public class LoginController {
     @FXML
     private void handleForgotPasswordAction() {
         Stage loginStage = (Stage) userNameField.getScene().getWindow();
-        UISetterUtil.setStage("/view/ForgotPassword.fxml", loginStage
+        UISetterUtil.setStage("/view/login/ForgotPassword.fxml", loginStage
                 , PROJECT_NAME, 400, 400);
         loginStage.show();
     }
@@ -191,7 +192,7 @@ public class LoginController {
     private void handleBackToLoginHyperlinkAction() {
 
         Stage loginStage = (Stage) forgotPasswordUserNameField.getScene().getWindow();
-        UISetterUtil.setStage("/view/Login.fxml", loginStage
+        UISetterUtil.setStage("/view/login/Login.fxml", loginStage
                 , PROJECT_NAME, 400, 400);
         loginStage.show();
     }

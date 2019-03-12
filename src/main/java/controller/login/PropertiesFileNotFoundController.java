@@ -1,4 +1,4 @@
-package controller;
+package controller.login;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;

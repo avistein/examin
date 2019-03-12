@@ -1,4 +1,4 @@
-package controller;
+package controller.adminPanel;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +35,7 @@ import java.util.List;
 
 import static util.ConstantsUtil.*;
 
-public class AdminDashboardController {
+public class DashboardController {
 
     @FXML
     private Label totalStudentsLabel;

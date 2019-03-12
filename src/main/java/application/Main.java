@@ -1,6 +1,6 @@
 package application;
 
-import controller.PropertiesFileNotFoundController;
+import controller.login.PropertiesFileNotFoundController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import util.UISetterUtil;
@@ -20,7 +20,7 @@ public class Main extends Application {
         if(Files.notExists(Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "db.properties"))){
             Stage propertiesFileNotFoundModal = new Stage();
 
-            PropertiesFileNotFoundController propertiesFileNotFoundController = UISetterUtil.setModalWindow("/view/PropertiesFileNotFound.fxml"
+            PropertiesFileNotFoundController propertiesFileNotFoundController = UISetterUtil.setModalWindow("/view/login/PropertiesFileNotFound.fxml"
                     , propertiesFileNotFoundModal, primaryStage, PROJECT_NAME).getController();
 
             propertiesFileNotFoundModal.showAndWait();
@@ -29,7 +29,7 @@ public class Main extends Application {
         }
 
         if(proceedToMainAppStatus) {
-            UISetterUtil.setStage("/view/Login.fxml", primaryStage
+            UISetterUtil.setStage("/view/login/Login.fxml", primaryStage
                     , PROJECT_NAME, 400, 400);
             primaryStage.show();
         }

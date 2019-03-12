@@ -24,11 +24,11 @@ import service.StudentService;
 import util.ValidatorUtil;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static util.ConstantsUtil.DATABASE_ERROR;
-import static util.ConstantsUtil.SUCCESS;
+import static util.ConstantsUtil.*;
 
 /**
  * Controller class for a single student registration.
@@ -40,6 +40,10 @@ public class StudentRegistrationController {
     /*--------------------Declaration and Initialization of variables--------------
     The @FXML components are initialized when FXML document is being loaded.
      */
+
+    private Student student;
+
+    private int editOrAddStudentChoice;
 
     private CourseService courseService;
 
@@ -159,6 +163,8 @@ public class StudentRegistrationController {
                     }
                     ObservableList<String> options = FXCollections.observableArrayList(items);
                     degreeComboBox.setItems(options);
+                    if(editOrAddStudentChoice == EDIT_CHOICE)
+                        degreeComboBox.setValue(student.getDegree());
                 }
 
                 //set items in the gender choice box
@@ -166,7 +172,6 @@ public class StudentRegistrationController {
                         , "Female", "Others"));
             }
         });
-
     }
 
     /**
@@ -203,6 +208,8 @@ public class StudentRegistrationController {
                     items.add(Integer.toString(i));
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 semesterComboBox.setItems(options);
+                if(editOrAddStudentChoice == EDIT_CHOICE)
+                    semesterComboBox.setValue(student.getCurrSemester());
             }
         }
     }
@@ -240,6 +247,8 @@ public class StudentRegistrationController {
                 }
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 disciplineComboBox.setItems(options);
+                if(editOrAddStudentChoice == EDIT_CHOICE)
+                    disciplineComboBox.setValue(student.getDiscipline());
             }
         }
     }
@@ -283,7 +292,8 @@ public class StudentRegistrationController {
                         }
                         ObservableList<String> options = FXCollections.observableArrayList(items);
                         batchNameComboBox.setItems(options);
-
+                        if(editOrAddStudentChoice == EDIT_CHOICE)
+                            batchNameComboBox.setValue(student.getBatchName());
                     }
                 }
             });
@@ -298,6 +308,7 @@ public class StudentRegistrationController {
     private void handleSubmitButtonAction() {
 
         if (validate()) {
+
 
             //fades the bg and display loading spinner
             mainGridPane.setOpacity(0.5);
@@ -336,39 +347,74 @@ public class StudentRegistrationController {
 
             }
 
-            Task<Integer> addStudentToDatabaseTask = studentService
-                    .getAddStudentToDatabaseTask(student);
-            new Thread(addStudentToDatabaseTask).start();
+            if(editOrAddStudentChoice == EDIT_CHOICE ){
 
-            addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
+                Task<Integer> updateStudentTask = studentService.getUpdateStudentTask(student);
+                new Thread(updateStudentTask).start();
 
-                    int status = addStudentToDatabaseTask.getValue();
+                updateStudentTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
 
-                    //hides the loading spinner and shows status
-                    progressIndicator.setVisible(false);
-                    buttonsHbox.setVisible(true);
-                    statusImageView.setVisible(true);
-                    statusLabel.setVisible(true);
+                        int status = updateStudentTask.getValue();
 
-                    //display several status
-                    if (status == DATABASE_ERROR) {
+                        progressIndicator.setVisible(false);
+                        buttonsHbox.setVisible(true);
+                        statusImageView.setVisible(true);
+                        statusLabel.setVisible(true);
 
-                        statusImageView.setImage(new Image("/png/critical error.png"));
-                        statusLabel.setText("Database Error!");
-                    } else if (status == SUCCESS) {
+                        //display several status
+                        if (status == DATABASE_ERROR) {
 
-                        statusImageView.setImage(new Image("/png/success.png"));
-                        statusLabel.setText("Added Successfully!");
-                    } else {
+                            statusImageView.setImage(new Image("/png/critical error.png"));
+                            statusLabel.setText("Database Error!");
+                        } else if (status == SUCCESS) {
 
-                        statusImageView.setImage(new Image("/png/error.png"));
-                        statusLabel.setText("Student already exists!");
+                            statusImageView.setImage(new Image("/png/success.png"));
+                            statusLabel.setText("Edited Successfully!");
+                        } else {
+                            statusImageView.setImage(new Image("/png/error.png"));
+                            statusLabel.setText("Student doesn't exist!");
+                        }
                     }
-                }
-            });
+                });
 
+                regIdTextField.setDisable(false);
+                rollNoTextField.setDisable(false);
+            }
+            else {
+                Task<Integer> addStudentToDatabaseTask = studentService.getAddStudentToDatabaseTask(student);
+                new Thread(addStudentToDatabaseTask).start();
+
+                addStudentToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        int status = addStudentToDatabaseTask.getValue();
+
+                        //hides the loading spinner and shows status
+                        progressIndicator.setVisible(false);
+                        buttonsHbox.setVisible(true);
+                        statusImageView.setVisible(true);
+                        statusLabel.setVisible(true);
+
+                        //display several status
+                        if (status == DATABASE_ERROR) {
+
+                            statusImageView.setImage(new Image("/png/critical error.png"));
+                            statusLabel.setText("Database Error!");
+                        } else if (status == SUCCESS) {
+
+                            statusImageView.setImage(new Image("/png/success.png"));
+                            statusLabel.setText("Added Successfully!");
+                        } else {
+
+                            statusImageView.setImage(new Image("/png/error.png"));
+                            statusLabel.setText("Student already exists!");
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -527,5 +573,36 @@ public class StudentRegistrationController {
                 .getResource("/view/StudentsList.fxml"));
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
+    }
+
+    public void setEditSignal(int editSignal){
+
+        editOrAddStudentChoice = editSignal;
+        firstNameTextField.setText(student.getFirstName());
+        middleNameTextField.setText(student.getMiddleName());
+        lastNameTextField.setText(student.getLastName());
+        dobDatePicker.setValue(LocalDate.parse(student.getDob()));
+        genderChoiceBox.setValue(student.getGender());
+        regYearTextField.setText(student.getRegYear());
+        emailTextField.setText(student.getEmail());
+        addressTextArea.setText(student.getAddress());
+        motherNameTextField.setText(student.getMotherName());
+        guardianContactNoTextField.setText(student.getGuardianContactNo());
+        regIdTextField.setText(student.getRegId());
+        rollNoTextField.setText(student.getRollNo());
+        contactNoTextField.setText(student.getContactNo());
+        guardianNameTextField.setText(student.getGuardianName());
+        semesterComboBox.getSelectionModel().clearSelection();
+        batchNameComboBox.getSelectionModel().clearSelection();
+        disciplineComboBox.getSelectionModel().clearSelection();
+        degreeComboBox.getSelectionModel().clearSelection();
+        regIdTextField.setDisable(true);
+        rollNoTextField.setDisable(true);
+
+    }
+
+    public void setStudentPojo(Student student){
+
+        this.student = student;
     }
 }

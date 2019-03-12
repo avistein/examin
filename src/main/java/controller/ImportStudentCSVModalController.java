@@ -669,7 +669,7 @@ public class ImportStudentCSVModalController {
      * @return The status which determines whether the TableView in
      * StudentsList.fxml will be updated or not.
      */
-    boolean getTableUpdateStatus() {
+    public boolean getTableUpdateStatus() {
 
         return tableUpdateStatus;
     }

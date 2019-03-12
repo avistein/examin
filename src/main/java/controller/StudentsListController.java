@@ -1,10 +1,13 @@
 package controller;
 
+import controller.ImportStudentCSVModalController;
+import controller.ViewStudentModalController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -52,8 +55,6 @@ public class StudentsListController {
 
     private List<Course> listOfCourses;
 
-    private FilteredList<Student> studentFilteredItems;
-
     private ObservableList<Student> studentObsList;
 
     @FXML
@@ -64,6 +65,9 @@ public class StudentsListController {
 
     @FXML
     private Button importButton;
+
+    @FXML
+    private Button viewStudentButton;
 
     @FXML
     private ComboBox<String> batchNameComboBox;
@@ -123,7 +127,7 @@ public class StudentsListController {
     /*------------------------------End of initialization-------------------------------*/
 
     /**
-     *  This method is called once the FXML document is loaded.
+     * This method is called once the FXML document is loaded.
      */
     @SuppressWarnings("Duplicates")
     @FXML
@@ -132,6 +136,7 @@ public class StudentsListController {
         studentService = new StudentService();
         courseService = new CourseService();
         batchService = new BatchService();
+
 
         //initialize this for the studentTableView
         studentObsList = FXCollections.observableArrayList();
@@ -366,7 +371,6 @@ public class StudentsListController {
 
         Task<List<Student>> studentsTask;
 
-
         if (degreeComboBox.getValue().equals("all")) {
 
             studentsTask = studentService.getStudentTask(additionalQuery);
@@ -387,7 +391,9 @@ public class StudentsListController {
 
                 listOfStudents = studentsTask.getValue();
                 studentObsList.setAll(listOfStudents);
-                studentFilteredItems = new FilteredList<>(studentObsList, null);
+
+                FilteredList<Student> studentFilteredItems = new FilteredList<>(studentObsList, null);
+                SortedList<Student> studentSortedList = new SortedList<>(studentFilteredItems);
                 searchTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -429,7 +435,8 @@ public class StudentsListController {
                     }
                 });
 
-                studentTableView.setItems(studentFilteredItems);
+                studentTableView.setItems(studentSortedList);
+                studentSortedList.comparatorProperty().bind(studentTableView.comparatorProperty());
             }
         });
 
@@ -437,10 +444,9 @@ public class StudentsListController {
 
     /**
      * Callback method for ImportButton to import the students from the Csv file.
-     * @throws IOException Load exception while loading the Fxml document.
      */
     @FXML
-    private void handleImportButtonAction() throws IOException {
+    private void handleImportButtonAction() {
 
         //create a new stage first
         Stage importStudentListModalWindow = new Stage();
@@ -462,32 +468,20 @@ public class StudentsListController {
         importStudentListModalWindow.showAndWait();
 
         boolean tableUpdateStatus = importStudentCSVModalController.getTableUpdateStatus();
-        if (tableUpdateStatus && degreeComboBox.getValue() != null){
+        if (tableUpdateStatus && degreeComboBox.getValue() != null) {
 
-            if(degreeComboBox.getValue().equals("all"))
+            if (degreeComboBox.getValue().equals("all"))
                 populateTable();
-            else if(disciplineComboBox.getValue() != null && batchNameComboBox.getValue() != null
+            else if (disciplineComboBox.getValue() != null && batchNameComboBox.getValue() != null
                     && semesterComboBox.getValue() != null)
                 populateTable();
         }
 
     }
 
-    /**
-     * Callback method
-     * @throws IOException
-     */
     @FXML
-    private void handleAddStudentButtonAction() throws IOException {
-        StackPane contentStackPane = (StackPane) studentListGridPane.getParent();
-        Parent studentRegistrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/StudentRegistration.fxml"));
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(studentRegistrationFxml);
-    }
+    private void handleViewStudentButtonAction() {
 
-    @FXML
-    private void handleMouseClickOnTableViewItem() throws IOException {
         Student student = studentTableView.getSelectionModel().getSelectedItem();
 
         if (student != null) {
@@ -504,4 +498,19 @@ public class StudentsListController {
                 studentObsList.remove(student);
         }
     }
+
+    /**
+     * Callback method
+     *
+     * @throws IOException
+     */
+    @FXML
+    private void handleAddStudentButtonAction() throws IOException {
+        StackPane contentStackPane = (StackPane) studentListGridPane.getParent();
+        Parent studentRegistrationFxml = FXMLLoader.load(getClass()
+                .getResource("/view/StudentRegistration.fxml"));
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(studentRegistrationFxml);
+    }
+
 }

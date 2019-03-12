@@ -1,4 +1,4 @@
-package controller;
+package controller.adminPanel;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -24,12 +24,12 @@ import java.util.Optional;
 import static util.ConstantsUtil.PROJECT_NAME;
 
 /**
- * Controller class for Admin.fxml.
+ * Controller class for adminPanel.fxml.
  * Loads the individual fxml upon clicking the buttons on left side.
  *
  * @author Avik Sarkar
  */
-public class AdminController {
+public class AdminPanelController {
 
     /*---------------------Initialization and declaration of variables-----------------------*/
 
@@ -73,13 +73,13 @@ public class AdminController {
 
     /**
      * Callback method for handling Dashboard.
-     * Opens AdminDashboard.fxml upon clicking Dashboard button.
+     * Opens Dashboard.fxml upon clicking Dashboard button.
      */
     @FXML
     private void handleDashboardButtonAction() throws IOException {
 
         Parent dashboardFxml = FXMLLoader.load(getClass()
-                .getResource("/view/AdminDashboard.fxml"));
+                .getResource("/view/adminPanel/Dashboard.fxml"));
         subTitleLabel.setText("");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(dashboardFxml);
@@ -106,11 +106,11 @@ public class AdminController {
     @FXML
     private void handleProfessorListButtonAction() throws IOException {
 
-        Parent studentsListFxml = FXMLLoader.load(getClass()
+        Parent professorListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ProfessorsList.fxml"));
         subTitleLabel.setText("Professor");
         contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().setAll(professorListFxml);
     }
 
     /**
@@ -120,11 +120,11 @@ public class AdminController {
     @FXML
     private void handleExamCellMemberListButtonAction() throws IOException {
 
-        Parent studentsListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/ExamCellMembersList.fxml"));
+        Parent examCellMemberListFxml = FXMLLoader.load(getClass()
+                .getResource("/view/adminPanel/ExamCellMembersList.fxml"));
         subTitleLabel.setText("Exam Cell Member");
         contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().setAll(examCellMemberListFxml);
     }
 
     /**
@@ -135,11 +135,11 @@ public class AdminController {
     @FXML
     private void handleAcademicAdministrationButtonAction() throws IOException {
 
-        Parent studentsListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/AcademicAdministration.fxml"));
+        Parent academicAdministrationFxml = FXMLLoader.load(getClass()
+                .getResource("/view/adminPanel/AcademicAdministration.fxml"));
         subTitleLabel.setText("Academic Administration");
         contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(studentsListFxml);
+        contentStackPane.getChildren().setAll(academicAdministrationFxml);
     }
 
     @FXML
@@ -163,8 +163,13 @@ public class AdminController {
     }
 
     @FXML
-    private void handleAdminSettingsButtonAction() {
+    private void handleAdminSettingsButtonAction() throws IOException {
 
+        Parent adminSettingsFxml = FXMLLoader.load(getClass()
+                .getResource("/view/adminPanel/Settings.fxml"));
+        subTitleLabel.setText("SettingsController");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(adminSettingsFxml);
     }
 
     @FXML
@@ -178,7 +183,7 @@ public class AdminController {
             Stage adminPanelStage = (Stage) logOutButton.getScene().getWindow();
             adminPanelStage.hide();
             Stage loginStage = new Stage();
-            UISetterUtil.setStage("/view/Login.fxml", loginStage
+            UISetterUtil.setStage("/view/login/Login.fxml", loginStage
                     , PROJECT_NAME, 400, 400);
             loginStage.show();
         }
@@ -190,7 +195,7 @@ public class AdminController {
      *
      * @param userId The userId used to login to the system
      */
-    void setAdminProfileDetails(String userId) {
+    public void setAdminProfileDetails(String userId) {
 
         final String additionalQuery = "where v_emp_id=?";
         Task<List<ExamCellMember>> examCellMembersTask = examCellMemberService
