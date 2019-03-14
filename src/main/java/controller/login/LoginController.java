@@ -29,7 +29,7 @@ import static util.ConstantsUtil.*;
  */
 public class LoginController {
 
-    /*--------------------Declaration and initialization of variables--------------------*/
+    /*--------------------------Declaration and initialization of variables----------------------------------*/
 
     private LoginCommand loginCommand;
 
@@ -53,16 +53,24 @@ public class LoginController {
     private UserService userService;
 
 
-    /*-------------------------------End of initialization--------------------------------*/
+    /*-----------------------------------------End of initialization-------------------------------------------*/
 
     /**
-     * This method is called once the FXML document is loaded.
+     * This method is used to initialize variables of this Class.
+     * This method is called when the FXMLLoader.load() is called.
+     * <p>
+     * Do not try to get the Scene or Window of any node in this method.
      */
     @FXML
     public void initialize() {
+
         loginCommand = new LoginCommand();
         userService = new UserService();
+
+        //create the main stage of the application
         mainStage = new Stage();
+
+        //the stage should always be in maximized mode
         mainStage.setMaximized(true);
     }
 
@@ -84,10 +92,10 @@ public class LoginController {
         String username = userNameField.getText().trim();
         String password = passwordField.getText();
 
-        Task<List<User>> usersTask = userService.getUsersTask("where v_user_id=?", username);
+        //get the task to get login details of the userId
+        Task<List<User>> usersTask = userService.getUsersTask("WHERE v_user_id=?", username);
         new Thread(usersTask).start();
-        //saveThread.setDaemon(true);
-        //saveThread.start();
+
         usersTask.setOnSucceeded(new EventHandler<>() {
 
             @Override
@@ -102,6 +110,8 @@ public class LoginController {
 
                 //authenticates the username and password of the user
                 if (!usersTask.getValue().isEmpty()) {
+
+                    //set the status of authentication
                     status = loginCommand.authenticateLogin(password
                             , usersTask.getValue().get(0));
                 }
@@ -110,6 +120,7 @@ public class LoginController {
                 switch (status) {
 
                     case LOGIN_ERROR:
+
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error");
                         alert.setContentText("Invalid Username or Password");
@@ -121,20 +132,25 @@ public class LoginController {
 
                     case ADMIN_GID:
 
-                        FXMLLoader loader = UISetterUtil.setStage("/view/adminPanel/AdminPanel.fxml", mainStage
-                                , PROJECT_NAME, 768, 1024);
+                        FXMLLoader loader = UISetterUtil.setStage("/view/adminPanel/AdminPanel.fxml"
+                                , mainStage, PROJECT_NAME, 768, 1024);
+
                         AdminPanelController adminPanelController = loader
                                 .getController();
+
+                        //send admin's userId to the admin panel controller
                         adminPanelController.setAdminProfileDetails
                                 (username.trim());
+
                         mainStage.show();
                         loginStage.hide();
                         break;
 
                     case EXAM_CELL_MEMBER_GID:
 
-                        loader = UISetterUtil.setStage("/view/examCellMemberPanel/ExamCellMemberPanel.fxml", mainStage
-                                , PROJECT_NAME, 768, 1024);
+                        loader = UISetterUtil.setStage("/view/examCellMemberPanel/ExamCellMemberPanel.fxml"
+                                , mainStage, PROJECT_NAME, 768, 1024);
+
                         mainStage.show();
                         loginStage.hide();
 
@@ -142,8 +158,9 @@ public class LoginController {
 
                     case PROFESSOR_HOD_GID:
 
-                        loader = UISetterUtil.setStage("/view/professorHodPanel/ProfessorHodPanel.fxml", mainStage
-                                , PROJECT_NAME, 768, 1024);
+                        loader = UISetterUtil.setStage("/view/professorHodPanel/ProfessorHodPanel.fxml"
+                                , mainStage, PROJECT_NAME, 768, 1024);
+
                         mainStage.show();
                         loginStage.hide();
 
@@ -153,6 +170,7 @@ public class LoginController {
 
                         loader = UISetterUtil.setStage("/view/professorPanel/ProfessorPanel.fxml", mainStage
                                 , PROJECT_NAME, 768, 1024);
+
                         mainStage.show();
                         loginStage.hide();
 
@@ -168,7 +186,11 @@ public class LoginController {
      */
     @FXML
     private void handleForgotPasswordAction() {
+
+        //get the login stage
         Stage loginStage = (Stage) userNameField.getScene().getWindow();
+
+        //attach the ForgotPassword scene in the stage
         UISetterUtil.setStage("/view/login/ForgotPassword.fxml", loginStage
                 , PROJECT_NAME, 400, 400);
         loginStage.show();
@@ -191,7 +213,10 @@ public class LoginController {
     @FXML
     private void handleBackToLoginHyperlinkAction() {
 
+        //get back the login stage
         Stage loginStage = (Stage) forgotPasswordUserNameField.getScene().getWindow();
+
+        //attach back the Login scene in the stage
         UISetterUtil.setStage("/view/login/Login.fxml", loginStage
                 , PROJECT_NAME, 400, 400);
         loginStage.show();

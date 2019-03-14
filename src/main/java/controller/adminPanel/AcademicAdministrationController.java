@@ -19,6 +19,7 @@ import model.Course;
 import model.Department;
 import service.CourseService;
 import service.DepartmentService;
+import util.ValidatorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import static util.ConstantsUtil.*;
  */
 public class AcademicAdministrationController {
 
-    /*------------------Declaration & initialization of items common to all tabs-----------*/
+    /*------------------------Declaration & initialization of items common to all tabs--------------------------------*/
 
     @FXML
     private TabPane academicAdministrationTabPane;
@@ -52,10 +53,10 @@ public class AcademicAdministrationController {
     @FXML
     private Tab classRoomsTab;
 
-    /*--------------------------End of initialization----------------------------------------*/
+    /*------------------------------------------End of initialization-------------------------------------------------*/
 
 
-    /*-------------Initialization and declaration of Department tab's components.------------*/
+    /*--------------------------Initialization and declaration of Department tab's components.------------------------*/
 
     @FXML
     private TextField deptNameTextfield;
@@ -112,10 +113,10 @@ public class AcademicAdministrationController {
     private ObservableList<Department> departmentObsList;
     private int deptAddOrEditChoice;
 
-    /*---------------End of initialization of Department's tab components-----------------*/
+    /*-------------------------------End of initialization of Department's tab components-----------------------------*/
 
 
-    /*----------Initialization and declaration of Courses tab's components----------------*/
+    /*-------------------------Initialization and declaration of Courses tab's components-----------------------------*/
 
     @FXML
     private ComboBox<String> courseDeptNameComboBox;
@@ -190,14 +191,17 @@ public class AcademicAdministrationController {
     private ObservableList<Course> courseObsList;
     private int courseAddOrEditChoice;
 
-    /*-----------------End of initialization of Courses tab's components------------------*/
-
+    /*-------------------------------------End of initialization of Courses tab's components--------------------------*/
 
     /**
-     *
+     * This method is used to initialize variables of this Class.
+     * This method is called when the FXMLLoader.load() is called.
+     * <p>
+     * Do not try to get the Scene or Window of any node in this method.
      */
     @FXML
     private void initialize() {
+
         deptAddOrEditChoice = ADD_CHOICE;
         courseAddOrEditChoice = ADD_CHOICE;
 
@@ -207,25 +211,34 @@ public class AcademicAdministrationController {
         courseService = new CourseService();
         courseObsList = FXCollections.observableArrayList();
 
+        //initialize columns of dept table and populate dept table
         initDeptCol();
         populateDeptTable();
 
+        //only initialize columns of course table
         initCourseCol();
 
         //initialize the respective tabs if it is selected
         academicAdministrationTabPane.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<Tab>() {
+
                     @Override
                     public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+
                         if (newValue == departmentsTab) {
+
                             initDepartmentsTab();
                         } else if (newValue == coursesTab) {
+
                             initCoursesTab();
                         } else if (newValue == batchesTab) {
 
+
                         } else if (newValue == subjectsTab) {
 
+
                         } else if (newValue == classRoomsTab) {
+
 
                         }
                     }
@@ -233,13 +246,13 @@ public class AcademicAdministrationController {
     }
 
 
-    /*-----------------End of initialization of items--------------------*/
+    /*-----------------------------------------End of initialization of items-----------------------------------------*/
 
 
-    /*--------------------------------------------------------------------
+    /*------------------------------------------------------------------------------------------------------------------
     Departments Tab operations:
     Add,edit,delete department and view them in the table.
-     ---------------------------------------------------------------------*/
+     -----------------------------------------------------------------------------------------------------------------*/
 
     /**
      * Initialization of Departments Tab
@@ -468,25 +481,23 @@ public class AcademicAdministrationController {
             alert.setContentText("Department Name cannot be empty!");
             alert.show();
             return false;
+        } else if (ValidatorUtil.validateAcademicItem(deptNameTextfield.getText())) {
+
+            alert.setContentText("Invalid department name!");
+            alert.show();
+            return false;
         }
-//        else if(ValidatorUtil.validateDeptName(deptNameTextfield.getText())){
-//
-//            alert.setContentText("Invalid department name!");
-//            alert.show();
-//            return false;
-//        }
         if (buildingNameTextField.getText() == null || buildingNameTextField.getText().isEmpty()) {
 
             alert.setContentText("Building Name cannot be empty!");
             alert.show();
             return false;
+        } else if (ValidatorUtil.validateAcademicItem(buildingNameTextField.getText())) {
+
+            alert.setContentText("Invalid building name!");
+            alert.show();
+            return false;
         }
-//        else if(ValidatorUtil.validateDeptName(buildingNameTextField.getText())){
-//
-//            alert.setContentText("Invalid building name!");
-//            alert.show();
-//            return false;
-//        }
         return true;
     }
 
@@ -595,16 +606,16 @@ public class AcademicAdministrationController {
         deptListMainGridPane.setOpacity(1);
     }
 
-    /*----------------End of Department Tabs operations-----------------*/
+    /*----------------------------------------End of Department Tabs operations---------------------------------------*/
 
 
-    /*------------------------------------------------------------------
+    /*------------------------------------------------------------------------------------------------------------------
     Courses Tab operations:
     Add,edit,delete course and view them in the table.
-     ------------------------------------------------------------------*/
+     -----------------------------------------------------------------------------------------------------------------*/
 
     /**
-     * Initialization of Courses Tab
+     * Initialization of Courses Tab : adds department to Dept Combo Box
      */
     private void initCoursesTab() {
 
@@ -621,8 +632,10 @@ public class AcademicAdministrationController {
 
                 //Add department names to the batchComboBox
                 if (!listOfDepartments.isEmpty()) {
+
                     List<String> items = new ArrayList<>();
                     for (Department department : listOfDepartments) {
+
                         items.add(department.getDeptName());
                     }
                     ObservableList<String> options = FXCollections.observableArrayList(items);
@@ -634,6 +647,11 @@ public class AcademicAdministrationController {
 
     }
 
+    /**
+     * Callback method to handle action of Submit Button.
+     * <p>
+     * This method either adds a new Course to the DB or updates an existing Course in the DB.
+     */
     @FXML
     private void handleSubmitCourseButtonAction() {
 
@@ -650,6 +668,7 @@ public class AcademicAdministrationController {
             activateAddCourseProgressIndicator();
 
             Course newCourse = new Course();
+
             //initialize the newly created course object
             newCourse.setDeptName(deptName);
             newCourse.setCourseId(courseId);
@@ -665,14 +684,18 @@ public class AcademicAdministrationController {
                 new Thread(addCourseToDatabaseTask).start();
 
                 addCourseToDatabaseTask.setOnSucceeded(new EventHandler<>() {
+
                     @Override
                     public void handle(WorkerStateEvent event) {
 
+                        //get the status of insertion operation
                         int status = addCourseToDatabaseTask.getValue();
 
                         //add operation finished on database, disable loading spinner and show status
                         deactivateAddCourseProgressIndicator();
 
+
+                        //display status
                         if (status == DATABASE_ERROR) {
 
                             addCourseStatusImageView.setImage(new Image("/png/critical error.png"));
@@ -694,6 +717,7 @@ public class AcademicAdministrationController {
             //'edit course' chosen
             else {
 
+                //change the status to ADD_CHOICE, since editing is done
                 courseAddOrEditChoice = ADD_CHOICE;
 
                 Task<Integer> editCourseTask = courseService
@@ -704,11 +728,13 @@ public class AcademicAdministrationController {
                     @Override
                     public void handle(WorkerStateEvent event) {
 
+                        //get the status of update operation
                         int status = editCourseTask.getValue();
 
                         //edit operation on database finished, disable loading spinner
                         deactivateAddCourseProgressIndicator();
 
+                        //display status
                         if (status == DATABASE_ERROR) {
 
                             addCourseStatusImageView.setImage(new Image("/png/critical error.png"));
@@ -729,6 +755,12 @@ public class AcademicAdministrationController {
         }
     }
 
+    /**
+     * Callback method to handle Ok and Reset button action.
+     * <p>
+     * This disables the progress indicator,status and clears the textfields and comboBoxes for addition of new
+     * course.
+     */
     @FXML
     private void handleCourseOkAndResetButtonAction() {
 
@@ -742,6 +774,12 @@ public class AcademicAdministrationController {
         durationTextField.clear();
     }
 
+    /**
+     * Callback method to handle action of Edit Course button.
+     * <p>
+     * This method basically sets the Course detials to be edited in the respective textfields and comboBoxes and
+     * sets the Edit Signal so that the {@link #handleSubmitCourseButtonAction()} works on updating the course.
+     */
     @FXML
     private void handleEditCourseButtonAction() {
 
@@ -777,6 +815,10 @@ public class AcademicAdministrationController {
         }
     }
 
+    /**
+     * Callback method to handle action of Delete Course button.
+     * This method deletes the selected Course in table from the DB.
+     */
     @FXML
     private void handleDeleteCourseButtonAction() {
 
@@ -806,11 +848,13 @@ public class AcademicAdministrationController {
                     @Override
                     public void handle(WorkerStateEvent event) {
 
+                        //get delete operation status
                         int status = deleteCourseTask.getValue();
 
                         //delete operation finished on database, disable the loading spinner and show status
                         deactivateCourseListProgressIndicator();
 
+                        //display status
                         if (status == DATABASE_ERROR) {
 
                             courseListStatusImageView.setImage(new Image("/png/critical error.png"));
@@ -841,6 +885,7 @@ public class AcademicAdministrationController {
      */
     @FXML
     private void handleCourseListOkButtonAction() {
+
         deactivateCourseListStatusStackPane();
     }
 
@@ -863,49 +908,42 @@ public class AcademicAdministrationController {
             alert.setContentText("Course ID cannot be empty!");
             alert.show();
             return false;
-        }
-//        else if(ValidatorUtil.validateDeptName(courseIdTextField.getText().trim())){
-//
-//            alert.setContentText("Invalid Course ID!");
-//            alert.show();
-//            return false;
-//        }
-        else if (degreeTextField.getText() == null || degreeTextField.getText().isEmpty()) {
+        } else if (ValidatorUtil.validateAcademicItem(courseIdTextField.getText().trim())) {
+
+            alert.setContentText("Invalid Course ID!");
+            alert.show();
+            return false;
+        } else if (degreeTextField.getText() == null || degreeTextField.getText().isEmpty()) {
 
             alert.setContentText("Degree cannot be empty!");
             alert.show();
             return false;
-        }
-//        else if(ValidatorUtil.validateDeptName(degreeTextField.getText().trim())){
-//
-//            alert.setContentText("Invalid degree!");
-//            alert.show();
-//            return false;
-//        }
-        else if (disciplineTextField.getText() == null || disciplineTextField.getText().isEmpty()) {
+        } else if (ValidatorUtil.validateAcademicItem(degreeTextField.getText().trim())) {
+
+            alert.setContentText("Invalid degree!");
+            alert.show();
+            return false;
+        } else if (disciplineTextField.getText() == null || disciplineTextField.getText().isEmpty()) {
 
             alert.setContentText("Discipline cannot be empty!");
             alert.show();
             return false;
-        }
-//        else if (disciplineTextField.getText() == null || degreeTextField.getText().isEmpty()) {
-//
-//            alert.setContentText("Invalid discipline!");
-//            alert.show();
-//            return false;
-//        }
-        else if (durationTextField.getText() == null || durationTextField.getText().isEmpty()) {
+        } else if (ValidatorUtil.validateAcademicItem(disciplineTextField.getText().trim())) {
+
+            alert.setContentText("Invalid discipline!");
+            alert.show();
+            return false;
+        } else if (durationTextField.getText() == null || durationTextField.getText().isEmpty()) {
 
             alert.setContentText("Duration cannot be empty!");
             alert.show();
             return false;
+        } else if (ValidatorUtil.validateSemester(durationTextField.getText().trim())) {
+
+            alert.setContentText("Invalid duration!");
+            alert.show();
+            return false;
         }
-//        else if (degreeTextField.getText() == null || degreeTextField.getText().isEmpty()) {
-//
-//            alert.setContentText("Invalid duration!");
-//            alert.show();
-//            return false;
-//        }
         return true;
     }
 
@@ -1018,13 +1056,13 @@ public class AcademicAdministrationController {
         courseListMainGridPane.setOpacity(1);
     }
 
-    /*------------------End of Courses Tab Operation---------------------*/
+    /*--------------------------------------------End of Courses Tab Operation----------------------------------------*/
 
 
-    /*--------------------------------------------------------------------
+    /*------------------------------------------------------------------------------------------------------------------
     Batches Tab operations:
     Add,edit,delete batch and view them in the table.
-     --------------------------------------------------------------------*/
+     -----------------------------------------------------------------------------------------------------------------*/
 
     @FXML
     private void handleBatchesDeptNameComboBox() {
@@ -1061,13 +1099,13 @@ public class AcademicAdministrationController {
 
     }
 
-    /*--------------End of Batches tab Operation----------------------*/
+    /*------------------------------------------End of Batches tab Operation------------------------------------------*/
 
 
-    /*-----------------------------------------------------------------
+    /*-----------------------------------------------------------------------------------------------------------------
     Subjects Tab operations:
     Add,edit,delete subject and view them in the table.
-     ------------------------------------------------------------------*/
+     -----------------------------------------------------------------------------------------------------------------*/
 
     @FXML
     private void handleSubTabDegreeComboBox() {
@@ -1104,13 +1142,13 @@ public class AcademicAdministrationController {
 
     }
 
-    /*-------------------End of Subjects Tab operation--------------------*/
+    /*--------------------------------------------------End of Subjects Tab operation---------------------------------*/
 
 
-    /*---------------------------------------------------------------------
+    /*------------------------------------------------------------------------------------------------------------------
     Classrooms Tab operations:
     Add,edit,delete classroom and view them in the table.
-     ----------------------------------------------------------------------*/
+     -----------------------------------------------------------------------------------------------------------------*/
 
     @FXML
     private void handleClassRoomDegreeComboBox() {
@@ -1142,6 +1180,5 @@ public class AcademicAdministrationController {
 
     }
 
-    /*-------------------End of Class Rooms tab operation-----------------*/
-
+    /*------------------------------------------End of Class Rooms tab operation--------------------------------------*/
 }

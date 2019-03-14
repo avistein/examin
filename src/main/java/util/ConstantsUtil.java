@@ -1,8 +1,14 @@
 package util;
 
-public final class ConstantsUtil {
 
-    private ConstantsUtil(){}
+/**
+ * Utility class to store constants only.
+ * <p>
+ * Utility classes are final, cannot be instantiated and have static methods.
+ *
+ * @author Avik Sarkar
+ */
+public final class ConstantsUtil {
 
     public static final int ADMIN_GID = 1;
 
@@ -12,7 +18,7 @@ public final class ConstantsUtil {
 
     public static final int PROFESSOR_GID = 4;
 
-    public static final int SUCCESS = 0;
+    public static final int SUCCESS = 200;
 
     public static final int DATABASE_ERROR = -1;
 
@@ -30,17 +36,23 @@ public final class ConstantsUtil {
 
     public static final String USER_HOME = System.getProperty("user.home");
 
-    public static  final String LINE_SEPARATOR = System.getProperty("line.separator");
+    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-    public static  final String FILE_SEPARATOR = System.getProperty("file.separator");
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-    public static  final String PROJECT_NAME = "examin - Examination Management Tool";
+    public static final String PROJECT_NAME = "examin - Examination Management Tool";
 
-    public static  final String ROOT_DIR = "examin";
+    public static final String ROOT_DIR = "examin";
 
-    public static  final String CONFIG_DIR = "configs";
+    public static final String CONFIG_DIR = "configs";
 
-    public static  final String CSV_DIR = "csv";
+    public static final String CSV_DIR = "csv";
 
-    public static  final String SETTINGS_DIR = "settings";
+    public static final String SETTINGS_DIR = "settings";
+
+    /**
+     * Private default constructor so that no other class can create an instance of this class.
+     */
+    private ConstantsUtil() {
+    }
 }

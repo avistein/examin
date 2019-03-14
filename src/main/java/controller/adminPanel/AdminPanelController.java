@@ -2,7 +2,6 @@ package controller.adminPanel;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +30,7 @@ import static util.ConstantsUtil.PROJECT_NAME;
  */
 public class AdminPanelController {
 
-    /*---------------------Initialization and declaration of variables-----------------------*/
+    /*-------------------------------Initialization and declaration of variables-----------------------------------*/
 
     private ExamCellMemberService examCellMemberService;
 
@@ -58,10 +57,13 @@ public class AdminPanelController {
     @FXML
     private Button logOutButton;
 
-    /*--------------------------End of Initialization-------------------------------------*/
+    /*--------------------------------------------End of Initialization-----------------------------------------------*/
 
     /**
-     * This method is called once all the components in the fxml has been loaded successfully
+     * This method is used to initialize variables of this Class.
+     * This method is called when the FXMLLoader.load() is called.
+     * <p>
+     * Do not try to get the Scene or Window of any node in this method.
      */
     @FXML
     private void initialize() {
@@ -162,6 +164,12 @@ public class AdminPanelController {
 
     }
 
+    /**
+     * Callback method to handle Setting button.
+     * This loads the Settings UI when clicked on Setting button.
+     *
+     * @throws IOException Load exception during loading the FXML document.
+     */
     @FXML
     private void handleAdminSettingsButtonAction() throws IOException {
 
@@ -172,23 +180,36 @@ public class AdminPanelController {
         contentStackPane.getChildren().setAll(adminSettingsFxml);
     }
 
+    /**
+     * Callback method to handle Log Out button action.
+     * This closes the main stage and loads the Login Stage.
+     */
     @FXML
-    private void handleLogOutButtonAction(ActionEvent event) throws IOException {
+    private void handleLogOutButtonAction() {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Do you really want to logout?");
         Optional<ButtonType> result = alert.showAndWait();
+
         if (result.get() == ButtonType.OK) {
 
+            //get the main stage
             Stage adminPanelStage = (Stage) logOutButton.getScene().getWindow();
+
+            //close the main stage
             adminPanelStage.hide();
+
+            //create login stage
             Stage loginStage = new Stage();
+
+            //set the login stage
             UISetterUtil.setStage("/view/login/Login.fxml", loginStage
                     , PROJECT_NAME, 400, 400);
+
+            //show the login stage
             loginStage.show();
         }
     }
-
 
     /**
      * This method sets the details of the admin in the admin panel
@@ -212,8 +233,6 @@ public class AdminPanelController {
                         + " " + admin.getLastName());
             }
         });
-
     }
-
 }
 

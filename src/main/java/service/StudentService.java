@@ -8,6 +8,7 @@ import database.DatabaseHelper;
 import javafx.concurrent.Task;
 import model.Batch;
 import model.Student;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,23 +16,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static util.ConstantsUtil.*;
+
 /**
- * Service class to
+ * Service class to get student, add student, edit student, delete student, import students from csv,
+ * get total no of departments.
  *
  * @author Avik Sarkar
  */
 public class StudentService {
 
+    /*--------------------------------Declaration of variables---------------------------------------*/
+
     private DatabaseHelper databaseHelper;
 
+    /*------------------------------------End of Declaration-----------------------------------------*/
+
+    /**
+     * Default public constructor to initialize database helper.
+     */
     public StudentService() {
+
         databaseHelper = new DatabaseHelper();
     }
 
-
+    /**
+     * This method is used to get a single studentTask object which is used to get student details.
+     *
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_student.
+     * @return A studentTask which can be used to get a list of student details from the DB in a separate
+     * thread.
+     */
     @SuppressWarnings("Duplicates")
-    public Task<List<Student>> getStudentTask(String additionalQuery, final String ...params){
+    public Task<List<Student>> getStudentTask(String additionalQuery, final String... params) {
 
         final String query = "SELECT v_reg_id, v_first_name, v_middle_name, v_last_name,d_dob, v_gender, v_reg_year" +
                 ",v_email_id, v_address, v_mother_name, v_guardian_contact_no, v_roll_no, v_contact_no" +
@@ -40,10 +59,19 @@ public class StudentService {
                 " t_batch " + additionalQuery;
 
         Task<List<Student>> studentTask = new Task<>() {
+
             @Override
-            protected List<Student> call(){
+            protected List<Student> call() {
+
                 Map<String, List<String>> map = databaseHelper.execQuery(query, params);
-                List<Student>list = new ArrayList<>();
+
+                //each item in the list is a single student details
+                List<Student> list = new ArrayList<>();
+
+                /*
+                v_reg_id is the primary key, total items in the map will always be equal to no of
+                v_reg_id retrieved
+                 */
                 for (int i = 0; i < map.get("v_reg_id").size(); i++) {
 
                     Student student = new Student();
@@ -68,97 +96,43 @@ public class StudentService {
                     student.setDegree(map.get("v_degree").get(i));
                     student.setDeptName(map.get("v_dept_name").get(i));
 
+                    //a single student details is added to the list
                     list.add(student);
                 }
+
+                //a list of student details
                 return list;
             }
         };
         return studentTask;
     }
 
-    public Task<Integer> getAddStudentFromMemoryToDataBaseTask(List<Student> list){
-        Task<Integer> addStudentFromMemoryToDataBaseTask = new Task<>() {
-            @Override
-            protected Integer call(){
-
-                BatchService batchService = new BatchService();
-
-                final String sql1 = "INSERT INTO t_student (v_first_name, v_middle_name" +
-                        ", v_last_name, v_reg_id, v_roll_no, d_dob, v_mother_name, v_reg_year" +
-                        ", v_contact_no, v_father_guardian_name, v_email_id, v_address" +
-                        ", v_guardian_contact_no, v_gender) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
-                        ", ?, ?, ?, ?)";
-
-                final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
-                        ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
-
-                List<Batch> listOfBatches = batchService.getBatchDataForServices("");
-
-                List<List<String>> listOfStudents = new ArrayList<>();
-                List<List<String>> studentEnrollmentList = new ArrayList<>();
-
-                for(Student student : list){
-                    List<String> singleStudentDetails = new ArrayList<>();
-                    List<String> singleStudentEnrollment = new ArrayList<>();
-
-                    for(Batch batch : listOfBatches){
-
-                        if(batch.getBatchName().equals(student.getBatchName())
-                                && batch.getDegree().equals(student.getDegree())
-                                && batch.getDiscipline().equals(student.getDiscipline())) {
-
-                            singleStudentEnrollment.add(batch.getBatchId());
-                            singleStudentEnrollment.add(student.getRegId());
-                            singleStudentEnrollment.add(student.getCurrSemester());
-
-                            studentEnrollmentList.add(singleStudentEnrollment);
-
-                        }
-                    }
-
-                    singleStudentDetails.add(student.getFirstName());
-                    singleStudentDetails.add(student.getMiddleName());
-                    singleStudentDetails.add(student.getLastName());
-                    singleStudentDetails.add(student.getRegId());
-                    singleStudentDetails.add(student.getRollNo());
-                    singleStudentDetails.add(student.getDob());
-                    singleStudentDetails.add(student.getMotherName());
-                    singleStudentDetails.add(student.getRegYear());
-                    singleStudentDetails.add(student.getContactNo());
-                    singleStudentDetails.add(student.getGuardianName());
-                    singleStudentDetails.add(student.getEmail());
-                    singleStudentDetails.add(student.getAddress());
-                    singleStudentDetails.add(student.getGuardianContactNo());
-                    singleStudentDetails.add(student.getGender());
-                    listOfStudents.add(singleStudentDetails);
-                }
-                int tStudentStatus = databaseHelper.batchInsert(sql1, listOfStudents);
-                int tStudentEnrollmentStatus = databaseHelper.batchInsert(sql2, studentEnrollmentList);
-
-                if(tStudentStatus == DATABASE_ERROR ||
-                        tStudentEnrollmentStatus == DATABASE_ERROR)
-                    return DATABASE_ERROR;
-                else if(tStudentStatus == SUCCESS &&
-                        tStudentEnrollmentStatus == SUCCESS)
-                    return SUCCESS;
-                else
-                    return DATA_ALREADY_EXIST_ERROR;
-            }
-        };
-        return addStudentFromMemoryToDataBaseTask;
-    }
-
-
-    public Task<List<Student>>  getLoadStudentFromCsvToMemoryTask(final File file, final Map<String, String> map) {
+    /**
+     * This method can be used to get a task to load a bunch of Students from the CSV file into the memory.
+     *
+     * @param file The CSV file which contains a bunch of Student details.
+     * @param map  A hashMap with data of Student bean as keys and the column names of the CSV file as values.
+     *             The first line of the CSV contains the column names.
+     * @return A task which can be used to retrieve Students list , which is loaded from the CSV file.
+     * @see <a href="http://opencsv.sourceforge.net/apidocs/com/opencsv/bean/HeaderColumnNameMappingStrategy.html">
+     * OpenCSV HeaderColumnNameMappingStrategy</a>
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<List<Student>> getLoadStudentFromCsvToMemoryTask(final File file, final Map<String, String> map) {
 
         Task<List<Student>> loadStudentFromCsvToMemoryTask = new Task<>() {
+
             @Override
-            protected List<Student> call() throws Exception {
+            protected List<Student> call() {
 
                 Map<String, String> columnNameMapping = new HashMap<>();
 
+                //each item in the list is a Student details obtained from the CSV
                 List<Student> listOfStudentsFromCsv = new ArrayList<>();
 
+                /*
+                Whatever be the column names, those will be mapped to the data of the Student Bean
+                 */
                 columnNameMapping.put(map.get("firstName"), "firstName");
                 columnNameMapping.put(map.get("middleName"), "middleName");
                 columnNameMapping.put(map.get("lastName"), "lastName");
@@ -178,29 +152,166 @@ public class StudentService {
                 columnNameMapping.put(map.get("degree"), "degree");
                 columnNameMapping.put(map.get("batchName"), "batchName");
 
+                /*
+                Maps data to objects using the column names in the first row of the CSV file as reference.
+                This way the column order does not matter.
+                @see for more.
+                 */
                 HeaderColumnNameTranslateMappingStrategy<Student> strategy = new
                         HeaderColumnNameTranslateMappingStrategy<>();
                 strategy.setType(Student.class);
                 strategy.setColumnMapping(columnNameMapping);
 
+                //open the CSV file for parsing
                 try (CSVReader reader = new CSVReader(new FileReader(file))) {
 
+                    //skip the first line of the csv as it contains the column names
                     CsvToBean<Student> csvToBean = new CsvToBeanBuilder<Student>(reader)
                             .withMappingStrategy(strategy).withSkipLines(1).build();
+
+                    //parse the csv and store list of Student objects
                     listOfStudentsFromCsv = csvToBean.parse();
                 } catch (IOException e) {
+
                     e.printStackTrace();
                 }
 
+                //list of Student objects
                 return listOfStudentsFromCsv;
             }
         };
         return loadStudentFromCsvToMemoryTask;
     }
 
+    /**
+     * This method can be used to get a task to add list of Students to database.
+     *
+     * @param list The ArrayList containing the Students.
+     * @return A task which can be used to add list of Students to database.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getAddStudentFromMemoryToDataBaseTask(List<Student> list) {
+        Task<Integer> addStudentFromMemoryToDataBaseTask = new Task<>() {
 
-    public Task<Integer>  getAddStudentToDatabaseTask(final Student student){
+            @Override
+            protected Integer call() {
+
+                BatchService batchService = new BatchService();
+
+                final String sql1 = "INSERT INTO t_student (v_first_name, v_middle_name" +
+                        ", v_last_name, v_reg_id, v_roll_no, d_dob, v_mother_name, v_reg_year" +
+                        ", v_contact_no, v_father_guardian_name, v_email_id, v_address" +
+                        ", v_guardian_contact_no, v_gender) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+                        ", ?, ?, ?, ?)";
+
+                final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
+                        ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
+
+
+                //get the list of batches
+                List<Batch> listOfBatches = batchService.getBatchDataForServices("");
+
+                /*
+                Each item in the list is itself a list of strings ;in the inner list each item is the data
+                of the Student bean.
+                For example if two Student objects are studentObj1 and studentObj2 and the structure is as follows :
+
+                studentObj1 = regId : 1, rollNo : 1, firstName : Dennis, middleName : MacAlistair, lastName : Ritchie...;
+                studentObj2 = regId : 2, rollNo : 2, firstName : Donald, middleName : E, lastName : Knuth...;
+
+                Then, listOfStudents will be stored as :
+
+                listOfHolidays = {{"1","1", "Dennis", "MacAlistair", "Ritchie", ...}, {"2", "2" , "Donald" , "E",
+                 "Knuth", ...}}
+
+                 studentEnrollmentList stores the data in the same way for t_student_enrollment_details table in DB.
+                 */
+                List<List<String>> listOfStudents = new ArrayList<>();
+                List<List<String>> studentEnrollmentList = new ArrayList<>();
+
+                //for each student ,form the data in the List<List<String>> structure
+                for (Student student : list) {
+
+                    List<String> singleStudentDetails = new ArrayList<>();
+                    List<String> singleStudentEnrollment = new ArrayList<>();
+
+                    /*
+                    iterate each batch to find out the batchId corresponding to the particular Course and semester, the
+                    student is undertaking.
+                     */
+                    for (Batch batch : listOfBatches) {
+
+                        if (batch.getBatchName().equals(student.getBatchName())
+                                && batch.getDegree().equals(student.getDegree())
+                                && batch.getDiscipline().equals(student.getDiscipline())) {
+
+                            singleStudentEnrollment.add(batch.getBatchId());
+                            singleStudentEnrollment.add(student.getRegId());
+                            singleStudentEnrollment.add(student.getCurrSemester());
+
+                            //add batchId,regId,semester of a particular student into the list
+                            studentEnrollmentList.add(singleStudentEnrollment);
+                        }
+                    }
+
+                    singleStudentDetails.add(student.getFirstName());
+                    singleStudentDetails.add(student.getMiddleName());
+                    singleStudentDetails.add(student.getLastName());
+                    singleStudentDetails.add(student.getRegId());
+                    singleStudentDetails.add(student.getRollNo());
+                    singleStudentDetails.add(student.getDob());
+                    singleStudentDetails.add(student.getMotherName());
+                    singleStudentDetails.add(student.getRegYear());
+                    singleStudentDetails.add(student.getContactNo());
+                    singleStudentDetails.add(student.getGuardianName());
+                    singleStudentDetails.add(student.getEmail());
+                    singleStudentDetails.add(student.getAddress());
+                    singleStudentDetails.add(student.getGuardianContactNo());
+                    singleStudentDetails.add(student.getGender());
+
+                    //add details of a particular student into the list
+                    listOfStudents.add(singleStudentDetails);
+                }
+
+                /*get the no of insertions or error status of the INSERT operation*/
+                int tStudentStatus = databaseHelper.batchInsert(sql1, listOfStudents);
+                int tStudentEnrollmentStatus = databaseHelper.batchInsert(sql2, studentEnrollmentList);
+
+                //if any DB error is present
+                if (tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                }
+
+                //return success ,if all students are inserted
+                else if (tStudentStatus == listOfStudents.size() &&
+                        tStudentEnrollmentStatus == studentEnrollmentList.size()) {
+
+                    return SUCCESS;
+                }
+
+                //return the no of student inserted
+                else {
+
+                    return tStudentStatus;
+                }
+            }
+        };
+        return addStudentFromMemoryToDataBaseTask;
+    }
+
+    /**
+     * This method is used to get a task which can be used to add a single student to the DB.
+     *
+     * @param student The student to be added to the database.
+     * @return A task which can be used to add a single student into the DB by running a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getAddStudentToDatabaseTask(final Student student) {
+
         Task<Integer> addStudentToDatabaseTask = new Task<>() {
+
             @Override
             protected Integer call() {
 
@@ -213,102 +324,150 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
                         ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
 
+                //get the status of insertion of student details into t_student in the DB
                 int tStudentStatus = databaseHelper.insert(sql1, student.getFirstName(), student.getMiddleName()
                         , student.getLastName(), student.getRegId(), student.getRollNo()
                         , student.getDob(), student.getMotherName(), student.getRegYear()
                         , student.getContactNo(), student.getGuardianName(), student.getEmail()
                         , student.getAddress(), student.getGuardianContactNo(), student.getGender());
 
+                // get the status of insertion of student details into t_student_enrollment_details in the DB
                 int tStudentEnrollmentStatus = databaseHelper.insert(sql2, student.getBatchId()
                         , student.getRegId(), student.getCurrSemester());
 
-                if(tStudentStatus == DATABASE_ERROR ||
-                        tStudentEnrollmentStatus == DATABASE_ERROR)
+                //return the status of insertion of student details
+                if (tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR) {
+
                     return DATABASE_ERROR;
-                else if(tStudentStatus == SUCCESS &&
-                        tStudentEnrollmentStatus== SUCCESS)
+                } else if (tStudentStatus == SUCCESS &&
+                        tStudentEnrollmentStatus == SUCCESS) {
+
                     return SUCCESS;
-                else
+                } else {
+
                     return DATA_ALREADY_EXIST_ERROR;
+                }
 
             }
         };
         return addStudentToDatabaseTask;
     }
 
-    public Task<Integer> getDeleteStudentTask(final Student student){
+    /**
+     * This method is used to get a deleteStudentTask which is used to delete a single student in the DB.
+     *
+     * @param student The student to be deleted.
+     * @return A deleteStudent Task instance which is used to delete a single student in the DB in a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getDeleteStudentTask(final Student student) {
 
         //final String sql1 = "DELETE FROM t_login_details where v_user_id=?";
+
         final String sql2 = "DELETE FROM t_student_enrollment_details where v_reg_id=?";
+
         final String sql3 = "DELETE FROM t_student where v_reg_id=?";
+
         Task<Integer> deleteStudentTask = new Task<>() {
+
             @Override
-            protected Integer call()  {
+            protected Integer call() {
+//
 //                boolean t_loginDetailsStatus = databaseHelper.insert
 //                (sql1, student.getRegId());
+
+                /*
+                holds the status of deletion of student in the DB, i.e success or failure
+                 */
                 int tStudentEnrollmentStatus = databaseHelper.updateDelete
                         (sql2, student.getRegId());
+
                 int tStudentStatus = databaseHelper.updateDelete
                         (sql3, student.getRegId());
 
-                if(tStudentStatus == DATABASE_ERROR ||
-                        tStudentEnrollmentStatus == DATABASE_ERROR)
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tStudentStatus == DATABASE_ERROR ||
+                        tStudentEnrollmentStatus == DATABASE_ERROR) {
                     return DATABASE_ERROR;
-                else if(tStudentStatus == SUCCESS &&
-                        tStudentEnrollmentStatus== SUCCESS)
+                } else if (tStudentStatus == SUCCESS &&
+                        tStudentEnrollmentStatus == SUCCESS) {
+
                     return SUCCESS;
-                else if(tStudentStatus == DATA_DEPENDENCY_ERROR ||
-                        tStudentEnrollmentStatus == DATA_DEPENDENCY_ERROR)
+                } else if (tStudentStatus == DATA_DEPENDENCY_ERROR ||
+                        tStudentEnrollmentStatus == DATA_DEPENDENCY_ERROR) {
+
                     return DATA_DEPENDENCY_ERROR;
-                else
+                } else {
+
                     return DATA_INEXISTENT_ERROR;
+                }
             }
         };
         return deleteStudentTask;
     }
 
-    public Task<Integer> getUpdateStudentTask(final Student student){
+    /**
+     * This method is used to get a updateStudentTask which is used to edit a single student in the DB.
+     *
+     * @param student The student to be edited.
+     * @return A updateStudentTask instance which is used to edit a single student in the DB in a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getUpdateStudentTask(final Student student) {
 
-        final String sql1 = "UPDATE t_student SET v_first_name=?, v_middle_name=?, v_last_name=?, d_dob=?, v_mother_name=?" +
+        final String sql = "UPDATE t_student SET v_first_name=?, v_middle_name=?, v_last_name=?, d_dob=?, v_mother_name=?" +
                 ", v_reg_year=?, v_contact_no=?, v_father_guardian_name=?, v_email_id=?, v_address=?, v_guardian_contact_no=?" +
                 ", v_gender=? where v_reg_id=?";
 
-        final String sql2 = "UPDATE t_student_enrollment_details SET v_batch_id=?, v_curr_semester=? where v_reg_id=?";
         Task<Integer> updateStudentTask = new Task<>() {
-            @Override
-            protected Integer call()  {
 
+            @Override
+            protected Integer call() {
+
+                //holds the status of updation of student in the DB, i.e success or failure
                 int tStudentStatus = databaseHelper.updateDelete
-                        (sql1, student.getFirstName(), student.getMiddleName(),student.getLastName(), student.getDob()
+                        (sql, student.getFirstName(), student.getMiddleName(), student.getLastName(), student.getDob()
                                 , student.getMotherName(), student.getRegYear(), student.getContactNo(), student.getGuardianName()
                                 , student.getEmail(), student.getAddress(), student.getGuardianContactNo(), student.getGender()
                                 , student.getRegId());
 
-                int tStudentEnrollmentStatus = databaseHelper.updateDelete(sql2, student.getBatchId(), student.getCurrSemester()
-                        , student.getRegId());
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tStudentStatus == DATABASE_ERROR) {
 
-                if(tStudentStatus == DATABASE_ERROR ||
-                        tStudentEnrollmentStatus == DATABASE_ERROR)
                     return DATABASE_ERROR;
-                else if(tStudentStatus == SUCCESS &&
-                        tStudentEnrollmentStatus== SUCCESS)
+                } else if (tStudentStatus == SUCCESS) {
+
                     return SUCCESS;
-                else
+                } else {
+
                     return DATA_INEXISTENT_ERROR;
+                }
             }
         };
         return updateStudentTask;
     }
 
-    public Task<Integer> getStudentsCountTask(){
+    /**
+     * This method is used to get a single studentsCountTask object which is used to get total no of Students in the DB.
+     *
+     * @return A studentsCountTask object which is used to get the total no. of Students in the DB in a separate thread.
+     */
+    public Task<Integer> getStudentsCountTask() {
 
         final String query = "SELECT v_reg_id FROM t_student";
 
         Task<Integer> studentsCountTask = new Task<>() {
+
             @Override
-            protected Integer call(){
+            protected Integer call() {
 
                 Map<String, List<String>> map = databaseHelper.execQuery(query);
+
+                /*
+                v_reg_id is the primary key, so total count will always be equal to the no of v_reg_id
+                retrieved
+                 */
                 return map.get("v_reg_id").size();
             }
         };

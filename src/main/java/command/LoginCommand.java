@@ -6,31 +6,28 @@ import org.mindrot.jbcrypt.BCrypt;
 import static util.ConstantsUtil.*;
 
 /**
- * Service class to
+ * Command class to handle Login logic.
+ * <p>
+ * Command classes form the Business Logic layer in our application.
  *
  * @author Avik Sarkar
  */
 public class LoginCommand {
 
-
-    public LoginCommand() {
-    }
-
-    //    /**
-//     * Authenticates a user to enter the system
-//     *
-//     * @param username      Username entered to login
-//     * @param inputPassword Password entered to login
-//     * @return The status of the authentication
-//     * @link http://www.mindrot.org/projects/jBCrypt
-//     */
+    /**
+     * Authenticates a user to enter the system.
+     *
+     * @param user          User to be authenticated.
+     * @param inputPassword Password entered to login.
+     * @return The status of the authentication.
+     * @see <a href="http://www.mindrot.org/projects/jBCrypt">jBCrypt</a>
+     */
     public int authenticateLogin(String inputPassword, User user) {
 
+        //get the gid of the user
+        int gid = Integer.parseInt(user.getGid());
 
-        int gid;
-
-        gid = Integer.parseInt(user.getGid());
-
+        //if password matches ,return status corresponding to the gid
         if (BCrypt.checkpw(inputPassword, user.getPassword())) {
 
             switch (gid) {
@@ -46,9 +43,10 @@ public class LoginCommand {
 
                 case 4:
                     return PROFESSOR_GID;
-
             }
         }
+
+        //error if password doesn't match
         return LOGIN_ERROR;
     }
 

@@ -16,15 +16,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import model.Student;
 import service.StudentService;
-import static util.ConstantsUtil.*;
 
 import java.io.IOException;
 import java.util.Optional;
 
+import static util.ConstantsUtil.*;
+
+/**
+ * Controller class for ViewStudentModal.fxml.
+ *
+ * @author Avik Sarkar
+ */
 public class ViewStudentModalController {
+
+    /*--------------------------------Initialization & Declaration of variables----------------------------------*/
 
     private Student student;
 
@@ -95,73 +102,114 @@ public class ViewStudentModalController {
     @FXML
     private Label statusLabel;
 
+    /*--------------------------------End of Initialization & Declaration ----------------------------------*/
+
+    /**
+     * This method is used to initialize variables of this Class.
+     * This method is called when the FXMLLoader.load() is called.
+     * <p>
+     * Do not try to get the Scene or Window of any node in this method.
+     */
     @FXML
-    private void initialize(){
+    private void initialize() {
+
         studentService = new StudentService();
+
+        //default status, no student has been deleted
         studentDeletedStatus = false;
     }
 
+    /**
+     * Callback method to handle the Edit Button action.
+     *
+     * @throws IOException Load exception while loading the FXML document.
+     */
     @FXML
     private void handleEditButtonAction() throws IOException {
 
+        //get the stage of the modal window
+        Stage modalStage = (Stage) mainGridPane.getScene().getWindow();
 
-        Stage modalStage = (Stage)mainGridPane.getScene().getWindow();
+        //get the parent stage of the modal window, i.e. the mainStage of the application
+        Stage mainStage = (Stage) modalStage.getOwner();
 
-        modalStage.hide();
-        Stage mainStage = (Stage)modalStage.getOwner();
-
+        //get the main scene of the application
         Scene mainScene = mainStage.getScene();
 
+        //get the contentStackPane here
         StackPane contentStackPane = (StackPane) mainScene.lookup("#contentStackPane");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/StudentRegistration.fxml"));
-
         Parent studentRegistrationFxml = loader.load();
 
+        //get the controller of StudentRegistration.fxml
         StudentRegistrationController studentRegistrationController = loader.getController();
 
+        //send the Student object to be edited
         studentRegistrationController.setStudentPojo(student);
+
+        //send the edit signal
         studentRegistrationController.setEditSignal(EDIT_CHOICE);
+
+        //close the modal window
+        modalStage.hide();
+
+        //place the StudentRegistration.fxml in the scene
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
     @FXML
-    private void handleDeleteButtonAction(){
+    private void handleDeleteButtonAction() {
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete");
         alert.setHeaderText("Are you really want to delete?");
+
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == ButtonType.OK){
+
+        //if OK is pressed in the Confirmation alert
+        if (result.get() == ButtonType.OK) {
+
+            /*fade the background and show loading spinner*/
             mainGridPane.setOpacity(0.5);
             statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
+
             Task<Integer> deleteStudentTask = studentService
                     .getDeleteStudentTask(student);
             new Thread(deleteStudentTask).start();
+
             deleteStudentTask.setOnSucceeded(new EventHandler<>() {
+
                 @Override
                 public void handle(WorkerStateEvent event) {
+
+                    //get the status of the deletion operation
                     int status = deleteStudentTask.getValue();
+
+                    /*disable the loading spinner and display status*/
                     progressIndicator.setVisible(false);
                     statusImageView.setVisible(true);
                     statusLabel.setVisible(true);
-                    if(status == DATABASE_ERROR){
+
+                    if (status == DATABASE_ERROR) {
+
                         statusImageView.setImage(new Image("/png/critical error.png"));
                         statusLabel.setText("Database Error!");
                         studentDeletedStatus = false;
-                    }
-                    else if(status == SUCCESS){
+                    } else if (status == SUCCESS) {
+
                         statusImageView.setImage(new Image("/png/success.png"));
                         statusLabel.setText("Successfully Deleted!");
                         studentDeletedStatus = true;
-                    }
-                    else if(status == DATA_DEPENDENCY_ERROR){
+                    } else if (status == DATA_DEPENDENCY_ERROR) {
+
                         statusImageView.setImage(new Image("/png/error.png"));
                         statusLabel.setText("Cannot delete student!");
                         studentDeletedStatus = false;
-                    }
-                    else {
+                    } else {
+
                         statusImageView.setImage(new Image("/png/error.png"));
                         statusLabel.setText("Student not found!");
                         studentDeletedStatus = false;
@@ -171,8 +219,16 @@ public class ViewStudentModalController {
         }
     }
 
-    public void setStudentPojo(Student student){
+    /**
+     * This method is used to set the Student object for editing or deleting it.
+     * Also sets the text of the labels.
+     *
+     * @param student The student to be set with for deletion or editing.
+     */
+    public void setStudentPojo(Student student) {
+
         this.student = student;
+
         nameLabel.setText(this.student.getFirstName() + " "
                 + this.student.getMiddleName() + " " +
                 this.student.getLastName());
@@ -193,8 +249,14 @@ public class ViewStudentModalController {
         addressLabel.setText(this.student.getAddress());
     }
 
-    public boolean getStudentDeletedStatus(){
+    /**
+     * This method is used to send the status to the controller calling it whether a particular student is deleted or
+     * not.
+     *
+     * @return The deletion status in boolean type.
+     */
+    public boolean getStudentDeletedStatus() {
+
         return studentDeletedStatus;
     }
-
 }

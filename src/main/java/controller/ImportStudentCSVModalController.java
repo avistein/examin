@@ -6,9 +6,9 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -24,14 +24,10 @@ import util.ValidatorUtil;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +42,7 @@ import static util.ConstantsUtil.*;
  */
 public class ImportStudentCSVModalController {
 
-    /*---------------------Initialization and declaration of variables-----------------------*/
+    /*---------------------------------Initialization and declaration of variables-------------------------------*/
 
     private StudentService studentService;
     private File file;
@@ -78,9 +74,6 @@ public class ImportStudentCSVModalController {
 
     @FXML
     private Label chosenFileLabel;
-
-    @FXML
-    private Hyperlink sampleCsvHyperLink;
 
     @FXML
     private ComboBox<String> firstNameComboBox;
@@ -136,10 +129,13 @@ public class ImportStudentCSVModalController {
     @FXML
     private ComboBox<String> rollNoComboBox;
 
-    /*--------------------------End of declaration and initialization------------------*/
+    /*-----------------------------------End of declaration and initialization----------------------------------*/
 
     /**
-     * This method is called once all the components of the fxml document is loaded
+     * This method is used to initialize variables of this Class.
+     * This method is called when the FXMLLoader.load() is called.
+     * <p>
+     * Do not try to get the Scene or Window of any node in this method.
      */
     public void initialize() {
 
@@ -174,14 +170,17 @@ public class ImportStudentCSVModalController {
         with the column names' list else unset ComboBoxes.
          */
         if (file != null) {
+
             chosenFileLabel.setText(file.getName());
             List<String> list = CSVUtil.getColumnNames(file);
 
             //checking if all 18 columns are present in the csv file uploaded
             if (list.size() == 18) {
+
                 setComboBoxes(list);
                 submitButton.setDisable(false);
             } else {
+
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("CSV file should have 18 columns!");
                 alert.show();
@@ -192,27 +191,46 @@ public class ImportStudentCSVModalController {
         }
     }
 
+    /**
+     * Callback method to handle SampleCsvHyperLinkAction.
+     *
+     * Basically this method opens the sample CSV in the User's System with an appropriate application.
+     */
     @FXML
     private void handleSampleCsvHyperLinkAction() {
 
+        /*
+        Couldn't find a way to open the CSV file from a relative file path.Also file opening doesn't work inside the JAR
+        package,so I had to get the input stream of the sample csv , create a new file in the USER's system in the
+        predefined location , copy the input stream to the new file.
+        I wish I could have found a better way!
+         */
+
+        //location of the sample CSV
         String sampleCsvFilePath = "/csv/studentSample.csv";
+
+        //location where the new csv will be created in the user's system
         String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR
                 + CSV_DIR + FILE_SEPARATOR + "studentSample.csv";
 
         try {
 
+            //if studentSample.csv doesn't exist in the User's System , then only create it
             if (Files.notExists(Paths.get(filePath))) {
+
                 //get the content of the sampleCsv File as InputStream
                 InputStream in = getClass().getResourceAsStream(sampleCsvFilePath);
 
-
+                //create the new csv file in the user's system and copy the contents of sampleCsv file to it
                 Task<Boolean> createAndWriteToFileTask = fileHandlingService.getCreateAndWriteToFileTask
                         (in.readAllBytes(), CSV_DIR, "studentSample.csv");
                 new Thread(createAndWriteToFileTask).start();
-
             }
+
+            //open the CSV file with the appropriate Application available in the user's system
             Desktop.getDesktop().open(new File(filePath));
         } catch (IOException e) {
+
             e.printStackTrace();
         }
     }
@@ -267,8 +285,7 @@ public class ImportStudentCSVModalController {
             @Override
             public void handle(WorkerStateEvent event) {
 
-                List<Student> listOfStudentsFromCsv = new ArrayList<>();
-                listOfStudentsFromCsv.addAll(loadStudentFromCsvToMemoryTask.getValue());
+                List<Student> listOfStudentsFromCsv = new ArrayList<>(loadStudentFromCsvToMemoryTask.getValue());
 
                 //index of the row containing student details currently under inspection
                 int currRowInCsv = 1;
@@ -299,6 +316,7 @@ public class ImportStudentCSVModalController {
                         @Override
                         public void handle(WorkerStateEvent event) {
 
+                            //get the status of the INSERT operation
                             int status = addStudentFromMemoryToDataBaseTask.getValue();
 
                             //disable progress indicator and display status got from the method above
@@ -307,16 +325,24 @@ public class ImportStudentCSVModalController {
                             statusLabel.setVisible(true);
 
                             if (status == DATABASE_ERROR) {
+
                                 statusImageView.setImage(new Image("/png/critical error.png"));
                                 statusLabel.setText("Database Error!");
                                 tableUpdateStatus = false;
                             } else if (status == SUCCESS) {
+
                                 statusImageView.setImage(new Image("/png/success.png"));
                                 statusLabel.setText("Successfully added all students!");
                                 tableUpdateStatus = true;
-                            } else {
+                            } else if (status == 0) {
+
                                 statusImageView.setImage(new Image("/png/error.png"));
-                                statusLabel.setText("One or more students already exist!");
+                                statusLabel.setText("All students in the CSV already exists in the database!");
+                                tableUpdateStatus = false;
+                            } else {
+
+                                statusImageView.setImage(new Image("/png/error.png"));
+                                statusLabel.setText(status + " students added to the database!");
                                 tableUpdateStatus = true;
                             }
                         }
@@ -336,144 +362,183 @@ public class ImportStudentCSVModalController {
     private boolean validate(Student student, int currStudentIndex) {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
+
         if (student.getDegree() == null || student.getDegree().trim().isEmpty()) {
+
             alert.setContentText("Degree cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateAcademicItem(student.getDegree().trim())) {
+
             alert.setContentText("Invalid Degree in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getDiscipline() == null || student.getDiscipline().trim().isEmpty()) {
+
             alert.setContentText("Discipline cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateAcademicItem(student.getDiscipline().trim())) {
+
             alert.setContentText("Invalid Discipline in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getBatchName() == null || student.getBatchName().trim().isEmpty()) {
+
             alert.setContentText("Batch cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateBatchName(student.getBatchName().trim())) {
+
             alert.setContentText("Invalid Batch in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getCurrSemester() == null || student.getCurrSemester().trim().isEmpty()) {
+
             alert.setContentText("Semester cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateSemester(student.getCurrSemester().trim())) {
+
             alert.setContentText("Invalid Semester in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getRegYear() == null || student.getRegYear().trim().isEmpty()) {
+
             alert.setContentText("Registration Year cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateRegYear(student.getBatchName(), student.getRegYear())) {
+
             alert.setContentText("Invalid Registration Year or not within batch range in Row : "
                     + currStudentIndex + "!");
-            System.out.println(student.getBatchName());
-            System.out.println(student.getRegYear());
             alert.show();
             return false;
         } else if (student.getRegId() == null || student.getRegId().trim().isEmpty()) {
+
             alert.setContentText("Registration ID cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateId(student.getRegId().trim())) {
+
             alert.setContentText("Invalid Registration ID in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getRollNo() == null || student.getRollNo().trim().isEmpty()) {
+
             alert.setContentText("Roll No. cannot be empty in Row : " + currStudentIndex + "!");
+            alert.show();
             return false;
         } else if (!ValidatorUtil.validateId(student.getRollNo().trim())) {
+
             alert.setContentText("Invalid Roll No. in Row : " + currStudentIndex + "!");
+            alert.show();
             return false;
         } else if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
+
             alert.setContentText("First Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateName(student.getFirstName().trim())) {
+
             alert.setContentText("Invalid First Name in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!student.getMiddleName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(student.getMiddleName().trim())) {
+
                 alert.setContentText("Invalid Middle Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
-            } else
+            } else {
+
                 return true;
+            }
         } else if (!student.getLastName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(student.getLastName().trim())) {
+
                 alert.setContentText("Invalid Last Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
-            } else
+            } else {
+
                 return true;
+            }
         } else if (student.getDob() == null || student.getDob().trim().isEmpty()) {
+
             alert.setContentText("DOB cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateDateFormat(student.getDob().trim())) {
+
             alert.setContentText("Invalid DOB format in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getGender() == null || student.getGender().trim().isEmpty()) {
+
             alert.setContentText("Gender cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateGender(student.getGender().trim())) {
+
             alert.setContentText("Invalid Gender in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+
             alert.setContentText("Email ID cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateEmail(student.getEmail().trim())) {
+
             alert.setContentText("Invalid Email ID in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getContactNo() == null || student.getContactNo().trim().isEmpty()) {
+
             alert.setContentText("Contact No. cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateContactNo(student.getContactNo().trim())) {
+
             alert.setContentText("Invalid Contact No. in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getAddress() == null || student.getAddress().trim().isEmpty()) {
+
             alert.setContentText("Address cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (student.getGuardianName() == null || student.getGuardianName().trim().isEmpty()) {
+
             alert.setContentText("Guardian/Father's Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateName(student.getGuardianName().trim())) {
+
             alert.setContentText("Invalid Guardian/Father's Name in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!student.getMotherName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(student.getMotherName().trim())) {
+
                 alert.setContentText("Invalid Mother's Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
-            } else
+            } else {
+
                 return true;
+            }
         } else if (student.getGuardianContactNo() == null || student.getGuardianContactNo().trim().isEmpty()) {
+
             alert.setContentText("Guardian Contact No. cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         } else if (!ValidatorUtil.validateContactNo(student.getGuardianContactNo().trim())) {
+
             alert.setContentText("Invalid Guardian Contact No. in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
@@ -484,8 +549,8 @@ public class ImportStudentCSVModalController {
     /**
      * Callback method for statusAnchorPane Mouse Clicked.
      * <p>
-     * On clicking the statusAnchorPane it will go away and
-     * mainGridPane will be normal from faded.
+     * On clicking the statusAnchorPane it will go away and mainGridPane will be normal from faded and all the
+     * comboBoxes will be unset.
      */
     @FXML
     private void handleStatusStackPaneMouseClickedAction() {
@@ -494,8 +559,9 @@ public class ImportStudentCSVModalController {
     }
 
     /**
-     * This method deactivates the progress indicator and the status.
+     * This method deactivates the progress indicator,status and un-sets the comboboxes.
      */
+    @SuppressWarnings("Duplicates")
     private void deactivateProgressAndStatus() {
 
         mainGridPane.setOpacity(1);
@@ -658,6 +724,7 @@ public class ImportStudentCSVModalController {
     private void configureFileChooser(FileChooser fileChooser) {
 
         fileChooser.setTitle("Import CSV file");
+
         //only .csv files can be chosen
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("CSV", "*.csv"));

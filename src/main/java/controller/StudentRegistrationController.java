@@ -33,12 +33,13 @@ import static util.ConstantsUtil.*;
 /**
  * Controller class for a single student registration.
  * for StudentRegistration.fxml
+ *
  * @author Avik Sarkar
  */
 public class StudentRegistrationController {
 
-    /*--------------------Declaration and Initialization of variables--------------
-    The @FXML components are initialized when FXML document is being loaded.
+    /*---------------------------------Declaration and Initialization of variables-----------------------------------
+    -----------------------The @FXML components are initialized when FXML document is being loaded.------------------
      */
 
     private Student student;
@@ -130,10 +131,13 @@ public class StudentRegistrationController {
     @FXML
     private HBox buttonsHbox;
 
-    /*---------------------End of declaration and initialization--------------------*/
+    /*------------------------------------End of declaration and initialization----------------------------------*/
 
     /**
-     * This method is called once the whole FXML document is done loading.
+     * This method is used to initialize variables of this Class.
+     * This method is called when the FXMLLoader.load() is called.
+     * <p>
+     * Do not try to get the Scene or Window of any node in this method.
      */
     @FXML
     private void initialize() {
@@ -142,6 +146,10 @@ public class StudentRegistrationController {
         batchService = new BatchService();
         studentService = new StudentService();
 
+        //initially adding of new student is opted
+        editOrAddStudentChoice = ADD_CHOICE;
+
+        //get a list of available courses in the DB
         Task<List<Course>> coursesTask = courseService
                 .getCoursesTask("");
         new Thread(coursesTask).start();
@@ -157,14 +165,18 @@ public class StudentRegistrationController {
                 if (!listOfCourses.isEmpty()) {
 
                     List<String> items = new ArrayList<>();
+
+                    //only add unique degrees to the degreeComboBox
                     for (Course course : listOfCourses) {
+
                         if (!items.contains(course.getDegree()))
                             items.add(course.getDegree());
                     }
+
                     ObservableList<String> options = FXCollections.observableArrayList(items);
+
+                    //set items in degreeComboBox
                     degreeComboBox.setItems(options);
-                    if(editOrAddStudentChoice == EDIT_CHOICE)
-                        degreeComboBox.setValue(student.getDegree());
                 }
 
                 //set items in the gender choice box
@@ -175,13 +187,97 @@ public class StudentRegistrationController {
     }
 
     /**
-     * This method handles an item selection in the BatchNameComboBox.
+     * Callback method for handling an item selection in the Degree ComboBox.
+     */
+    @SuppressWarnings("Duplicates")
+    @FXML
+    private void handleDegreeComboBox() {
+
+        /*
+        Whenever any degree is selected ,clear all other combo boxes.
+         */
+        disciplineComboBox.getSelectionModel().clearSelection();
+        disciplineComboBox.getItems().clear();
+
+        //only if a degree is selected
+        if (degreeComboBox.getValue() != null) {
+
+            //only if there is any course in the db
+            if (!listOfCourses.isEmpty()) {
+
+                List<String> items = new ArrayList<>();
+
+                for (Course course : listOfCourses) {
+
+                    //sets the unique discipline items for particular degree
+                    if (course.getDegree().equals(degreeComboBox.getValue()))
+
+                        if (!items.contains(course.getDiscipline()))
+                            items.add(course.getDiscipline());
+                }
+                ObservableList<String> options = FXCollections.observableArrayList(items);
+                disciplineComboBox.setItems(options);
+            }
+        }
+    }
+
+    /**
+     * Callback method for handling Discipline ComboBox.
+     */
+    @SuppressWarnings("Duplicates")
+    @FXML
+    private void handleDisciplineComboBox() {
+
+        //clear batch combo box and semester combo box whenever a discipline is selected
+        batchNameComboBox.getSelectionModel().clearSelection();
+        batchNameComboBox.getItems().clear();
+
+        //only if an discipline is selected this will be executed
+        if (disciplineComboBox.getValue() != null) {
+
+            final String additionalQuery = "where v_degree=? and v_discipline =?";
+
+            //get the batches for that corresponding degree and discipline
+            Task<List<Batch>> batchesTask = batchService
+                    .getBatchesTask(additionalQuery, degreeComboBox.getValue()
+                            , disciplineComboBox.getValue());
+            new Thread(batchesTask).start();
+
+            batchesTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+
+                    //store the list of batches for the corresponding degree and discipline
+                    listOfBatches = batchesTask.getValue();
+
+                    //only if there is any batch in the db
+                    if (!listOfBatches.isEmpty()) {
+
+                        List<String> items = new ArrayList<>();
+
+                        for (Batch batch : listOfBatches) {
+
+                            //sets the unique batch name items for particular degree and discipline
+                            if (!items.contains(batch.getBatchName()))
+                                items.add(batch.getBatchName());
+                        }
+                        ObservableList<String> options = FXCollections.observableArrayList(items);
+                        batchNameComboBox.setItems(options);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Callback method that handles an item selection in the BatchNameComboBox.
      * Also sets the items in the Semester combo box.
      */
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleBatchNameComboBox() {
 
+        //whenever any batch name is selected ,clear the semesterComboBox
         semesterComboBox.getSelectionModel().clearSelection();
         semesterComboBox.getItems().clear();
 
@@ -206,97 +302,10 @@ public class StudentRegistrationController {
                 //set the semester items from 1 to totalSemesters
                 for (int i = 1; i <= totalSemesters; i++)
                     items.add(Integer.toString(i));
+
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 semesterComboBox.setItems(options);
-                if(editOrAddStudentChoice == EDIT_CHOICE)
-                    semesterComboBox.setValue(student.getCurrSemester());
             }
-        }
-    }
-
-    /**
-     * Callback method for handling the Degree ComboBox.
-     */
-    @SuppressWarnings("Duplicates")
-    @FXML
-    private void handleDegreeComboBox() {
-
-        disciplineComboBox.getSelectionModel().clearSelection();
-        disciplineComboBox.getItems().clear();
-
-        batchNameComboBox.getSelectionModel().clearSelection();
-        batchNameComboBox.getItems().clear();
-
-        semesterComboBox.getSelectionModel().clearSelection();
-        semesterComboBox.getItems().clear();
-
-        //only if a degree is selected
-        if (degreeComboBox.getValue() != null) {
-
-            //only if there is any course in the db
-            if (!listOfCourses.isEmpty()) {
-
-                List<String> items = new ArrayList<>();
-                for (Course course : listOfCourses) {
-
-                    //sets the discipline items for particular degree
-                    if (course.getDegree().equals(degreeComboBox.getValue()))
-
-                        if (!items.contains(course.getDiscipline()))
-                            items.add(course.getDiscipline());
-                }
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                disciplineComboBox.setItems(options);
-                if(editOrAddStudentChoice == EDIT_CHOICE)
-                    disciplineComboBox.setValue(student.getDiscipline());
-            }
-        }
-    }
-
-    /**
-     * Callback method for handling Discipline ComboBox.
-     */
-    @SuppressWarnings("Duplicates")
-    @FXML
-    private void handleDisciplineComboBox() {
-
-        batchNameComboBox.getSelectionModel().clearSelection();
-        batchNameComboBox.getItems().clear();
-
-        //only if an discipline is selected this will be executed
-        if (disciplineComboBox.getValue() != null) {
-
-            final String additionalQuery = "where v_degree=? and v_discipline =?";
-
-            Task<List<Batch>> batchesTask = batchService
-                    .getBatchesTask(additionalQuery, degreeComboBox.getValue()
-                            , disciplineComboBox.getValue());
-            new Thread(batchesTask).start();
-
-            batchesTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-
-                    listOfBatches = batchesTask.getValue();
-
-                    //only if there is any batch in the db
-                    if (!listOfBatches.isEmpty()) {
-
-                        List<String> items = new ArrayList<>();
-
-                        for (Batch batch : listOfBatches) {
-
-                            //sets the batch name items for particular degree and discipline
-                            if (!items.contains(batch.getBatchName()))
-                                items.add(batch.getBatchName());
-                        }
-                        ObservableList<String> options = FXCollections.observableArrayList(items);
-                        batchNameComboBox.setItems(options);
-                        if(editOrAddStudentChoice == EDIT_CHOICE)
-                            batchNameComboBox.setValue(student.getBatchName());
-                    }
-                }
-            });
         }
     }
 
@@ -307,15 +316,19 @@ public class StudentRegistrationController {
     @FXML
     private void handleSubmitButtonAction() {
 
+        //at first validate all the fields
         if (validate()) {
-
 
             //fades the bg and display loading spinner
             mainGridPane.setOpacity(0.5);
             statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
 
+            /*
+            Creates a new Student object and sets it's data.
+             */
             Student student = new Student();
+
             student.setFirstName(firstNameTextField.getText().trim());
             student.setMiddleName(middleNameTextField.getText().trim());
             student.setLastName(lastNameTextField.getText().trim());
@@ -335,7 +348,7 @@ public class StudentRegistrationController {
             student.setDiscipline(disciplineComboBox.getValue());
             student.setDegree(degreeComboBox.getValue());
 
-            //get the batch ids for the respective degree,discipline and batch chosen
+            //get the batch id for the respective degree,discipline and batch chosen
             for (Batch batch : listOfBatches) {
 
                 if (batch.getDiscipline().equals(disciplineComboBox.getValue()) &&
@@ -347,7 +360,8 @@ public class StudentRegistrationController {
 
             }
 
-            if(editOrAddStudentChoice == EDIT_CHOICE ){
+            //if edit signal is sent
+            if (editOrAddStudentChoice == EDIT_CHOICE) {
 
                 Task<Integer> updateStudentTask = studentService.getUpdateStudentTask(student);
                 new Thread(updateStudentTask).start();
@@ -356,8 +370,12 @@ public class StudentRegistrationController {
                     @Override
                     public void handle(WorkerStateEvent event) {
 
+                        //get the status of the update Student
                         int status = updateStudentTask.getValue();
 
+                        /*
+                        Disable the loading spinner and show status
+                         */
                         progressIndicator.setVisible(false);
                         buttonsHbox.setVisible(true);
                         statusImageView.setVisible(true);
@@ -379,10 +397,11 @@ public class StudentRegistrationController {
                     }
                 });
 
-                regIdTextField.setDisable(false);
-                rollNoTextField.setDisable(false);
             }
+
+            //if add new student is chosen
             else {
+
                 Task<Integer> addStudentToDatabaseTask = studentService.getAddStudentToDatabaseTask(student);
                 new Thread(addStudentToDatabaseTask).start();
 
@@ -390,6 +409,7 @@ public class StudentRegistrationController {
                     @Override
                     public void handle(WorkerStateEvent event) {
 
+                        //get the status of insertion of new student into the DB
                         int status = addStudentToDatabaseTask.getValue();
 
                         //hides the loading spinner and shows status
@@ -426,6 +446,7 @@ public class StudentRegistrationController {
     private boolean validate() {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
+
         if (degreeComboBox.getValue() == null) {
 
             alert.setContentText("Please select a degree!");
@@ -462,18 +483,59 @@ public class StudentRegistrationController {
             alert.setContentText("Registration ID cannot be empty!");
             alert.show();
             return false;
+        } else if (!ValidatorUtil.validateId(regIdTextField.getText().trim())) {
+
+            alert.setContentText("Invalid Registration ID!");
+            alert.show();
+            return false;
         } else if (rollNoTextField.getText().isEmpty()) {
 
             alert.setContentText("Roll No. cannot be empty!");
+            return false;
+        } else if (!ValidatorUtil.validateId(rollNoTextField.getText().trim())) {
+
+            alert.setContentText("Invalid Roll No.!");
             return false;
         } else if (firstNameTextField.getText().isEmpty()) {
 
             alert.setContentText("First Name cannot be empty!");
             alert.show();
             return false;
+        } else if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
+
+            alert.setContentText("Invalid First Name!");
+            alert.show();
+            return false;
+        } else if (!middleNameTextField.getText().trim().isEmpty()) {
+
+            if (!(ValidatorUtil.validateName(middleNameTextField.getText().trim()))) {
+
+                alert.setContentText("Invalid Middle Name!");
+                alert.show();
+                return false;
+            } else {
+
+                return true;
+            }
+        } else if (!lastNameTextField.getText().trim().isEmpty()) {
+
+            if (!(ValidatorUtil.validateName(lastNameTextField.getText().trim()))) {
+
+                alert.setContentText("Invalid Last Name!");
+                alert.show();
+                return false;
+            } else {
+
+                return true;
+            }
         } else if (dobDatePicker.getValue() == null) {
 
             alert.setContentText("Please choose a date of birth!");
+            alert.show();
+            return false;
+        } else if (!ValidatorUtil.validateDateFormat(dobDatePicker.getValue().toString())) {
+
+            alert.setContentText("Invalid date of birth format!");
             alert.show();
             return false;
         } else if (genderChoiceBox.getValue() == null) {
@@ -511,6 +573,22 @@ public class StudentRegistrationController {
             alert.setContentText("Guardian/Father's Name cannot be empty!");
             alert.show();
             return false;
+        } else if (!ValidatorUtil.validateName(guardianNameTextField.getText().trim())) {
+
+            alert.setContentText("Invalid Guardian/Father's Name!");
+            alert.show();
+            return false;
+        } else if (!motherNameTextField.getText().trim().isEmpty()) {
+
+            if (!(ValidatorUtil.validateName(motherNameTextField.getText().trim()))) {
+
+                alert.setContentText("Invalid Mother's Name!");
+                alert.show();
+                return false;
+            } else {
+
+                return true;
+            }
         } else if (guardianContactNoTextField.getText().isEmpty()) {
 
             alert.setContentText("Guardian Contact No. cannot be empty!");
@@ -533,6 +611,10 @@ public class StudentRegistrationController {
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleAddAnotherAndResetButtonAction() {
+
+        //add another or reset means adding a new student
+        editOrAddStudentChoice = ADD_CHOICE;
+
         statusStackPane.setVisible(false);
         progressIndicator.setVisible(false);
         buttonsHbox.setVisible(false);
@@ -557,6 +639,11 @@ public class StudentRegistrationController {
         guardianNameTextField.clear();
         motherNameTextField.clear();
         guardianContactNoTextField.clear();
+        regIdTextField.setDisable(false);
+        rollNoTextField.setDisable(false);
+        batchNameComboBox.setDisable(false);
+        disciplineComboBox.setDisable(false);
+        degreeComboBox.setDisable(false);
     }
 
     /**
@@ -575,7 +662,12 @@ public class StudentRegistrationController {
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
-    public void setEditSignal(int editSignal){
+    /**
+     * This method is used to set the edit command and prepare the Registration form for editing.
+     *
+     * @param editSignal EDIT_CHOICE
+     */
+    public void setEditSignal(int editSignal) {
 
         editOrAddStudentChoice = editSignal;
         firstNameTextField.setText(student.getFirstName());
@@ -592,16 +684,24 @@ public class StudentRegistrationController {
         rollNoTextField.setText(student.getRollNo());
         contactNoTextField.setText(student.getContactNo());
         guardianNameTextField.setText(student.getGuardianName());
-        semesterComboBox.getSelectionModel().clearSelection();
-        batchNameComboBox.getSelectionModel().clearSelection();
-        disciplineComboBox.getSelectionModel().clearSelection();
-        degreeComboBox.getSelectionModel().clearSelection();
+        batchNameComboBox.setDisable(true);
+        disciplineComboBox.setDisable(true);
+        degreeComboBox.setDisable(true);
+        semesterComboBox.setDisable(true);
+        degreeComboBox.setValue(student.getDegree());
+        disciplineComboBox.setValue(student.getDiscipline());
+        batchNameComboBox.setValue(student.getBatchName());
+        semesterComboBox.setValue(student.getCurrSemester());
         regIdTextField.setDisable(true);
         rollNoTextField.setDisable(true);
-
     }
 
-    public void setStudentPojo(Student student){
+    /**
+     * This method is used the set the Student object with the selected Student object in the tableView for editing.
+     *
+     * @param student The object with which the Student object will be set.
+     */
+    public void setStudentPojo(Student student) {
 
         this.student = student;
     }

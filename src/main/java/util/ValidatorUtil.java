@@ -4,10 +4,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Utility class to validate Text Fields.
+ * <p>
+ * Utility classes are final, cannot be instantiated and have static methods.
+ *
  * @author Avik Sarkar
  */
 public final class ValidatorUtil {
 
+    /**
+     * Private default constructor so that no other class can create an instance of this class.
+     */
     private ValidatorUtil() {
     }
 
@@ -15,8 +22,8 @@ public final class ValidatorUtil {
      * This method matches the email with regex provided.
      *
      * @param email the email to be  matched.
-     * @return The status of the matching operation.
-     * @link http://emailregex.com/
+     * @return The result of the matching operation i.e. true or false.
+     * @see <a href="http://emailregex.com/">Email Regex</a>
      */
     public static boolean validateEmail(String email) {
 
@@ -34,6 +41,13 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
+    /**
+     * This method matches the contact no with the regex provided.
+     *
+     * @param contactNo The contact no. to be matched.
+     * @return The result of the matching operation i.e. true or false.
+     * @see <a href="https://stackoverflow.com/a/22061081/1943882">Contact No. Regex</a>
+     */
     public static boolean validateContactNo(String contactNo) {
 
         String regex = "^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[6-9]\\d{9}$";
@@ -42,6 +56,14 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
+    /**
+     * This method matches the regyear with the regex provided and also checks if the regYEAR is within the Batch Name
+     * range.
+     *
+     * @param batchName The batch with whom the reg year would be checked to see if the regyear is in the range.
+     * @param regYear   The regYear to be matched with the regex provided.
+     * @return The result i.e. true or false.
+     */
     public static boolean validateRegYear(String batchName, String regYear) {
 
         String regex = "^(20)[0-9][0-9]$";
@@ -59,6 +81,12 @@ public final class ValidatorUtil {
         return false;
     }
 
+    /**
+     * This method matches the batchName with the regex provided.
+     *
+     * @param batchName The batchName to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateBatchName(String batchName) {
 
         String regex = "^(20)[0-9]{2}-(20)[0-9]{2}$";
@@ -67,7 +95,12 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
-
+    /**
+     * This method matches the semester with the regex provided.
+     *
+     * @param semester The semester to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateSemester(String semester) {
 
         String regex = "^[1-9][0-9]?$";
@@ -76,6 +109,12 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
+    /**
+     * This method matches the date with the regex provided.
+     *
+     * @param date The date to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateDateFormat(String date) {
 
         String regex = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$";
@@ -84,6 +123,12 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
+    /**
+     * This method matches the gender with the regex provided.
+     *
+     * @param gender The gender to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateGender(String gender) {
 
         String regex = "^male|female|others$";
@@ -92,7 +137,12 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
-
+    /**
+     * This method matches a name with the regex provided.
+     *
+     * @param name The name to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateName(String name) {
 
         String regex = "^[a-zA-z]+$";
@@ -101,6 +151,12 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
+    /**
+     * This method matches an Academic Item such as Degree,Discipline,Building Name,Dept name etc. with regex provided.
+     *
+     * @param item The item to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateAcademicItem(String item) {
 
         String regex = "^([a-zA-z0-9]+[ '.\\-]*(\\([a-zA-z0-9]+[ '.\\-]*[a-zA-z0-9]+\\))?)+$";
@@ -110,6 +166,12 @@ public final class ValidatorUtil {
 
     }
 
+    /**
+     * This method matches an ID such as Reg.ID,roll no, course ID etc with the regex provided.
+     *
+     * @param id The ID to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateId(String id) {
 
         String regex = "^[a-zA-z0-9]+$";
@@ -118,5 +180,4 @@ public final class ValidatorUtil {
         return matcher.matches();
 
     }
-
 }
