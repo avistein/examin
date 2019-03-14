@@ -10,14 +10,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.User;
+import service.FileHandlingService;
 import service.UserService;
 import util.UISetterUtil;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 import static util.ConstantsUtil.*;
 
@@ -29,8 +36,6 @@ import static util.ConstantsUtil.*;
  */
 public class LoginController {
 
-    /*--------------------------Declaration and initialization of variables----------------------------------*/
-
     private LoginCommand loginCommand;
 
     private Stage mainStage;
@@ -39,13 +44,13 @@ public class LoginController {
     private GridPane mainGridPane;
 
     @FXML
+    private ImageView universityLogoImageView;
+
+    @FXML
     private StackPane statusStackPane;
 
     @FXML
-    private TextField userNameField;
-
-    @FXML
-    private TextField forgotPasswordUserNameField;
+    private TextField userIdTextField;
 
     @FXML
     private PasswordField passwordField;
@@ -67,6 +72,21 @@ public class LoginController {
         loginCommand = new LoginCommand();
         userService = new UserService();
 
+        //get the location of settings.properties to set the University logo
+        Path path = Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "settings.properties");
+
+        //check if the settings.properties exists the user's system
+        if (Files.exists(path)) {
+
+            FileHandlingService fileHandlingService = new FileHandlingService();
+
+            //get the location of University logo
+            Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
+                    ("settings.properties", "universityLogoLocation");
+
+            universityLogoImageView.setImage(new Image(propMap.get("universityLogoLocation")));
+        }
+
         //create the main stage of the application
         mainStage = new Stage();
 
@@ -78,148 +98,144 @@ public class LoginController {
      * Callback method for handle Sign In button click event and set the panel  or display error msg.
      */
     @FXML
-    private void handleSignInButtonAction() {
+    private void handleLoginButtonAction() {
 
-        //get the stage of the Login screen
-        Stage loginStage = (Stage) userNameField.getScene().getWindow();
+        if (validateLoginItems()) {
 
-        //Background faded once the Sign In button is clicked.
-        mainGridPane.setOpacity(0.5);
+            //get the stage of the Login screen
+            Stage loginStage = (Stage) userIdTextField.getScene().getWindow();
 
-        //this should display a progress spinner before database connection
-        statusStackPane.setVisible(true);
+            //Background faded once the Sign In button is clicked.
+            mainGridPane.setOpacity(0.5);
 
-        String username = userNameField.getText().trim();
-        String password = passwordField.getText();
+            //this should display a progress spinner before database connection
+            statusStackPane.setVisible(true);
 
-        //get the task to get login details of the userId
-        Task<List<User>> usersTask = userService.getUsersTask("WHERE v_user_id=?", username);
-        new Thread(usersTask).start();
+            String username = userIdTextField.getText().trim();
+            String password = passwordField.getText();
 
-        usersTask.setOnSucceeded(new EventHandler<>() {
+            //get the task to get login details of the userId
+            Task<List<User>> usersTask = userService.getUsersTask("WHERE v_user_id=?", username);
+            new Thread(usersTask).start();
 
-            @Override
-            public void handle(WorkerStateEvent event) {
+            usersTask.setOnSucceeded(new EventHandler<>() {
 
-                //db connection and work done, so deactivate Status.
-                statusStackPane.setVisible(false);
-                mainGridPane.setOpacity(1);
+                @Override
+                public void handle(WorkerStateEvent event) {
 
-                //by default status is login err.
-                int status = LOGIN_ERROR;
+                    //db connection and work done, so deactivate Status.
+                    statusStackPane.setVisible(false);
+                    mainGridPane.setOpacity(1);
 
-                //authenticates the username and password of the user
-                if (!usersTask.getValue().isEmpty()) {
+                    //by default status is login err.
+                    int status = LOGIN_ERROR;
 
-                    //set the status of authentication
-                    status = loginCommand.authenticateLogin(password
-                            , usersTask.getValue().get(0));
+                    //authenticates the username and password of the user
+                    if (!usersTask.getValue().isEmpty()) {
+
+                        //set the status of authentication
+                        status = loginCommand.authenticateLogin(password
+                                , usersTask.getValue().get(0));
+                    }
+
+                    //Open different panel for different types of user on successful  login.
+                    switch (status) {
+
+                        case LOGIN_ERROR:
+
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setContentText("Invalid Username or Password");
+                            alert.show();
+                            mainGridPane.setOpacity(1);
+                            userIdTextField.clear();
+                            passwordField.clear();
+                            break;
+
+                        case ADMIN_GID:
+
+                            FXMLLoader loader = UISetterUtil.setStage("/view/adminPanel/AdminPanel.fxml"
+                                    , mainStage, PROJECT_NAME, 768, 1024);
+
+                            AdminPanelController adminPanelController = loader
+                                    .getController();
+
+                            //send admin's userId to the admin panel controller
+                            adminPanelController.setAdminProfileDetails
+                                    (username.trim());
+
+                            mainStage.show();
+                            loginStage.hide();
+                            break;
+
+                        case EXAM_CELL_MEMBER_GID:
+
+                            loader = UISetterUtil.setStage("/view/examCellMemberPanel/ExamCellMemberPanel.fxml"
+                                    , mainStage, PROJECT_NAME, 768, 1024);
+
+                            mainStage.show();
+                            loginStage.hide();
+
+                            break;
+
+                        case PROFESSOR_HOD_GID:
+
+                            loader = UISetterUtil.setStage("/view/professorHodPanel/ProfessorHodPanel.fxml"
+                                    , mainStage, PROJECT_NAME, 768, 1024);
+
+                            mainStage.show();
+                            loginStage.hide();
+
+                            break;
+
+                        case PROFESSOR_GID:
+
+                            loader = UISetterUtil.setStage("/view/professorPanel/ProfessorPanel.fxml", mainStage
+                                    , PROJECT_NAME, 768, 1024);
+
+                            mainStage.show();
+                            loginStage.hide();
+
+                            break;
+                    }
                 }
-
-                //Open different panel for different types of user on successful  login.
-                switch (status) {
-
-                    case LOGIN_ERROR:
-
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error");
-                        alert.setContentText("Invalid Username or Password");
-                        alert.show();
-                        mainGridPane.setOpacity(1);
-                        userNameField.clear();
-                        passwordField.clear();
-                        break;
-
-                    case ADMIN_GID:
-
-                        FXMLLoader loader = UISetterUtil.setStage("/view/adminPanel/AdminPanel.fxml"
-                                , mainStage, PROJECT_NAME, 768, 1024);
-
-                        AdminPanelController adminPanelController = loader
-                                .getController();
-
-                        //send admin's userId to the admin panel controller
-                        adminPanelController.setAdminProfileDetails
-                                (username.trim());
-
-                        mainStage.show();
-                        loginStage.hide();
-                        break;
-
-                    case EXAM_CELL_MEMBER_GID:
-
-                        loader = UISetterUtil.setStage("/view/examCellMemberPanel/ExamCellMemberPanel.fxml"
-                                , mainStage, PROJECT_NAME, 768, 1024);
-
-                        mainStage.show();
-                        loginStage.hide();
-
-                        break;
-
-                    case PROFESSOR_HOD_GID:
-
-                        loader = UISetterUtil.setStage("/view/professorHodPanel/ProfessorHodPanel.fxml"
-                                , mainStage, PROJECT_NAME, 768, 1024);
-
-                        mainStage.show();
-                        loginStage.hide();
-
-                        break;
-
-                    case PROFESSOR_GID:
-
-                        loader = UISetterUtil.setStage("/view/professorPanel/ProfessorPanel.fxml", mainStage
-                                , PROJECT_NAME, 768, 1024);
-
-                        mainStage.show();
-                        loginStage.hide();
-
-                        break;
-
-                }
-            }
-        });
+            });
+        }
     }
 
     /**
      * Callback method to set the Forgot Password scene
      */
     @FXML
-    private void handleForgotPasswordAction() {
+    private void handleForgotPasswordHyperlinkAction() {
 
         //get the login stage
-        Stage loginStage = (Stage) userNameField.getScene().getWindow();
+        Stage loginStage = (Stage) userIdTextField.getScene().getWindow();
 
         //attach the ForgotPassword scene in the stage
         UISetterUtil.setStage("/view/login/ForgotPassword.fxml", loginStage
-                , PROJECT_NAME, 400, 400);
-        loginStage.show();
+                , PROJECT_NAME, 350, 300);
+        //loginStage.show();
     }
 
     /**
-     * Callback method to send the user a new password on clicking the Send Password button.
+     * This method is used to validate items in the Login UI.
      */
-    @FXML
-    private void handleSendPasswordAction() {
+    private boolean validateLoginItems() {
 
-        String username = forgotPasswordUserNameField.getText();
-        loginCommand.resetPassword(username);
-    }
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (userIdTextField.getText().trim().isEmpty()) {
 
-    /**
-     * Callback method to get back the Login window once reset password job is done or whenever
-     * the user wants to go back.
-     */
-    @FXML
-    private void handleBackToLoginHyperlinkAction() {
+            alert.setHeaderText("User ID cannot be empty!");
+            alert.show();
+            return false;
+        } else if (passwordField.getText().isEmpty()) {
 
-        //get back the login stage
-        Stage loginStage = (Stage) forgotPasswordUserNameField.getScene().getWindow();
-
-        //attach back the Login scene in the stage
-        UISetterUtil.setStage("/view/login/Login.fxml", loginStage
-                , PROJECT_NAME, 400, 400);
-        loginStage.show();
+            alert.setHeaderText("Password cannot be empty!");
+            alert.show();
+            return false;
+        }
+        return true;
     }
 }
 

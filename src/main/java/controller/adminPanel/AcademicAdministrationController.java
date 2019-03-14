@@ -220,7 +220,7 @@ public class AcademicAdministrationController {
 
         //initialize the respective tabs if it is selected
         academicAdministrationTabPane.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Tab>() {
+                .addListener(new ChangeListener<>() {
 
                     @Override
                     public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
@@ -481,7 +481,7 @@ public class AcademicAdministrationController {
             alert.setContentText("Department Name cannot be empty!");
             alert.show();
             return false;
-        } else if (ValidatorUtil.validateAcademicItem(deptNameTextfield.getText())) {
+        } else if (!ValidatorUtil.validateAcademicItem(deptNameTextfield.getText())) {
 
             alert.setContentText("Invalid department name!");
             alert.show();
@@ -492,7 +492,7 @@ public class AcademicAdministrationController {
             alert.setContentText("Building Name cannot be empty!");
             alert.show();
             return false;
-        } else if (ValidatorUtil.validateAcademicItem(buildingNameTextField.getText())) {
+        } else if (!ValidatorUtil.validateAcademicItem(buildingNameTextField.getText())) {
 
             alert.setContentText("Invalid building name!");
             alert.show();
@@ -908,7 +908,7 @@ public class AcademicAdministrationController {
             alert.setContentText("Course ID cannot be empty!");
             alert.show();
             return false;
-        } else if (ValidatorUtil.validateAcademicItem(courseIdTextField.getText().trim())) {
+        } else if (!ValidatorUtil.validateAcademicItem(courseIdTextField.getText().trim())) {
 
             alert.setContentText("Invalid Course ID!");
             alert.show();
@@ -918,7 +918,7 @@ public class AcademicAdministrationController {
             alert.setContentText("Degree cannot be empty!");
             alert.show();
             return false;
-        } else if (ValidatorUtil.validateAcademicItem(degreeTextField.getText().trim())) {
+        } else if (!ValidatorUtil.validateAcademicItem(degreeTextField.getText().trim())) {
 
             alert.setContentText("Invalid degree!");
             alert.show();
@@ -928,7 +928,7 @@ public class AcademicAdministrationController {
             alert.setContentText("Discipline cannot be empty!");
             alert.show();
             return false;
-        } else if (ValidatorUtil.validateAcademicItem(disciplineTextField.getText().trim())) {
+        } else if (!ValidatorUtil.validateAcademicItem(disciplineTextField.getText().trim())) {
 
             alert.setContentText("Invalid discipline!");
             alert.show();
@@ -938,7 +938,7 @@ public class AcademicAdministrationController {
             alert.setContentText("Duration cannot be empty!");
             alert.show();
             return false;
-        } else if (ValidatorUtil.validateSemester(durationTextField.getText().trim())) {
+        } else if (!ValidatorUtil.validateSemester(durationTextField.getText().trim())) {
 
             alert.setContentText("Invalid duration!");
             alert.show();

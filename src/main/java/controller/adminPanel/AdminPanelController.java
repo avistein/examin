@@ -173,9 +173,33 @@ public class AdminPanelController {
     @FXML
     private void handleAdminSettingsButtonAction() throws IOException {
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/adminPanel/Settings.fxml"));
+
+        Parent adminSettingsFxml = loader.load();
+
+        //get the controller
+        SettingsController settingsController = loader.getController();
+
+        //send the admin profile details to the controller
+        settingsController.setAdminProfileDetails(admin);
+
+        subTitleLabel.setText("Settings");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(adminSettingsFxml);
+    }
+
+    /**
+     * Callback method to handle Change Password button.
+     * This loads the Change Password UI when clicked on Change Password button.
+     *
+     * @throws IOException Load exception during loading the FXML document.
+     */
+    @FXML
+    private void handleChangePasswordButtonAction() throws IOException {
+
         Parent adminSettingsFxml = FXMLLoader.load(getClass()
-                .getResource("/view/adminPanel/Settings.fxml"));
-        subTitleLabel.setText("SettingsController");
+                .getResource("/view/adminPanel/ChangePassword.fxml"));
+        subTitleLabel.setText("Change Password");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(adminSettingsFxml);
     }
@@ -204,7 +228,7 @@ public class AdminPanelController {
 
             //set the login stage
             UISetterUtil.setStage("/view/login/Login.fxml", loginStage
-                    , PROJECT_NAME, 400, 400);
+                    , PROJECT_NAME, 350, 300);
 
             //show the login stage
             loginStage.show();
@@ -225,8 +249,10 @@ public class AdminPanelController {
         new Thread(examCellMembersTask).start();
 
         examCellMembersTask.setOnSucceeded(new EventHandler<>() {
+
             @Override
             public void handle(WorkerStateEvent event) {
+
                 admin = examCellMembersTask.getValue().get(0);
                 userIdLabel.setText(userId);
                 nameLabel.setText(admin.getFirstName() + " " + admin.getMiddleName()

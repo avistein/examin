@@ -508,7 +508,7 @@ public class StudentRegistrationController {
             return false;
         } else if (!middleNameTextField.getText().trim().isEmpty()) {
 
-            if (!(ValidatorUtil.validateName(middleNameTextField.getText().trim()))) {
+            if (!ValidatorUtil.validateName(middleNameTextField.getText().trim())) {
 
                 alert.setContentText("Invalid Middle Name!");
                 alert.show();
@@ -519,7 +519,7 @@ public class StudentRegistrationController {
             }
         } else if (!lastNameTextField.getText().trim().isEmpty()) {
 
-            if (!(ValidatorUtil.validateName(lastNameTextField.getText().trim()))) {
+            if (!ValidatorUtil.validateName(lastNameTextField.getText().trim())) {
 
                 alert.setContentText("Invalid Last Name!");
                 alert.show();
@@ -580,7 +580,7 @@ public class StudentRegistrationController {
             return false;
         } else if (!motherNameTextField.getText().trim().isEmpty()) {
 
-            if (!(ValidatorUtil.validateName(motherNameTextField.getText().trim()))) {
+            if (!ValidatorUtil.validateName(motherNameTextField.getText().trim())) {
 
                 alert.setContentText("Invalid Mother's Name!");
                 alert.show();

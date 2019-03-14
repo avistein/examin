@@ -161,6 +161,7 @@ public class ImportStudentCSVModalController {
      */
     @FXML
     private void handleChooseFileButtonAction() {
+
         FileChooser fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         file = fileChooser.showOpenDialog(chooseFileButton.getScene().getWindow());
@@ -193,7 +194,7 @@ public class ImportStudentCSVModalController {
 
     /**
      * Callback method to handle SampleCsvHyperLinkAction.
-     *
+     * <p>
      * Basically this method opens the sample CSV in the User's System with an appropriate application.
      */
     @FXML

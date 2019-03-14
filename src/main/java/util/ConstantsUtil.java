@@ -40,15 +40,13 @@ public final class ConstantsUtil {
 
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-    public static final String PROJECT_NAME = "examin - Examination Management Tool";
+    public static final String PROJECT_NAME = "examin";
 
     public static final String ROOT_DIR = "examin";
 
     public static final String CONFIG_DIR = "configs";
 
     public static final String CSV_DIR = "csv";
-
-    public static final String SETTINGS_DIR = "settings";
 
     /**
      * Private default constructor so that no other class can create an instance of this class.

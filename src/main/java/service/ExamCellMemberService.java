@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static util.ConstantsUtil.*;
+
 /**
  * Service class to get exam cell member, add exam cell member, edit exam cell member, delete exam cell member,
  * get total no of exam cell members.
@@ -80,6 +82,46 @@ public class ExamCellMemberService {
             }
         };
         return examCellMemberTask;
+    }
+
+    /**
+     * This method is used to get a updateExamCellMemberTask which is used to edit a single exam cell member in the DB.
+     *
+     * @param examCellMember The examCellMember to be edited.
+     * @return A updateExamCellMemberTask instance which is used to edit a single exam cell member in the DB in
+     * a separate thread.
+     */
+    public Task<Integer> getUpdateExamCellMemberTask(final ExamCellMember examCellMember) {
+
+        Task<Integer> updateExamCellMember = new Task<Integer>() {
+
+            final String sql = "UPDATE t_exam_cell_member SET v_first_name=?, v_middle_name=?, v_last_name=?," +
+                    " d_dob=?, d_date_of_joining=?, v_email_id=?, v_address=?, v_contact_no=? WHERE v_emp_id=?";
+
+            @Override
+            protected Integer call() {
+
+                //holds the status of updation of student in the DB, i.e success or failure
+                int tExamCellMemberUpdateStatus = databaseHelper.updateDelete
+                        (sql, examCellMember.getFirstName(), examCellMember.getMiddleName()
+                                , examCellMember.getLastName(), examCellMember.getDob(), examCellMember.getDoj()
+                                , examCellMember.getEmail(), examCellMember.getAddress(), examCellMember.getContactNo()
+                                , examCellMember.getEmpId());
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tExamCellMemberUpdateStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tExamCellMemberUpdateStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return updateExamCellMember;
     }
 
     /**

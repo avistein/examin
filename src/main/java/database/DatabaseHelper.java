@@ -1,9 +1,12 @@
 package database;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import service.FileHandlingService;
+
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static util.ConstantsUtil.*;
 
@@ -18,47 +21,32 @@ public class DatabaseHelper {
     /*--------------------------------Declaration of variables----------------------------------*/
 
     private Connection con;
+
     private String url;
     private String username;
     private String password;
 
+    private FileHandlingService fileHandlingService;
     /*------------------------------------End of Declaration-------------------------------------*/
 
     /**
-     * Public constructor to get the db.properties file and setup the DB connection
+     * Public constructor to get the properties from the db.properties file and setup the DB connection.
      */
     public DatabaseHelper() {
 
-        //create a new Properties object to get the properties from db.properties
-        Properties props = new Properties();
+        fileHandlingService = new FileHandlingService();
 
-        try {
-
-            //the file is located for example in "C:/Avik Sarkar/examin/configs/db.properties"
-            String dbPropertiesFilePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR
-                    + CONFIG_DIR + FILE_SEPARATOR + "db.properties";
-
-            //create a new stream
-            FileInputStream in = new FileInputStream(dbPropertiesFilePath);
-
-            //load the properties in the Properties instance
-            props.load(in);
-
-            //close the stream
-            in.close();
-        } catch (IOException e) {
-
-            //throw an exception & print the stack trace if the file can't be found or unable to load
-            e.printStackTrace();
-        }
+        Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
+                ("db.properties", "jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password");
 
         //get the JDBC driver
-        String driver = props.getProperty("jdbc.driver");
+        String driver = propMap.get("jdbc.driver");
 
         try {
 
             //load the driver class if the driver exists
             if (driver != null) {
+
                 Class.forName(driver);
             }
         } catch (ClassNotFoundException e) {
@@ -68,13 +56,13 @@ public class DatabaseHelper {
         }
 
         //get the url where the database server is running
-        url = props.getProperty("jdbc.url");
+        url = propMap.get("jdbc.url");
 
         //get the username to connect to the database server
-        username = props.getProperty("jdbc.username");
+        username = propMap.get("jdbc.username");
 
         //get the password to connect to the database server
-        password = props.getProperty("jdbc.password");
+        password = propMap.get("jdbc.password");
     }
 
     /**

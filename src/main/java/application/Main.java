@@ -59,7 +59,7 @@ public class Main extends Application {
         if (proceedToMainAppStatus) {
 
             UISetterUtil.setStage("/view/login/Login.fxml", primaryStage
-                    , PROJECT_NAME, 400, 400);
+                    , PROJECT_NAME, 350, 300);
             primaryStage.show();
         } else {
 

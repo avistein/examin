@@ -155,6 +155,18 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
+                  <Button fx:id="adminChangePasswordButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="370.0" mnemonicParsing="false" onAction="#handleChangePasswordButtonAction" prefHeight="44.0" prefWidth="200.0" text="Change Password">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../png/settings.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Button>
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #222051;">
@@ -211,7 +223,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="nameLabel" textFill="WHITE">
+                  <Label id="nameLabel" fx:id="nameLabel" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
