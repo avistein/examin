@@ -481,7 +481,8 @@ public class AcademicAdministrationController {
             alert.setContentText("Department Name cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(deptNameTextfield.getText())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(deptNameTextfield.getText())) {
 
             alert.setContentText("Invalid department name!");
             alert.show();
@@ -492,7 +493,8 @@ public class AcademicAdministrationController {
             alert.setContentText("Building Name cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(buildingNameTextField.getText())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(buildingNameTextField.getText())) {
 
             alert.setContentText("Invalid building name!");
             alert.show();
@@ -903,42 +905,50 @@ public class AcademicAdministrationController {
             alert.setContentText("Please select a department!");
             alert.show();
             return false;
-        } else if (courseIdTextField.getText() == null || courseIdTextField.getText().isEmpty()) {
+        }
+        if (courseIdTextField.getText() == null || courseIdTextField.getText().isEmpty()) {
 
             alert.setContentText("Course ID cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(courseIdTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(courseIdTextField.getText().trim())) {
 
             alert.setContentText("Invalid Course ID!");
             alert.show();
             return false;
-        } else if (degreeTextField.getText() == null || degreeTextField.getText().isEmpty()) {
+        }
+        if (degreeTextField.getText() == null || degreeTextField.getText().isEmpty()) {
 
             alert.setContentText("Degree cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(degreeTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(degreeTextField.getText().trim())) {
 
             alert.setContentText("Invalid degree!");
             alert.show();
             return false;
-        } else if (disciplineTextField.getText() == null || disciplineTextField.getText().isEmpty()) {
+        }
+        if (disciplineTextField.getText() == null || disciplineTextField.getText().isEmpty()) {
 
             alert.setContentText("Discipline cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(disciplineTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(disciplineTextField.getText().trim())) {
 
             alert.setContentText("Invalid discipline!");
             alert.show();
             return false;
-        } else if (durationTextField.getText() == null || durationTextField.getText().isEmpty()) {
+        }
+        if (durationTextField.getText() == null || durationTextField.getText().isEmpty()) {
 
             alert.setContentText("Duration cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateSemester(durationTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateSemester(durationTextField.getText().trim())) {
 
             alert.setContentText("Invalid duration!");
             alert.show();

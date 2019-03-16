@@ -602,34 +602,49 @@ public class DashboardController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
         if (holiday.getHolidayId() == null || holiday.getHolidayId().trim().isEmpty()) {
+
             alert.setContentText("Holiday ID cannot be empty in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateId(holiday.getHolidayId().trim())) {
+        }
+        if (!ValidatorUtil.validateId(holiday.getHolidayId().trim())) {
+
             alert.setContentText("Invalid Holiday ID in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (holiday.getHolidayName() == null || holiday.getHolidayName().trim().isEmpty()) {
+        }
+        if (holiday.getHolidayName() == null || holiday.getHolidayName().trim().isEmpty()) {
+
             alert.setContentText("Holiday name cannot be empty in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(holiday.getHolidayName().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(holiday.getHolidayName().trim())) {
+
             alert.setContentText("Invalid Holiday Name in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (holiday.getStartDate() == null || holiday.getStartDate().trim().isEmpty()) {
+        }
+        if (holiday.getStartDate() == null || holiday.getStartDate().trim().isEmpty()) {
+
             alert.setContentText("Start date cannot be empty in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateDateFormat(holiday.getStartDate().trim())) {
+        }
+        if (!ValidatorUtil.validateDateFormat(holiday.getStartDate().trim())) {
+
             alert.setContentText("Invalid start date in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (holiday.getEndDate() == null || holiday.getEndDate().trim().isEmpty()) {
+        }
+        if (holiday.getEndDate() == null || holiday.getEndDate().trim().isEmpty()) {
+
             alert.setContentText("End date cannot be empty in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateDateFormat(holiday.getEndDate().trim())) {
+        }
+        if (!ValidatorUtil.validateDateFormat(holiday.getEndDate().trim())) {
+
             alert.setContentText("Invalid end date in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;

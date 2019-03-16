@@ -43,15 +43,15 @@ public class ExamCellMemberService {
     @SuppressWarnings("Duplicates")
     public Task<List<ExamCellMember>> getExamCellMembersTask(String additionalQuery, final String... params) {
 
-        final String query = "SELECT * from t_exam_cell_member " + additionalQuery;
+        final String query1 = "SELECT * from t_exam_cell_member " + additionalQuery;
+        final String query2 = "SELECT * from t_user_contact_details where v_user_id=?";
 
         Task<List<ExamCellMember>> examCellMemberTask = new Task<>() {
 
             @Override
             protected List<ExamCellMember> call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
-
+                Map<String, List<String>> map1 = databaseHelper.execQuery(query1, params);
                 //each item in the list is a single  Exam Cell Member details
                 List<ExamCellMember> list = new ArrayList<>();
 
@@ -59,19 +59,39 @@ public class ExamCellMemberService {
                 v_emp_id is the primary key, total items in the map will always be equal to no of
                 v_emp_id retrieved
                  */
-                for (int i = 0; i < map.get("v_emp_id").size(); i++) {
+                for (int i = 0; i < map1.get("v_emp_id").size(); i++) {
 
                     ExamCellMember examCellMember = new ExamCellMember();
 
-                    examCellMember.setEmpId(map.get("v_emp_id").get(i));
-                    examCellMember.setFirstName(map.get("v_first_name").get(i));
-                    examCellMember.setMiddleName(map.get("v_middle_name").get(i));
-                    examCellMember.setLastName(map.get("v_last_name").get(i));
-                    examCellMember.setDob(map.get("d_dob").get(i));
-                    examCellMember.setDoj(map.get("d_date_of_joining").get(i));
-                    examCellMember.setEmail(map.get("v_email_id").get(i));
-                    examCellMember.setAddress(map.get("v_address").get(i));
-                    examCellMember.setContactNo(map.get("v_contact_no").get(i));
+                    examCellMember.setEmpId(map1.get("v_emp_id").get(i));
+                    examCellMember.setFirstName(map1.get("v_first_name").get(i));
+
+                    //get the exam cell member email,address,contact no from t_user_contact_details
+                    Map<String, List<String>> map2 = databaseHelper.execQuery(query2, examCellMember.getEmpId());
+
+                    //to avoid storing "null"
+                    if (!(map1.get("v_middle_name").get(i) == null)) {
+
+                        examCellMember.setMiddleName(map1.get("v_middle_name").get(i));
+                    }
+
+                    //to avoid storing "null"
+                    if (!(map1.get("v_last_name").get(i) == null)) {
+
+                        examCellMember.setLastName(map1.get("v_last_name").get(i));
+                    }
+
+                    examCellMember.setDob(map1.get("d_dob").get(i));
+                    examCellMember.setDoj(map1.get("d_date_of_joining").get(i));
+                    examCellMember.setEmail(map2.get("v_email_id").get(i));
+                    examCellMember.setAddress(map2.get("v_address").get(i));
+                    examCellMember.setContactNo(map2.get("v_contact_no").get(i));
+
+                    //to avoid storing "null" in image location
+                    if (!(map1.get("v_profile_picture_location").get(i) == null)) {
+
+                        examCellMember.setProfileImagePath(map1.get("v_profile_picture_location").get(i));
+                    }
 
                     //a single Exam Cell Member details is added to the list
                     list.add(examCellMember);
@@ -85,34 +105,43 @@ public class ExamCellMemberService {
     }
 
     /**
-     * This method is used to get a updateExamCellMemberTask which is used to edit a single exam cell member in the DB.
+     * This method is used to get a updateExamCellMemberTask which is used to update a single exam cell member
+     * in the DB.
      *
-     * @param examCellMember The examCellMember to be edited.
-     * @return A updateExamCellMemberTask instance which is used to edit a single exam cell member in the DB in
+     * @param examCellMember The examCellMember to be updated.
+     * @return A updateExamCellMemberTask instance which is used to update a single exam cell member in the DB in
      * a separate thread.
      */
+    @SuppressWarnings("Duplicates")
     public Task<Integer> getUpdateExamCellMemberTask(final ExamCellMember examCellMember) {
 
-        Task<Integer> updateExamCellMember = new Task<Integer>() {
+        Task<Integer> updateExamCellMember = new Task<>() {
 
-            final String sql = "UPDATE t_exam_cell_member SET v_first_name=?, v_middle_name=?, v_last_name=?," +
-                    " d_dob=?, d_date_of_joining=?, v_email_id=?, v_address=?, v_contact_no=? WHERE v_emp_id=?";
+            final String sql1 = "UPDATE t_exam_cell_member SET v_first_name=?, v_middle_name=?, v_last_name=?," +
+                    " d_dob=?, d_date_of_joining=?, v_email_id=?, v_address=?, v_contact_no=?" +
+                    ", v_profile_picture_location=? WHERE v_emp_id=?";
+
+            final String sql2 = "UPDATE t_user_contact_details SET v_email_id=?, v_address=?, v_contact_no=?" +
+                    "WHERE v_user_id=?";
 
             @Override
             protected Integer call() {
 
                 //holds the status of updation of student in the DB, i.e success or failure
                 int tExamCellMemberUpdateStatus = databaseHelper.updateDelete
-                        (sql, examCellMember.getFirstName(), examCellMember.getMiddleName()
+                        (sql1, examCellMember.getFirstName(), examCellMember.getMiddleName()
                                 , examCellMember.getLastName(), examCellMember.getDob(), examCellMember.getDoj()
-                                , examCellMember.getEmail(), examCellMember.getAddress(), examCellMember.getContactNo()
+                                , examCellMember.getProfileImagePath(), examCellMember.getEmpId());
+
+                int tUserContactDetailsStatus = databaseHelper.updateDelete
+                        (sql2, examCellMember.getEmail(), examCellMember.getAddress(), examCellMember.getContactNo()
                                 , examCellMember.getEmpId());
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
-                if (tExamCellMemberUpdateStatus == DATABASE_ERROR) {
+                if (tExamCellMemberUpdateStatus == DATABASE_ERROR || tUserContactDetailsStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
-                } else if (tExamCellMemberUpdateStatus == SUCCESS) {
+                } else if (tExamCellMemberUpdateStatus == SUCCESS && tUserContactDetailsStatus == SUCCESS) {
 
                     return SUCCESS;
                 } else {

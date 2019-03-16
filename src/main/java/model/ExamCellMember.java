@@ -21,6 +21,7 @@ public class ExamCellMember {
     private SimpleStringProperty email;
     private SimpleStringProperty address;
     private SimpleStringProperty contactNo;
+    private SimpleStringProperty profileImagePath;
 
     /*------------------------------------End of Initialization-------------------------------------*/
 
@@ -38,6 +39,7 @@ public class ExamCellMember {
         this.email = new SimpleStringProperty("");
         this.address = new SimpleStringProperty("");
         this.contactNo = new SimpleStringProperty("");
+        this.profileImagePath = new SimpleStringProperty("");
     }
 
     /**
@@ -220,4 +222,23 @@ public class ExamCellMember {
         this.contactNo.set(contactNo);
     }
 
+    /**
+     * Getter method to get the file path of the Exam Cell Member's profile image.
+     *
+     * @return The file path.
+     */
+    public String getProfileImagePath() {
+
+        return profileImagePath.get();
+    }
+
+    /**
+     * Setter method to set path of the Exam Cell Member's profile image.
+     *
+     * @param path The file path to set.
+     */
+    public void setProfileImagePath(String path) {
+
+        this.profileImagePath.set(path);
+    }
 }

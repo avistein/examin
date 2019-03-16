@@ -1,6 +1,5 @@
 package util;
 
-
 /**
  * Utility class to store constants only.
  * <p>

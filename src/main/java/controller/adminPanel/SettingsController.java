@@ -20,7 +20,6 @@ import service.FileHandlingService;
 import util.ValidatorUtil;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -64,6 +63,9 @@ public class SettingsController {
     private ImageView profileSettingPictureImageView;
 
     @FXML
+    private Button profileSettingsChooseImageButton;
+
+    @FXML
     private HBox profileSettingsHboxButtons;
 
     @FXML
@@ -99,6 +101,8 @@ public class SettingsController {
     private ExamCellMember admin;
 
     private ExamCellMemberService examCellMemberService;
+
+    private String profileImagePath;
 
     /*--------------------End of Declaration & Initialization of variables of Profile Settings Tab--------------------*/
 
@@ -138,11 +142,11 @@ public class SettingsController {
     @FXML
     private HBox universityInfoHboxButtons;
 
-    private File file;
+    private File universityInfoLogo;
 
     private FileHandlingService fileHandlingService;
 
-    private Path path;
+    private Path settingsPropsFileLocation;
 
     /*--------------------End of Declaration & Initialization of variables of University Info Tab---------------------*/
 
@@ -183,8 +187,26 @@ public class SettingsController {
     /*---------------------------------------Profile Settings Tab operation-------------------------------------------*/
 
     @FXML
-    private void handleEditProfilePictureButtonAction() {
+    private void handleProfileSettingsChooseImageButtonAction() {
 
+        //choose the profile picture from the file system
+        FileChooser fileChooser = new FileChooser();
+        profileSettingsConfigureFileChooser(fileChooser);
+        File profileSettingsPictureImage = fileChooser.showOpenDialog(profileSettingsChooseImageButton.getScene()
+                .getWindow());
+
+        /*
+        if an image is chosen, enable the submit button so that the admin can update the image location in the DB , and
+        set the image path and set the imageview with that image.
+         */
+        if (profileSettingsPictureImage != null) {
+
+            profileSettingsSubmitButton.setDisable(false);
+
+            profileImagePath = "file:" + profileSettingsPictureImage.getAbsolutePath();
+
+            profileSettingPictureImageView.setImage(new Image(profileImagePath));
+        }
     }
 
     /**
@@ -215,6 +237,12 @@ public class SettingsController {
         admin.setDoj(String.valueOf(profileSettingsDojDatePicker.getValue()));
         admin.setDob(String.valueOf(profileSettingsDobDatePicker.getValue()));
         admin.setAddress(profileSettingsAddressTextArea.getText().trim());
+
+        //if a image is chosen from the filechooser then set the path with the location of that image
+        if (!profileImagePath.isEmpty()) {
+
+            admin.setProfileImagePath(profileImagePath);
+        }
 
         //validate first
         if (validateProfileSettingsItems()) {
@@ -257,6 +285,12 @@ public class SettingsController {
                         //get the label which is situated in the Subtitle
                         Label nameLabelInAdminPanel = (Label) mainScene.lookup("#nameLabel");
 
+                        //get the imageview of the admin panel
+                        ImageView profileImage = (ImageView) mainScene.lookup("#profileImageImageView");
+
+                        //set the display picture of the admin there
+                        profileImage.setImage(new Image(admin.getProfileImagePath()));
+
                         //update the name in the Subtitle
                         nameLabelInAdminPanel.setText(admin.getFirstName() + " " + admin.getMiddleName() + " "
                                 + admin.getLastName());
@@ -287,8 +321,8 @@ public class SettingsController {
      */
     private void initProfileSettingsTab() {
 
-        disableTextFields();
-        setTextFields();
+        disableProfileItems();
+        setProfileItems();
     }
 
     /**
@@ -306,77 +340,94 @@ public class SettingsController {
             alert.setContentText("First Name cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateName(profileSettingsFirstNameTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateName(profileSettingsFirstNameTextField.getText().trim())) {
 
             alert.setContentText("Invalid First Name!");
             alert.show();
             return false;
-        } else if (!profileSettingsMiddleNameTextFiled.getText().isEmpty()) {
+        }
+        if (!profileSettingsMiddleNameTextFiled.getText().isEmpty()) {
 
             if (!ValidatorUtil.validateName(profileSettingsMiddleNameTextFiled.getText())) {
 
                 alert.setContentText("Invalid Middle Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (!profileSettingsLastNameTextField.getText().isEmpty()) {
+        }
+        if (!profileSettingsLastNameTextField.getText().isEmpty()) {
 
             if (!ValidatorUtil.validateName(profileSettingsLastNameTextField.getText())) {
 
                 alert.setContentText("Invalid Last Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (profileSettingsContactNoTextField.getText() == null || profileSettingsContactNoTextField.getText()
+        }
+        if (profileSettingsContactNoTextField.getText() == null || profileSettingsContactNoTextField.getText()
                 .trim().isEmpty()) {
 
             alert.setContentText("Contact No. cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateContactNo(profileSettingsContactNoTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateContactNo(profileSettingsContactNoTextField.getText().trim())) {
 
             alert.setContentText("Invalid contact no!");
             alert.show();
             return false;
-        } else if (profileSettingsEmailIdTextField.getText() == null || profileSettingsEmailIdTextField.getText()
+        }
+        if (profileSettingsEmailIdTextField.getText() == null || profileSettingsEmailIdTextField.getText()
                 .trim().isEmpty()) {
 
             alert.setContentText("Email ID cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateEmail(profileSettingsEmailIdTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateEmail(profileSettingsEmailIdTextField.getText().trim())) {
 
             alert.setContentText("Invalid Email ID!");
             alert.show();
             return false;
-        } else if (profileSettingsDojDatePicker.getValue() == null) {
+        }
+        if (profileSettingsDojDatePicker.getValue() == null) {
 
             alert.setContentText("Date of Joining cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateEmail(String.valueOf(profileSettingsDojDatePicker.getValue()))) {
+        }
+        if (!ValidatorUtil.validateEmail(String.valueOf(profileSettingsDojDatePicker.getValue()))) {
 
             alert.setContentText("Invalid date of joining format!");
             alert.show();
             return false;
-        } else if (profileSettingsDobDatePicker.getValue() == null) {
+        }
+        if (profileSettingsDobDatePicker.getValue() == null) {
 
             alert.setContentText("Date of birth cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateEmail(String.valueOf(profileSettingsDobDatePicker.getValue()))) {
+        }
+        if (!ValidatorUtil.validateEmail(String.valueOf(profileSettingsDobDatePicker.getValue()))) {
 
             alert.setContentText("Invalid date of birth format!");
             alert.show();
             return false;
         }
         return true;
+    }
+
+    /**
+     * Method for configuring the fileChooser to choose an Image for the display picture in the Profile Settings tab.
+     */
+    private void profileSettingsConfigureFileChooser(FileChooser fileChooser) {
+
+        fileChooser.setTitle("Choose Image");
+
+        //only .png,.jpg & .jpeg files can be chosen
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", ".jpeg"));
     }
 
     /**
@@ -399,7 +450,7 @@ public class SettingsController {
     /**
      * This method disables the TextFields of the Profile Sections tab and also disables the Submit button for editing.
      */
-    private void disableTextFields() {
+    private void disableProfileItems() {
 
         profileSettingsFirstNameTextField.setDisable(true);
         profileSettingsMiddleNameTextFiled.setDisable(true);
@@ -413,9 +464,9 @@ public class SettingsController {
     }
 
     /**
-     * This method sets the TextFields,TextArea and datePicker of the Profile Sections tab.
+     * This method sets the TextFields,TextArea and datePicker, display picture of the Profile Sections tab.
      */
-    private void setTextFields() {
+    private void setProfileItems() {
 
         profileSettingsEmpIdLabel.setText(admin.getEmpId());
         profileSettingsFirstNameTextField.setText(admin.getFirstName());
@@ -426,6 +477,15 @@ public class SettingsController {
         profileSettingsDojDatePicker.setValue(LocalDate.parse(admin.getDoj()));
         profileSettingsDobDatePicker.setValue(LocalDate.parse(admin.getDob()));
         profileSettingsAddressTextArea.setText(admin.getAddress());
+        profileImagePath = "";
+
+        if (Paths.get(admin.getProfileImagePath().replace("file:", "")).toFile().exists()) {
+
+            profileSettingPictureImageView.setImage(new Image(admin.getProfileImagePath()));
+        } else {
+
+            profileSettingPictureImageView.setImage(new Image("/png/placeholder.png"));
+        }
     }
 
     /**
@@ -467,15 +527,16 @@ public class SettingsController {
     @FXML
     private void handleUniversityInfoChooseLogoButtonAction() {
 
+        /*choose an image for the logo from the file system*/
         FileChooser fileChooser = new FileChooser();
-        configureFileChooser(fileChooser);
-        file = fileChooser.showOpenDialog(universityInfoChooseLogoButton.getScene().getWindow());
+        universityInfoConfigureFileChooser(fileChooser);
+        universityInfoLogo = fileChooser.showOpenDialog(universityInfoChooseLogoButton.getScene().getWindow());
 
-        //only if a file is chosen, otherwise reset the label
-        if (file != null) {
+        //only if a universityInfoLogo is chosen set the imageview and the label, otherwise reset the label
+        if (universityInfoLogo != null) {
 
-            universityInfoChosenLogoLabel.setText(file.getName());
-            universityInfoLogoImageView.setImage(new Image("file:" + file.getAbsolutePath()));
+            universityInfoChosenLogoLabel.setText(universityInfoLogo.getName());
+            universityInfoLogoImageView.setImage(new Image("file:" + universityInfoLogo.getAbsolutePath()));
         } else {
             universityInfoChosenLogoLabel.setText("");
         }
@@ -485,7 +546,7 @@ public class SettingsController {
      * Callback method to handle Submit Button in University Info tab.
      * <p>
      * Basically it checks for validation first and if validation is successful , then save properties in the
-     * settings.properties file in  the User's system.If the doesn't exist in the User's system then create it first.
+     * settings.properties universityInfoLogo in  the User's system.If the doesn't exist in the User's system then create it first.
      */
     @FXML
     private void handleUniversityInfoSubmitButtonAction() {
@@ -505,7 +566,7 @@ public class SettingsController {
              */
             Map<String, String> propMap = new HashMap<>();
             propMap.put("universityName", universityInfoNameTextField.getText());
-            propMap.put("universityLogoLocation", "file:" + file.getAbsolutePath());
+            propMap.put("universityLogoLocation", "file:" + universityInfoLogo.getAbsolutePath());
 
             Task<Boolean> createPropertiesFileTask = fileHandlingService.getCreatePropertiesFile(
                     "settings.properties", propMap);
@@ -548,12 +609,12 @@ public class SettingsController {
     }
 
     /**
-     * This method initializes the Path of the settings.properties file and also sets the University Name textField and
-     * logo imageview in the University Info tab.
+     * This method initializes the Path of the settings.properties and also sets the University Name
+     * textField and logo imageview in the University Info tab.
      */
     private void initUniversityInfoTab() {
 
-        path = Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "settings.properties");
+        settingsPropsFileLocation = Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "settings.properties");
         universityInfoChosenLogoLabel.setText("");
         loadProperties();
     }
@@ -568,7 +629,7 @@ public class SettingsController {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-        if (file == null) {
+        if (universityInfoLogo == null) {
 
             alert.setHeaderText("No image is chosen!");
             alert.show();
@@ -578,12 +639,12 @@ public class SettingsController {
     }
 
     /**
-     * This method is used to load the properties from the settings.properties file from the User's system and set
-     * the TextField and ImageView according to the Properties values.
+     * This method is used to load the properties from the settings.properties universityInfoLogo from the User's system
+     * and set the TextField and ImageView according to the Properties values.
      */
     private void loadProperties() {
 
-        if (Files.exists(path)) {
+        if (settingsPropsFileLocation.toFile().exists()) {
 
             Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
                     ("settings.properties", "universityName", "universityLogoLocation");
@@ -594,9 +655,9 @@ public class SettingsController {
     }
 
     /**
-     * Method for configuring the fileChooser
+     * Method for configuring the fileChooser in the University Info tab.
      */
-    private void configureFileChooser(FileChooser fileChooser) {
+    private void universityInfoConfigureFileChooser(FileChooser fileChooser) {
 
         fileChooser.setTitle("Choose Logo");
 

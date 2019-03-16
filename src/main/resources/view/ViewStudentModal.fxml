@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="529.0" prefWidth="669.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewStudentModalController">
+<AnchorPane prefHeight="529.0" prefWidth="669.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewStudentModalController">
     <children>
         <GridPane fx:id="mainGridPane" layoutX="76.0" layoutY="67.0" prefHeight="529.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -28,8 +28,9 @@
             <children>
                 <GridPane prefHeight="487.0" prefWidth="669.0" GridPane.rowIndex="1">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="132.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="508.0" minWidth="10.0" prefWidth="266.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="123.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="17.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="508.0" minWidth="10.0" prefWidth="287.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="508.0" minWidth="10.0" prefWidth="15.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="508.0" minWidth="10.0" prefWidth="266.0" />
                     </columnConstraints>
@@ -37,8 +38,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Separator orientation="VERTICAL" prefHeight="487.0" prefWidth="46.0" GridPane.columnIndex="2" />
-                        <GridPane GridPane.columnIndex="1">
+                        <Separator orientation="VERTICAL" prefHeight="487.0" prefWidth="10.0" GridPane.columnIndex="3" />
+                        <GridPane GridPane.columnIndex="2">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -156,7 +157,7 @@
                            </children></HBox>
                             </children>
                         </GridPane>
-                        <GridPane GridPane.columnIndex="3">
+                        <GridPane GridPane.columnIndex="4">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -280,12 +281,15 @@
                         </GridPane>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                      <children>
-                        <ImageView fitHeight="98.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="profileImageView" fitHeight="98.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../png/placeholder.png" />
                            </image>
                         </ImageView>
-                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonAction" text="Edit" />
+                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonAction" text="Edit">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin></Button>
                         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
                      </children>
                      <GridPane.margin>
@@ -295,15 +299,21 @@
                         <Insets top="10.0" />
                      </padding>
                   </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                     <children>
+                        <Separator orientation="VERTICAL" prefHeight="498.0" prefWidth="10.0" />
+                     </children>
+                  </VBox>
                     </children>
                 </GridPane>
-                <HBox prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Label prefHeight="41.0" prefWidth="141.0" text="User Profile">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin></Label>
-                    </children>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <Label fx:id="nameLabelInTitle" />
+                  <Label text="Profile" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
                 </HBox>
             </children>
         </GridPane>

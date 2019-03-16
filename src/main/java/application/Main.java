@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import util.UISetterUtil;
 
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static util.ConstantsUtil.*;
@@ -32,7 +31,7 @@ public class Main extends Application {
         while starting the application or ask the user to create the file using UI.if it exists , don't show the user
         the UI to create or load the file and directly load the db.properties from then location.
          */
-        if (Files.notExists(Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "db.properties"))) {
+        if (!Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "db.properties").toFile().exists()) {
 
             //create the modal window
             Stage propertiesFileNotFoundModal = new Stage();

@@ -1,5 +1,6 @@
 package controller.adminPanel;
 
+import controller.ChangePasswordController;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -10,13 +11,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.ExamCellMember;
+import model.User;
 import service.ExamCellMemberService;
 import util.UISetterUtil;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +41,13 @@ public class AdminPanelController {
 
     private ExamCellMember admin;
 
+    private User adminLogin;
+
     @FXML
     private Label userIdLabel;
+
+    @FXML
+    private ImageView profileImageImageView;
 
     @FXML
     private StackPane contentStackPane;
@@ -197,8 +207,14 @@ public class AdminPanelController {
     @FXML
     private void handleChangePasswordButtonAction() throws IOException {
 
-        Parent adminSettingsFxml = FXMLLoader.load(getClass()
+        FXMLLoader loader = new FXMLLoader(getClass()
                 .getResource("/view/adminPanel/ChangePassword.fxml"));
+
+        Parent adminSettingsFxml = loader.load();
+
+        ChangePasswordController changePasswordController = loader.getController();
+
+        changePasswordController.setUserLoginDetails(adminLogin);
         subTitleLabel.setText("Change Password");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(adminSettingsFxml);
@@ -238,13 +254,15 @@ public class AdminPanelController {
     /**
      * This method sets the details of the admin in the admin panel
      *
-     * @param userId The userId used to login to the system
+     * @param adminLogin The User object used to login to the system
      */
-    public void setAdminProfileDetails(String userId) {
+    public void setAdminProfileDetails(User adminLogin) {
+
+        this.adminLogin = adminLogin;
 
         final String additionalQuery = "where v_emp_id=?";
         Task<List<ExamCellMember>> examCellMembersTask = examCellMemberService
-                .getExamCellMembersTask(additionalQuery, userId);
+                .getExamCellMembersTask(additionalQuery, adminLogin.getUserId());
 
         new Thread(examCellMembersTask).start();
 
@@ -254,7 +272,16 @@ public class AdminPanelController {
             public void handle(WorkerStateEvent event) {
 
                 admin = examCellMembersTask.getValue().get(0);
-                userIdLabel.setText(userId);
+
+                //set the profile image if it exists ,otherwise set a placeholder
+                if (Paths.get(admin.getProfileImagePath().replace("file:", "")).toFile().exists()) {
+
+                    profileImageImageView.setImage(new Image(admin.getProfileImagePath()));
+                } else {
+
+                    profileImageImageView.setImage(new Image("/png/placeholder.png"));
+                }
+                userIdLabel.setText(adminLogin.getUserId());
                 nameLabel.setText(admin.getFirstName() + " " + admin.getMiddleName()
                         + " " + admin.getLastName());
             }

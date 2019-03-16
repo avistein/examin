@@ -49,14 +49,5 @@ public class LoginCommand {
         //error if password doesn't match
         return LOGIN_ERROR;
     }
-
-    /**
-     * Resets the password and send it to the user via email and store it into DB
-     *
-     * @param username Username of the forgotten password
-     */
-    public void resetPassword(String username) {
-
-    }
 }
 

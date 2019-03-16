@@ -115,7 +115,7 @@ public class LoginController {
             String password = passwordField.getText();
 
             //get the task to get login details of the userId
-            Task<List<User>> usersTask = userService.getUsersTask("WHERE v_user_id=?", username);
+            Task<List<User>> usersTask = userService.getUsersLoginDetailsTask("WHERE v_user_id=?", username);
             new Thread(usersTask).start();
 
             usersTask.setOnSucceeded(new EventHandler<>() {
@@ -162,7 +162,7 @@ public class LoginController {
 
                             //send admin's userId to the admin panel controller
                             adminPanelController.setAdminProfileDetails
-                                    (username.trim());
+                                    (usersTask.getValue().get(0));
 
                             mainStage.show();
                             loginStage.hide();

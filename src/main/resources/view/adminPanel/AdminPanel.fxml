@@ -174,14 +174,14 @@
                   <Insets top="10.0" />
                </padding>
                <children>
-                  <ImageView fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="profileImageImageView" fx:id="profileImageImageView" fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/placeholder.png" />
                      </image>
                   </ImageView>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="28.0" prefWidth="187.0">
                      <children>
-                        <Label text="ID - " textFill="WHITE">
+                        <Label text="User ID - " textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
@@ -240,6 +240,14 @@
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
+                  </Label>
+                  <Label text="Last Login : " textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
                   </Label>
                </children>
             </HBox>

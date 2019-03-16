@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import model.Batch;
 import model.Course;
 import model.Student;
@@ -23,7 +24,9 @@ import service.CourseService;
 import service.StudentService;
 import util.ValidatorUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,8 @@ public class StudentRegistrationController {
 
     private List<Batch> listOfBatches;
 
+    private File imageFile;
+
     @FXML
     private ComboBox<String> batchNameComboBox;
 
@@ -76,6 +81,12 @@ public class StudentRegistrationController {
 
     @FXML
     private TextField regIdTextField;
+
+    @FXML
+    private ImageView profileImageImageView;
+
+    @FXML
+    private Button chooseImageButton;
 
     @FXML
     private TextField firstNameTextField;
@@ -309,6 +320,21 @@ public class StudentRegistrationController {
         }
     }
 
+    @FXML
+    private void handleChooseImageButtonAction() {
+
+        //choose a profile image for the student from the system
+        FileChooser fileChooser = new FileChooser();
+        configureFileChooser(fileChooser);
+        imageFile = fileChooser.showOpenDialog(chooseImageButton.getScene().getWindow());
+
+        //if an image is chosen then set the imageView with that image
+        if (imageFile != null) {
+
+            profileImageImageView.setImage(new Image("file:" + imageFile.getAbsoluteFile()));
+        }
+    }
+
     /**
      * Callback method to handle Submit button.
      */
@@ -348,20 +374,19 @@ public class StudentRegistrationController {
             student.setDiscipline(disciplineComboBox.getValue());
             student.setDegree(degreeComboBox.getValue());
 
-            //get the batch id for the respective degree,discipline and batch chosen
-            for (Batch batch : listOfBatches) {
-
-                if (batch.getDiscipline().equals(disciplineComboBox.getValue()) &&
-                        batch.getDegree().equals(degreeComboBox.getValue()) &&
-                        batch.getBatchName().equals(batchNameComboBox.getValue())) {
-
-                    student.setBatchId(batch.getBatchId());
-                }
-
-            }
-
             //if edit signal is sent
             if (editOrAddStudentChoice == EDIT_CHOICE) {
+
+                /*
+                If a image is chosen from the FileChooser, then set the path of the image in Student.profileImagePath,
+                otherwise set the previous location i.e. the location specified in the database before editing.
+                 */
+                if (imageFile != null) {
+
+                    student.setProfileImagePath(imageFile.getAbsolutePath());
+                } else {
+                    student.setProfileImagePath(this.student.getProfileImagePath());
+                }
 
                 Task<Integer> updateStudentTask = studentService.getUpdateStudentTask(student);
                 new Thread(updateStudentTask).start();
@@ -400,7 +425,24 @@ public class StudentRegistrationController {
             }
 
             //if add new student is chosen
-            else {
+            else if (editOrAddStudentChoice == ADD_CHOICE) {
+
+                //if a image is chosen from the FileChooser, then set the path of the image in Student.profileImagePath
+                if (imageFile != null) {
+
+                    student.setProfileImagePath(imageFile.getAbsolutePath());
+                }
+                //get the batch id for the respective degree,discipline and batch chosen
+                for (Batch batch : listOfBatches) {
+
+                    if (batch.getDiscipline().equals(disciplineComboBox.getValue()) &&
+                            batch.getDegree().equals(degreeComboBox.getValue()) &&
+                            batch.getBatchName().equals(batchNameComboBox.getValue())) {
+
+                        student.setBatchId(batch.getBatchId());
+                    }
+
+                }
 
                 Task<Integer> addStudentToDatabaseTask = studentService.getAddStudentToDatabaseTask(student);
                 new Thread(addStudentToDatabaseTask).start();
@@ -452,149 +494,166 @@ public class StudentRegistrationController {
             alert.setContentText("Please select a degree!");
             alert.show();
             return false;
-        } else if (disciplineComboBox.getValue() == null) {
+        }
+        if (disciplineComboBox.getValue() == null) {
 
             alert.setContentText("Please select a discipline!");
             alert.show();
             return false;
-        } else if (batchNameComboBox.getValue() == null) {
+        }
+        if (batchNameComboBox.getValue() == null) {
 
             alert.setContentText("Please select a batch!");
             alert.show();
             return false;
-        } else if (semesterComboBox.getValue() == null) {
+        }
+        if (semesterComboBox.getValue() == null) {
 
             alert.setContentText("Please select a semester!");
             alert.show();
             return false;
-        } else if (regYearTextField.getText().isEmpty()) {
+        }
+        if (regYearTextField.getText().isEmpty()) {
 
             alert.setContentText("Registration Year cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateRegYear(batchNameComboBox.getValue()
+        }
+        if (!ValidatorUtil.validateRegYear(batchNameComboBox.getValue()
                 , regYearTextField.getText())) {
 
             alert.setContentText("Invalid Registration Year or not within batch range!");
             alert.show();
             return false;
-        } else if (regIdTextField.getText().isEmpty()) {
+        }
+        if (regIdTextField.getText().isEmpty()) {
 
             alert.setContentText("Registration ID cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateId(regIdTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateId(regIdTextField.getText().trim())) {
 
             alert.setContentText("Invalid Registration ID!");
             alert.show();
             return false;
-        } else if (rollNoTextField.getText().isEmpty()) {
+        }
+        if (rollNoTextField.getText().isEmpty()) {
 
             alert.setContentText("Roll No. cannot be empty!");
             return false;
-        } else if (!ValidatorUtil.validateId(rollNoTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateId(rollNoTextField.getText().trim())) {
 
             alert.setContentText("Invalid Roll No.!");
             return false;
-        } else if (firstNameTextField.getText().isEmpty()) {
+        }
+        if (firstNameTextField.getText().isEmpty()) {
 
             alert.setContentText("First Name cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
 
             alert.setContentText("Invalid First Name!");
             alert.show();
             return false;
-        } else if (!middleNameTextField.getText().trim().isEmpty()) {
+        }
+        if (!middleNameTextField.getText().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(middleNameTextField.getText().trim())) {
 
                 alert.setContentText("Invalid Middle Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (!lastNameTextField.getText().trim().isEmpty()) {
+        }
+        if (!lastNameTextField.getText().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(lastNameTextField.getText().trim())) {
 
                 alert.setContentText("Invalid Last Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (dobDatePicker.getValue() == null) {
+        }
+        if (dobDatePicker.getValue() == null) {
 
             alert.setContentText("Please choose a date of birth!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateDateFormat(dobDatePicker.getValue().toString())) {
+        }
+        if (!ValidatorUtil.validateDateFormat(String.valueOf(dobDatePicker.getValue()))) {
 
             alert.setContentText("Invalid date of birth format!");
             alert.show();
             return false;
-        } else if (genderChoiceBox.getValue() == null) {
+        }
+        if (genderChoiceBox.getValue() == null) {
 
             alert.setContentText("Please select a gender!");
             alert.show();
             return false;
-        } else if (emailTextField.getText().isEmpty()) {
+        }
+        if (emailTextField.getText().isEmpty()) {
 
             alert.setContentText("Email ID cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateEmail(emailTextField.getText())) {
+        }
+        if (!ValidatorUtil.validateEmail(emailTextField.getText())) {
 
             alert.setContentText("Invalid Email ID !");
             alert.show();
             return false;
-        } else if (contactNoTextField.getText().isEmpty()) {
+        }
+        if (contactNoTextField.getText().isEmpty()) {
 
             alert.setContentText("Contact No. cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateContactNo(contactNoTextField.getText())) {
+        }
+        if (!ValidatorUtil.validateContactNo(contactNoTextField.getText())) {
 
             alert.setContentText("Invalid Contact No.!");
             alert.show();
             return false;
-        } else if (addressTextArea.getText().isEmpty()) {
+        }
+        if (addressTextArea.getText().isEmpty()) {
 
             alert.setContentText("Address cannot be empty!");
             alert.show();
             return false;
-        } else if (guardianNameTextField.getText().isEmpty()) {
+        }
+        if (guardianNameTextField.getText().isEmpty()) {
 
             alert.setContentText("Guardian/Father's Name cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateName(guardianNameTextField.getText().trim())) {
+        }
+        if (!ValidatorUtil.validateName(guardianNameTextField.getText().trim())) {
 
             alert.setContentText("Invalid Guardian/Father's Name!");
             alert.show();
             return false;
-        } else if (!motherNameTextField.getText().trim().isEmpty()) {
+        }
+        if (!motherNameTextField.getText().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(motherNameTextField.getText().trim())) {
 
                 alert.setContentText("Invalid Mother's Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (guardianContactNoTextField.getText().isEmpty()) {
+        }
+        if (guardianContactNoTextField.getText().isEmpty()) {
 
             alert.setContentText("Guardian Contact No. cannot be empty!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateContactNo(guardianContactNoTextField
+        }
+        if (!ValidatorUtil.validateContactNo(guardianContactNoTextField
                 .getText())) {
 
             alert.setContentText("Invalid Guardian Contact No.!");
@@ -605,8 +664,22 @@ public class StudentRegistrationController {
     }
 
     /**
+     * Method for configuring the fileChooser.
+     */
+    private void configureFileChooser(FileChooser fileChooser) {
+
+        fileChooser.setTitle("Choose Image");
+
+        //only .png,.jpg and .jpeg files can be chosen
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+    }
+
+    /**
      * Callback method to handle Add Another button and Reset button.
-     * Deactivates loading spinner and status and clears the textfields and the comboboxes.
+     * <p>
+     * Deactivates loading spinner and status and clears the textfields and the comboboxes and sets the profile
+     * imageview with a placeholder.
      */
     @SuppressWarnings("Duplicates")
     @FXML
@@ -624,15 +697,15 @@ public class StudentRegistrationController {
         firstNameTextField.clear();
         middleNameTextField.clear();
         lastNameTextField.clear();
-        degreeComboBox.getSelectionModel().clearSelection();
-        disciplineComboBox.getSelectionModel().clearSelection();
-        batchNameComboBox.getSelectionModel().clearSelection();
-        semesterComboBox.getSelectionModel().clearSelection();
+        degreeComboBox.setValue(null);
+        disciplineComboBox.setValue(null);
+        batchNameComboBox.setValue(null);
+        semesterComboBox.setValue(null);
         regYearTextField.clear();
         regIdTextField.clear();
         rollNoTextField.clear();
-        genderChoiceBox.getSelectionModel().clearSelection();
-        dobDatePicker.getEditor().clear();
+        genderChoiceBox.setValue(null);
+        dobDatePicker.setValue(null);
         emailTextField.clear();
         addressTextArea.clear();
         contactNoTextField.clear();
@@ -644,6 +717,8 @@ public class StudentRegistrationController {
         batchNameComboBox.setDisable(false);
         disciplineComboBox.setDisable(false);
         degreeComboBox.setDisable(false);
+        semesterComboBox.setDisable(false);
+        profileImageImageView.setImage(new Image("/png/placeholder.png"));
     }
 
     /**
@@ -670,6 +745,16 @@ public class StudentRegistrationController {
     public void setEditSignal(int editSignal) {
 
         editOrAddStudentChoice = editSignal;
+
+        //if the Image exists in the location ,set the ImageView with that ,otherwise set with a placeholder
+        if (Paths.get(student.getProfileImagePath()).toFile().exists()) {
+
+            profileImageImageView.setImage(new Image("file:" + student.getProfileImagePath()));
+        } else {
+
+            profileImageImageView.setImage(new Image("/png/placeholder.png"));
+        }
+
         firstNameTextField.setText(student.getFirstName());
         middleNameTextField.setText(student.getMiddleName());
         lastNameTextField.setText(student.getLastName());

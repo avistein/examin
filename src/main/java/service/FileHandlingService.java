@@ -135,7 +135,7 @@ public class FileHandlingService {
                 try {
 
                     //if the .properties file exists, then don't create it again
-                    if (Files.notExists(filePath)) {
+                    if (!filePath.toFile().exists()) {
 
                         Files.createFile(filePath);
                     }

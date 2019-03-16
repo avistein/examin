@@ -131,7 +131,7 @@ public final class ValidatorUtil {
      */
     public static boolean validateGender(String gender) {
 
-        String regex = "^male|female|others$";
+        String regex = "^Male|Female|Others$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(gender);
         return matcher.matches();
@@ -145,7 +145,7 @@ public final class ValidatorUtil {
      */
     public static boolean validateName(String name) {
 
-        String regex = "^[a-zA-z]+$";
+        String regex = "^([a-zA-z] ?)+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();

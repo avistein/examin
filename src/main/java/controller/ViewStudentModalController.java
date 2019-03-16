@@ -20,6 +20,7 @@ import model.Student;
 import service.StudentService;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static util.ConstantsUtil.*;
@@ -38,6 +39,12 @@ public class ViewStudentModalController {
     private boolean studentDeletedStatus;
 
     private StudentService studentService;
+
+    @FXML
+    private Label nameLabelInTitle;
+
+    @FXML
+    private ImageView profileImageView;
 
     @FXML
     private Label nameLabel;
@@ -229,6 +236,15 @@ public class ViewStudentModalController {
 
         this.student = student;
 
+        //if the Image exists in that location, then set the ImageView with that, otherwise set a placeholder
+        if (Paths.get(student.getProfileImagePath()).toFile().exists()) {
+
+            profileImageView.setImage(new Image("file:" + student.getProfileImagePath()));
+        } else {
+
+            profileImageView.setImage(new Image("/png/placeholder.png"));
+        }
+        nameLabelInTitle.setText(this.student.getFirstName() + "'s");
         nameLabel.setText(this.student.getFirstName() + " "
                 + this.student.getMiddleName() + " " +
                 this.student.getLastName());

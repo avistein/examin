@@ -170,29 +170,24 @@
                               </HBox>
                            </children>
                         </GridPane>
-                        <ImageView fx:id="profileSettingPictureImageView" fitHeight="106.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                        <VBox alignment="TOP_CENTER" spacing="20.0" GridPane.rowIndex="1">
                            <GridPane.margin>
-                              <Insets bottom="350.0" left="30.0" />
+                              <Insets />
                            </GridPane.margin>
-                           <image>
-                              <Image url="@../../png/placeholder.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="editProfileSettingsPictureButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleEditProfilePictureButtonAction" prefHeight="25.0" prefWidth="120.0" text=" Edit Profile picture" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="140.0" left="30.0" />
-                           </GridPane.margin>
-                        </Button>
-                        <Button fx:id="profileSettingsEditButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsEditButtonAction" prefWidth="60.0" text="Edit" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="130.0" left="60.0" top="80.0" />
-                           </GridPane.margin>
-                        </Button>
-                        <Button fx:id="profileSettingsSubmitButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsSubmitButtonAction" prefHeight="20.0" prefWidth="60.0" text="Submit" GridPane.rowIndex="1">
-                           <GridPane.margin>
-                              <Insets bottom="120.0" left="60.0" top="160.0" />
-                           </GridPane.margin>
-                        </Button>
+                           <children>
+                              <ImageView fx:id="profileSettingPictureImageView" fitHeight="136.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../png/placeholder.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="profileSettingsChooseImageButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsChooseImageButtonAction" prefHeight="25.0" prefWidth="120.0" text="Choose Image" />
+                              <Button fx:id="profileSettingsEditButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsEditButtonAction" prefWidth="60.0" text="Edit" />
+                              <Button fx:id="profileSettingsSubmitButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsSubmitButtonAction" prefHeight="20.0" prefWidth="60.0" text="Submit" />
+                           </children>
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                        </VBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2">
                            <children>
                               <Label text="Profile Settings">

@@ -31,6 +31,7 @@ public class Student extends Batch implements Serializable {
     private SimpleStringProperty contactNo;
     private SimpleStringProperty guardianName;
     private SimpleStringProperty currSemester;
+    private SimpleStringProperty profileImagePath;
 
     /*------------------------------------End of Initialization-------------------------------------*/
 
@@ -54,6 +55,7 @@ public class Student extends Batch implements Serializable {
         this.contactNo = new SimpleStringProperty("");
         this.guardianName = new SimpleStringProperty("");
         this.currSemester = new SimpleStringProperty("");
+        this.profileImagePath = new SimpleStringProperty("");
     }
 
     /**
@@ -356,4 +358,23 @@ public class Student extends Batch implements Serializable {
         this.currSemester.set(currSemester);
     }
 
+    /**
+     * Getter method to get the file path of the Student's profile image.
+     *
+     * @return The file path.
+     */
+    public String getProfileImagePath() {
+
+        return profileImagePath.get();
+    }
+
+    /**
+     * Setter method to set path of the Student's profile image.
+     *
+     * @param path The file path to set.
+     */
+    public void setProfileImagePath(String path) {
+
+        this.profileImagePath.set(path);
+    }
 }

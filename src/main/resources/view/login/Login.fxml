@@ -83,7 +83,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction" text="Login" />
+                        <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#handleLoginButtonAction" text="Login" />
                      </children>
                      <padding>
                         <Insets right="35.0" />

@@ -369,176 +369,198 @@ public class ImportStudentCSVModalController {
             alert.setContentText("Degree cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(student.getDegree().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(student.getDegree().trim())) {
 
             alert.setContentText("Invalid Degree in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getDiscipline() == null || student.getDiscipline().trim().isEmpty()) {
+        }
+        if (student.getDiscipline() == null || student.getDiscipline().trim().isEmpty()) {
 
             alert.setContentText("Discipline cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(student.getDiscipline().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(student.getDiscipline().trim())) {
 
             alert.setContentText("Invalid Discipline in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getBatchName() == null || student.getBatchName().trim().isEmpty()) {
+        }
+        if (student.getBatchName() == null || student.getBatchName().trim().isEmpty()) {
 
             alert.setContentText("Batch cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateBatchName(student.getBatchName().trim())) {
+        }
+        if (!ValidatorUtil.validateBatchName(student.getBatchName().trim())) {
 
             alert.setContentText("Invalid Batch in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getCurrSemester() == null || student.getCurrSemester().trim().isEmpty()) {
+        }
+        if (student.getCurrSemester() == null || student.getCurrSemester().trim().isEmpty()) {
 
             alert.setContentText("Semester cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateSemester(student.getCurrSemester().trim())) {
+        }
+        if (!ValidatorUtil.validateSemester(student.getCurrSemester().trim())) {
 
             alert.setContentText("Invalid Semester in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getRegYear() == null || student.getRegYear().trim().isEmpty()) {
+        }
+        if (student.getRegYear() == null || student.getRegYear().trim().isEmpty()) {
 
             alert.setContentText("Registration Year cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateRegYear(student.getBatchName(), student.getRegYear())) {
+        }
+        if (!ValidatorUtil.validateRegYear(student.getBatchName(), student.getRegYear())) {
 
             alert.setContentText("Invalid Registration Year or not within batch range in Row : "
                     + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getRegId() == null || student.getRegId().trim().isEmpty()) {
+        }
+        if (student.getRegId() == null || student.getRegId().trim().isEmpty()) {
 
             alert.setContentText("Registration ID cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateId(student.getRegId().trim())) {
+        }
+        if (!ValidatorUtil.validateId(student.getRegId().trim())) {
 
             alert.setContentText("Invalid Registration ID in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getRollNo() == null || student.getRollNo().trim().isEmpty()) {
+        }
+        if (student.getRollNo() == null || student.getRollNo().trim().isEmpty()) {
 
             alert.setContentText("Roll No. cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateId(student.getRollNo().trim())) {
+        }
+        if (!ValidatorUtil.validateId(student.getRollNo().trim())) {
 
             alert.setContentText("Invalid Roll No. in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
+        }
+        if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
 
             alert.setContentText("First Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateName(student.getFirstName().trim())) {
+        }
+        if (!ValidatorUtil.validateName(student.getFirstName().trim())) {
 
             alert.setContentText("Invalid First Name in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!student.getMiddleName().trim().isEmpty()) {
+        }
+        if (!student.getMiddleName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(student.getMiddleName().trim())) {
 
                 alert.setContentText("Invalid Middle Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (!student.getLastName().trim().isEmpty()) {
+        }
+        if (!student.getLastName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(student.getLastName().trim())) {
 
                 alert.setContentText("Invalid Last Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (student.getDob() == null || student.getDob().trim().isEmpty()) {
+        }
+        if (student.getDob() == null || student.getDob().trim().isEmpty()) {
 
             alert.setContentText("DOB cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateDateFormat(student.getDob().trim())) {
+        }
+        if (!ValidatorUtil.validateDateFormat(student.getDob().trim())) {
 
             alert.setContentText("Invalid DOB format in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getGender() == null || student.getGender().trim().isEmpty()) {
+        }
+        if (student.getGender() == null || student.getGender().trim().isEmpty()) {
 
             alert.setContentText("Gender cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateGender(student.getGender().trim())) {
+        }
+        if (!ValidatorUtil.validateGender(student.getGender().trim())) {
 
             alert.setContentText("Invalid Gender in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+        }
+        if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
 
             alert.setContentText("Email ID cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateEmail(student.getEmail().trim())) {
+        }
+        if (!ValidatorUtil.validateEmail(student.getEmail().trim())) {
 
             alert.setContentText("Invalid Email ID in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getContactNo() == null || student.getContactNo().trim().isEmpty()) {
+        }
+        if (student.getContactNo() == null || student.getContactNo().trim().isEmpty()) {
 
             alert.setContentText("Contact No. cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateContactNo(student.getContactNo().trim())) {
+        }
+        if (!ValidatorUtil.validateContactNo(student.getContactNo().trim())) {
 
             alert.setContentText("Invalid Contact No. in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getAddress() == null || student.getAddress().trim().isEmpty()) {
+        }
+        if (student.getAddress() == null || student.getAddress().trim().isEmpty()) {
 
             alert.setContentText("Address cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (student.getGuardianName() == null || student.getGuardianName().trim().isEmpty()) {
+        }
+        if (student.getGuardianName() == null || student.getGuardianName().trim().isEmpty()) {
 
             alert.setContentText("Guardian/Father's Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateName(student.getGuardianName().trim())) {
+        }
+        if (!ValidatorUtil.validateName(student.getGuardianName().trim())) {
 
             alert.setContentText("Invalid Guardian/Father's Name in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!student.getMotherName().trim().isEmpty()) {
+        }
+        if (!student.getMotherName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(student.getMotherName().trim())) {
 
                 alert.setContentText("Invalid Mother's Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (student.getGuardianContactNo() == null || student.getGuardianContactNo().trim().isEmpty()) {
+        }
+        if (student.getGuardianContactNo() == null || student.getGuardianContactNo().trim().isEmpty()) {
 
             alert.setContentText("Guardian Contact No. cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateContactNo(student.getGuardianContactNo().trim())) {
+        }
+        if (!ValidatorUtil.validateContactNo(student.getGuardianContactNo().trim())) {
 
             alert.setContentText("Invalid Guardian Contact No. in Row : " + currStudentIndex + "!");
             alert.show();
