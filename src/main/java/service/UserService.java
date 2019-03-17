@@ -4,14 +4,16 @@ import database.DatabaseHelper;
 import javafx.concurrent.Task;
 import model.User;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static util.ConstantsUtil.*;
 
 /**
- * Service class to get user, update user pass and get user contact details.
+ * Service class to get user, update user pass and get user contact details, and set login timestamp of the user.
  *
  * @author Avik Sarkar
  */
@@ -159,4 +161,41 @@ public class UserService {
         return userTask;
     }
 
+    /**
+     * This method is used to get a task which can be used to update the timestamp of the Login of the user.
+     *
+     * @param user The user object whose Login timestamp will be updated.
+     * @return A task which can be used to update the timestamp of the Login of the user in a separate thread.
+     */
+    public Task<Integer> getUpdateUserLastLoginTimeStampTask(final User user) {
+
+        final String sql = "UPDATE t_login_details SET ts_login_timestamp=? where v_user_id=?";
+
+        Task<Integer> updateUserLastLoginTimeStampTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                //get the current time of the system
+                Timestamp timestamp = new Timestamp((new Date()).getTime());
+
+                //holds the status of updation of user login timestamp in the DB, i.e success or failure
+                int tLoginDetailsStatus = databaseHelper.updateDelete
+                        (sql, String.valueOf(timestamp), user.getUserId());
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tLoginDetailsStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tLoginDetailsStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return updateUserLastLoginTimeStampTask;
+    }
 }

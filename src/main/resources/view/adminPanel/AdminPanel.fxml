@@ -122,22 +122,11 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
-                  <Button fx:id="noticesListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notices">
+                  <Button fx:id="noticesListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notify">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../png/notices.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding></Button>
-                  <Button fx:id="reportsListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleReportsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Reports">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../png/reports.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -159,7 +148,7 @@
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../png/settings.png" />
+                              <Image url="@../../png/ligature-symbols_2-11-0_key_256_0_0c1544_none.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -248,6 +237,11 @@
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
+                  </Label>
+                  <Label fx:id="lastLoginLabel" layoutX="220.0" layoutY="24.0" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
                   </Label>
                </children>
             </HBox>

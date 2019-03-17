@@ -136,6 +136,14 @@ public class LoginController {
                         //set the status of authentication
                         status = loginCommand.authenticateLogin(password
                                 , usersTask.getValue().get(0));
+
+                        //if login is successful then update the login timestamp
+                        if (status != LOGIN_ERROR) {
+
+                            Task<Integer> updateUserLastLoginTimeStampTask = userService.getUpdateUserLastLoginTimeStampTask
+                                    (usersTask.getValue().get(0));
+                            new Thread(updateUserLastLoginTimeStampTask).start();
+                        }
                     }
 
                     //Open different panel for different types of user on successful  login.
@@ -160,12 +168,13 @@ public class LoginController {
                             AdminPanelController adminPanelController = loader
                                     .getController();
 
-                            //send admin's userId to the admin panel controller
+                            //send admin's login details to the admin panel controller
                             adminPanelController.setAdminProfileDetails
                                     (usersTask.getValue().get(0));
 
                             mainStage.show();
                             loginStage.hide();
+
                             break;
 
                         case EXAM_CELL_MEMBER_GID:

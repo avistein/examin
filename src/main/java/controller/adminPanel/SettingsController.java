@@ -39,6 +39,8 @@ public class SettingsController {
     @FXML
     private TabPane settingsTabPane;
 
+    private FileHandlingService fileHandlingService;
+
     /*-------------------------Declaration & Initialization of variables of Profile Settings Tab----------------------*/
 
     @FXML
@@ -144,12 +146,46 @@ public class SettingsController {
 
     private File universityInfoLogo;
 
-    private FileHandlingService fileHandlingService;
-
     private Path settingsPropsFileLocation;
 
     /*--------------------End of Declaration & Initialization of variables of University Info Tab---------------------*/
 
+
+    /*-------------------------Declaration & Initialization of variables of Email Settings Tab-----------------------*/
+
+    @FXML
+    private Tab emailSettingsTab;
+
+    @FXML
+    private TextField adminEmailIdTextField;
+
+    @FXML
+    private PasswordField sendGridApiKeyPasswordField;
+
+    @FXML
+    private Button emailSettingsSubmitButton;
+
+    @FXML
+    private GridPane emailSettingsMainGridPane;
+
+    @FXML
+    private StackPane emailSettingsStatusStackPane;
+
+    @FXML
+    private ProgressIndicator emailSettingsProgressIndicator;
+
+    @FXML
+    private ImageView emailSettingsStatusImageView;
+
+    @FXML
+    private Label emailSettingsStatusLabel;
+
+    @FXML
+    private HBox emailSettingsHboxButtons;
+
+    private Path emailPropsFileLocation;
+
+    /*---------------------End of Declaration & Initialization of variables of Email Settings Tab---------------------*/
 
     /**
      * This method is used to initialize variables of this Class.
@@ -175,11 +211,10 @@ public class SettingsController {
                 } else if (newValue == universityInfoTab) {
 
                     initUniversityInfoTab();
+                } else if (newValue == emailSettingsTab) {
+
+                    initEmailSettingsTab();
                 }
-//                else if(newValue == emailSettingsTab){
-//
-//
-//                }
             }
         });
     }
@@ -244,7 +279,7 @@ public class SettingsController {
             admin.setProfileImagePath(profileImagePath);
         }
 
-        //validate first
+        //validateUniversityInfoItems first
         if (validateProfileSettingsItems()) {
 
             //fade the background and show loading spinner
@@ -552,7 +587,7 @@ public class SettingsController {
     private void handleUniversityInfoSubmitButtonAction() {
 
         //if validation is successful
-        if (validate()) {
+        if (validateUniversityInfoItems()) {
 
             //fade the background and display loading spinner
             universityInfoMainGridPane.setOpacity(0.5);
@@ -604,7 +639,7 @@ public class SettingsController {
     @FXML
     private void handleUniversityInfoOkButtonAction() {
 
-        loadProperties();
+        loadUniversityInfoProperties();
         deactivateUniversityInfoStatus();
     }
 
@@ -616,7 +651,7 @@ public class SettingsController {
 
         settingsPropsFileLocation = Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "settings.properties");
         universityInfoChosenLogoLabel.setText("");
-        loadProperties();
+        loadUniversityInfoProperties();
     }
 
     /**
@@ -625,7 +660,7 @@ public class SettingsController {
      *
      * @return The result of the validation i.e. true or false.
      */
-    private boolean validate() {
+    private boolean validateUniversityInfoItems() {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
@@ -642,7 +677,7 @@ public class SettingsController {
      * This method is used to load the properties from the settings.properties universityInfoLogo from the User's system
      * and set the TextField and ImageView according to the Properties values.
      */
-    private void loadProperties() {
+    private void loadUniversityInfoProperties() {
 
         if (settingsPropsFileLocation.toFile().exists()) {
 
@@ -681,4 +716,173 @@ public class SettingsController {
     }
 
     /*--------------------------------------End of University Info Tab operation--------------------------------------*/
+
+
+    /*----------------------------------------Email Settings Tab operation--------------------------------------------*/
+
+    @FXML
+    private void handleEmailSettingsEditButtonAction() {
+
+        enableEmailSettingsItems();
+    }
+
+    /**
+     * Callback method to handle Submit Button in Email Settings tab.
+     * <p>
+     * Basically it checks for validation first and if validation is successful , then save properties in the
+     * email.properties in  the User's system.If the doesn't exist in the User's system then create it first.
+     */
+    @FXML
+    private void handleEmailSettingsSubmitButtonAction() {
+
+        //if validation is successful
+        if (validateEmailSettingsItems()) {
+
+            //fade the background and display loading spinner
+            emailSettingsMainGridPane.setOpacity(0.5);
+            emailSettingsStatusStackPane.setVisible(true);
+            emailSettingsProgressIndicator.setVisible(true);
+
+            /*
+            Create a HashMap of the following structure :
+            Key : Property Key
+            Value : Property Value
+             */
+            Map<String, String> propMap = new HashMap<>();
+            propMap.put("adminEmailId", adminEmailIdTextField.getText());
+            propMap.put("sendGridApiKey", sendGridApiKeyPasswordField.getText());
+
+            Task<Boolean> createPropertiesFileTask = fileHandlingService.getCreatePropertiesFile(
+                    "email.properties", propMap);
+            new Thread(createPropertiesFileTask).start();
+
+            createPropertiesFileTask.setOnSucceeded(new EventHandler<>() {
+
+                @Override
+                public void handle(WorkerStateEvent event) {
+
+                    //operation finished , deactivate loading spinner and display status
+                    emailSettingsProgressIndicator.setVisible(false);
+                    emailSettingsStatusImageView.setVisible(true);
+                    emailSettingsStatusLabel.setVisible(true);
+                    emailSettingsHboxButtons.setVisible(true);
+
+                    //display status
+                    if (createPropertiesFileTask.getValue()) {
+
+                        emailSettingsStatusImageView.setImage(new Image("/png/success.png"));
+                        emailSettingsStatusLabel.setText("Email Settings Updated!");
+                    } else {
+
+                        emailSettingsStatusImageView.setImage(new Image("/png/critical error.png"));
+                        emailSettingsStatusLabel.setText("Error in updating email settings!");
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Callback method to handle the action of Ok button in the Email Settings tab.
+     */
+    @FXML
+    private void handleEmailSettingsOkButtonAction() {
+
+        loadEmailSettingsProperties();
+        deactivateEmailSettingsStatus();
+        disableEmailSettingsItems();
+    }
+
+    /**
+     * This method initializes the Path of the email.properties and also sets the Admin Email ID and SendGrid Api key
+     * fields in the Email Settings tab.
+     */
+    private void initEmailSettingsTab() {
+
+        emailPropsFileLocation = Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "email.properties");
+        loadEmailSettingsProperties();
+        disableEmailSettingsItems();
+    }
+
+    /**
+     * This method is for ensuring that the Admin's email Id field and SendGrid api key aren't empty or invalid.
+     *
+     * @return The result of the validation i.e. true or false.
+     */
+    private boolean validateEmailSettingsItems() {
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        if (adminEmailIdTextField == null || adminEmailIdTextField.getText().trim().isEmpty()) {
+
+            alert.setHeaderText("Admin Email ID cannot be empty!");
+            alert.show();
+            return false;
+        }
+        if (!ValidatorUtil.validateEmail(adminEmailIdTextField.getText().trim())) {
+
+            alert.setHeaderText("Invalid Admin Email ID!");
+            alert.show();
+            return false;
+        }
+        if (sendGridApiKeyPasswordField == null || sendGridApiKeyPasswordField.getText().isEmpty()) {
+
+            alert.setHeaderText("SendGrid API key cannot be empty!");
+            alert.show();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * This method is used to load the properties from the email.properties from the User's system
+     * and set the email ID TextField according to the Properties values.
+     */
+    private void loadEmailSettingsProperties() {
+
+        if (emailPropsFileLocation.toFile().exists()) {
+
+            Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
+                    ("email.properties", "adminEmailId", "sendGridApiKey");
+
+            adminEmailIdTextField.setText(propMap.get("adminEmailId"));
+            sendGridApiKeyPasswordField.setText(propMap.get("sendGridApiKey"));
+        }
+    }
+
+    /**
+     * This method deactivates the status stack pane and it's items in the Email Settings tab and also brings back the
+     * UI as it was before updating the Settings.
+     */
+    @SuppressWarnings("Duplicates")
+    private void deactivateEmailSettingsStatus() {
+
+        emailSettingsMainGridPane.setOpacity(1);
+        emailSettingsStatusStackPane.setVisible(false);
+        emailSettingsStatusImageView.setVisible(false);
+        emailSettingsHboxButtons.setVisible(false);
+        emailSettingsStatusLabel.setVisible(false);
+    }
+
+    /**
+     * Method to disable items of the Email Settings tab.
+     */
+    private void disableEmailSettingsItems() {
+
+        adminEmailIdTextField.setDisable(true);
+        sendGridApiKeyPasswordField.setDisable(true);
+        emailSettingsSubmitButton.setDisable(true);
+    }
+
+    /**
+     * Method to enable items of the Email Settings tab.
+     */
+    private void enableEmailSettingsItems() {
+
+        adminEmailIdTextField.setDisable(false);
+        sendGridApiKeyPasswordField.setDisable(false);
+        emailSettingsSubmitButton.setDisable(false);
+    }
+
+    /*---------------------------------------End of Email Settings Tab operation--------------------------------------*/
 }

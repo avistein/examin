@@ -16,10 +16,12 @@ import javafx.stage.Stage;
 import model.Email;
 import model.User;
 import service.EmailService;
+import service.FileHandlingService;
 import service.UserService;
 import util.PasswordGenUtil;
 import util.UISetterUtil;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,8 @@ public class ForgotPasswordController {
 
     private EmailService emailService;
 
+    private FileHandlingService fileHandlingService;
+
     /*---------------------------------------------End of initialization----------------------------------------------*/
 
     /**
@@ -73,6 +77,7 @@ public class ForgotPasswordController {
         user = new User();
         userService = new UserService();
         emailService = new EmailService();
+        fileHandlingService = new FileHandlingService();
     }
 
     /**
@@ -174,8 +179,9 @@ public class ForgotPasswordController {
     /**
      * This method sends an email containing the newly generated password to the user.
      * <p>
-     * This method at first gets the User's contact details like email ID and name from the database, then it sends the
-     * email to the User's email ID.
+     * This method at first gets the User's contact details like email ID and name from the database, then it gets the
+     * admin's email address from the email.properties and then sends the newly generated password to user's email
+     * address.
      *
      * @param password The newly generated password.
      */
@@ -194,45 +200,69 @@ public class ForgotPasswordController {
                 user.setName(userContactTask.getValue().get(0).getName());
                 user.setEmail(userContactTask.getValue().get(0).getEmail());
 
-                //create new email object
-                Email email = new Email(
-                        "admin@examin.com"
-                        , user.getEmail()
-                        , "Your examin password has been reset"
-                        , "<div>Dear " + user.getName() + ",<p>Your examin password for User ID " + user.getUserId()
-                        + " has been reset. Your new password is " + password + "<p>Thanks & Regards,<br>admin"
-                        , "text/html");
+                //if the email.properties file exists in the system then only send email
+                if (Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "email.properties").toFile().exists()) {
+
+                    //get the admin's email address
+                    String senderEmail = fileHandlingService.loadPropertiesValuesFromPropertiesFile
+                            ("email.properties", "adminEmailId").get("adminEmailId");
+
+                    //get the user's email address
+                    String recipientEmail = user.getEmail();
+
+                    //set the subject of the email
+                    String subject = "Your examin password has been reset";
+
+                    //body of the email
+                    String body = "<div>Dear " + user.getName() + ",<p>Your examin password for User ID "
+                            + user.getUserId() + " has been reset. Your new password is " + password +
+                            "<p>Thanks & Regards,<br>admin";
+
+                    //content type of the email
+                    String contentType = "text/html";
+
+                    //create new email object
+                    Email email = new Email(senderEmail, recipientEmail, subject, body, contentType);
 
 
-                Task<Boolean> sendEmailTask = emailService.getSendEmailTask(email);
-                new Thread(sendEmailTask).start();
+                    Task<Boolean> sendEmailTask = emailService.getSendEmailTask(email);
+                    new Thread(sendEmailTask).start();
 
-                sendEmailTask.setOnSucceeded(new EventHandler<>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
+                    sendEmailTask.setOnSucceeded(new EventHandler<>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
 
-                        //everything is complete,so now disable the progress indicator
-                        progressIndicator.setVisible(false);
+                            //everything is complete,so now disable the progress indicator
+                            progressIndicator.setVisible(false);
 
-                        //display status of email sending operation
-                        if (sendEmailTask.getValue()) {
+                            //display status of email sending operation
+                            if (sendEmailTask.getValue()) {
 
-                            statusImageView.setImage(new Image("png/success.png"));
-                            statusLabel.setText("New password has been mailed to your registered email successfully!");
-                            msgLabel.setVisible(true);
-                            userIdTextField.clear();
-                        } else {
+                                statusImageView.setImage(new Image("png/success.png"));
+                                statusLabel.setText("New password has been mailed to your registered email " +
+                                        "successfully!");
+                                msgLabel.setVisible(true);
+                                userIdTextField.clear();
+                            } else {
 
-                            statusImageView.setImage(new Image("png/error.png"));
-                            statusLabel.setText("Unable to send email!");
-                            msgLabel.setVisible(true);
+                                statusImageView.setImage(new Image("png/error.png"));
+                                statusLabel.setText("Unable to send email!");
+                                msgLabel.setVisible(true);
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
+                //email.properties doesn't exist ,so can't send email
+                else {
+
+                    progressIndicator.setVisible(false);
+                    statusImageView.setImage(new Image("png/error.png"));
+                    statusLabel.setText("Unable to send email!");
+                    msgLabel.setVisible(true);
+                }
             }
         });
-
-
     }
 
     /**

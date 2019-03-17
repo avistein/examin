@@ -65,6 +65,9 @@ public class AdminPanelController {
     private Button dashboardButton;
 
     @FXML
+    private Label lastLoginLabel;
+
+    @FXML
     private Button logOutButton;
 
     /*--------------------------------------------End of Initialization-----------------------------------------------*/
@@ -166,11 +169,6 @@ public class AdminPanelController {
 
     @FXML
     private void handleNoticesListButtonAction() {
-
-    }
-
-    @FXML
-    private void handleReportsListButtonAction() {
 
     }
 
@@ -284,6 +282,7 @@ public class AdminPanelController {
                 userIdLabel.setText(adminLogin.getUserId());
                 nameLabel.setText(admin.getFirstName() + " " + admin.getMiddleName()
                         + " " + admin.getLastName());
+                lastLoginLabel.setText(adminLogin.getLastLoginTimeStamp());
             }
         });
     }

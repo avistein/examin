@@ -5,6 +5,9 @@ import javafx.concurrent.Task;
 import model.Email;
 
 import java.io.IOException;
+import java.nio.file.Paths;
+
+import static util.ConstantsUtil.*;
 
 /**
  * Service class to send an Email using the SendGrid API.
@@ -12,6 +15,20 @@ import java.io.IOException;
  * @author Avik Sarkar
  */
 public class EmailService {
+
+    /*--------------------------------------------Declaration of variables--------------------------------------------*/
+
+    private FileHandlingService fileHandlingService;
+
+    /*----------------------------------------End of Declaration of variables-----------------------------------------*/
+
+    /**
+     * Public default constructor to initialize data
+     */
+    public EmailService() {
+
+        fileHandlingService = new FileHandlingService();
+    }
 
     /**
      * This method is used to get a task which can be used to send an email over the Internet using SendGrid API.
@@ -39,8 +56,24 @@ public class EmailService {
                 //form the mail using subject and body
                 Mail mail = new Mail(from, email.getSubject(), to, content);
 
-                //the API key
-                SendGrid sg = new SendGrid("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");
+                SendGrid sg;
+
+                //if the email.properties exists in the system then get the api key from there
+                if (Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "email.properties").toFile().exists()) {
+
+                    //the API key
+                    String apiKey = fileHandlingService.loadPropertiesValuesFromPropertiesFile
+                            ("email.properties", "sendGridApiKey").get("sendGridApiKey");
+
+
+                    sg = new SendGrid(apiKey);
+                }
+
+                //api key doesn't exist in the system , so email sending failed
+                else {
+
+                    return false;
+                }
 
                 Request request = new Request();
 
