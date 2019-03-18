@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="675.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfessorRegistrationController">
+   <children>
+      <GridPane fx:id="mainGridPane" prefHeight="675.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="333.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="638.0" minHeight="10.0" prefHeight="615.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label prefHeight="55.0" prefWidth="269.0" text=" Professor Registration">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <GridPane GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="593.0" minHeight="10.0" prefHeight="525.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="239.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <GridPane fx:id="contentGridPane" prefHeight="549.0" prefWidth="860.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="132.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="132.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="177.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="216.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="225.0" minHeight="10.0" prefHeight="133.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="100.0" text="Department">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="deptComboBox" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="163.0" text="Highest Qualification">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="highestQualificationComboBox" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="100.0" text="HOD Status">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="hodComboBox" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Professor ID">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="profIdTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
+                           <children>
+                              <Label prefHeight="25.0" prefWidth="117.0" text="Personal Details:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
+                           <children>
+                              <Label text="First Name">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="firstNameTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <children>
+                              <Label text="Middle Name">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="middleNameTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                           <children>
+                              <Label text="Last Name">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="lastNameTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="7">
+                           <children>
+                              <Label text="Contact Details:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="89.0" prefWidth="210.0" GridPane.rowIndex="8">
+                           <children>
+                              <Label text="Email Id">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="emailIdTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                           <children>
+                              <Label text="Contact No">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="contactNoTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
+                           <children>
+                              <Label text="Address">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextArea fx:id="addressTextArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </TextArea>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label prefHeight="25.0" prefWidth="104.0" text="Office Details:">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="30.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="371.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                           <children>
+                              <Label text="Date Of Birth">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <DatePicker fx:id="dobDatePicker" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </DatePicker>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Date of Joining">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <DatePicker fx:id="dojDatePicker" prefHeight="32.0" prefWidth="183.0">
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="6.0" />
+                                 </VBox.margin>
+                              </DatePicker>
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+                  <HBox alignment="CENTER" prefHeight="95.0" prefWidth="860.0" spacing="10.0" GridPane.rowIndex="1">
+                     <children>
+                        <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackAndCancelButtonAction" text="Back">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="submitButton" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="resetButton" alignment="CENTER_RIGHT" layoutX="72.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleAddAnotherAndResetButtonAction" text="Reset">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+      <StackPane fx:id="statusStackPane" prefHeight="675.0" prefWidth="860.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+               <children>
+                  <ProgressIndicator fx:id="progressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
+                  <ImageView fx:id="statusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                  <Label fx:id="statusLabel" visible="false" />
+                  <HBox fx:id="buttonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                     <children>
+                        <Button fx:id="addAnotherButton" mnemonicParsing="false" onAction="#handleAddAnotherAndResetButtonAction" text="Add Another" />
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleBackAndCancelButtonAction" text="Cancel" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
