@@ -18,14 +18,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import model.Department;
 import model.Professor;
-import service.*;
+import service.DepartmentService;
+import service.ProfessorService;
 import util.ValidatorUtil;
 
-import javax.swing.plaf.basic.ComboPopup;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import static util.ConstantsUtil.*;
 
 /**
@@ -55,10 +56,10 @@ public class ProfessorRegistrationController {
     private ComboBox<String> deptComboBox;
 
     @FXML
-    private ComboBox<String> highestQualificationComboBox;
+    private TextField highestQualificationTextField;
 
     @FXML
-    private ComboBox<String> hodComboBox;
+    private CheckBox hodCheckBox;
 
     @FXML
     private DatePicker dojDatePicker;
@@ -108,7 +109,7 @@ public class ProfessorRegistrationController {
     @FXML
     private HBox buttonsHbox;
 
-    /*------------------------------------End of declaration and initialization----------------------------------*/
+    /*--------------------------------------End of declaration and initialization-------------------------------------*/
 
     /**
      * This method is used to initialize variables of this Class.
@@ -153,13 +154,6 @@ public class ProfessorRegistrationController {
                     //set items in profDeptComboBox
                     deptComboBox.setItems(options);
                 }
-
-                //set items in the Highest Qualification Combo box
-                highestQualificationComboBox.setItems(FXCollections.observableArrayList("B.tech"
-                , "M.tech", "B.sc", "M.sc", "B.A", "M.A", "P.hd", "H.S"));
-
-                //set items in the Hod Status combo box
-                hodComboBox.setItems(FXCollections.observableArrayList("1", "0"));
             }
         });
 
@@ -195,12 +189,16 @@ public class ProfessorRegistrationController {
             professor.setAddress(addressTextArea.getText().trim());
             professor.setEmail(emailIdTextField.getText().trim());
             professor.setDoj(dojDatePicker.getValue().toString());
-            professor.setHighestQualification(highestQualificationComboBox.getValue());
-            professor.setHodStatus(Integer.parseInt(hodComboBox.getValue()));
+            professor.setHighestQualification(highestQualificationTextField.getText().trim());
+            if (hodCheckBox.isSelected()) {
+
+                professor.setHodStatus("HOD");
+            } else {
+
+                professor.setHodStatus("");
+            }
+
             professor.setDeptName(deptComboBox.getValue());
-            //professor.setDepartment(deptComboBox.getValue());
-
-
 
             //if edit signal is sent
             if (editOrAddProfessorChoice == EDIT_CHOICE) {
@@ -233,7 +231,7 @@ public class ProfessorRegistrationController {
                         } else if (status == SUCCESS) {
 
                             statusImageView.setImage(new Image("/png/success.png"));
-                            statusLabel.setText("Added Successfully!");
+                            statusLabel.setText("Edited Successfully!");
                         } else {
 
                             statusImageView.setImage(new Image("/png/error.png"));
@@ -297,110 +295,106 @@ public class ProfessorRegistrationController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
         if (deptComboBox.getValue() == null) {
-            alert.setContentText("Please select a department!");
+            alert.setContentText("Please select a department first!");
             alert.show();
             return false;
         }
-        else if (highestQualificationComboBox.getValue() == null) {
-            alert.setContentText("Please select highest qualification!");
+        if (highestQualificationTextField.getText() == null || highestQualificationTextField.getText().trim()
+                .isEmpty()) {
+            alert.setContentText("Please enter highest qualification!");
             alert.show();
             return false;
         }
-        else if (hodComboBox.getValue() == null) {
-            alert.setContentText("Please select Hod status!");
+        if (!ValidatorUtil.validateAcademicItem(highestQualificationTextField.getText().trim())) {
+
+            alert.setContentText("Invalid highest qualification!");
             alert.show();
             return false;
         }
-        else if (dojDatePicker.getValue() == null) {
+        if (dojDatePicker.getValue() == null) {
             alert.setContentText("Please choose a date of joining!");
             alert.show();
             return false;
         }
-        else if (!ValidatorUtil.validateDateFormat(dobDatePicker.getValue().toString())) {
+        if (!ValidatorUtil.validateDateFormat(dobDatePicker.getValue().toString())) {
 
             alert.setContentText("Invalid date of joining format!");
             alert.show();
             return false;
         }
-        else if (profIdTextField.getText().isEmpty()) {
+        if (profIdTextField.getText().isEmpty()) {
             alert.setContentText("Please enter professor Id!");
             alert.show();
             return false;
         }
-        else if (!ValidatorUtil.validateId(profIdTextField.getText().trim())) {
+        if (!ValidatorUtil.validateId(profIdTextField.getText().trim())) {
 
             alert.setContentText("Invalid Professor Id!");
             alert.show();
             return false;
         }
-        else if (firstNameTextField.getText().isEmpty()) {
-            alert.setContentText("First Name cannot be empty!");
+        if (firstNameTextField.getText().isEmpty()) {
+            alert.setContentText("Professor's First Name cannot be empty!");
             alert.show();
             return false;
         }
-        else if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
+        if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
 
-            alert.setContentText("Invalid First Name!");
+            alert.setContentText("Invalid Professor's First Name!");
             alert.show();
             return false;
         }
-        else if (!middleNameTextField.getText().trim().isEmpty()) {
+        if (!middleNameTextField.getText().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(middleNameTextField.getText().trim())) {
 
-                alert.setContentText("Invalid Middle Name!");
+                alert.setContentText("Invalid Professor's Middle Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
         }
-        else if (!lastNameTextField.getText().trim().isEmpty()) {
+        if (!lastNameTextField.getText().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(lastNameTextField.getText().trim())) {
 
-                alert.setContentText("Invalid Last Name!");
+                alert.setContentText("Invalid Professor's Last Name!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
         }
-        else if (dobDatePicker.getValue() == null) {
+        if (dobDatePicker.getValue() == null) {
             alert.setContentText("Please choose a date of birth!");
             alert.show();
             return false;
         }
-        else if (!ValidatorUtil.validateDateFormat(dobDatePicker.getValue().toString())) {
+        if (!ValidatorUtil.validateDateFormat(dobDatePicker.getValue().toString())) {
 
             alert.setContentText("Invalid Date of Birth Format!");
             alert.show();
             return false;
         }
-        else if (emailIdTextField.getText().isEmpty()) {
-            alert.setContentText("Email ID cannot be empty!");
+        if (emailIdTextField.getText().isEmpty()) {
+            alert.setContentText("Professor's Email ID cannot be empty!");
             alert.show();
             return false;
         }
-        else if (!ValidatorUtil.validateEmail(emailIdTextField.getText())) {
-            alert.setContentText("Invalid Email ID !");
+        if (!ValidatorUtil.validateEmail(emailIdTextField.getText())) {
+            alert.setContentText("Invalid Professor's Email ID !");
             alert.show();
             return false;
         }
-        else if (contactNoTextField.getText().isEmpty()) {
-            alert.setContentText("Contact No. cannot be empty!");
+        if (contactNoTextField.getText().isEmpty()) {
+            alert.setContentText("Professor's Contact No. cannot be empty!");
             alert.show();
             return false;
         }
-        else if (!ValidatorUtil.validateContactNo(contactNoTextField.getText())) {
-            alert.setContentText("Invalid Contact No.!");
+        if (!ValidatorUtil.validateContactNo(contactNoTextField.getText())) {
+            alert.setContentText("Invalid Professor's Contact No.!");
             alert.show();
             return false;
         }
-        else if (addressTextArea.getText().isEmpty()) {
-            alert.setContentText("Address cannot be empty!");
+        if (addressTextArea.getText().isEmpty()) {
+            alert.setContentText("Professor's Address cannot be empty!");
             alert.show();
             return false;
         }
@@ -414,7 +408,7 @@ public class ProfessorRegistrationController {
      */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleAddAnotherAndResetButtonAction(){
+    private void handleAddAnotherAndResetButtonAction() {
 
         //add another or reset means adding a new professor
         editOrAddProfessorChoice = ADD_CHOICE;
@@ -425,6 +419,7 @@ public class ProfessorRegistrationController {
         statusImageView.setVisible(false);
         statusLabel.setVisible(false);
         mainGridPane.setOpacity(1);
+
         firstNameTextField.clear();
         middleNameTextField.clear();
         lastNameTextField.clear();
@@ -432,14 +427,14 @@ public class ProfessorRegistrationController {
         emailIdTextField.clear();
         addressTextArea.clear();
         contactNoTextField.clear();
-        deptComboBox.getSelectionModel().clearSelection();
-        highestQualificationComboBox.getSelectionModel().clearSelection();
-        hodComboBox.getSelectionModel().clearSelection();
+        deptComboBox.setValue(null);
+        highestQualificationTextField.clear();
+        hodCheckBox.setSelected(false);
         dojDatePicker.getEditor().clear();
         profIdTextField.clear();
-        hodComboBox.setDisable(false);
-        highestQualificationComboBox.setDisable(false);
+
         deptComboBox.setDisable(false);
+        profIdTextField.setDisable(false);
     }
 
     /**
@@ -451,7 +446,7 @@ public class ProfessorRegistrationController {
     @FXML
     private void handleBackAndCancelButtonAction() throws IOException {
 
-        StackPane contentStackPane = (StackPane)rootAnchorPane.getParent();
+        StackPane contentStackPane = (StackPane) rootAnchorPane.getParent();
         Parent professorRegistrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ProfessorSection.fxml"));
         contentStackPane.getChildren().removeAll();
@@ -467,6 +462,7 @@ public class ProfessorRegistrationController {
     public void setEditSignal(int editSignal) {
 
         editOrAddProfessorChoice = editSignal;
+
         firstNameTextField.setText(professor.getFirstName());
         middleNameTextField.setText(professor.getMiddleName());
         lastNameTextField.setText(professor.getLastName());
@@ -476,12 +472,15 @@ public class ProfessorRegistrationController {
         addressTextArea.setText(professor.getAddress());
         profIdTextField.setText(professor.getProfId());
         contactNoTextField.setText(professor.getContactNo());
-        deptComboBox.setDisable(true);
-        highestQualificationComboBox.setDisable(true);
-        hodComboBox.setDisable(true);
         deptComboBox.setValue(professor.getDeptName());
-        highestQualificationComboBox.setValue(professor.getHighestQualification());
-        hodComboBox.setValue(Integer.toString(professor.getHodStatus()));
+        highestQualificationTextField.setText(professor.getHighestQualification());
+
+        if (professor.getHodStatus().equals("HOD")) {
+
+            hodCheckBox.setSelected(true);
+        }
+
+        deptComboBox.setDisable(true);
         profIdTextField.setDisable(true);
     }
 

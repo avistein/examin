@@ -48,6 +48,7 @@ public class ImportStudentCSVModalController {
     private File file;
     private boolean tableUpdateStatus;
     private FileHandlingService fileHandlingService;
+
     @FXML
     private GridPane mainGridPane;
 
@@ -137,6 +138,7 @@ public class ImportStudentCSVModalController {
      * <p>
      * Do not try to get the Scene or Window of any node in this method.
      */
+    @SuppressWarnings("Duplicates")
     public void initialize() {
 
         studentService = new StudentService();
@@ -147,7 +149,7 @@ public class ImportStudentCSVModalController {
 
         //setting the csv import instruction
         Text text1 = new Text("File must be comma delimited CSV file\n");
-        Text text2 = new Text("Open excel save as comma delimited CSV file\n");
+        Text text2 = new Text("In MS Excel save as comma delimited CSV file\n");
         Text text3 = new Text("Make sure there is no heading or any other content" +
                 " than column header and values in CSV file\n");
         Text text4 = new Text("Any date column should have values in the format " +
@@ -217,7 +219,7 @@ public class ImportStudentCSVModalController {
         try {
 
             //if studentSample.csv doesn't exist in the User's System , then only create it
-            if (Files.notExists(Paths.get(filePath))) {
+            if (!Paths.get(filePath).toFile().exists()) {
 
                 //get the content of the sampleCsv File as InputStream
                 InputStream in = getClass().getResourceAsStream(sampleCsvFilePath);
@@ -251,9 +253,9 @@ public class ImportStudentCSVModalController {
         Map<String, String> map = new HashMap<>();
         map.put("firstName", firstNameComboBox.getValue());
         map.put("middleName", middleNameComboBox.getValue());
-        map.put("lastName", lastNameComboBox.getValue());
         map.put("batchName", batchNameComboBox.getValue());
         map.put("degree", degreeComboBox.getValue());
+        map.put("lastName", lastNameComboBox.getValue());
         map.put("discipline", disciplineComboBox.getValue());
         map.put("regYear", regYearComboBox.getValue());
         map.put("currSemester", currSemesterComboBox.getValue());
@@ -451,13 +453,13 @@ public class ImportStudentCSVModalController {
         }
         if (student.getFirstName() == null || student.getFirstName().trim().isEmpty()) {
 
-            alert.setContentText("First Name cannot be empty in Row : " + currStudentIndex + "!");
+            alert.setContentText("Student's First Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
         if (!ValidatorUtil.validateName(student.getFirstName().trim())) {
 
-            alert.setContentText("Invalid First Name in Row : " + currStudentIndex + "!");
+            alert.setContentText("Invalid Student's First Name in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
@@ -465,7 +467,7 @@ public class ImportStudentCSVModalController {
 
             if (!ValidatorUtil.validateName(student.getMiddleName().trim())) {
 
-                alert.setContentText("Invalid Middle Name in Row : " + currStudentIndex + "!");
+                alert.setContentText("Invalid Student's Middle Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
             }
@@ -474,20 +476,20 @@ public class ImportStudentCSVModalController {
 
             if (!ValidatorUtil.validateName(student.getLastName().trim())) {
 
-                alert.setContentText("Invalid Last Name in Row : " + currStudentIndex + "!");
+                alert.setContentText("Invalid Student's Last Name in Row : " + currStudentIndex + "!");
                 alert.show();
                 return false;
             }
         }
         if (student.getDob() == null || student.getDob().trim().isEmpty()) {
 
-            alert.setContentText("DOB cannot be empty in Row : " + currStudentIndex + "!");
+            alert.setContentText("Student's DOB cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
         if (!ValidatorUtil.validateDateFormat(student.getDob().trim())) {
 
-            alert.setContentText("Invalid DOB format in Row : " + currStudentIndex + "!");
+            alert.setContentText("Invalid Student's DOB format in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
@@ -511,19 +513,19 @@ public class ImportStudentCSVModalController {
         }
         if (!ValidatorUtil.validateEmail(student.getEmail().trim())) {
 
-            alert.setContentText("Invalid Email ID in Row : " + currStudentIndex + "!");
+            alert.setContentText("Invalid Student's Email ID in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
         if (student.getContactNo() == null || student.getContactNo().trim().isEmpty()) {
 
-            alert.setContentText("Contact No. cannot be empty in Row : " + currStudentIndex + "!");
+            alert.setContentText("Student's Contact No. cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
         if (!ValidatorUtil.validateContactNo(student.getContactNo().trim())) {
 
-            alert.setContentText("Invalid Contact No. in Row : " + currStudentIndex + "!");
+            alert.setContentText("Invalid Student's Contact No. in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
         }
@@ -757,7 +759,7 @@ public class ImportStudentCSVModalController {
      * This method returns the status of the TableView updation.
      *
      * @return The status which determines whether the TableView in
-     * StudentsList.fxml will be updated or not.
+     * StudentSection.fxml will be updated or not.
      */
     public boolean getTableUpdateStatus() {
 

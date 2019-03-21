@@ -81,7 +81,7 @@ public class BatchService {
      *
      * @param additionalQuery Includes WHERE clause or any other specific query details.
      * @param params          Parameters for the PreparedStatement.
-     * @return A list of Batch details retrieved from the DB in a separate thread.
+     * @return A list of Batch details retrieved from the DB.
      */
     @SuppressWarnings("Duplicates")
     List<Batch> getBatchDataForServices(String additionalQuery, String... params) {

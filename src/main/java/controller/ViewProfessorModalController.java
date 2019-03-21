@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -18,7 +15,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.Professor;
 import service.ProfessorService;
-import static util.ConstantsUtil.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -33,7 +29,7 @@ import static util.ConstantsUtil.*;
 
 public class ViewProfessorModalController {
 
-    /*--------------------------------Initialization & Declaration of variables----------------------------------*/
+    /*------------------------------------Initialization & Declaration of variables-----------------------------------*/
 
     private Professor professor;
 
@@ -69,7 +65,7 @@ public class ViewProfessorModalController {
     private Label addressLabel;
 
     @FXML
-    private Label hodStatusLabel;
+    private CheckBox hodCheckBox;
 
     @FXML
     private GridPane mainGridPane;
@@ -86,7 +82,7 @@ public class ViewProfessorModalController {
     @FXML
     private Label statusLabel;
 
-    /*--------------------------------End of Initialization & Declaration ----------------------------------*/
+    /*---------------------------------------End of Initialization & Declaration -------------------------------------*/
 
     /**
      * This method is used to initialize variables of this Class.
@@ -94,9 +90,8 @@ public class ViewProfessorModalController {
      * <p>
      * Do not try to get the Scene or Window of any node in this method.
      */
-
     @FXML
-    private void initialize(){
+    private void initialize() {
         professorService = new ProfessorService();
 
         //default status, no professor has been deleted
@@ -124,7 +119,8 @@ public class ViewProfessorModalController {
         //get the contentStackPane here
         StackPane contentStackPane = (StackPane) mainScene.lookup("#contentStackPane");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ProfessorPanel/ProfessorRegistration.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource
+                ("/view/ProfessorRegistration.fxml"));
         Parent professorRegistrationFxml = loader.load();
 
         //get the controller of ProfessorRegistration.fxml
@@ -145,7 +141,7 @@ public class ViewProfessorModalController {
     }
 
     @FXML
-    private void handleDeleteButtonAction(){
+    private void handleDeleteButtonAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete");
         alert.setHeaderText("Are you really want to delete?");
@@ -153,7 +149,8 @@ public class ViewProfessorModalController {
         Optional<ButtonType> result = alert.showAndWait();
 
         //if OK is pressed in the Confirmation alert
-        if(result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
+
             mainGridPane.setOpacity(0.5);
             statusStackPane.setVisible(true);
             progressIndicator.setVisible(true);
@@ -174,12 +171,11 @@ public class ViewProfessorModalController {
                     statusImageView.setVisible(true);
                     statusLabel.setVisible(true);
 
-                    if(status == DATABASE_ERROR){
+                    if (status == DATABASE_ERROR) {
                         statusImageView.setImage(new Image("/png/critical error.png"));
                         statusLabel.setText("Database Error!");
                         professorDeletedStatus = false;
-                    }
-                    else if(status == SUCCESS){
+                    } else if (status == SUCCESS) {
                         statusImageView.setImage(new Image("/png/success.png"));
                         statusLabel.setText("Successfully Deleted!");
                         professorDeletedStatus = true;
@@ -188,8 +184,7 @@ public class ViewProfessorModalController {
                         statusImageView.setImage(new Image("/png/error.png"));
                         statusLabel.setText("Cannot delete professor!");
                         professorDeletedStatus = false;
-                    }
-                    else {
+                    } else {
                         statusImageView.setImage(new Image("/png/error.png"));
                         statusLabel.setText("Professor not found!");
                         professorDeletedStatus = false;
@@ -198,7 +193,6 @@ public class ViewProfessorModalController {
             });
         }
     }
-
 
     /**
      * This method is used to set the Professor object for editing or deleting it.
@@ -210,8 +204,7 @@ public class ViewProfessorModalController {
 
         this.professor = professor;
 
-        nameLabel.setText(this.professor.getFirstName() + " "
-                + this.professor.getMiddleName() + " " +
+        nameLabel.setText(this.professor.getFirstName() + " " + this.professor.getMiddleName() + " " +
                 this.professor.getLastName());
         dobLabel.setText(this.professor.getDob());
         profIdLabel.setText(this.professor.getProfId());
@@ -220,7 +213,10 @@ public class ViewProfessorModalController {
         contactNoLabel.setText(this.professor.getContactNo());
         emailIdLabel.setText(this.professor.getEmail());
         addressLabel.setText(this.professor.getAddress());
-        hodStatusLabel.setText(Integer.toString(this.professor.getHodStatus()));
+        if (this.professor.getHodStatus().equals("HOD")) {
+
+            hodCheckBox.setSelected(true);
+        }
         deptLabel.setText(this.professor.getDeptName());
     }
 
@@ -230,10 +226,8 @@ public class ViewProfessorModalController {
      *
      * @return The deletion status in boolean type.
      */
-    public boolean getProfessorDeletedStatus(){
+    public boolean getProfessorDeletedStatus() {
 
         return professorDeletedStatus;
     }
-
-
 }

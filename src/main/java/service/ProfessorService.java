@@ -5,9 +5,11 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 import database.DatabaseHelper;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
-import model.Department;
 import model.Professor;
+import model.Subject;
+import util.PasswordGenUtil;
 
 import java.io.File;
 import java.io.FileReader;
@@ -50,34 +52,51 @@ public class ProfessorService {
      * @return A professorTask which can be used to get a list of professor details from the DB in a separate
      * thread.
      */
-
     @SuppressWarnings("Duplicates")
-    public Task<List<Professor>> getProfessorTask(String additionalQuery, final String ...params){
+    public Task<List<Professor>> getProfessorTask(String additionalQuery, final String... params) {
 
-        final String query = "SELECT v_prof_id, v_first_name, v_middle_name, v_last_name, d_dob" +
-                ",v_email_id, v_address, d_date_of_joining, v_contact_no, v_dept_name, v_highest_qualification" +
-                ", int_hod FROM t_professor natural join t_prof_dept " + additionalQuery;
+        SubjectService subjectService = new SubjectService();
+
+        final String query = "SELECT v_prof_id, t_professor.v_first_name, v_middle_name, v_last_name, d_dob" +
+                ", d_date_of_joining, v_dept_name, v_highest_qualification, int_hod, v_contact_no, v_address" +
+                ", v_email_id FROM t_professor natural join t_prof_dept inner join t_user_contact_details on " +
+                "t_professor.v_prof_id = t_user_contact_details.v_user_id " + additionalQuery;
 
         Task<List<Professor>> professorTask = new Task<>() {
             @Override
-            protected List<Professor> call(){
+            protected List<Professor> call() {
+
                 Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 //each item in the list is a single professor details
-                List<Professor>list = new ArrayList<>();
+                List<Professor> list = new ArrayList<>();
 
                 /*
-                v_prof_id is the primary key, total items in the map will always be equal to no of
+                v_prof_id is the primary key, total items in the map1 will always be equal to no of
                 v_prof_id retrieved
                  */
                 for (int i = 0; i < map.get("v_prof_id").size(); i++) {
+
+                    //get the list of subjects for the respective professor
+                    List<Subject> listOfSubjects = subjectService.getSubjectDataForServices
+                            ("natural join t_prof_sub WHERE v_prof_id=?", map.get("v_prof_id").get(i));
 
                     Professor professor = new Professor();
 
                     professor.setProfId(map.get("v_prof_id").get(i));
                     professor.setFirstName(map.get("v_first_name").get(i));
-                    professor.setMiddleName(map.get("v_middle_name").get(i));
-                    professor.setLastName(map.get("v_last_name").get(i));
+
+                    //to avoid storing "null"
+                    if (!(map.get("v_middle_name").get(i) == null)) {
+
+                        professor.setMiddleName(map.get("v_middle_name").get(i));
+                    }
+
+                    //to avoid storing "null"
+                    if (!(map.get("v_last_name").get(i) == null)) {
+
+                        professor.setLastName(map.get("v_last_name").get(i));
+                    }
                     professor.setDob(map.get("d_dob").get(i));
                     professor.setDoj(map.get("d_date_of_joining").get(i));
                     professor.setEmail(map.get("v_email_id").get(i));
@@ -85,7 +104,8 @@ public class ProfessorService {
                     professor.setContactNo(map.get("v_contact_no").get(i));
                     professor.setHighestQualification(map.get("v_highest_qualification").get(i));
                     professor.setDeptName(map.get("v_dept_name").get(i));
-                    professor.setHodStatus(Integer.parseInt(map.get("int_hod").get(i)));
+                    professor.setHodStatus(map.get("int_hod").get(i).equals("1") ? "HOD" : "");
+                    professor.setSubjects(FXCollections.observableArrayList(listOfSubjects));
 
                     //a single professor details is added to the list
                     list.add(professor);
@@ -168,7 +188,6 @@ public class ProfessorService {
         return loadProfessorFromCsvToMemoryTask;
     }
 
-
     /**
      * This method can be used to get a task to add list of Professors to database.
      *
@@ -176,18 +195,22 @@ public class ProfessorService {
      * @return A task which can be used to add list of Professors to database.
      */
     @SuppressWarnings("Duplicates")
-    public Task<Integer> getAddProfessorFromMemoryToDataBaseTask(List<Professor> list){
+    public Task<Integer> getAddProfessorFromMemoryToDataBaseTask(List<Professor> list) {
         Task<Integer> addProfessorFromMemoryToDataBaseTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                final String sql1 = "INSERT INTO t_professor (v_prof_id, v_first_name" +
-                        ", v_middle_name, v_last_name, d_dob, v_contact_no, v_address" +
-                        ", v_email_id, d_date_of_joining, v_highest_qualification)" +
-                        " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                final String sql1 = "INSERT INTO t_login_details (v_user_id, int_gid, v_pass, v_hash_algo) " +
+                        "VALUES(?, ?, ?, ?)";
 
-                final String sql2 = "INSERT INTO t_prof_dept (v_prof_id" +
+                final String sql2 = "INSERT INTO t_professor (v_prof_id, v_first_name, v_middle_name, v_last_name" +
+                        ", d_dob, d_date_of_joining, v_highest_qualification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_first_name, v_contact_no" +
+                        ", v_address, v_email_id) VALUES(?, ?, ?, ?, ?)";
+
+                final String sql4 = "INSERT INTO t_prof_dept (v_prof_id" +
                         ", v_dept_name, int_hod) VALUES(?, ?, ?)";
 
                 /*
@@ -204,57 +227,90 @@ public class ProfessorService {
 
                  professorDeptList stores the data in the same way for t_prof_dept table in DB.
                  */
-
+                List<List<String>> professorsLoginDetailsList = new ArrayList<>();
                 List<List<String>> listOfProfessors = new ArrayList<>();
                 List<List<String>> professorDeptList = new ArrayList<>();
+                List<List<String>> profContactDetailsList = new ArrayList<>();
 
+                for (Professor professor : list) {
 
-                for(Professor professor : list){
+                    List<String> singleProfessorLoginDetails = new ArrayList<>();
                     List<String> singleProfessorDetails = new ArrayList<>();
                     List<String> singleProfessorDept = new ArrayList<>();
+                    List<String> singleProfContactDetails = new ArrayList<>();
 
-                    singleProfessorDept.add(professor.getProfId());
-                    singleProfessorDept.add(professor.getDeptName());
-                    singleProfessorDept.add(Integer.toString(professor.getHodStatus()));
+                    //single professor login details
+                    singleProfessorLoginDetails.add(professor.getProfId());
+                    singleProfessorLoginDetails.add(
+                            String.valueOf(professor.getHodStatus().equals("HOD") ? PROFESSOR_HOD_GID : PROFESSOR_GID)
+                    );
+                    singleProfessorLoginDetails.add(PasswordGenUtil.generateNewPassword().get("hashedPassword"));
+                    singleProfessorLoginDetails.add("bcrypt");
 
-                    //add profId,deptName,hodStatus of a particular professor into the list
-                    professorDeptList.add(singleProfessorDept);
+                    //add details of a particular professor login  details into the list
+                    professorsLoginDetailsList.add(singleProfessorLoginDetails);
 
+
+                    //single professor details
                     singleProfessorDetails.add(professor.getProfId());
                     singleProfessorDetails.add(professor.getFirstName());
                     singleProfessorDetails.add(professor.getMiddleName());
                     singleProfessorDetails.add(professor.getLastName());
                     singleProfessorDetails.add(professor.getDob());
-                    singleProfessorDetails.add(professor.getContactNo());
-                    singleProfessorDetails.add(professor.getAddress());
-                    singleProfessorDetails.add(professor.getEmail());
                     singleProfessorDetails.add(professor.getDoj());
                     singleProfessorDetails.add(professor.getHighestQualification());
+
+                    //add details of a particular professor into the list
                     listOfProfessors.add(singleProfessorDetails);
+
+
+                    //single professor contact details
+                    singleProfContactDetails.add(professor.getContactNo());
+                    singleProfContactDetails.add(professor.getAddress());
+                    singleProfContactDetails.add(professor.getEmail());
+
+                    //add contact details of a particular professor into the list
+                    profContactDetailsList.add(singleProfContactDetails);
+
+
+                    //single professor dept details
+                    singleProfessorDept.add(professor.getProfId());
+                    singleProfessorDept.add(professor.getDeptName());
+                    singleProfessorDept.add(String.valueOf(professor.getHodStatus().equals("HOD") ? 1 : 0));
+
+                    //add profId,deptName,hodStatus of a particular professor into the list
+                    professorDeptList.add(singleProfessorDept);
                 }
 
                 /*get the no of insertions or error status of the INSERT operation*/
-                int tProfessorStatus = databaseHelper.batchInsert(sql1, listOfProfessors);
-                int tProfessorDeptStatus = databaseHelper.batchInsert(sql2, professorDeptList);
+                int tLoginDetailsStatus = databaseHelper.batchInsert(sql1, professorsLoginDetailsList);
+                int tProfessorStatus = databaseHelper.batchInsert(sql2, listOfProfessors);
+                int tUserContactDetails = databaseHelper.batchInsert(sql3, profContactDetailsList);
+                int tProfessorDeptStatus = databaseHelper.batchInsert(sql4, professorDeptList);
 
                 //if any DB error is present
-                if(tProfessorStatus == DATABASE_ERROR ||
-                        tProfessorDeptStatus == DATABASE_ERROR)
+                if (tLoginDetailsStatus == DATABASE_ERROR || tProfessorStatus == DATABASE_ERROR
+                        || tProfessorDeptStatus == DATABASE_ERROR || tUserContactDetails == DATABASE_ERROR) {
+
                     return DATABASE_ERROR;
+                }
 
                 //return success ,if all professors are inserted
-                else if(tProfessorStatus == SUCCESS &&
-                        tProfessorDeptStatus == SUCCESS)
+                else if (tLoginDetailsStatus == SUCCESS && tProfessorStatus == SUCCESS
+                        && tProfessorDeptStatus == SUCCESS && tUserContactDetails == SUCCESS) {
+
                     return SUCCESS;
+                }
 
                 //return the no of professor inserted
-                else
+                else {
+
                     return DATA_ALREADY_EXIST_ERROR;
+                }
             }
         };
         return addProfessorFromMemoryToDataBaseTask;
     }
-
 
     /**
      * This method is used to get a task which can be used to add a single professor to the DB.
@@ -262,45 +318,63 @@ public class ProfessorService {
      * @param professor The professor to be added to the database.
      * @return A task which can be used to add a single professor into the DB by running a separate thread.
      */
-    public Task<Integer>  getAddProfessorToDatabaseTask(final Professor professor){
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getAddProfessorToDatabaseTask(final Professor professor) {
         Task<Integer> addProfessorToDatabaseTask = new Task<>() {
             @Override
             protected Integer call() {
 
-                final String sql1 = "INSERT INTO t_professor (v_prof_id, v_first_name, v_middle_name" +
-                        ", v_last_name, d_dob, v_contact_no, v_address, v_email_id" +
-                        ", d_date_of_joining, v_highest_qualification) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String profGid = String.valueOf(professor.getHodStatus().equals("HOD") ? PROFESSOR_HOD_GID : PROFESSOR_GID);
+                Map<String, String> genPassMap = PasswordGenUtil.generateNewPassword();
 
-                final String sql2 = "INSERT INTO t_prof_dept(v_prof_id" +
+                final String sql1 = "INSERT INTO t_login_details (v_user_id, int_gid, v_pass, v_hash_algo) " +
+                        "VALUES(?, ?, ?, ?)";
+
+                final String sql2 = "INSERT INTO t_professor (v_prof_id, v_first_name, v_middle_name" +
+                        ", v_last_name, d_dob, d_date_of_joining, v_highest_qualification) " +
+                        "values(?, ?, ?, ?, ?, ?, ?)";
+
+                final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_first_name, v_contact_no" +
+                        ", v_address, v_email_id) values(?, ?, ?, ?, ?)";
+
+                final String sql4 = "INSERT INTO t_prof_dept(v_prof_id" +
                         ", v_dept_name, int_hod) VALUES(?, ?, ?)";
 
+                //get the status of insertion of professor's login details into t_login_details in the DB
+                int tLoginDetailsStatus = databaseHelper.updateDelete(sql1, professor.getProfId()
+                        , profGid, genPassMap.get("hashedPassword"), "bcrypt");
+
                 //get the status of insertion of professor details into t_professor in the DB
-                int tProfessorStatus = databaseHelper.updateDelete(sql1, professor.getProfId()
+                int tProfessorStatus = databaseHelper.updateDelete(sql2, professor.getProfId()
                         , professor.getFirstName(), professor.getMiddleName(), professor.getLastName()
-                        , professor.getDob(), professor.getContactNo(), professor.getAddress()
-                        , professor.getEmail(), professor.getDoj(), professor.getHighestQualification());
+                        , professor.getDob(), professor.getDoj(), professor.getHighestQualification());
+
+                // get the status of insertion of professor details into t_user_contact_details in the DB
+                int tUserContactDetails = databaseHelper.updateDelete(sql3, professor.getProfId()
+                        , professor.getFirstName(), professor.getContactNo(), professor.getAddress()
+                        , professor.getEmail());
 
                 // get the status of insertion of professor details into t_prof_dept in the DB
-                int tProfessorDeptStatus = databaseHelper.updateDelete(sql2, professor.getProfId()
-                        , professor.getDeptName(), Integer.toString(professor.getHodStatus()));
+                int tProfessorDeptStatus = databaseHelper.updateDelete(sql4, professor.getProfId()
+                        , professor.getDeptName(), String.valueOf(professor.getHodStatus().equals("HOD") ? 1 : 0));
 
                 //return the status of insertion of professor details
-                if(tProfessorStatus == DATABASE_ERROR ||
-                        tProfessorDeptStatus == DATABASE_ERROR)
+                if (tLoginDetailsStatus == DATABASE_ERROR || tProfessorStatus == DATABASE_ERROR
+                        || tProfessorDeptStatus == DATABASE_ERROR || tUserContactDetails == DATABASE_ERROR) {
+
                     return DATABASE_ERROR;
+                } else if (tLoginDetailsStatus == SUCCESS && tProfessorStatus == SUCCESS
+                        && tProfessorDeptStatus == SUCCESS && tUserContactDetails == SUCCESS) {
 
-                else if(tProfessorStatus == SUCCESS &&
-                        tProfessorDeptStatus == SUCCESS)
                     return SUCCESS;
+                } else {
 
-                else
                     return DATA_ALREADY_EXIST_ERROR;
-
+                }
             }
         };
         return addProfessorToDatabaseTask;
     }
-
 
     /**
      * This method is used to get a deleteProfessorTask which is used to delete a single professor in the DB.
@@ -309,35 +383,32 @@ public class ProfessorService {
      * @return A deleteProfessor Task instance which is used to delete a professor in the DB in a separate thread.
      */
 
-    public Task<Integer> getDeleteProfessorTask(final Professor professor){
+    public Task<Integer> getDeleteProfessorTask(final Professor professor) {
 
-        //final String sql1 = "DELETE FROM t_login_details where v_user_id=?";
-
-        final String sql2 = "DELETE FROM t_prof_dept where v_prof_id=?";
-        final String sql3 = "DELETE FROM t_professor where v_prof_id=?";
+        final String sql = "DELETE FROM t_login_details where v_user_id=?";
+//
+//        final String sql2 = "DELETE FROM t_professor where v_prof_id=?";
+//
+//        final String sql3 = "DELETE FROM t_user_contact_details where v_user_id=?";
 
         Task<Integer> deleteProfessorTask = new Task<>() {
             @Override
-            protected Integer call()  {
+            protected Integer call() {
 //                boolean t_loginDetailsStatus = databaseHelper.insertUpdateDelete
 //                (sql1, student.getRegId());
 
                 /*
-                holds the status of deletion of student in the DB, i.e success or failure
+                holds the status of deletion of professor in the DB, i.e success or failure
                  */
-                int tProfessorDeptStatus = databaseHelper.updateDelete
-                        (sql2, professor.getProfId());
+                int tLoginDetailsStatus = databaseHelper.updateDelete
+                        (sql, professor.getProfId());
 
-                int tProfessorStatus = databaseHelper.updateDelete
-                        (sql3, professor.getProfId());
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
-                if(tProfessorStatus == DATABASE_ERROR ||
-                        tProfessorDeptStatus == DATABASE_ERROR)
+                if (tLoginDetailsStatus == DATABASE_ERROR)
                     return DATABASE_ERROR;
 
-                else if(tProfessorStatus == SUCCESS &&
-                        tProfessorDeptStatus == SUCCESS)
+                else if (tLoginDetailsStatus == SUCCESS)
                     return SUCCESS;
 
                 else
@@ -356,8 +427,15 @@ public class ProfessorService {
     @SuppressWarnings("Duplicates")
     public Task<Integer> getUpdateProfessorTask(final Professor professor) {
 
-        final String sql = "UPDATE t_professor SET v_first_name=?, v_middle_name=?, v_last_name=?, d_dob=?, v_contact_no=?" +
-                ", v_address=?, v_email_id=?, d_date_of_joining=?, v_highest_qualification=? where v_prof_id=?";
+        final String sql1 = "UPDATE t_professor SET v_first_name=?, v_middle_name=?, v_last_name=?, d_dob=?" +
+                ", d_date_of_joining=?, v_highest_qualification=? where v_prof_id=?";
+
+        final String sql2 = "UPDATE t_user_contact_details SET v_contact_no=?, v_address=?, v_email_id=? " +
+                "where v_user_id=?";
+
+        final String sql3 = "UPDATE t_prof_Dept SET int_hod=? where v_prof_id=?";
+
+        final String sql4 = "UPDATE t_login_details SET int_gid=? where v_user_id=?";
 
         Task<Integer> updateProfessorTask = new Task<>() {
 
@@ -366,20 +444,31 @@ public class ProfessorService {
 
                 //holds the status of updation of professor in the DB, i.e success or failure
                 int tProfessorStatus = databaseHelper.updateDelete
-                        (sql, professor.getFirstName(), professor.getMiddleName(), professor.getLastName(), professor.getDob()
-                                , professor.getContactNo(), professor.getAddress(), professor.getEmail(), professor.getDoj()
+                        (sql1, professor.getFirstName(), professor.getMiddleName(), professor.getLastName()
+                                , professor.getDob(), professor.getDoj(), professor.getHighestQualification()
+                                , professor.getProfId());
+
+                int tUserContactDetailsStatus = databaseHelper.updateDelete
+                        (sql2, professor.getContactNo(), professor.getAddress(), professor.getEmail()
+                                , professor.getProfId());
+
+                int tProfDeptStatus = databaseHelper.updateDelete
+                        (sql3, String.valueOf(professor.getHodStatus().equals("HOD") ? 1 : 0), professor.getProfId());
+
+                int tLoginDetails = databaseHelper.updateDelete
+                        (sql4, String.valueOf(professor.getHodStatus().equals("HOD") ? PROFESSOR_HOD_GID : PROFESSOR_GID)
                                 , professor.getProfId());
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
-                if (tProfessorStatus == DATABASE_ERROR) {
+                if (tProfessorStatus == DATABASE_ERROR || tUserContactDetailsStatus == DATABASE_ERROR
+                        || tProfDeptStatus == DATABASE_ERROR || tLoginDetails == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
-                }
-                else if (tProfessorStatus == SUCCESS) {
+                } else if (tProfessorStatus == SUCCESS && tUserContactDetailsStatus == SUCCESS
+                        && tProfDeptStatus == SUCCESS && tLoginDetails == SUCCESS) {
 
                     return SUCCESS;
-                }
-                else {
+                } else {
 
                     return DATA_INEXISTENT_ERROR;
                 }
@@ -389,9 +478,11 @@ public class ProfessorService {
     }
 
     /**
-     * This method is used to get a single professorsCountTask object which is used to get total no of Professors in the DB.
+     * This method is used to get a single professorsCountTask object which is used to get total no of Professors in
+     * the DB.
      *
-     * @return A professorsCountTask object which is used to get the total no. of Professors in the DB in a separate thread.
+     * @return A professorsCountTask object which is used to get the total no. of Professors in the DB in a separate
+     * thread.
      */
     @SuppressWarnings("Duplicates")
     public Task<Integer> getProfessorsCountTask() {
@@ -414,6 +505,4 @@ public class ProfessorService {
         };
         return professorsCountTask;
     }
-
-
 }

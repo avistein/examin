@@ -732,7 +732,7 @@ public class StudentRegistrationController {
 
         StackPane contentStackPane = (StackPane) rootAnchorPane.getParent();
         Parent studentRegistrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/StudentsList.fxml"));
+                .getResource("/view/StudentSection.fxml"));
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
@@ -742,6 +742,7 @@ public class StudentRegistrationController {
      *
      * @param editSignal EDIT_CHOICE
      */
+    @SuppressWarnings("Duplicates")
     public void setEditSignal(int editSignal) {
 
         editOrAddStudentChoice = editSignal;

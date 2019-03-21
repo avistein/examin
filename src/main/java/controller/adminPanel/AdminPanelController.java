@@ -102,13 +102,13 @@ public class AdminPanelController {
 
     /**
      * Callback method for handling studentListButton.
-     * Opens StudentsList.fxml upon clicking studentListButton.
+     * Opens StudentSection.fxml upon clicking studentListButton.
      */
     @FXML
     private void handleStudentListButtonAction() throws IOException {
 
         Parent studentsListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/StudentsList.fxml"));
+                .getResource("/view/StudentSection.fxml"));
         subTitleLabel.setText("Student");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(studentsListFxml);
@@ -116,13 +116,13 @@ public class AdminPanelController {
 
     /**
      * Callback method for handling professorListButtonAction.
-     * Opens StudentsList.fxml upon clicking professorListButtonAction.
+     * Opens StudentSection.fxml upon clicking professorListButtonAction.
      */
     @FXML
     private void handleProfessorListButtonAction() throws IOException {
 
         Parent professorListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/ProfessorsList.fxml"));
+                .getResource("/view/ProfessorSection.fxml"));
         subTitleLabel.setText("Professor");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(professorListFxml);
@@ -130,7 +130,7 @@ public class AdminPanelController {
 
     /**
      * Callback method for handling examCellMemberListButton.
-     * Opens StudentsList.fxml upon clicking examCellMemberListButton.
+     * Opens StudentSection.fxml upon clicking examCellMemberListButton.
      */
     @FXML
     private void handleExamCellMemberListButtonAction() throws IOException {

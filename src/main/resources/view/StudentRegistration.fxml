@@ -49,8 +49,8 @@
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints maxHeight="593.0" minHeight="10.0" prefHeight="593.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="239.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="593.0" minHeight="10.0" prefHeight="577.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="239.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <GridPane fx:id="contentGridPane" prefHeight="548.0" prefWidth="664.0">
@@ -64,16 +64,16 @@
                         <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="138.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="27.0" minHeight="0.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="73.0" minHeight="9.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="54.0" minHeight="9.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="56.0" minHeight="8.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="55.0" minHeight="7.0" prefHeight="55.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="152.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="67.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="73.0" minHeight="9.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="54.0" minHeight="9.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="58.0" minHeight="8.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="85.0" minHeight="7.0" prefHeight="71.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
@@ -241,7 +241,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                            <children>
                               <Label text="Gender">
                                  <VBox.margin>
@@ -413,7 +413,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="6">
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                            <children>
                               <Label text="Date Of Birth">
                                  <font>
@@ -430,7 +430,7 @@
                               </DatePicker>
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5" GridPane.rowSpan="2">
                            <children>
                               <ImageView fx:id="profileImageImageView" fitHeight="83.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

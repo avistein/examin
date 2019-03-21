@@ -6,9 +6,9 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -22,19 +22,17 @@ import service.ProfessorService;
 import util.CSVUtil;
 import util.ValidatorUtil;
 
-import javax.print.DocFlavor;
 import java.awt.*;
-import java.awt.color.CMMException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.CompilationMXBean;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static util.ConstantsUtil.*;
 
 
@@ -124,7 +122,7 @@ public class ImportProfessorCSVModalController {
      * Do not try to get the Scene or Window of any node in this method.
      */
     @SuppressWarnings("Duplicates")
-    public void initialize(){
+    public void initialize() {
 
         professorService = new ProfessorService();
 
@@ -146,7 +144,7 @@ public class ImportProfessorCSVModalController {
      */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleChooseFileButtonAction(){
+    private void handleChooseFileButtonAction() {
         FileChooser fileChooser = new FileChooser();
         configureFileChooser(fileChooser);
         file = fileChooser.showOpenDialog(chooseFileButton.getScene().getWindow());
@@ -155,17 +153,16 @@ public class ImportProfessorCSVModalController {
         Only when a file is chosen, get the column names from the file and set ComboBoxes
         with the column names' list else unset ComboBoxes.
          */
-        if(file != null) {
+        if (file != null) {
             chosenFileLabel.setText(file.getName());
             List<String> list = CSVUtil.getColumnNames(file);
 
             //checking if all 12 columns are present in the csv file uploaded
-            if(list.size() == 12) {
+            if (list.size() == 12) {
                 setComboBoxes(list);
                 submitButton.setDisable(false);
             }
-        }
-        else{
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("CSV file should have 12 columns!");
             alert.show();
@@ -222,13 +219,12 @@ public class ImportProfessorCSVModalController {
     }
 
 
-
     /**
      * Callback method for submitButton.
      */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleSubmitButtonAction(){
+    private void handleSubmitButtonAction() {
 
         /*
         Create a HashMap and set up the following :
@@ -320,7 +316,7 @@ public class ImportProfessorCSVModalController {
                                 statusImageView.setImage(new Image("/png/success.png"));
                                 statusLabel.setText("Successfully added all professors!");
                                 tableUpdateStatus = true;
-                            } else if (status==0) {
+                            } else if (status == 0) {
 
                                 statusImageView.setImage(new Image("/png/error.png"));
                                 statusLabel.setText("All professors in the CSV already exists in the database!");
@@ -352,100 +348,109 @@ public class ImportProfessorCSVModalController {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-         if (professor.getDeptName() == null || professor.getDeptName().trim().isEmpty()) {
+        if (professor.getDeptName() == null || professor.getDeptName().trim().isEmpty()) {
 
             alert.setContentText("Department cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(professor.getDeptName().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(professor.getDeptName().trim())) {
 
             alert.setContentText("Invalid Department in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (professor.getHighestQualification() == null || professor.getHighestQualification().trim().isEmpty()) {
+        }
+        if (professor.getHighestQualification() == null || professor.getHighestQualification().trim().isEmpty()) {
 
             alert.setContentText("Highest Qualification cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateAcademicItem(professor.getHighestQualification().trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(professor.getHighestQualification().trim())) {
 
             alert.setContentText("Invalid Highest Qualification in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (Integer.toString(professor.getHodStatus()) == null || Integer.toString(professor.getHodStatus()).trim().isEmpty()) {
+        }
+        if (professor.getHodStatus() == null || professor.getHodStatus().trim().isEmpty()) {
 
             alert.setContentText("Hod Status cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateHodStatus(Integer.toString(professor.getHodStatus()).trim())) {
+        }
+        if (!ValidatorUtil.validateAcademicItem(professor.getHodStatus().trim())) {
 
             alert.setContentText("Invalid Hod Status in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (professor.getProfId() == null || professor.getProfId().trim().isEmpty()) {
+        }
+        if (professor.getProfId() == null || professor.getProfId().trim().isEmpty()) {
 
             alert.setContentText("Professor ID cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateId(professor.getProfId().trim())) {
+        }
+        if (!ValidatorUtil.validateId(professor.getProfId().trim())) {
 
             alert.setContentText("Invalid Professor ID in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (professor.getFirstName() == null || professor.getFirstName().trim().isEmpty()) {
+        }
+        if (professor.getFirstName() == null || professor.getFirstName().trim().isEmpty()) {
 
             alert.setContentText("First Name cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateName(professor.getFirstName().trim())) {
+        }
+        if (!ValidatorUtil.validateName(professor.getFirstName().trim())) {
 
             alert.setContentText("Invalid First Name in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!professor.getMiddleName().trim().isEmpty()) {
+        }
+        if (!professor.getMiddleName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(professor.getMiddleName().trim())) {
 
                 alert.setContentText("Invalid Middle Name in Row : " + currProfessorIndex + "!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (!professor.getLastName().trim().isEmpty()) {
+        }
+        if (!professor.getLastName().trim().isEmpty()) {
 
             if (!ValidatorUtil.validateName(professor.getLastName().trim())) {
 
                 alert.setContentText("Invalid Last Name in Row : " + currProfessorIndex + "!");
                 alert.show();
                 return false;
-            } else {
-
-                return true;
             }
-        } else if (professor.getDob() == null || professor.getDob().trim().isEmpty()) {
+        }
+        if (professor.getDob() == null || professor.getDob().trim().isEmpty()) {
 
             alert.setContentText("DOB cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateDateFormat(professor.getDob().trim())) {
+        }
+        if (!ValidatorUtil.validateDateFormat(professor.getDob().trim())) {
 
             alert.setContentText("Invalid DOB format in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
         }
-         else if (professor.getDoj() == null || professor.getDoj().trim().isEmpty()) {
+        if (professor.getDoj() == null || professor.getDoj().trim().isEmpty()) {
 
-             alert.setContentText("DOJ cannot be empty in Row : " + currProfessorIndex + "!");
-             alert.show();
-             return false;
-         } else if (!ValidatorUtil.validateDateFormat(professor.getDoj().trim())) {
+            alert.setContentText("DOJ cannot be empty in Row : " + currProfessorIndex + "!");
+            alert.show();
+            return false;
+        }
+        if (!ValidatorUtil.validateDateFormat(professor.getDoj().trim())) {
 
-             alert.setContentText("Invalid DOJ format in Row : " + currProfessorIndex + "!");
-             alert.show();
-             return false;
-         } else if (professor.getEmail() == null || professor.getEmail().trim().isEmpty()) {
+            alert.setContentText("Invalid DOJ format in Row : " + currProfessorIndex + "!");
+            alert.show();
+            return false;
+        }
+        if (professor.getEmail() == null || professor.getEmail().trim().isEmpty()) {
 
             alert.setContentText("Email ID cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
@@ -455,17 +460,20 @@ public class ImportProfessorCSVModalController {
             alert.setContentText("Invalid Email ID in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (professor.getContactNo() == null || professor.getContactNo().trim().isEmpty()) {
+        }
+        if (professor.getContactNo() == null || professor.getContactNo().trim().isEmpty()) {
 
             alert.setContentText("Contact No. cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (!ValidatorUtil.validateContactNo(professor.getContactNo().trim())) {
+        }
+        if (!ValidatorUtil.validateContactNo(professor.getContactNo().trim())) {
 
             alert.setContentText("Invalid Contact No. in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        } else if (professor.getAddress() == null || professor.getAddress().trim().isEmpty()) {
+        }
+        if (professor.getAddress() == null || professor.getAddress().trim().isEmpty()) {
 
             alert.setContentText("Address cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
@@ -483,7 +491,7 @@ public class ImportProfessorCSVModalController {
      */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleStatusStackPaneMouseClickedAction(){
+    private void handleStatusStackPaneMouseClickedAction() {
 
         deactivateProgressAndStatus();
     }
@@ -512,9 +520,9 @@ public class ImportProfessorCSVModalController {
      * @param list List of columns extracted from the CSV file.
      */
     @SuppressWarnings("Duplicates")
-    private void setComboBoxes(List<String> list){
+    private void setComboBoxes(List<String> list) {
 
-        ObservableList<String>  options = FXCollections.observableArrayList(list);
+        ObservableList<String> options = FXCollections.observableArrayList(list);
 
         firstNameComboBox.setDisable(false);
         firstNameComboBox.setItems(options);
@@ -571,7 +579,7 @@ public class ImportProfessorCSVModalController {
      * Method for disabling and un-setting the ComboBoxes.
      */
     @SuppressWarnings("Duplicates")
-    private void unSetComboBoxes(){
+    private void unSetComboBoxes() {
 
         firstNameComboBox.setDisable(true);
         firstNameComboBox.setValue("");
@@ -614,9 +622,8 @@ public class ImportProfessorCSVModalController {
 
     /**
      * Method for configuring the fileChooser
-     *
      */
-    private void configureFileChooser(FileChooser fileChooser){
+    private void configureFileChooser(FileChooser fileChooser) {
 
         fileChooser.setTitle("Import CSV file");
         //only .csv files can be chosen
@@ -624,18 +631,14 @@ public class ImportProfessorCSVModalController {
                 new FileChooser.ExtensionFilter("CSV", "*.csv"));
     }
 
-
     /**
      * This method returns the status of the TableView updation.
      *
      * @return The status which determines whether the TableView in
      * ProfessorSection.fxml will be updated or not.
      */
-    boolean getTableUpdateStatus(){
+    boolean getTableUpdateStatus() {
 
         return tableUpdateStatus;
     }
-
-
-
 }

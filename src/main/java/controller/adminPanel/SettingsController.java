@@ -432,21 +432,9 @@ public class SettingsController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateEmail(String.valueOf(profileSettingsDojDatePicker.getValue()))) {
-
-            alert.setContentText("Invalid date of joining format!");
-            alert.show();
-            return false;
-        }
         if (profileSettingsDobDatePicker.getValue() == null) {
 
             alert.setContentText("Date of birth cannot be empty!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateEmail(String.valueOf(profileSettingsDobDatePicker.getValue()))) {
-
-            alert.setContentText("Invalid date of birth format!");
             alert.show();
             return false;
         }

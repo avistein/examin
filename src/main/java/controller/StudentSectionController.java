@@ -31,11 +31,11 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * Controller class for StudentsList.fxml
+ * Controller class for StudentSection.fxml
  *
  * @author Avik Sarkar
  */
-public class StudentsListController {
+public class StudentSectionController {
 
     /*------------------------------Declaration and initialization of variables------------------------------*/
 

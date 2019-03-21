@@ -192,6 +192,46 @@ public class CourseService {
     }
 
     /**
+     * This method is similar to {@link #getCoursesTask(String, String...)} ,except that it used by the
+     * Service classes to get Course details.
+     *
+     * @param additionalQuery Includes WHERE clause or any other specific query details.
+     * @param params          Parameters for the PreparedStatement.
+     * @return A list of Course details retrieved from the DB.
+     */
+    @SuppressWarnings("Duplicates")
+    List<Course> getCourseDataForServices(String additionalQuery, String... params) {
+
+        final String query = "SELECT * from t_course " + additionalQuery;
+
+        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
+
+        //each item in the list is a single Course details
+        List<Course> list = new ArrayList<>();
+
+        /*
+        v_course_id is the primary key, total items in the map will always be equal to no of
+        v_course_id retrieved
+        */
+        for (int i = 0; i < map.get("v_course_id").size(); i++) {
+
+            Course course = new Course();
+
+            course.setCourseId(map.get("v_course_id").get(i));
+            course.setDiscipline(map.get("v_discipline").get(i));
+            course.setDegree(map.get("v_degree").get(i));
+            course.setDuration(map.get("v_duration").get(i));
+            course.setDeptName(map.get("v_dept_name").get(i));
+
+            //a single course details is added to the list
+            list.add(course);
+        }
+
+        //a list of Course details
+        return list;
+    }
+
+    /**
      * This method is used to get a single coursesCountTask object which is used to get total no of Courses in the DB.
      *
      * @return A coursesCountTask object which is used to get the total no. of Courses in the DB in a separate thread.

@@ -149,9 +149,13 @@ public class DashboardController {
 
     private CourseService courseService;
 
+    private SubjectService subjectService;
+
     private DepartmentService departmentService;
 
     private ExamCellMemberService examCellMemberService;
+
+    private ProfessorService professorService;
 
     private FileHandlingService fileHandlingService;
 
@@ -174,10 +178,12 @@ public class DashboardController {
 
         holidayService = new HolidayService();
         studentService = new StudentService();
+        subjectService = new SubjectService();
         batchService = new BatchService();
         courseService = new CourseService();
         departmentService = new DepartmentService();
         examCellMemberService = new ExamCellMemberService();
+        professorService = new ProfessorService();
         fileHandlingService = new FileHandlingService();
 
         //for the tableView
@@ -191,6 +197,8 @@ public class DashboardController {
         updateTotalDeptsCount();
         updateTotalExamCellMembersCount();
         updateTotalStudentsCount();
+        updateTotalProfessorsCount();
+        updateTotalSubjectsCount();
 
         /*
         Initialize columns and populate tableView.
@@ -353,6 +361,26 @@ public class DashboardController {
     }
 
     /**
+     * This method is used to count the total no. of Subejcts in the DB by getting the appropriate task and update
+     * the corresponding label in the UI.
+     */
+    @SuppressWarnings("Duplicates")
+    private void updateTotalSubjectsCount() {
+
+        Task<Integer> subjectsCountTask = subjectService.getSubjectsCountTask();
+        new Thread(subjectsCountTask).start();
+
+        subjectsCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalSubjects = subjectsCountTask.getValue();
+                totalSubjectsLabel.setText(Integer.toString(totalSubjects));
+            }
+        });
+    }
+
+    /**
      * This method is used to count the total no. of Courses in the DB by getting the appropriate task and update
      * the corresponding label in the UI.
      */
@@ -372,6 +400,25 @@ public class DashboardController {
         });
     }
 
+    /**
+     * This method is used to count the total no. of Courses in the DB by getting the appropriate task and update
+     * the corresponding label in the UI.
+     */
+    @SuppressWarnings("Duplicates")
+    private void updateTotalProfessorsCount() {
+
+        Task<Integer> profsCountTask = professorService.getProfessorsCountTask();
+        new Thread(profsCountTask).start();
+
+        profsCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalProfs = profsCountTask.getValue();
+                totalProfessorsLabel.setText(Integer.toString(totalProfs));
+            }
+        });
+    }
     /**
      * This method is used to count the total no. of Exam Cell Members in the DB by getting the appropriate task
      * and update the corresponding label in the UI.
@@ -457,7 +504,7 @@ public class DashboardController {
         try {
 
             //if holidaySample.csv doesn't exist in the User's System , then only create it
-            if (Files.notExists(Paths.get(filePath))) {
+            if (!Paths.get(filePath).toFile().exists()) {
 
                 //get the content of the sampleCsv File as InputStream
                 InputStream in = getClass().getResourceAsStream(sampleCsvFilePath);

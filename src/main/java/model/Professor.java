@@ -1,8 +1,9 @@
 package model;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.Serializable;
 
@@ -21,7 +22,7 @@ public class Professor extends Department implements Serializable {
 
     private SimpleStringProperty firstName;
     private SimpleStringProperty middleName;
-    private SimpleStringProperty lastName ;
+    private SimpleStringProperty lastName;
     private SimpleStringProperty dob;
     private SimpleStringProperty doj;
     private SimpleStringProperty email;
@@ -29,17 +30,18 @@ public class Professor extends Department implements Serializable {
     private SimpleStringProperty contactNo;
     private SimpleStringProperty highestQualification;
     private SimpleStringProperty profId;
-    private SimpleIntegerProperty hodStatus;
-    //private SimpleListProperty<Subject> subjects;
+    private SimpleStringProperty hodStatus;
+    private SimpleListProperty<Subject> subjects;
 
     /*------------------------------------End of Initialization-------------------------------------*/
+
 
     /**
      * Default public constructor to initialize data.
      */
-    public Professor(){
+    public Professor() {
         this.firstName = new SimpleStringProperty("");
-        this.middleName= new SimpleStringProperty("");
+        this.middleName = new SimpleStringProperty("");
         this.lastName = new SimpleStringProperty("");
         this.dob = new SimpleStringProperty("");
         this.doj = new SimpleStringProperty("");
@@ -48,8 +50,8 @@ public class Professor extends Department implements Serializable {
         this.contactNo = new SimpleStringProperty("");
         this.highestQualification = new SimpleStringProperty("");
         this.profId = new SimpleStringProperty("");
-        this.hodStatus = new SimpleIntegerProperty(0);
-       // this.subjects = new SimpleListProperty<Subject>();
+        this.hodStatus = new SimpleStringProperty("");
+        this.subjects = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
 
     /**
@@ -257,7 +259,7 @@ public class Professor extends Department implements Serializable {
      *
      * @return The hodStatus.
      */
-    public int getHodStatus() {
+    public String getHodStatus() {
 
         return this.hodStatus.get();
     }
@@ -267,9 +269,16 @@ public class Professor extends Department implements Serializable {
      *
      * @param status The hodStatus to set.
      */
-    public void setHodStatus(int status) {
+    public void setHodStatus(String status) {
 
         this.hodStatus.set(status);
     }
 
+    public ObservableList<Subject> getSubjects() {
+        return subjects.get();
+    }
+
+    public void setSubjects(ObservableList<Subject> subjects) {
+        this.subjects.set(subjects);
+    }
 }

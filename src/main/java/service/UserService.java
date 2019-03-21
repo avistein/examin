@@ -19,11 +19,11 @@ import static util.ConstantsUtil.*;
  */
 public class UserService {
 
-    /*--------------------------------Declaration of variables---------------------------------------*/
+    /*---------------------------------------------Declaration of variables-------------------------------------------*/
 
     private DatabaseHelper databaseHelper;
 
-    /*------------------------------------End of Declaration-----------------------------------------*/
+    /*--------------------------------------------End of Declaration--------------------------------------------------*/
 
     /**
      * Default public constructor to initialize database helper.
