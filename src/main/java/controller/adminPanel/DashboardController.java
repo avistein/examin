@@ -26,7 +26,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.*;
@@ -419,6 +418,7 @@ public class DashboardController {
             }
         });
     }
+
     /**
      * This method is used to count the total no. of Exam Cell Members in the DB by getting the appropriate task
      * and update the corresponding label in the UI.
@@ -866,6 +866,7 @@ public class DashboardController {
     /**
      * Populates and updates the holiday table.
      */
+    @SuppressWarnings("Duplicates")
     private void populateHolidayTable() {
 
         //get the task to get list of holidays from the DB
@@ -895,5 +896,4 @@ public class DashboardController {
         holidaysListStatusStackPane.setVisible(false);
         holidaysListHboxButtons.setVisible(false);
     }
-
 }

@@ -239,8 +239,9 @@ public class DatabaseHelper {
 
                 statusList.add(i);
             }
+            e.printStackTrace();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
         } finally {
