@@ -47,42 +47,58 @@ public class HolidayService {
      */
     public Task<List<Holiday>> getHolidaysTask() {
 
-        final String query = "SELECT int_holiday_id, v_holiday_name, d_start_date, d_end_date " +
-                "from t_holiday_details";
-
         Task<List<Holiday>> holidaysTask = new Task<>() {
 
             @Override
             protected List<Holiday> call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                List<Holiday> list = getHolidaysData();
 
-                //each item in the list is a single Holiday details
-                List<Holiday> list = new ArrayList<>();
-
-                /*
-                int_holiday_id is the primary key, total items in the map will always be equal to no of
-                int_holiday_id retrieved
-                 */
-                for (int i = 0; i < map.get("int_holiday_id").size(); i++) {
-
-                    Holiday holiday = new Holiday();
-
-                    holiday.setHolidayId(map.get("int_holiday_id").get(i));
-                    holiday.setHolidayName(map.get("v_holiday_name").get(i));
-                    holiday.setStartDate(map.get("d_start_date").get(i));
-                    holiday.setEndDate(map.get("d_end_date").get(i));
-
-                    //a single holiday details is added to the list
-                    list.add(holiday);
-                }
-
-                //a list of Department details
+                //a list of Holiday details
                 return list;
             }
         };
         return holidaysTask;
     }
+
+    /**
+     * This method is used to get a single holidaysTask object which is used to get holidays details.
+     *
+     * @return A holidaysTask which can be used to get a list of Holidays details from the DB in a separate
+     * thread.
+     */
+    public List<Holiday> getHolidaysData() {
+
+        final String query = "SELECT int_holiday_id, v_holiday_name, d_start_date, d_end_date " +
+                "from t_holiday_details";
+
+
+        Map<String, List<String>> map = databaseHelper.execQuery(query);
+
+        //each item in the list is a single Holiday details
+        List<Holiday> list = new ArrayList<>();
+
+                /*
+                int_holiday_id is the primary key, total items in the map will always be equal to no of
+                int_holiday_id retrieved
+                 */
+        for (int i = 0; i < map.get("int_holiday_id").size(); i++) {
+
+            Holiday holiday = new Holiday();
+
+            holiday.setHolidayId(map.get("int_holiday_id").get(i));
+            holiday.setHolidayName(map.get("v_holiday_name").get(i));
+            holiday.setStartDate(map.get("d_start_date").get(i));
+            holiday.setEndDate(map.get("d_end_date").get(i));
+
+            //a single holiday details is added to the list
+            list.add(holiday);
+        }
+
+        //a list of Department details
+        return list;
+    }
+
 
     /**
      * This method can be used to get a task to load a bunch of Holidays from the CSV file into the memory.

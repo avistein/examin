@@ -49,19 +49,35 @@ public class StudentService {
      * @return A studentTask which can be used to get a list of student details from the DB in a separate
      * thread.
      */
-    @SuppressWarnings("Duplicates")
     public Task<List<Student>> getStudentTask(String additionalQuery, final String... params) {
-
-        final String query = "SELECT v_reg_id, v_first_name, v_middle_name, v_last_name,d_dob, v_gender, v_reg_year" +
-                ",v_email_id, v_address, v_mother_name, v_guardian_contact_no, v_roll_no, v_contact_no" +
-                ", v_father_guardian_name, v_curr_semester, v_batch_name, v_discipline, v_degree, v_dept_name" +
-                ", v_profile_picture_location FROM t_student natural join t_student_enrollment_details natural join " +
-                "t_course natural join t_batch " + additionalQuery;
 
         Task<List<Student>> studentTask = new Task<>() {
 
             @Override
             protected List<Student> call() {
+
+                List<Student> list = getStudentData(additionalQuery, params);
+
+                //a list of student details
+                return list;
+            }
+        };
+        return studentTask;
+    }
+
+    /**
+     *
+     * @param additionalQuery
+     * @param params
+     * @return
+     */
+    public List<Student> getStudentData(String additionalQuery, final String... params) {
+
+        final String query = "SELECT v_reg_id, v_first_name, v_middle_name, v_last_name,d_dob, v_gender, v_reg_year" +
+                ",v_email_id, v_address, v_mother_name, v_guardian_contact_no, v_roll_no, v_contact_no" +
+                ", v_father_guardian_name, int_curr_semester, v_batch_name, v_discipline, v_degree, v_dept_name" +
+                ", v_profile_picture_location FROM t_student natural join t_student_enrollment_details natural join " +
+                "t_course natural join t_batch " + additionalQuery;
 
                 Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
@@ -105,7 +121,7 @@ public class StudentService {
                     student.setRollNo(map.get("v_roll_no").get(i));
                     student.setContactNo(map.get("v_contact_no").get(i));
                     student.setGuardianName(map.get("v_father_guardian_name").get(i));
-                    student.setCurrSemester(map.get("v_curr_semester").get(i));
+                    student.setCurrSemester(map.get("int_curr_semester").get(i));
                     student.setBatchName(map.get("v_batch_name").get(i));
                     student.setDiscipline(map.get("v_discipline").get(i));
                     student.setDegree(map.get("v_degree").get(i));
@@ -120,12 +136,7 @@ public class StudentService {
                     //a single student details is added to the list
                     list.add(student);
                 }
-
-                //a list of student details
                 return list;
-            }
-        };
-        return studentTask;
     }
 
     /**
@@ -224,11 +235,11 @@ public class StudentService {
                         ", v_email_id, v_address, v_guardian_contact_no, v_gender) values(?, ?, ?, ?, ?, ?, ?, ?, ?" +
                         ", ?, ?, ?, ?, ?)";
 
-                final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id, v_reg_id, v_curr_semester)" +
+                final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id, v_reg_id, int_curr_semester)" +
                         " VALUES(?, ?, ?)";
 
                 //get the list of batches
-                List<Batch> listOfBatches = batchService.getBatchDataForServices("");
+                List<Batch> listOfBatches = batchService.getBatchData("");
 
                 /*
                 Each item in the list is itself a list of strings ;in the inner list each item is the data
@@ -339,7 +350,7 @@ public class StudentService {
                         "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
-                        ", v_reg_id, v_curr_semester) VALUES(?, ?, ?)";
+                        ", v_reg_id, int_curr_semester) VALUES(?, ?, ?)";
 
                 //get the status of insertion of student details into t_student in the DB
                 int tStudentStatus = databaseHelper.insert(sql1, student.getFirstName(), student.getMiddleName()

@@ -52,8 +52,23 @@ public class ProfessorService {
      * @return A professorTask which can be used to get a list of professor details from the DB in a separate
      * thread.
      */
-    @SuppressWarnings("Duplicates")
     public Task<List<Professor>> getProfessorTask(String additionalQuery, final String... params) {
+
+        Task<List<Professor>> professorTask = new Task<>() {
+            @Override
+            protected List<Professor> call() {
+
+                List<Professor> list = getProfessorData(additionalQuery, params);
+
+                //a list of professor details
+                return list;
+            }
+        };
+        return professorTask;
+    }
+
+
+    public List<Professor> getProfessorData(String additionalQuery, final String... params) {
 
         SubjectService subjectService = new SubjectService();
 
@@ -62,9 +77,6 @@ public class ProfessorService {
                 ", v_email_id FROM t_professor natural join t_prof_dept inner join t_user_contact_details on " +
                 "t_professor.v_prof_id = t_user_contact_details.v_user_id " + additionalQuery;
 
-        Task<List<Professor>> professorTask = new Task<>() {
-            @Override
-            protected List<Professor> call() {
 
                 Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
@@ -78,7 +90,7 @@ public class ProfessorService {
                 for (int i = 0; i < map.get("v_prof_id").size(); i++) {
 
                     //get the list of subjects for the respective professor
-                    List<Subject> listOfSubjects = subjectService.getSubjectDataForServices
+                    List<Subject> listOfSubjects = subjectService.getSubjectData
                             ("natural join t_prof_sub WHERE v_prof_id=?", map.get("v_prof_id").get(i));
 
                     Professor professor = new Professor();
@@ -113,9 +125,6 @@ public class ProfessorService {
 
                 //a list of professor details
                 return list;
-            }
-        };
-        return professorTask;
     }
 
     /**

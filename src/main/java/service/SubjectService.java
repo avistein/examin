@@ -41,33 +41,14 @@ public class SubjectService {
      * @param params          Parameters for the PreparedStatement i.e. basically column names of t_subject.
      * @return A subjectTask which can be used to get a list of subjects from the DB in a separate thread.
      */
-    @SuppressWarnings("Duplicates")
     public Task<List<Subject>> getSubjectsTask(String additionalQuery, final String... params) {
-
-        final String query = "SELECT v_course_id, v_sub_id, v_sub_name" +
-                ", v_credit, v_semester, int_opt_status, v_full_marks" +
-                ", v_sub_type from t_subject " + additionalQuery;
 
         Task<List<Subject>> subjectTask = new Task<>() {
             @Override
             protected List<Subject> call() {
-                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
-                List<Subject> list = new ArrayList<>();
-                for (int i = 0; i < map.get("v_sub_id").size(); i++) {
 
-                    Subject subject = new Subject();
-                    subject.setCourseId(map.get("v_course_id").get(i));
-                    subject.setSubId(map.get("v_sub_id").get(i));
-                    subject.setSubName(map.get("v_sub_name").get(i));
-                    subject.setCredit(map.get("v_credit").get(i));
-                    subject.setSemester(map.get("v_semester").get(i));
-                    subject.setOptStatus(Integer.parseInt(map.get("int_opt_status").get(i)));
-                    subject.setFullMarks(map.get("v_full_marks").get(i));
-                    subject.setSubType(map.get("v_sub_type").get(i));
+                List<Subject> list = getSubjectData(additionalQuery, params);
 
-
-                    list.add(subject);
-                }
                 return list;
             }
         };
@@ -81,14 +62,13 @@ public class SubjectService {
      * @param params          Parameters for the PreparedStatement i.e. basically column names of t_subject.
      * @return List of subjects in the DB.
      */
-    @SuppressWarnings("Duplicates")
-    List<Subject> getSubjectDataForServices(String additionalQuery, String... params) {
+    public List<Subject> getSubjectData(String additionalQuery, String... params) {
 
         //list to store the subjects
         List<Subject> list = new ArrayList<>();
 
         final String query = "SELECT v_course_id, v_sub_id, v_sub_name" +
-                ", v_credit, v_semester, int_opt_status, v_full_marks" +
+                ", v_credit, int_semester, int_opt_status, v_full_marks" +
                 ", v_sub_type from t_subject " + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
@@ -100,7 +80,7 @@ public class SubjectService {
             subject.setSubId(map.get("v_sub_id").get(i));
             subject.setSubName(map.get("v_sub_name").get(i));
             subject.setCredit(map.get("v_credit").get(i));
-            subject.setSemester(map.get("v_semester").get(i));
+            subject.setSemester(map.get("int_semester").get(i));
             subject.setOptStatus(Integer.parseInt(map.get("int_opt_status").get(i)));
             subject.setFullMarks(map.get("v_full_marks").get(i));
             subject.setSubType(map.get("v_sub_type").get(i));
@@ -241,7 +221,7 @@ public class SubjectService {
 
                     List<String> singleSubjectAllocation = new ArrayList<>();
 
-                    List<Course> course = courseService.getCourseDataForServices
+                    List<Course> course = courseService.getCourseData
                             ("where v_degree=? and v_discipline=?"
                                     , subjectAllocation.getDegree(), subjectAllocation.getDiscipline());
 

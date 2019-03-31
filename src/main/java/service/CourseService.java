@@ -32,50 +32,65 @@ public class CourseService {
     }
 
     /**
-     * This method is used to get a single CoursesTask object which is used to get courses details.
+     * This method is used to get a single CoursesTask object which is used to get courses details in a separate thread.
      *
      * @param additionalQuery Includes WHERE clause or any other extra specific query details.
      * @param params          Parameters for the PreparedStatement i.e. basically column names of t_course.
      * @return A coursesTask which can be used to get a list of Course details from the DB in a separate thread.
      */
-    @SuppressWarnings("Duplicates")
     public Task<List<Course>> getCoursesTask(String additionalQuery, final String... params) {
-
-        final String query = "SELECT * from t_course " + additionalQuery;
 
         Task<List<Course>> courseTask = new Task<>() {
 
             @Override
             protected List<Course> call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
-
-                //each item in the list is a single Course details
-                List<Course> list = new ArrayList<>();
-
-                /*
-                v_course_id is the primary key, total items in the map will always be equal to no of
-                v_course_id retrieved
-                 */
-                for (int i = 0; i < map.get("v_course_id").size(); i++) {
-
-                    Course course = new Course();
-
-                    course.setCourseId(map.get("v_course_id").get(i));
-                    course.setDiscipline(map.get("v_discipline").get(i));
-                    course.setDegree(map.get("v_degree").get(i));
-                    course.setDuration(map.get("v_duration").get(i));
-                    course.setDeptName(map.get("v_dept_name").get(i));
-
-                    //a single course details is added to the list
-                    list.add(course);
-                }
+                List<Course> list = getCourseData(additionalQuery, params);
 
                 //a list of Course details
                 return list;
             }
         };
         return courseTask;
+    }
+
+    /**
+     * This method is used to get Course details in the same thread it is called.
+     *
+     * @param additionalQuery Includes WHERE clause or any other specific query details.
+     * @param params          Parameters for the PreparedStatement.
+     * @return A list of Course details retrieved from the DB.
+     */
+    @SuppressWarnings("Duplicates")
+    public List<Course> getCourseData(String additionalQuery, String... params) {
+
+        final String query = "SELECT * from t_course " + additionalQuery;
+
+        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
+
+        //each item in the list is a single Course details
+        List<Course> list = new ArrayList<>();
+
+        /*
+        v_course_id is the primary key, total items in the map will always be equal to no of
+        v_course_id retrieved
+        */
+        for (int i = 0; i < map.get("v_course_id").size(); i++) {
+
+            Course course = new Course();
+
+            course.setCourseId(map.get("v_course_id").get(i));
+            course.setDiscipline(map.get("v_discipline").get(i));
+            course.setDegree(map.get("v_degree").get(i));
+            course.setDuration(map.get("int_duration").get(i));
+            course.setDeptName(map.get("v_dept_name").get(i));
+
+            //a single course details is added to the list
+            list.add(course);
+        }
+
+        //a list of Course details
+        return list;
     }
 
     /**
@@ -92,7 +107,7 @@ public class CourseService {
             protected Integer call() {
 
                 final String sql = "INSERT INTO t_course(v_dept_name, v_course_id" +
-                        ", v_degree, v_discipline, v_duration) VALUES(?, ?, ?, ?, ?)";
+                        ", v_degree, v_discipline, int_duration) VALUES(?, ?, ?, ?, ?)";
 
                 //holds the status of insertion of course to the DB, i.e success or failure
                 int tCourseStatus = databaseHelper.insert(sql, course.getDeptName()
@@ -129,7 +144,7 @@ public class CourseService {
             @Override
             protected Integer call() {
 
-                final String sql = "UPDATE t_course SET v_degree=?, v_discipline=?, v_duration=? " +
+                final String sql = "UPDATE t_course SET v_degree=?, v_discipline=?, int_duration=? " +
                         "WHERE v_course_id=?";
 
                 //holds the status of updation of course in the DB, i.e success or failure
@@ -191,45 +206,6 @@ public class CourseService {
         return deleteCourseTask;
     }
 
-    /**
-     * This method is similar to {@link #getCoursesTask(String, String...)} ,except that it used by the
-     * Service classes to get Course details.
-     *
-     * @param additionalQuery Includes WHERE clause or any other specific query details.
-     * @param params          Parameters for the PreparedStatement.
-     * @return A list of Course details retrieved from the DB.
-     */
-    @SuppressWarnings("Duplicates")
-    List<Course> getCourseDataForServices(String additionalQuery, String... params) {
-
-        final String query = "SELECT * from t_course " + additionalQuery;
-
-        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
-
-        //each item in the list is a single Course details
-        List<Course> list = new ArrayList<>();
-
-        /*
-        v_course_id is the primary key, total items in the map will always be equal to no of
-        v_course_id retrieved
-        */
-        for (int i = 0; i < map.get("v_course_id").size(); i++) {
-
-            Course course = new Course();
-
-            course.setCourseId(map.get("v_course_id").get(i));
-            course.setDiscipline(map.get("v_discipline").get(i));
-            course.setDegree(map.get("v_degree").get(i));
-            course.setDuration(map.get("v_duration").get(i));
-            course.setDeptName(map.get("v_dept_name").get(i));
-
-            //a single course details is added to the list
-            list.add(course);
-        }
-
-        //a list of Course details
-        return list;
-    }
 
     /**
      * This method is used to get a single coursesCountTask object which is used to get total no of Courses in the DB.
