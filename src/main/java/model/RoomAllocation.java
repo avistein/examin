@@ -2,19 +2,21 @@ package model;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoomAllocation extends Classroom {
 
     private List<Student> studentList;
-    private List<String> roomAllocationIdlist;
+    private Map<Integer, Integer> roomAllocationMap;
     private String examDetailsId;
 
 
     public RoomAllocation() {
 
         this.studentList = new ArrayList<>();
-        this.roomAllocationIdlist = new ArrayList<>();
+        this.roomAllocationMap = new HashMap<>();
         this.examDetailsId = "";
     }
 
@@ -36,14 +38,12 @@ public class RoomAllocation extends Classroom {
         this.studentList = studentList;
     }
 
-    public List<String> getRoomAllocationIdlist() {
-
-        return roomAllocationIdlist;
+    public Map<Integer, Integer> getRoomAllocationMap() {
+        return roomAllocationMap;
     }
 
-    public void setRoomAllocationIdlist(List<String> roomAllocationIdlist) {
-
-        this.roomAllocationIdlist = roomAllocationIdlist;
+    public void setRoomAllocationMap(Map<Integer, Integer> roomAllocationMap) {
+        this.roomAllocationMap = roomAllocationMap;
     }
 }
 

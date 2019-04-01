@@ -302,11 +302,12 @@ public class ExamService {
         for (RoomAllocation roomAllocation : roomAllocationList) {
 
             int i = 0;
-            for (Student student : roomAllocation.getStudentList()) {
+            for (Map.Entry<Integer, Integer> entry : roomAllocation.getRoomAllocationMap().entrySet()) {
 
                 List<String> singleRoomAllocation = new ArrayList<>();
+                Student student = roomAllocation.getStudentList().get(entry.getValue());
 
-                singleRoomAllocation.add(roomAllocation.getRoomAllocationIdlist().get(i++));
+                singleRoomAllocation.add(String.valueOf(entry.getKey()));
                 singleRoomAllocation.add(roomAllocation.getExamDetailsId());
                 singleRoomAllocation.add(roomAllocation.getRoomNo());
                 singleRoomAllocation.add(student.getRegId());
@@ -388,7 +389,7 @@ public class ExamService {
 
                     student.setRegId(map.get("v_reg_id").get(i));
 
-                    roomAllocation.getRoomAllocationIdlist().add(map.get("int_ralloc_id").get(i));
+                    roomAllocation.getRoomAllocationMap().put(Integer.valueOf(map.get("int_ralloc_id").get(i)), i);
                     roomAllocation.getStudentList().add(student);
                 }
             }

@@ -426,9 +426,9 @@ public class ExamCommand {
 
                     for (RoomAllocation roomAllocation : roomAllocationList) {
 
-                        List<String> allocIdList = roomAllocation.getRoomAllocationIdlist();
+                        Map<Integer, Integer> allocIdMap = roomAllocation.getRoomAllocationMap();
                         int currAllocId = 0;
-                        while(allocIdList.contains(String.valueOf(currAllocId))){
+                        while(allocIdMap.keySet().contains(String.valueOf(currAllocId))){
 
                             currAllocId++;
                         }
@@ -442,7 +442,7 @@ public class ExamCommand {
                                 && currStudentIndex < studentListOfTheBatch.size()
                                 && currAllocId < roomCapacity) {
 
-                            allocIdList.add(String.valueOf(currAllocId));
+                            allocIdMap.put(currAllocId, currStudentIndex);
                             currAllocId += 2;
                             Student student = studentListOfTheBatch.get(currStudentIndex++);
 

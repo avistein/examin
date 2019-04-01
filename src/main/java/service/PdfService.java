@@ -341,7 +341,7 @@ public class PdfService {
                         int cols = Integer.parseInt(roomAllocation.getNoOfCols());
 
                         List<Student> studentListInRoom = roomAllocation.getStudentList();
-
+                        Map<Integer, Integer> roomAllocationIdMap = roomAllocation.getRoomAllocationMap();
                         PdfPTable mainTable = new PdfPTable(cols);
 
                         PdfPTable tableTitle = new PdfPTable(1);
@@ -380,13 +380,15 @@ public class PdfService {
                                 PdfPCell pdfPCell;
 
                                 int currStudentIndex = j * rows + i;
-                                if (currStudentIndex < studentListInRoom.size()) {
+                                if (roomAllocationIdMap.containsKey(currStudentIndex)) {
 
-                                    Student currStudent = studentListInRoom.get(currStudentIndex);
+                                        Student currStudent = studentListInRoom.get(
+                                                roomAllocationIdMap.get(currStudentIndex));
 
-                                    pdfPCell = new PdfPCell(new Phrase(currStudent.getRegId(), CONTENT_FONT1));
-                                    pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                    pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                                        pdfPCell = new PdfPCell(new Phrase(currStudent.getRegId(), CONTENT_FONT1));
+                                        pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                        pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
                                 } else {
 
                                     pdfPCell = new PdfPCell(new Phrase(" "));
