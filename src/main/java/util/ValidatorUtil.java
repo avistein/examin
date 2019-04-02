@@ -180,4 +180,20 @@ public final class ValidatorUtil {
         return matcher.matches();
 
     }
+
+    public static boolean validateTimeFormat(String time) {
+
+        String regex = "^([0-9]{2}:[0-9]{2}:[0-9]{2})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(time);
+        return matcher.matches();
+    }
+
+    public static boolean validateNumber(String number) {
+
+        String regex = "^\\d+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(number);
+        return matcher.matches();
+    }
 }

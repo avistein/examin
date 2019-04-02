@@ -88,7 +88,7 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
-                  <Button id="examAdministrationButton" fx:id="examsListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleExamsListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Administration">
+                  <Button id="examAdministrationButton" fx:id="examsAdministrationButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleExamsAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Administration">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -99,6 +99,18 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
+                  <Button id="examAdministrationButton" fx:id="examsListButton1" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="206.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="200.0" text="Admit Cards">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../png/subjects.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Button>
                   <Button id="marksButton" fx:id="marksListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
@@ -110,6 +122,30 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
+                  <Button id="marksButton" fx:id="marksListButton1" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="262.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student Promotion" textOverrun="CENTER_ELLIPSIS">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../png/marks.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Button>
+                  <Button id="marksButton" fx:id="marksListButton11" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="274.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marksheets">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../png/marks.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Button>
                   <Button id="notifyButton" fx:id="noticesListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notify">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
@@ -133,6 +169,18 @@
                         <Insets left="10.0" />
                      </padding></Button>
                   <Button id="changePasswordButton" fx:id="adminChangePasswordButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="370.0" mnemonicParsing="false" onAction="#handleChangePasswordButtonAction" prefHeight="44.0" prefWidth="200.0" text="Change Password">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../png/ligature-symbols_2-11-0_key_256_0_0c1544_none.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Button>
+                  <Button id="changePasswordButton" fx:id="adminChangePasswordButton1" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleChangePasswordButtonAction" prefHeight="44.0" prefWidth="200.0" text="About Us">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>

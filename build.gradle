@@ -28,7 +28,8 @@ dependencies {
     compile group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4'
     compile 'com.opencsv:opencsv:4.5'
     implementation 'com.sendgrid:sendgrid-java:4.3.0'
-    
+    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13'
+
 }
 
 

@@ -158,8 +158,13 @@ public class AdminPanelController {
     }
 
     @FXML
-    private void handleExamsListButtonAction() {
+    private void handleExamsAdministrationButtonAction() throws IOException{
 
+        Parent examAdministrationFxml = FXMLLoader.load(getClass()
+                .getResource("/view/adminPanel/ExamAdministration.fxml"));
+        subTitleLabel.setText("Exam Administration");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(examAdministrationFxml);
     }
 
     @FXML

@@ -166,6 +166,8 @@ public class ViewStudentModalController {
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
+
+
     @FXML
     private void handleDeleteButtonAction() {
 

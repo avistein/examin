@@ -209,4 +209,17 @@ public class FileHandlingService {
         }
         return map;
     }
+
+
+//    Task<Boolean> getCreateSeatingArrangementPdfTask(List<RoomAllocation> roomAllocationList){
+//
+//        Task<Boolean> createSeatingArrangementPdfTask = new Task<Boolean>() {
+//            @Override
+//            protected Boolean call() throws Exception {
+//
+//
+//            }
+//        };
+//        return createSeatingArrangementPdfTask;
+//    }
 }

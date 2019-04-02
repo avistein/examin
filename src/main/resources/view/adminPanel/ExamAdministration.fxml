@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<TabPane fx:id="examAdministrationTabPane" prefHeight="523.0" prefWidth="722.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.ExamAdministrationController">
+  <tabs>
+    <Tab fx:id="createExamTab" text="Create Exam">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <GridPane fx:id="createExamTabMainGridPane" layoutY="-6.0" prefHeight="494.0" prefWidth="722.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-6.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="316.0" minHeight="10.0" prefHeight="229.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="316.0" minHeight="10.0" prefHeight="229.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="316.0" minHeight="10.0" prefHeight="229.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="212.0" minHeight="10.0" prefHeight="207.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Exam ID">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="examDetailsIdTextField" maxHeight="-Infinity" maxWidth="-Infinity">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="60.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
+                           <children>
+                              <Label text="Semester Type">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ChoiceBox fx:id="semesterTypeChoiceBox" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Start Date">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="startDateDatePicker" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                           <children>
+                              <GridPane prefHeight="217.0" prefWidth="253.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                       <children>
+                                          <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit">
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetButtonAction" text="Reset">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Start Time">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="startTimeTextField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="HH:MM:SS">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="60.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="End Time">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="endTimeTextField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="HH:MM:SS">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="60.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label text="Academic Year">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="academicYearTextField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="eg. 2018-2019">
+                                       <VBox.margin>
+                                          <Insets left="60.0" right="60.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                    </GridPane>
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Exam Interval">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="examIntervalTextField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="eg. 2">
+                                 <VBox.margin>
+                                    <Insets left="60.0" right="60.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" layoutX="251.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label text="Exam Type">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ChoiceBox fx:id="examTypeChoiceBox" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <CheckBox fx:id="examOnSaturdayCheckBox" mnemonicParsing="false" text="Exam on Saturday">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </CheckBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+                  <StackPane fx:id="createExamTabStatusStackPane" onMouseClicked="#handleCreateExamStatusStackPaneOnMouseClicked" prefHeight="494.0" prefWidth="722.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ProgressIndicator fx:id="createExamTabProgressIndicator" prefHeight="39.0" prefWidth="47.0" visible="false" />
+                              <ImageView fx:id="createExamTabStatusImageView" fitHeight="43.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <Label fx:id="createExamTabStatusLabel" visible="false" />
+                              <Label fx:id="createExamTabMsgLabel" text="Click anywhere to proceed!" visible="false" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab fx:id="manageExamTab" text="Manage Exam">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <GridPane fx:id="manageExamTabMainGridPane" layoutX="39.0" layoutY="87.0" prefHeight="494.0" prefWidth="722.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="147.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="252.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Accordion GridPane.rowIndex="1">
+                          <panes>
+                            <TitledPane animated="false" text="Time Table">
+                              <content>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="720.0" spacing="7.0">
+                                       <children>
+                                          <Button fx:id="timeTableCreateButton" mnemonicParsing="false" onAction="#handleTimeTableCreateButtonAction" text="Create" />
+                                          <Button fx:id="timeTableGeneratePdfButton" layoutX="20.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleTimeTableGeneratePdfButtonAction" text="Generate PDF" />
+                                          <Button fx:id="timeTableViewButton" mnemonicParsing="false" onAction="#handleTimeTableViewButtonAction" text="View" />
+                                          <Button fx:id="timeTableDeleteButton" mnemonicParsing="false" onAction="#handleTimeTableDeleteButtonAction" text="Delete" />
+                                       </children>
+                                    </HBox>
+                              </content>
+                            </TitledPane>
+                            <TitledPane animated="false" text="Room Allocation">
+                                 <content>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="720.0" spacing="7.0">
+                                       <children>
+                                          <Button fx:id="roomAllocationCreateButton" mnemonicParsing="false" onAction="#handleRoomAllocationCreateButtonAction" text="Create" />
+                                          <Button fx:id="roomAllocationGeneratePdfButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleRoomAllocationGeneratePdfButtonAction" text="Generate PDF" />
+                                          <Button fx:id="roomAllocationViewButton" mnemonicParsing="false" onAction="#handleRoomAllocationViewButtonAction" text="View" />
+                                          <Button fx:id="roomAllocationDeleteButton" mnemonicParsing="false" onAction="#handleRoomAllocationDeleteButtonAction" text="Delete" />
+                                       </children>
+                                    </HBox>
+                                 </content>
+                            </TitledPane>
+                              <TitledPane animated="false" layoutX="10.0" layoutY="122.0" text="Seating Arrangement">
+                                 <content>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="720.0" spacing="7.0">
+                                       <children>
+                                          <Button fx:id="seatArrangementGeneratePdfButton" layoutX="20.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleSeatArrangementGeneratePdfButtonAction" text="Generate PDF" />
+                                          <Button fx:id="seatArrangementViewButton" mnemonicParsing="false" onAction="#handleSeatArrangementViewButtonAction" text="View" />
+                                       </children>
+                                    </HBox>
+                                 </content>
+                              </TitledPane>
+                            <TitledPane animated="false" text="Invigilation Duty">
+                                 <content>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="720.0" spacing="7.0">
+                                       <children>
+                                          <Button fx:id="invigilationDutyCreateButton" mnemonicParsing="false" onAction="#handleInvigilationDutyCreateButtonAction" text="Create" />
+                                          <Button fx:id="invigilationDutyGeneratePdfButton" layoutX="20.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleInvigilationDutyGeneratePdfButtonAction" text="Generate PDF" />
+                                          <Button fx:id="invigilationDutyViewButton" mnemonicParsing="false" onAction="#handleInvigilationDutyViewButtonAction" text="View" />
+                                          <Button fx:id="invigilationDutyDeleteButton" mnemonicParsing="false" onAction="#handleInvigilationDutyDeleteButtonAction" text="Delete" />
+                                       </children>
+                                    </HBox>
+                                 </content>
+                            </TitledPane>
+                          </panes>
+                        </Accordion>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+                           <children>
+                              <Pagination prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="deleteExamButton" mnemonicParsing="false" onAction="#handleDeleteExamButtonAction" text="Delete Exam" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="manageExamTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                          <columns>
+                              <TableColumn fx:id="examDetailsIdCol" prefWidth="75.0" text="Exam ID" />
+                            <TableColumn fx:id="examTypeCol" prefWidth="75.0" text="Exam Type" />
+                            <TableColumn fx:id="semesterTypeCol" prefWidth="75.0" text="Semester Type" />
+                              <TableColumn fx:id="startDateCol" prefWidth="75.0" text="Start Date" />
+                              <TableColumn fx:id="endDateCol" prefWidth="75.0" text="End Date" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </GridPane>
+                  <StackPane fx:id="manageExamTabStatusStackPane" onMouseClicked="#handleManageExamStatusStackPaneOnMouseClicked" prefHeight="494.0" prefWidth="722.0" visible="false">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ProgressIndicator fx:id="manageExamTabProgressIndicator" prefHeight="39.0" prefWidth="47.0" visible="false" />
+                              <ImageView fx:id="manageExamTabStatusImageView" fitHeight="43.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                              <Label fx:id="manageExamTabStatusLabel" visible="false" />
+                              <Label fx:id="manageExamTabMsgLabel" text="Click anywhere to proceed!" visible="false" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>
