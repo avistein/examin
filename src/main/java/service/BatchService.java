@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static util.ConstantsUtil.*;
+
 /**
  * Service class to  get Batch, add Batch, delete Batch , edit Batch, get total no. of Batches .
  *
@@ -86,6 +88,122 @@ public class BatchService {
             list.add(batch);
         }
         return list;
+    }
+
+    /**
+     * This method is used to get a addBatchToDatabaseTask which is used to add a single batch to the DB.
+     *
+     * @param batch The batch to be added to the DB.
+     * @return A addBatchToDatabaseTask instance which is used to add a single batch to DB in a separate thread.
+     */
+    public Task<Integer> getAddBatchToDatabaseTask(final Batch batch) {
+
+        Task<Integer> addBatchToDatabaseTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                CourseService courseService = new CourseService();
+                final String additionalQuery = "WHERE v_degree=? AND v_discipline=?";
+
+                String courseId = courseService.getCourseData(additionalQuery, batch.getDegree()
+                        , batch.getDiscipline()).get(0).getCourseId();
+
+                final String sql = "INSERT INTO t_batch(v_batch_id, v_batch_name" +
+                        ", v_course_id) VALUES(?, ?, ?)";
+
+                //holds the status of insertion of batch to the DB, i.e success or failure
+                int tBatchStatus = databaseHelper.insert(sql, batch.getBatchId()
+                        , batch.getBatchName(), courseId);
+
+                /*returns an integer holding the success or failure status*/
+                if (tBatchStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tBatchStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_ALREADY_EXIST_ERROR;
+                }
+
+            }
+        };
+        return addBatchToDatabaseTask;
+    }
+
+    /**
+     * This method is used to get a updateBatchTask which is used to edit a single batch in the DB.
+     *
+     * @param batch The course to be edited.
+     * @return A updateBatchTask instance which is used to edit a single batch in the DB in a separate thread.
+     */
+    public Task<Integer> getUpdateBatchTask(final Batch batch) {
+
+        Task<Integer> updateBatchTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                final String sql = "UPDATE t_batch SET v_batch_name=? WHERE v_batch_id=?";
+
+                //holds the status of updation of batch in the DB, i.e success or failure
+                int tBatchStatus = databaseHelper.updateDelete(sql, batch.getBatchName(), batch.getBatchId());
+
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tBatchStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tBatchStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return updateBatchTask;
+    }
+
+    /**
+     * This method is used to get a deleteBatchTask which is used to delete a single batch in the DB.
+     *
+     * @param param Batch id of the batch to be deleted.
+     * @return A deleteBatchTask instance which is used to delete a single batch in the DB in a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getDeleteBatchTask(final String param) {
+
+        Task<Integer> deleteBatchTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                final String sql = "DELETE FROM t_batch WHERE v_batch_id=?";
+
+                //holds the status of deletion of batch in the DB, i.e success or failure
+                int tBatchStatus = databaseHelper.updateDelete(sql, param);
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tBatchStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tBatchStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else if (tBatchStatus == DATA_DEPENDENCY_ERROR) {
+
+                    return DATA_DEPENDENCY_ERROR;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return deleteBatchTask;
     }
 
     /**

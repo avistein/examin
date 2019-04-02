@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
@@ -23,843 +23,919 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <TabPane fx:id="academicAdministrationTabPane" prefHeight="675.0" prefWidth="860.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.AcademicAdministrationController">
-  <tabs>
-    <Tab fx:id="departmentsTab" text="Departments">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane dividerPositions="0.2829324169530355" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
-                           <children>
-                              <GridPane fx:id="addDeptMainGridPane" layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="620.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
-                                       <children>
-                                          <Label text="Add Department" />
-                                       </children>
-                                    </HBox>
-                                    <GridPane GridPane.rowIndex="1">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints maxHeight="189.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="280.0" minHeight="0.0" prefHeight="108.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="484.0" minHeight="10.0" prefHeight="376.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                             <children>
-                                                <Label text="Department Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField fx:id="deptNameTextfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <Label text="Building Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="buildingNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <Button fx:id="SubmitDeptButton" mnemonicParsing="false" onAction="#handleSubmitDeptButtonAction" text="Submit">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button fx:id="resetDeptButton" mnemonicParsing="false" onAction="#handleDeptOkAndResetButtonAction" text="Reset">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </GridPane>
-                                 </children>
-                              </GridPane>
-                              <StackPane fx:id="addDeptStatusStackPane" prefHeight="653.0" prefWidth="260.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
-                                       <children>
-                                          <ProgressIndicator fx:id="addDeptProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
-                                          <ImageView fx:id="addDeptStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
-                                          <Label fx:id="addDeptStatusLabel" visible="false" />
-                                          <HBox fx:id="addDeptButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleDeptOkAndResetButtonAction" text="OK" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <GridPane fx:id="deptListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="539.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <TableView fx:id="deptTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                      <columns>
-                                        <TableColumn fx:id="deptDeptNameCol" prefWidth="116.0" text="Department Name" />
-                                        <TableColumn fx:id="deptBuildingNameCol" prefWidth="110.0" text="Building Name" />
-                                      </columns>
-                                    </TableView>
-                                    <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Label text="Departments List" />
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#handleEditDeptButtonAction" text="Edit" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteDeptButtonAction" text="Delete" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </GridPane>
-                              <StackPane fx:id="deptListStatusStackPane" prefHeight="653.0" prefWidth="607.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
-                                       <children>
-                                          <ProgressIndicator fx:id="deptListProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
-                                          <ImageView fx:id="deptListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
-                                          <Label fx:id="deptListStatusLabel" visible="false" />
-                                          <HBox fx:id="deptListButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleDeptListOkButtonAction" text="OK" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </AnchorPane>
-                    </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-      </content>
-    </Tab>
-      <Tab fx:id="coursesTab" text="Courses">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
-                           <children>
-                              <GridPane fx:id="addCourseMainGridPane" layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="616.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
-                                       <children>
-                                          <Label text="Add Course" />
-                                       </children>
-                                    </HBox>
-                                    <GridPane GridPane.rowIndex="1">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="174.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="319.0" minHeight="10.0" prefHeight="215.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <VBox alignment="CENTER" prefHeight="109.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <Label text="Course ID">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="courseIdTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="162.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <Label text="Degree">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="degreeTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
-                                             <children>
-                                                <Label text="Discipline">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="disciplineTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.rowIndex="5">
-                                             <children>
-                                                <Button fx:id="submitCourseButton" mnemonicParsing="false" onAction="#handleSubmitCourseButtonAction" text="Submit">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button fx:id="resetCourseButton" mnemonicParsing="false" onAction="#handleCourseOkAndResetButtonAction" text="Reset">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <GridPane.margin>
-                                                <Insets />
-                                             </GridPane.margin>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                             <children>
-                                                <Label text="Department Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="courseDeptNameComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
-                                             <children>
-                                                <Label text="Duration">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="durationTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </GridPane>
-                                 </children>
-                              </GridPane>
-                              <StackPane fx:id="addCourseStatusStackPane" prefHeight="653.0" prefWidth="260.0" visible="false">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
-                                       <children>
-                                          <ProgressIndicator fx:id="addCourseProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
-                                          <ImageView fx:id="addCourseStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
-                                          <Label fx:id="addCourseStatusLabel" visible="false" />
-                                          <HBox fx:id="addCourseButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleCourseOkAndResetButtonAction" text="OK" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <GridPane fx:id="courseListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="532.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <TableView fx:id="courseTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                       <columns>
-                                          <TableColumn fx:id="courseDeptNameCol" prefWidth="111.0" text="Department Name" />
-                                          <TableColumn fx:id="courseCourseIdCol" prefWidth="75.0" text="Course ID" />
-                                          <TableColumn fx:id="courseDegreeCol" prefWidth="75.0" text="Degree" />
-                                          <TableColumn fx:id="courseDisciplineCol" prefWidth="75.0" text="Discipline" />
-                                          <TableColumn fx:id="courseDurationCol" prefWidth="75.0" text="Duration" />
-                                       </columns>
-                                    </TableView>
-                                    <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Label text="Courses List" />
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#handleEditCourseButtonAction" text="Edit" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteCourseButtonAction" text="Delete" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </GridPane>
-                              <StackPane fx:id="courseListStatusStackPane" prefHeight="653.0" prefWidth="607.0" visible="false">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
-                                       <children>
-                                          <ProgressIndicator fx:id="courseListProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
-                                          <ImageView fx:id="courseListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
-                                          <Label fx:id="courseListStatusLabel" visible="false" />
-                                          <HBox fx:id="courseListButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleCourseListOkButtonAction" text="OK" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </StackPane>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-      <Tab fx:id="batchesTab" text="Batches">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
-                           <children>
-                              <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="616.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
-                                       <children>
-                                          <Label text="Add Batch" />
-                                       </children>
-                                    </HBox>
-                                    <GridPane GridPane.rowIndex="1">
-                                       <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       </columnConstraints>
-                                       <rowConstraints>
-                                          <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="174.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="319.0" minHeight="10.0" prefHeight="215.0" vgrow="SOMETIMES" />
-                                       </rowConstraints>
-                                       <children>
-                                          <VBox alignment="CENTER" prefHeight="109.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="4">
-                                             <children>
-                                                <Label text="Batch Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="batchNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="162.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <Label text="Degree">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="batchesDegreeComboBox" onAction="#handleBatchesDegreeComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <Label text="Discipline">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="batchesDisciplineComboBox" onAction="#handleBatchesDisciplineComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.rowIndex="5">
-                                             <children>
-                                                <Button fx:id="submitBatchesButton" mnemonicParsing="false" onAction="#handleSubmitBatchesButtonAction" text="Submit">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button mnemonicParsing="false" onAction="#handleResetBatchesButtonAction" text="Reset">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                             <opaqueInsets>
-                                                <Insets />
-                                             </opaqueInsets>
-                                             <GridPane.margin>
-                                                <Insets />
-                                             </GridPane.margin>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                             <children>
-                                                <Label text="Department Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="batchesDeptNameComboBox1" onAction="#handleBatchesDeptNameComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
-                                             <children>
-                                                <Label text="Batch ID">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="batchIdTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </GridPane>
-                                 </children>
-                              </GridPane>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="532.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <TableView fx:id="courseTableView1" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                       <columns>
-                                          <TableColumn fx:id="batchesDeptNameCol" prefWidth="111.0" text="Department Name" />
-                                          <TableColumn fx:id="batchesBatchIdCol" prefWidth="75.0" text="Batch ID" />
-                                          <TableColumn fx:id="batchesDegreeCol" prefWidth="75.0" text="Degree" />
-                                          <TableColumn fx:id="batchesDisciplineCol" prefWidth="75.0" text="Discipline" />
-                                       </columns>
-                                    </TableView>
-                                    <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Label text="Batches List" />
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#handleEditBatchButtonAction" text="Edit" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteBatchButtonAction" text="Delete" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </GridPane>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-      <Tab fx:id="subjectsTab" text="Subjects">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
-                           <children>
-                              <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="616.0" minHeight="10.0" prefHeight="616.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
-                                       <children>
-                                          <Label text="Add Subject" />
-                                       </children>
-                                    </HBox>
-                                    <GridPane GridPane.rowIndex="1">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                          <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="118.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="122.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="273.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="240.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <VBox alignment="CENTER" prefHeight="79.0" prefWidth="260.0" spacing="10.0" GridPane.rowIndex="4">
-                                             <children>
-                                                <Label text="Subject Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="subjectNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="151.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5">
-                                             <children>
-                                                <Label text="Subject Type">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <TextField fx:id="subjectTypeTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="64.0" prefWidth="260.0" spacing="6.0" GridPane.rowIndex="6">
-                                             <children>
-                                                <Label text="Credit">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets top="5.0" />
-                                                   </VBox.margin>
-                                                </Label>
-                                                <TextField fx:id="creditTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <HBox alignment="CENTER" spacing="10.0" GridPane.rowIndex="8">
-                                             <children>
-                                                <Button fx:id="resetSubButton" mnemonicParsing="false" onAction="#handleResetSubButtonAction" text="Reset">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button mnemonicParsing="false" onAction="#handleSubmitSubjectButtonAction" text="Submit">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                          </HBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                             <children>
-                                                <Label text="Degree ">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="subTabDegreeComboBox" onAction="#handleSubTabDegreeComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <Label text="Discipline">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="subTabDisciplineComboBox" onAction="#handleSubTabDisciplineComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <Label text="Professor Name">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="subTabProfNameComboBox" onAction="#handleSubTabProfNameComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <GridPane GridPane.rowIndex="3">
+    <tabs>
+        <Tab fx:id="departmentsTab" text="Departments">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <SplitPane dividerPositions="0.2829324169530355" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                    <children>
+                                        <GridPane fx:id="addDeptMainGridPane" layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="620.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
-                                             <children>
-                                                <VBox alignment="CENTER" prefHeight="76.0" prefWidth="255.0" spacing="10.0">
-                                                   <children>
-                                                      <Label text="Subject ID">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <TextField fx:id="subjectIdTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
-                                                   </children>
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                                    <children>
+                                                        <Label text="Add Department" />
+                                                    </children>
+                                                </HBox>
+                                                <GridPane GridPane.rowIndex="1">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="189.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="280.0" minHeight="0.0" prefHeight="108.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="484.0" minHeight="10.0" prefHeight="376.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                                            <children>
+                                                                <Label text="Department Name">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                    <VBox.margin>
+                                                                        <Insets />
+                                                                    </VBox.margin>
+                                                                </Label>
+                                                                <TextField fx:id="deptNameTextfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <Label text="Building Name">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="buildingNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.rowIndex="2">
+                                                            <children>
+                                                                <Button fx:id="SubmitDeptButton" mnemonicParsing="false" onAction="#handleSubmitDeptButtonAction" text="Submit">
+                                                                    <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                                <Button fx:id="resetDeptButton" mnemonicParsing="false" onAction="#handleDeptOkAndResetButtonAction" text="Reset">
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="addDeptStatusStackPane" prefHeight="653.0" prefWidth="260.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="addDeptProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
+                                                        <ImageView fx:id="addDeptStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="addDeptStatusLabel" visible="false" />
+                                                        <HBox fx:id="addDeptButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleDeptOkAndResetButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
                                                 </VBox>
-                                             </children>
-                                          </GridPane>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="7">
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <GridPane fx:id="deptListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="539.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <TableView fx:id="deptTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                    <columns>
+                                                        <TableColumn fx:id="deptDeptNameCol" prefWidth="116.0" text="Department Name" />
+                                                        <TableColumn fx:id="deptBuildingNameCol" prefWidth="110.0" text="Building Name" />
+                                                    </columns>
+                                                </TableView>
+                                                <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label text="Departments List" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#handleEditDeptButtonAction" text="Edit" />
+                                                        <Button mnemonicParsing="false" onAction="#handleDeleteDeptButtonAction" text="Delete" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="deptListStatusStackPane" prefHeight="653.0" prefWidth="607.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="deptListProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
+                                                        <ImageView fx:id="deptListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="deptListStatusLabel" visible="false" />
+                                                        <HBox fx:id="deptListButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleDeptListOkButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="coursesTab" text="Courses">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                    <children>
+                                        <GridPane fx:id="addCourseMainGridPane" layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="616.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                                    <children>
+                                                        <Label text="Add Course" />
+                                                    </children>
+                                                </HBox>
+                                                <GridPane GridPane.rowIndex="1">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="174.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="319.0" minHeight="10.0" prefHeight="215.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="109.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <Label text="Course ID">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="courseIdTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="162.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="2">
+                                                            <children>
+                                                                <Label text="Degree">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="degreeTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
+                                                            <children>
+                                                                <Label text="Discipline">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="disciplineTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.rowIndex="5">
+                                                            <children>
+                                                                <Button fx:id="submitCourseButton" mnemonicParsing="false" onAction="#handleSubmitCourseButtonAction" text="Submit">
+                                                                    <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                                <Button fx:id="resetCourseButton" mnemonicParsing="false" onAction="#handleCourseOkAndResetButtonAction" text="Reset">
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                            </children>
+                                                            <opaqueInsets>
+                                                                <Insets />
+                                                            </opaqueInsets>
+                                                            <GridPane.margin>
+                                                                <Insets />
+                                                            </GridPane.margin>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                                            <children>
+                                                                <Label text="Department Name">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <ComboBox fx:id="courseDeptNameComboBox" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
+                                                            <children>
+                                                                <Label text="Duration">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="durationTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="addCourseStatusStackPane" prefHeight="653.0" prefWidth="260.0" visible="false">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="addCourseProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
+                                                        <ImageView fx:id="addCourseStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="addCourseStatusLabel" visible="false" />
+                                                        <HBox fx:id="addCourseButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleCourseOkAndResetButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <GridPane fx:id="courseListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="532.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <TableView fx:id="courseTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                    <columns>
+                                                        <TableColumn fx:id="courseDeptNameCol" prefWidth="111.0" text="Department Name" />
+                                                        <TableColumn fx:id="courseCourseIdCol" prefWidth="75.0" text="Course ID" />
+                                                        <TableColumn fx:id="courseDegreeCol" prefWidth="75.0" text="Degree" />
+                                                        <TableColumn fx:id="courseDisciplineCol" prefWidth="75.0" text="Discipline" />
+                                                        <TableColumn fx:id="courseDurationCol" prefWidth="75.0" text="Duration" />
+                                                    </columns>
+                                                </TableView>
+                                                <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label text="Courses List" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#handleEditCourseButtonAction" text="Edit" />
+                                                        <Button mnemonicParsing="false" onAction="#handleDeleteCourseButtonAction" text="Delete" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="courseListStatusStackPane" prefHeight="653.0" prefWidth="607.0" visible="false">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="courseListProgressIndicator" prefHeight="43.0" prefWidth="45.0" visible="false" />
+                                                        <ImageView fx:id="courseListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="courseListStatusLabel" visible="false" />
+                                                        <HBox fx:id="courseListButtonsHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleCourseListOkButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="batchesTab" text="Batches">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                    <children>
+                                        <GridPane fx:id="addBatchMainGridPane" layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="616.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                                    <children>
+                                                        <Label text="Add Batch" />
+                                                    </children>
+                                                </HBox>
+                                                <GridPane GridPane.rowIndex="1">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="289.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="174.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="319.0" minHeight="10.0" prefHeight="215.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="109.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="4">
+                                                            <children>
+                                                                <Label text="Batch Name">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="batchNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="162.0" prefWidth="255.0" spacing="10.0" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <Label text="Degree">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <ComboBox fx:id="batchesDegreeComboBox" onAction="#handleBatchesDegreeComboBox" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
+                                                            <children>
+                                                                <Label text="Discipline">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <ComboBox fx:id="batchesDisciplineComboBox" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.rowIndex="5">
+                                                            <children>
+                                                                <Button fx:id="submitBatchesButton" mnemonicParsing="false" onAction="#handleSubmitBatchesButtonAction" text="Submit">
+                                                                    <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                                <Button mnemonicParsing="false" onAction="#handleBatchOkAndResetButtonAction" text="Reset">
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                            </children>
+                                                            <opaqueInsets>
+                                                                <Insets />
+                                                            </opaqueInsets>
+                                                            <GridPane.margin>
+                                                                <Insets />
+                                                            </GridPane.margin>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
+                                                            <children>
+                                                                <Label text="Batch ID">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="batchIdTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="addBatchStatusStackPane" prefHeight="653.0" prefWidth="260.0" visible="false">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="addBatchProgressIndicator" prefHeight="44.0" prefWidth="40.0" visible="false" />
+                                                        <ImageView fx:id="addBatchStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="addBatchStatusLabel" visible="false" />
+                                                        <HBox fx:id="addBatchButtonHbox" alignment="CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleBatchOkAndResetButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <GridPane fx:id="batchListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="532.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <TableView fx:id="batchTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                    <columns>
+                                                        <TableColumn fx:id="batchesDeptNameCol" prefWidth="148.0" text="Department Name" />
+                                                        <TableColumn fx:id="batchesBatchIdCol" prefWidth="87.0" text="Batch ID" />
+                                                        <TableColumn fx:id="batchesBatchNameCol" prefWidth="119.0" text="Batch Name" />
+                                                        <TableColumn fx:id="batchesDegreeCol" prefWidth="88.0" text="Degree" />
+                                                        <TableColumn fx:id="batchesDisciplineCol" prefWidth="119.0" text="Discipline" />
+                                                    </columns>
+                                                </TableView>
+                                                <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label text="Batches List" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#handleEditBatchButtonAction" text="Edit" />
+                                                        <Button mnemonicParsing="false" onAction="#handleDeleteBatchButtonAction" text="Delete" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="batchListStatusStackPane" prefHeight="644.0" prefWidth="597.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="batchListProgressIndicator" prefHeight="43.0" prefWidth="37.0" visible="false" />
+                                                        <ImageView fx:id="batchListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="batchListStatusLabel" visible="false" />
+                                                        <HBox fx:id="batchListButtonHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleBatchListOkButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="subjectsTab" text="Subjects">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                    <children>
+                                        <GridPane fx:id="addSubjectsMainGridPane" layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="616.0" minHeight="10.0" prefHeight="616.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                                    <children>
+                                                        <Label text="Add Subject" />
+                                                    </children>
+                                                </HBox>
+                                                <GridPane GridPane.rowIndex="1">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="122.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="273.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="202.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="240.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="79.0" prefWidth="260.0" spacing="10.0" GridPane.rowIndex="4">
+                                                            <children>
+                                                                <Label text="Subject Name">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="subjectNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="151.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5">
+                                                            <children>
+                                                                <Label text="Subject Type">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                        <ChoiceBox fx:id="subjectTypeChoiceBox" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="64.0" prefWidth="260.0" spacing="6.0" GridPane.rowIndex="6">
+                                                            <children>
+                                                                <Label text="Credit">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                    <VBox.margin>
+                                                                        <Insets top="5.0" />
+                                                                    </VBox.margin>
+                                                                </Label>
+                                                                <TextField fx:id="creditTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <HBox alignment="CENTER" spacing="10.0" GridPane.rowIndex="8">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleSubjectsOkAndResetButtonAction" text="Reset">
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                                <Button mnemonicParsing="false" onAction="#handleSubmitSubjectButtonAction" text="Submit">
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                            </children>
+                                                        </HBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                                            <children>
+                                                                <Label text="Degree ">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <ComboBox fx:id="subjectsDegreeComboBox" onAction="#handleSubjectsDegreeComboBox" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <Label text="Discipline">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <ComboBox fx:id="subjectsDisciplineComboBox" onAction="#handleSubjectsDisciplineComboBox" prefWidth="150.0" />
+                                                            </children>
+                                                        </VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
                                              <children>
-                                                <CheckBox fx:id="optionalCheckBox" mnemonicParsing="false" text="Optional">
+                                                 <Label text="Subject ID">
+                                                     <font>
+                                                         <Font size="14.0" />
+                                                     </font>
+                                                 </Label>
+                                                 <TextField fx:id="subjectIdTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                             </children></VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="7">
+                                             <children>
+                                                <Label text="Full Marks">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
-                                                </CheckBox>
+                                                </Label>
+                                                <TextField fx:id="fullMarksTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" />
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" layoutX="10.0" layoutY="73.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
+                                             <children>
+                                                <Label text="Semester">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <ComboBox fx:id="subjectsSemesterComboBox" prefWidth="150.0" />
+                                             </children>
+                                          </VBox>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </GridPane>
+                              <StackPane fx:id="addSubjectsStatusStackPane" prefHeight="644.0" prefWidth="255.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <ProgressIndicator fx:id="addSubjectsProgressIndicator" prefHeight="37.0" prefWidth="48.0" visible="false" />
+                                          <ImageView fx:id="addSubjectsStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Label fx:id="addSubjectsStatusLabel" visible="false" />
+                                          <HBox fx:id="addSubjectsButtonHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="126.0" visible="false">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#handleSubjectsOkAndResetButtonAction" text="OK" />
                                              </children>
                                           </HBox>
                                        </children>
-                                    </GridPane>
+                                    </VBox>
                                  </children>
-                              </GridPane>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="7.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="531.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
+                              </StackPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <GridPane fx:id="subjectsListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="7.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="531.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <TableView fx:id="subjectsTableView" prefHeight="600.0" prefWidth="605.0" GridPane.rowIndex="2">
+                                                    <columns>
+                                                        <TableColumn fx:id="subSubIdCol" prefWidth="68.0" text="Subject ID" />
+                                                        <TableColumn fx:id="subDegreeCol" prefWidth="69.0" text="Degree" />
+                                                        <TableColumn fx:id="subDisciplineCol" prefWidth="92.0" text="Discipline" />
+                                                        <TableColumn fx:id="subSemesterCol" minWidth="0.0" prefWidth="65.0" text="Semester" />
+                                                        <TableColumn fx:id="subSubNameCol" prefWidth="92.0" text="Subject Name" />
+                                                        <TableColumn fx:id="subSubTypeCol" prefWidth="82.0" text="Subject Type" />
+                                                        <TableColumn fx:id="subCreditCol" prefWidth="48.0" text="Credit" />
+                                                        <TableColumn fx:id="subFullMarksCol" text="Full Marks" />
+                                                    </columns>
+                                                </TableView>
+                                                <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label text="Subjects List" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#handleEditSubjectButtonAction" text="Edit" />
+                                                        <Button mnemonicParsing="false" onAction="#handleDeleteSubjectButtonAction" text="Delete" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+                              <StackPane fx:id="subjectsListStatusStackPane" prefHeight="644.0" prefWidth="597.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <TableView fx:id="subTableView" prefHeight="600.0" prefWidth="605.0" GridPane.rowIndex="2">
-                                       <columns>
-                                          <TableColumn fx:id="subDeptNameCol" prefWidth="74.0" text="Dept Name" />
-                                          <TableColumn fx:id="subSubIdCol" prefWidth="66.0" text="Subject ID" />
-                                          <TableColumn fx:id="subDegreeCol" prefWidth="60.0" text="Degree" />
-                                          <TableColumn fx:id="subDisciplineCol" prefWidth="64.0" text="Discipline" />
-                                          <TableColumn fx:id="subProfNameCol" prefWidth="74.0" text="Prof Name" />
-                                          <TableColumn fx:id="subSubNameCol" prefWidth="89.0" text="Subject Name" />
-                                          <TableColumn fx:id="subSubTypeCol" prefWidth="93.0" text="Subject Type" />
-                                          <TableColumn fx:id="subCreditCol" prefWidth="108.0" text="Credit" />
-                                       </columns>
-                                    </TableView>
-                                    <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                    <VBox alignment="CENTER" prefHeight="126.0" prefWidth="140.0">
                                        <children>
-                                          <Label text="Subjects List" />
+                                          <ProgressIndicator fx:id="subjectsListProgressIndicator" prefHeight="42.0" prefWidth="49.0" visible="false" />
+                                          <ImageView fx:id="subjectsListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                          <Label fx:id="subjectsListStatusLabel" visible="false" />
+                                          <HBox fx:id="subjectsListButtonHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#handleSubjectsListOkButtonAction" text="OK" />
+                                             </children>
+                                          </HBox>
                                        </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#handleEditSubjectButtonAction" text="Edit" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteSubjectButtonAction" text="Delete" />
-                                       </children>
-                                    </HBox>
+                                    </VBox>
                                  </children>
-                              </GridPane>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-      <Tab fx:id="classRoomsTab" text="Classrooms">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
-                           <children>
-                              <GridPane layoutY="109.0" prefHeight="629.0" prefWidth="361.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="612.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
-                                       <children>
-                                          <Label text="Add Classroom" />
-                                       </children>
-                                    </HBox>
-                                    <GridPane GridPane.rowIndex="1">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                          <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="397.0" minHeight="10.0" prefHeight="286.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
+                              </StackPane>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="classRoomsTab" text="Classrooms">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <SplitPane dividerPositions="0.30082644628099175" layoutX="139.0" layoutY="47.0" prefHeight="631.0" prefWidth="1212.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="629.0" prefWidth="278.0">
+                                    <children>
+                                        <GridPane fx:id="addClassroomMainGridPane" layoutY="109.0" prefHeight="644.0" prefWidth="255.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="205.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="612.0" minHeight="10.0" prefHeight="612.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: DEDEDE;">
+                                                    <children>
+                                                        <Label text="Add Classroom" />
+                                                    </children>
+                                                </HBox>
+                                                <GridPane GridPane.rowIndex="1">
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints maxHeight="190.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="72.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints maxHeight="397.0" minHeight="10.0" prefHeight="176.0" vgrow="SOMETIMES" />
+                                                    </rowConstraints>
+                                                    <children>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                                            <children>
+                                                                <Label text="Room No">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="roomNoTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="153.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+                                                            <children>
+                                                                <Label text="Capacity">
+                                                                    <font>
+                                                                        <Font size="14.0" />
+                                                                    </font>
+                                                                </Label>
+                                                                <TextField fx:id="capacityTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="152.0" />
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleClassroomSubmitButtonAction" text="Submit">
+                                                                    <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                                <Button mnemonicParsing="false" onAction="#handleClassroomOkAndResetButtonAction" text="Reset">
+                                                                    <font>
+                                                                        <Font size="13.0" />
+                                                                    </font>
+                                                                </Button>
+                                                            </children>
+                                                        </VBox>
+                                          <VBox alignment="CENTER" layoutX="10.0" layoutY="223.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
                                              <children>
-                                                <Label text="Room No">
+                                                <Label text="Row">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="roomNoTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="153.0" />
+                                                <TextField fx:id="rowTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="152.0" />
                                              </children>
                                           </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
+                                          <VBox alignment="CENTER" layoutX="10.0" layoutY="300.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
                                              <children>
-                                                <Label text="Capacity">
+                                                <Label text="Column">
                                                    <font>
                                                       <Font size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="capacityTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="152.0" />
+                                                <TextField fx:id="columnTextField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="152.0" />
                                              </children>
                                           </VBox>
-                                          <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleSubmitClassroomButtonAction" text="Submit">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button fx:id="resetClassroomsButton" mnemonicParsing="false" onAction="#handleResetClassroomsButtonAction" text="Reset">
-                                                   <font>
-                                                      <Font size="13.0" />
-                                                   </font>
-                                                </Button>
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
-                                             <children>
-                                                <Label text="Degree">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="classRoomDegreeComboBox" onAction="#handleClassRoomDegreeComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <Label text="Discipline">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Label>
-                                                <ComboBox fx:id="classRoomDisciplineComboBox" onAction="#handleClassRoomDisciplineComboBox" prefWidth="150.0" />
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </GridPane>
-                                 </children>
-                              </GridPane>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <GridPane layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="531.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
-                                    <TableView fx:id="classroomsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                       <columns>
-                                          <TableColumn fx:id="classRoomDegreeCol" prefWidth="75.0" text="Degree" />
-                                          <TableColumn fx:id="classRoomDisciplineCol" prefWidth="75.0" text="Discipline" />
-                                          <TableColumn fx:id="classRoomRoomNoCol" prefWidth="75.0" text="Room No" />
-                                          <TableColumn fx:id="classRoomCapacityCol" prefWidth="75.0" text="Capacity" />
-                                       </columns>
-                                    </TableView>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                       <children>
-                                          <Label text="Classrooms List" />
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#handleEditClassRoomButtonAction" text="Edit" />
-                                          <Button mnemonicParsing="false" onAction="#handleDeleteClassRoomButtonAction" text="Delete" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </GridPane>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-  </tabs>
+                                                    </children>
+                                                </GridPane>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="addClassroomStatusStackPane" prefHeight="644.0" prefWidth="255.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="addClassroomProgressIndicator" prefHeight="44.0" prefWidth="40.0" visible="false" />
+                                                        <ImageView fx:id="addClassroomStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="addClassroomStatusLabel" visible="false" />
+                                                        <HBox fx:id="addClassroomButtonHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleClassroomOkAndResetButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <GridPane fx:id="classroomListMainGridPane" layoutX="47.0" layoutY="114.0" prefHeight="629.0" prefWidth="883.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="588.0" minHeight="10.0" prefHeight="531.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="309.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Pagination prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
+                                                <TableView fx:id="classroomsTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                                                    <columns>
+                                                        <TableColumn fx:id="classroomRoomNoCol" prefWidth="94.0" text="Room No" />
+                                                        <TableColumn fx:id="classroomCapacityCol" prefWidth="77.0" text="Capacity" />
+                                                        <TableColumn fx:id="classroomRowCol" prefWidth="85.0" text="No of Row" />
+                                                        <TableColumn fx:id="classroomColumnCol" prefWidth="109.0" text="No of Column" />
+                                                    </columns>
+                                                </TableView>
+                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Label text="Classrooms List" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <Button mnemonicParsing="false" onAction="#handleEditClassroomButtonAction" text="Edit" />
+                                                        <Button mnemonicParsing="false" onAction="#handleDeleteClassroomButtonAction" text="Delete" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </GridPane>
+                                        <StackPane fx:id="classroomListStatusStackPane" prefHeight="644.0" prefWidth="597.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                                    <children>
+                                                        <ProgressIndicator fx:id="classroomListProgressIndicator" prefHeight="38.0" prefWidth="50.0" visible="false" />
+                                                        <ImageView fx:id="classroomListStatusImageView" fitHeight="43.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                                                        <Label fx:id="classroomListStatusLabel" visible="false" />
+                                                        <HBox fx:id="classroomListButtonHbox" alignment="TOP_CENTER" prefHeight="26.0" prefWidth="127.0" visible="false">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#handleClassroomListOkButtonAction" text="OK" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
 </TabPane>

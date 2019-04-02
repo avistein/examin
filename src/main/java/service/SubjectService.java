@@ -67,9 +67,8 @@ public class SubjectService {
         //list to store the subjects
         List<Subject> list = new ArrayList<>();
 
-        final String query = "SELECT v_course_id, v_sub_id, v_sub_name" +
-                ", v_credit, int_semester, int_opt_status, v_full_marks" +
-                ", v_sub_type from t_subject " + additionalQuery;
+        final String query = "SELECT v_course_id, v_degree, v_discipline, v_sub_id, v_sub_name, v_credit, int_semester" +
+                ", v_full_marks, v_sub_type from t_subject natural join t_course" + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
@@ -81,14 +80,136 @@ public class SubjectService {
             subject.setSubName(map.get("v_sub_name").get(i));
             subject.setCredit(map.get("v_credit").get(i));
             subject.setSemester(map.get("int_semester").get(i));
-            subject.setOptStatus(Integer.parseInt(map.get("int_opt_status").get(i)));
             subject.setFullMarks(map.get("v_full_marks").get(i));
             subject.setSubType(map.get("v_sub_type").get(i));
+            subject.setDegree(map.get("v_degree").get(i));
+            subject.setDiscipline(map.get("v_discipline").get(i));
 
             //add a single subject to the list
             list.add(subject);
         }
         return list;
+    }
+
+    /**
+     * This method is used to get a task which can be used to add a single subject to the DB.
+     *
+     * @param subject The subject to be added to the database.
+     * @return A task which can be used to add a single subject into the DB by running a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getAddSubjectToDatabaseTask(final Subject subject) {
+
+        Task<Integer> addSubjectToDatabaseTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                CourseService courseService = new CourseService();
+
+                final String additionalQuery = "WHERE v_degree=? AND v_discipline=?";
+
+                String courseId = courseService.getCourseData(additionalQuery, subject.getDegree()
+                        , subject.getDiscipline()).get(0).getCourseId();
+
+                final String sql = "INSERT INTO t_subject(v_course_id, v_sub_id, v_sub_name, v_credit" +
+                        ", int_semester, v_full_marks, v_sub_type) VALUES(?, ?, ?, ?, ?, ?, ?)";
+
+                //get the status of insertion of subject details into t_subject in the DB
+                int tSubjectStatus = databaseHelper.insert(sql, courseId, subject.getSubId()
+                        , subject.getSubName(), subject.getCredit(), subject.getSemester()
+                        , subject.getFullMarks(), subject.getSubType());
+
+                //return the status of insertion of student details
+                if (tSubjectStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tSubjectStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_ALREADY_EXIST_ERROR;
+                }
+
+            }
+        };
+        return addSubjectToDatabaseTask;
+    }
+
+    /**
+     * This method is used to get a updateSubjectTask which is used to edit a single subject in the DB.
+     *
+     * @param subject The course to be edited.
+     * @return A updateSubjectTask instance which is used to edit a single subject in the DB in a separate thread.
+     */
+    public Task<Integer> getUpdateSubjectTask(final Subject subject) {
+
+        Task<Integer> updateSubjectTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                final String sql = "UPDATE t_subject SET v_sub_name=?, v_credit=?" +
+                        ", int_semester=?, v_full_marks=?, v_sub_type=? WHERE v_sub_id=?";
+
+                //holds the status of updation of subject in the DB, i.e success or failure
+                int tSubjectStatus = databaseHelper.updateDelete(sql, subject.getSubName(), subject.getCredit()
+                        , subject.getSemester(), subject.getFullMarks(), subject.getSubType(), subject.getSubId());
+
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tSubjectStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tSubjectStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return updateSubjectTask;
+    }
+
+    /**
+     * This method is used to get a deleteSubjectTask which is used to delete a single subject in the DB.
+     *
+     * @param param Subject Id of the subject to be deleted.
+     * @return A deleteSubjectTask instance which is used to delete a single subject in the DB in a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
+    public Task<Integer> getDeleteSubjectTask(final String param) {
+
+        Task<Integer> deleteSubjectTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                final String sql = "DELETE FROM t_subject WHERE v_sub_id=?";
+
+                //holds the status of deletion of subject in the DB, i.e success or failure
+                int tSubjectStatus = databaseHelper.updateDelete(sql, param);
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tSubjectStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tSubjectStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else if (tSubjectStatus == DATA_DEPENDENCY_ERROR) {
+
+                    return DATA_DEPENDENCY_ERROR;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return deleteSubjectTask;
     }
 
     /**

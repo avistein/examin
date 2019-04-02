@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Sourav Debnath
  */
+
 public class Classroom {
 
     /*--------------------------------Initialization of variables----------------------------------*/
@@ -72,22 +73,43 @@ public class Classroom {
         this.capacity.set(roomCapacity);
     }
 
+    /**
+     * Getter method to get the no of rows.
+     *
+     * @return The no of rows.
+     */
     public String getNoOfRows() {
+
         return noOfRows.get();
     }
 
-
+    /**
+     * Setter method to set no of rows.
+     *
+     * @param noOfRows The no of row to set.
+     */
     public void setNoOfRows(String noOfRows) {
+
         this.noOfRows.set(noOfRows);
     }
 
+    /**
+     * Getter method to get the no of column.
+     *
+     * @return The no of columns.
+     */
     public String getNoOfCols() {
+
         return noOfCols.get();
     }
 
-
+    /**
+     * Setter method to set no of column.
+     *
+     * @param noOfCols The no of column to set.
+     */
     public void setNoOfCols(String noOfCols) {
+
         this.noOfCols.set(noOfCols);
     }
-
 }

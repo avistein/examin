@@ -152,25 +152,23 @@ public class StudentSectionController {
                 listOfCourses = coursesTask.getValue();
 
                 //only if there's any course in the db
-                if (!listOfCourses.isEmpty()) {
 
-                    List<String> items = new ArrayList<>();
+                List<String> items = new ArrayList<>();
 
-                    for (Course course : listOfCourses) {
+                for (Course course : listOfCourses) {
 
-                        //add only unique degree items to degree combobox
-                        if (!items.contains(course.getDegree())) {
+                    //add only unique degree items to degree combobox
+                    if (!items.contains(course.getDegree())) {
 
-                            items.add(course.getDegree());
-                        }
+                        items.add(course.getDegree());
                     }
-
-                    //choosing this will display students from all degrees
-                    items.add("all");
-
-                    ObservableList<String> options = FXCollections.observableArrayList(items);
-                    degreeComboBox.setItems(options);
                 }
+
+                //choosing this will display students from all degrees
+                items.add("all");
+
+                ObservableList<String> options = FXCollections.observableArrayList(items);
+                degreeComboBox.setItems(options);
             }
         });
 
@@ -208,20 +206,17 @@ public class StudentSectionController {
             semesterComboBox.setDisable(false);
 
             //Add every discipline which comes under the selected degree
-            if (!listOfCourses.isEmpty()) {
+            List<String> items = new ArrayList<>();
+            for (Course course : listOfCourses) {
 
-                List<String> items = new ArrayList<>();
-                for (Course course : listOfCourses) {
+                if (course.getDegree().equals(degreeComboBox.getValue()))
 
-                    if (course.getDegree().equals(degreeComboBox.getValue()))
-
-                        //add the disciplines to the discipline comboBox for particular degree
-                        if (!items.contains(course.getDiscipline()))
-                            items.add(course.getDiscipline());
-                }
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                disciplineComboBox.setItems(options);
+                    //add the disciplines to the discipline comboBox for particular degree
+                    if (!items.contains(course.getDiscipline()))
+                        items.add(course.getDiscipline());
             }
+            ObservableList<String> options = FXCollections.observableArrayList(items);
+            disciplineComboBox.setItems(options);
         }
     }
 
@@ -257,26 +252,21 @@ public class StudentSectionController {
 
                     listOfBatches = batchesTask.getValue();
 
-                    if (!listOfBatches.isEmpty()) {
+                    List<String> items = new ArrayList<>();
 
-                        List<String> items = new ArrayList<>();
+                    for (Batch batch : listOfBatches) {
 
-                        for (Batch batch : listOfBatches) {
+                        //Add unique batch names to the batchComboBox for the corresponding degree and discipline
+                        if (!items.contains(batch.getBatchName())) {
 
-                            //Add unique batch names to the batchComboBox for the corresponding degree and discipline
-                            if (!items.contains(batch.getBatchName())) {
-
-                                items.add(batch.getBatchName());
-                            }
+                            items.add(batch.getBatchName());
                         }
-                        ObservableList<String> options = FXCollections.observableArrayList(items);
-                        batchNameComboBox.setItems(options);
                     }
+                    ObservableList<String> options = FXCollections.observableArrayList(items);
+                    batchNameComboBox.setItems(options);
                 }
             });
-
         }
-
     }
 
     /**
@@ -298,30 +288,27 @@ public class StudentSectionController {
         //only if a batchName is selected
         if (batchNameComboBox.getValue() != null) {
 
-            if (!listOfCourses.isEmpty()) {
-
-                List<String> items = new ArrayList<>();
-                int totalSemesters = 0;
+            List<String> items = new ArrayList<>();
+            int totalSemesters = 0;
                 /*
                 Get the total no.of semesters for the selected Degree,discipline &
                 set the semesterComboBox with semester values from 1 to total no.
                  */
-                for (Course course : listOfCourses) {
+            for (Course course : listOfCourses) {
 
-                    if (course.getDegree().equals(degreeComboBox.getValue())
-                            && course.getDiscipline().equals(disciplineComboBox.getValue())) {
+                if (course.getDegree().equals(degreeComboBox.getValue())
+                        && course.getDiscipline().equals(disciplineComboBox.getValue())) {
 
-                        totalSemesters = Integer.parseInt(course.getDuration());
-                    }
+                    totalSemesters = Integer.parseInt(course.getDuration());
                 }
-                //set the semester combo box from 1 to totalSemesters
-                for (int i = 1; i <= totalSemesters; i++) {
-
-                    items.add(Integer.toString(i));
-                }
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                semesterComboBox.setItems(options);
             }
+            //set the semester combo box from 1 to totalSemesters
+            for (int i = 1; i <= totalSemesters; i++) {
+
+                items.add(Integer.toString(i));
+            }
+            ObservableList<String> options = FXCollections.observableArrayList(items);
+            semesterComboBox.setItems(options);
         }
     }
 

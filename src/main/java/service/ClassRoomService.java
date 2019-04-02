@@ -107,11 +107,13 @@ public class ClassRoomService {
             @Override
             protected Integer call() {
 
-                final String sql = "INSERT INTO t_classroom(v_room_no" +
-                        ", v_capacity) VALUES(?, ?, ?)";
+
+                final String sql = "INSERT INTO t_classroom(int_room_no, int_capacity" +
+                        ", int_rows, int_cols) VALUES(?, ?, ?, ?)";
 
                 //holds the status of insertion of classroom to the DB, i.e success or failure
-                int tClassroomStatus = databaseHelper.insert(sql, classroom.getRoomNo(), classroom.getCapacity());
+                int tClassroomStatus = databaseHelper.insert(sql, classroom.getRoomNo(), classroom.getCapacity()
+                        , classroom.getNoOfRows(), classroom.getNoOfCols());
 
                 /*returns an integer holding the success or failure status*/
                 if (tClassroomStatus == DATABASE_ERROR) {
@@ -143,11 +145,11 @@ public class ClassRoomService {
             @Override
             protected Integer call() {
 
-                final String sql = "UPDATE t_classroom SET v_capacity=? WHERE v_room_no=?";
+                final String sql = "UPDATE t_classroom SET int_capacity=?, int_rows=?, int_cols=? WHERE int_room_no=?";
 
                 //holds the status of updation of classroom in the DB, i.e success or failure
-                int tClassroomStatus = databaseHelper.updateDelete(sql, classroom.getCapacity(), classroom.getRoomNo());
-
+                int tClassroomStatus = databaseHelper.updateDelete(sql, classroom.getCapacity(), classroom.getNoOfRows()
+                        , classroom.getNoOfCols(), classroom.getRoomNo());
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
                 if (tClassroomStatus == DATABASE_ERROR) {
@@ -179,7 +181,7 @@ public class ClassRoomService {
             @Override
             protected Integer call() {
 
-                final String sql = "DELETE FROM t_classroom WHERE v_room_no=?";
+                final String sql = "DELETE FROM t_classroom WHERE int_room_no=?";
 
                 //holds the status of deletion of classroom in the DB, i.e success or failure
                 int tClassroomStatus = databaseHelper.updateDelete(sql, param);
@@ -210,7 +212,7 @@ public class ClassRoomService {
      */
     public Task<Integer> getClassroomCountTask() {
 
-        final String query = "SELECT v_room_no FROM t_classroom";
+        final String query = "SELECT int_room_no FROM t_classroom";
 
         Task<Integer> classroomCountTask = new Task<>() {
 
@@ -220,13 +222,12 @@ public class ClassRoomService {
                 Map<String, List<String>> map = databaseHelper.execQuery(query);
 
                 /*
-                v_room_no is the primary key, so total count will always be equal to the no of v_room_no
+                int_room_no is the primary key, so total count will always be equal to the no of v_room_no
                 retrieved
                  */
-                return map.get("v_room_no").size();
+                return map.get("int_room_no").size();
             }
         };
         return classroomCountTask;
     }
-
 }
