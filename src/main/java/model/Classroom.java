@@ -8,7 +8,8 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Sourav Debnath
  */
-public class Classroom extends Course {
+
+public class Classroom {
 
     /*--------------------------------Initialization of variables----------------------------------*/
 

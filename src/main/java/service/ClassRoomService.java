@@ -107,6 +107,7 @@ public class ClassRoomService {
             @Override
             protected Integer call() {
 
+
                 final String sql = "INSERT INTO t_classroom(int_room_no, int_capacity" +
                         ", int_rows, int_cols) VALUES(?, ?, ?, ?)";
 
@@ -149,7 +150,6 @@ public class ClassRoomService {
                 //holds the status of updation of classroom in the DB, i.e success or failure
                 int tClassroomStatus = databaseHelper.updateDelete(sql, classroom.getCapacity(), classroom.getNoOfRows()
                         , classroom.getNoOfCols(), classroom.getRoomNo());
-
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
                 if (tClassroomStatus == DATABASE_ERROR) {
@@ -204,7 +204,6 @@ public class ClassRoomService {
         };
         return deleteClassroomTask;
     }
-
 
     /**
      * This method is used to get a single classroomCountTask object which is used to get total no of Classroom in the DB.
