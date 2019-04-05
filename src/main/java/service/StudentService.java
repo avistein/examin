@@ -304,8 +304,8 @@ public class StudentService {
                 }
 
                 /*get the no of insertions or error status of the INSERT operation*/
-                int tStudentStatus = databaseHelper.batchInsert(sql1, listOfStudents);
-                int tStudentEnrollmentStatus = databaseHelper.batchInsert(sql2, studentEnrollmentList);
+                int tStudentStatus = databaseHelper.batchInsertUpdate(sql1, listOfStudents);
+                int tStudentEnrollmentStatus = databaseHelper.batchInsertUpdate(sql2, studentEnrollmentList);
 
                 //if any DB error is present
                 if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR) {
@@ -461,6 +461,36 @@ public class StudentService {
         };
         return updateStudentTask;
     }
+
+    public Task<Integer> getPromoteStudentTask(final Student student) {
+
+        final String sql = "UPDATE t_student_enrollment_details SET int_curr_semester=? where v_reg_id=?";
+
+        Task<Integer> promoteStudentTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                //holds the status of updation of student in the DB, i.e success or failure
+                int tStudentEnrollmentStatus = databaseHelper.updateDelete
+                        (sql, student.getCurrSemester(), student.getRegId());
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tStudentEnrollmentStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tStudentEnrollmentStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return promoteStudentTask;
+    }
+
 
     /**
      * This method is used to get a single studentsCountTask object which is used to get total no of Students in the DB.

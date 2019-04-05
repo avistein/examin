@@ -4,18 +4,18 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="studentListGridPane" prefHeight="675.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StudentSectionController">
+<GridPane fx:id="studentListGridPane" prefHeight="675.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MarksSectionController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -31,47 +31,47 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="750.0" />
         </columnConstraints>
         <rowConstraints>
-                <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox prefHeight="100.0" prefWidth="873.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.rowIndex="1">
-               <children>
-                  <Label text="Select Degree" />
-                  <ComboBox fx:id="batchNameComboBox" onAction="#handleBatchNameComboBox" prefWidth="150.0" />
-                  <Label text="Select Discipline" />
-                  <ComboBox fx:id="batchNameComboBox2" onAction="#handleBatchNameComboBox" prefWidth="150.0" />
-                  <Label layoutX="254.0" layoutY="20.0" text="Select Batch" />
-                  <ComboBox fx:id="batchNameComboBox21" layoutX="333.0" layoutY="20.0" onAction="#handleBatchNameComboBox" prefWidth="150.0" />
-               </children>
-               <padding>
-                  <Insets left="10.0" top="10.0" />
-               </padding>
-            </HBox>
             <HBox prefHeight="100.0" prefWidth="923.0" spacing="5.0" style="-fx-background-color: D2D2D4;">
                <children>
-                  <Label text="Select Exam" />
-                  <ChoiceBox prefWidth="150.0" />
-                  <Label text="Select Exam Start Date" />
-                  <DatePicker />
+                  <Label text="Select Exam Type" />
+                  <ChoiceBox fx:id="examTypeChoiceBox" onAction="#handleExamTypeChoiceBox" prefWidth="150.0" />
+                  <Label text="Select Academic Year" />
+                  <ComboBox fx:id="academicYearComboBox" onAction="#handleAcademicYearComboBox" prefWidth="150.0" />
+                  <Label text="Exam ID" />
+                  <Label fx:id="examIdLabel" />
                </children>
                <padding>
                   <Insets left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="873.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.rowIndex="2">
+            <HBox prefHeight="100.0" prefWidth="873.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.rowIndex="1">
                <children>
-                  <Label text="Select Semester" />
-                  <ComboBox fx:id="batchNameComboBox1" onAction="#handleBatchNameComboBox" prefWidth="150.0" />
-                  <Label layoutX="20.0" layoutY="20.0" text="Select Subject" />
-                  <ComboBox fx:id="batchNameComboBox11" layoutX="109.0" layoutY="20.0" onAction="#handleBatchNameComboBox" prefWidth="150.0" />
-                  <Button mnemonicParsing="false" text="Add / Update Marks">
+                  <Label layoutX="20.0" layoutY="20.0" text="Select Degree" />
+                  <ComboBox fx:id="degreeComboBox" layoutX="109.0" layoutY="20.0" onAction="#handleDegreeComboBox" prefWidth="150.0" />
+                  <Label layoutX="20.0" layoutY="20.0" text="Select Discipline" />
+                  <ComboBox fx:id="disciplineComboBox" layoutX="99.0" layoutY="20.0" onAction="#handleDisciplineComboBox" prefWidth="150.0" />
+                  <Label layoutX="254.0" layoutY="20.0" text="Select Subject" />
+                  <ComboBox fx:id="subjectComboBox" layoutX="254.0" layoutY="20.0" onAction="#handleSubjectComboBox" prefWidth="150.0" />
+               </children>
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="54.0" prefHeight="100.0" prefWidth="873.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.rowIndex="2">
+               <children>
+                  <Label text="Search" />
+                  <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="155.0" />
+                  <Button fx:id="addMarksButton" mnemonicParsing="false" onAction="#handleAddMarksButtonAction" text="Add / Update Marks">
                      <HBox.margin>
                         <Insets left="72.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Import Marks CSV" />
+                  <Button fx:id="importMarksButton" mnemonicParsing="false" onAction="#handleImportMarksButtonAction" text="Import Marks CSV" />
                </children>
                <padding>
                   <Insets left="10.0" top="10.0" />
@@ -99,12 +99,10 @@
             <Insets left="10.0" />
          </padding>
       </HBox>
-      <TableView fx:id="studentTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+      <TableView fx:id="marksListTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
         <columns>
           <TableColumn fx:id="regIdCol" editable="false" prefWidth="75.0" text="Reg ID." />
-          <TableColumn fx:id="rollNoCol" editable="false" prefWidth="75.0" text="Roll No." />
-            <TableColumn fx:id="rollNoCol1" editable="false" prefWidth="75.0" text="Name" />
-            <TableColumn fx:id="regIdCol2" editable="false" prefWidth="75.0" text="Marks" />
+            <TableColumn fx:id="marksCol" editable="false" prefWidth="75.0" text="Obtained Marks" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

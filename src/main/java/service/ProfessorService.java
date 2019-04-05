@@ -292,10 +292,10 @@ public class ProfessorService {
                 }
 
                 /*get the no of insertions or error status of the INSERT operation*/
-                int tLoginDetailsStatus = databaseHelper.batchInsert(sql1, professorsLoginDetailsList);
-                int tProfessorStatus = databaseHelper.batchInsert(sql2, listOfProfessors);
-                int tUserContactDetails = databaseHelper.batchInsert(sql3, profContactDetailsList);
-                int tProfessorDeptStatus = databaseHelper.batchInsert(sql4, professorDeptList);
+                int tLoginDetailsStatus = databaseHelper.batchInsertUpdate(sql1, professorsLoginDetailsList);
+                int tProfessorStatus = databaseHelper.batchInsertUpdate(sql2, listOfProfessors);
+                int tUserContactDetails = databaseHelper.batchInsertUpdate(sql3, profContactDetailsList);
+                int tProfessorDeptStatus = databaseHelper.batchInsertUpdate(sql4, professorDeptList);
 
                 //if any DB error is present
                 if (tLoginDetailsStatus == DATABASE_ERROR || tProfessorStatus == DATABASE_ERROR

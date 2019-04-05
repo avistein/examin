@@ -207,7 +207,7 @@ public class HolidayService {
                 }
 
                 //status which denotes successful or failed insertion of data
-                int tHolidayDetailsStatus = databaseHelper.batchInsert(sql, listOfHolidays);
+                int tHolidayDetailsStatus = databaseHelper.batchInsertUpdate(sql, listOfHolidays);
 
                 /*
                 Returns a status which indicates success or failure in data insertion to the DB.

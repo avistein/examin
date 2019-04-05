@@ -476,14 +476,13 @@ public class ExamCommand {
      *
      * @return A task which can be used to create invigilation duties for the examination.
      */
-    public Task<Integer> getCreateInvigilationDutyTask(ExamDetails examDetails) {
+    public Task<Integer> getCreateInvigilationDutyTask(List<Professor> professorList, ExamDetails examDetails) {
 
         Task<Integer> createInvigilationDutyTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                List<Professor> professorList = professorService.getProfessorData("");
                 List<Exam> examRoutine = examService.getExamRoutine("WHERE v_exam_details_id=?"
                         , examDetails.getExamDetailsId());
 

@@ -168,8 +168,13 @@ public class AdminPanelController {
     }
 
     @FXML
-    private void handleMarksListButtonAction() {
+    private void handleMarksListButtonAction() throws IOException{
 
+        Parent marksSectionFxml = FXMLLoader.load(getClass()
+                .getResource("/view/MarksSection.fxml"));
+        subTitleLabel.setText("Marks List");
+        contentStackPane.getChildren().removeAll();
+        contentStackPane.getChildren().setAll(marksSectionFxml);
     }
 
     @FXML

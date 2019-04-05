@@ -18,7 +18,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportProfessorCSVModalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0"
+            prefWidth="505.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ImportMarksCsvModalController">
    <children>
       <GridPane fx:id="mainGridPane" layoutX="30.0" layoutY="32.0" prefHeight="450.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -63,7 +65,6 @@
             <GridPane hgap="10.0" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
@@ -72,38 +73,29 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Exam ID">
-                           <VBox.margin>
-                              <Insets left="10.0" />
-                           </VBox.margin></Label>
-                        <ComboBox fx:id="firstNameComboBox" prefHeight="25.0" prefWidth="136.0">
-                           <VBox.margin>
-                              <Insets left="5.0" />
-                           </VBox.margin></ComboBox>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
-                     <children>
                         <Label text="Reg ID">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="middleNameComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="regIdComboBox" onAction="#handleRegIdComboBox" prefWidth="150.0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                      <children>
                         <Label text="Obtained Marks">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="lastNameComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="obtainedMarksComboBox" onAction="#handleObtainedMarksComboBox" prefWidth="150.0" />
                      </children></VBox>
                </children>
             </GridPane>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
                <children>
-                  <Button mnemonicParsing="false" text="Submit" />
+                  <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit">
+                     <HBox.margin>
+                        <Insets right="80.0" />
+                     </HBox.margin></Button>
                </children>
                <padding>
                   <Insets right="10.0" />

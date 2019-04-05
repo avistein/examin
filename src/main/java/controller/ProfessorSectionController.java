@@ -94,16 +94,15 @@ public class ProfessorSectionController {
     private TableColumn<Professor, String> hodStatusCol;
     @FXML
     private TableColumn<Professor, List<Subject>> subCol;
-
-
-    /*-------------------End of Declaration and initialization of variables of Professor List Tab---------------------*/
-
-
-    /*---------------------Declaration and initialization of variables of Subject Allocation Tab----------------------*/
     @FXML
     private TableColumn<Professor, String> emailCol;
     @FXML
     private TableColumn<Professor, String> contactNoCol;
+    /*-------------------End of Declaration and initialization of variables of Professor List Tab---------------------*/
+
+
+    /*---------------------Declaration and initialization of variables of Subject Allocation Tab----------------------*/
+
     @FXML
     private Tab subjectAllocationTab;
     @FXML

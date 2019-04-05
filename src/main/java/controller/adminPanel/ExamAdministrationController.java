@@ -1,24 +1,25 @@
 package controller.adminPanel;
 
 import command.ExamCommand;
+import controller.ImportMarksCsvModalController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import model.Exam;
-import model.ExamDetails;
-import model.InvigilationDuty;
-import model.RoomAllocation;
+import javafx.stage.Stage;
+import model.*;
 import service.ExamService;
 import service.PdfService;
+import util.UISetterUtil;
 import util.ValidatorUtil;
 
 import java.util.ArrayList;
@@ -132,6 +133,9 @@ public class ExamAdministrationController {
 
     @FXML
     private Label manageExamTabMsgLabel;
+
+    @FXML
+    private Button invigilationDutyCreateButton;
 
     private ObservableList<ExamDetails> examDetailsObsList;
 
@@ -757,43 +761,71 @@ public class ExamAdministrationController {
 
             if (result.get() == ButtonType.OK) {
 
-                manageExamTabMainGridPane.setOpacity(0.2);
-                manageExamTabStatusStackPane.setVisible(true);
-                manageExamTabProgressIndicator.setVisible(true);
-                manageExamTabMsgLabel.setVisible(true);
-                manageExamTabMsgLabel.setText("Invigilation Duty is being generated.Please do not close this window.");
+                //create a modal window
+                Stage chooseProfessorModal = new Stage();
 
-                Task<Integer> createInvigilationDutyTask = examCommand.getCreateInvigilationDutyTask
-                        (examDetails);
-                new Thread(createInvigilationDutyTask).start();
+                //get the main stage
+                Stage parentStage = (Stage) invigilationDutyCreateButton.getScene().getWindow();
 
-                createInvigilationDutyTask.setOnSucceeded(new EventHandler<>() {
+                //set the modal window
+                FXMLLoader loader = UISetterUtil.setModalWindow(
+                        "/view/adminPanel/ChooseProfessorForInvigilationDutyModal.fxml", chooseProfessorModal
+                        , parentStage, "Choose Professor for Invigilation Duties");
 
-                    @Override
-                    public void handle(WorkerStateEvent event) {
+                //get the controller
+                ChooseProfessorForInvigilationDutyModalController chooseProfessorForInvigilationDutyModalController =
+                        loader.getController();
 
-                        manageExamTabProgressIndicator.setVisible(false);
-                        manageExamTabStatusImageView.setVisible(true);
-                        manageExamTabStatusLabel.setVisible(true);
-                        manageExamTabMsgLabel.setText("Click anywhere to proceed!  ");
+                chooseProfessorModal.showAndWait();
 
-                        int status = createInvigilationDutyTask.getValue();
+                List<Professor> professorList = chooseProfessorForInvigilationDutyModalController.getProfessorsList();
 
-                        if (status == DATABASE_ERROR) {
+                if(!professorList.isEmpty()) {
 
-                            manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
-                            manageExamTabStatusLabel.setText("Error!");
-                        } else if (status == SUCCESS) {
+                    manageExamTabMainGridPane.setOpacity(0.2);
+                    manageExamTabStatusStackPane.setVisible(true);
+                    manageExamTabProgressIndicator.setVisible(true);
+                    manageExamTabMsgLabel.setVisible(true);
+                    manageExamTabMsgLabel.setText("Invigilation Duty is being generated.Please do not close this window.");
 
-                            manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
-                            manageExamTabStatusLabel.setText("Successfully created Invigilation Duty!");
-                        } else {
+                    Task<Integer> createInvigilationDutyTask = examCommand.getCreateInvigilationDutyTask
+                            (professorList, examDetails);
+                    new Thread(createInvigilationDutyTask).start();
 
-                            manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
-                            manageExamTabStatusLabel.setText("Invigilation Duty for this exam already exists!");
+                    createInvigilationDutyTask.setOnSucceeded(new EventHandler<>() {
+
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+
+                            manageExamTabProgressIndicator.setVisible(false);
+                            manageExamTabStatusImageView.setVisible(true);
+                            manageExamTabStatusLabel.setVisible(true);
+                            manageExamTabMsgLabel.setText("Click anywhere to proceed!  ");
+
+                            int status = createInvigilationDutyTask.getValue();
+
+                            if (status == DATABASE_ERROR) {
+
+                                manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
+                                manageExamTabStatusLabel.setText("Error!");
+                            } else if (status == SUCCESS) {
+
+                                manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
+                                manageExamTabStatusLabel.setText("Successfully created Invigilation Duty!");
+                            } else {
+
+                                manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
+                                manageExamTabStatusLabel.setText("Invigilation Duty for this exam already exists!");
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                else{
+
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setHeaderText("No professor is selected for invigilation duties!");
+                    alert1.show();
+                }
             }
         }
     }

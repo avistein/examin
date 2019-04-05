@@ -28,7 +28,11 @@ import util.UISetterUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
+
+import static util.ConstantsUtil.DATABASE_ERROR;
+import static util.ConstantsUtil.SUCCESS;
 
 /**
  * Controller class for StudentSection.fxml
@@ -39,20 +43,14 @@ public class StudentSectionController {
 
     /*------------------------------Declaration and initialization of variables------------------------------*/
 
+    String duration;
     private StudentService studentService;
-
     private CourseService courseService;
-
     private BatchService batchService;
-
     private List<Batch> listOfBatches;
-
     private List<Student> listOfStudents;
-
     private List<Course> listOfCourses;
-
     private ObservableList<Student> studentObsList;
-
     @FXML
     private GridPane studentListGridPane;
 
@@ -300,6 +298,7 @@ public class StudentSectionController {
                         && course.getDiscipline().equals(disciplineComboBox.getValue())) {
 
                     totalSemesters = Integer.parseInt(course.getDuration());
+                    duration = course.getDuration();
                 }
             }
             //set the semester combo box from 1 to totalSemesters
@@ -424,6 +423,69 @@ public class StudentSectionController {
         }
     }
 
+    @FXML
+    private void handlePromoteStudentButtonAction() {
+
+        Student student = studentTableView.getSelectionModel().getSelectedItem();
+
+        if (student != null) {
+
+            Task<List<Course>> coursesTask = courseService.getCoursesTask("WHERE v_degree=? AND " +
+                            "v_discipline=?", student.getDegree(), student.getDiscipline());
+            new Thread(coursesTask).start();
+
+            coursesTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+
+                    if (!coursesTask.getValue().get(0).getDuration().equals(student.getCurrSemester())) {
+
+                        String newSemester = String.valueOf(Integer.parseInt(student.getCurrSemester()) + 1);
+
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setHeaderText("Do you want to promote student with Reg Id " + student.getRegId() +
+                                " to Semester " +
+                                newSemester);
+                        Optional<ButtonType> result = alert.showAndWait();
+
+                        if (result.get() == ButtonType.OK) {
+
+                            student.setCurrSemester(newSemester);
+                            Task<Integer> promoteStudentTask = studentService.getPromoteStudentTask(student);
+                            new Thread(promoteStudentTask).start();
+
+                            promoteStudentTask.setOnSucceeded(new EventHandler<>() {
+                                @Override
+                                public void handle(WorkerStateEvent event) {
+
+                                    int status = promoteStudentTask.getValue();
+
+
+                                    if (status == DATABASE_ERROR) {
+
+                                        Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                                        alert1.setHeaderText("Error in database!");
+                                        alert1.show();
+                                    } else if (status == SUCCESS) {
+
+                                        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                                        alert1.setHeaderText("Promoted student to Semester " + newSemester + "!");
+                                        alert1.show();
+                                    } else {
+                                        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                                        alert1.setHeaderText("Student doesn't exist!");
+                                        alert1.show();
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                }
+            });
+        }
+    }
+
     /**
      * Callback method to handle ADD STUDENT Button action.
      *
@@ -480,7 +542,7 @@ public class StudentSectionController {
         } else {
 
             additionalQuery = "where v_degree=? and v_discipline=? " +
-                    "and v_batch_name=? and v_curr_semester=?";
+                    "and v_batch_name=? and int_curr_semester=?";
             studentsTask = studentService.getStudentTask(additionalQuery
                     , degreeComboBox.getValue(), disciplineComboBox.getValue()
                     , batchNameComboBox.getValue(), semesterComboBox.getValue());

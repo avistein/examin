@@ -178,7 +178,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tExamTimeTableStatus = databaseHelper.batchInsert(sql, routine);
+        int tExamTimeTableStatus = databaseHelper.batchInsertUpdate(sql, routine);
 
         if (tExamTimeTableStatus == DATABASE_ERROR) {
 
@@ -217,7 +217,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tStudentStatus = databaseHelper.batchInsert(sql, studentAssignment);
+        int tStudentStatus = databaseHelper.batchInsertUpdate(sql, studentAssignment);
 
         if (tStudentStatus == DATABASE_ERROR) {
 
@@ -318,7 +318,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tRoomAllocationStatus = databaseHelper.batchInsert(sql, list);
+        int tRoomAllocationStatus = databaseHelper.batchInsertUpdate(sql, list);
 
         if (tRoomAllocationStatus == DATABASE_ERROR) {
 
@@ -472,7 +472,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tInvigilationDutyStatus = databaseHelper.batchInsert(sql, list);
+        int tInvigilationDutyStatus = databaseHelper.batchInsertUpdate(sql, list);
 
         if (tInvigilationDutyStatus == DATABASE_ERROR) {
 

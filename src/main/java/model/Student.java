@@ -359,6 +359,10 @@ public class Student extends Batch implements Serializable {
         this.currSemester.set(currSemester);
     }
 
+    public SimpleStringProperty currSemesterProperty() {
+        return currSemester;
+    }
+
     /**
      * Getter method to get the file path of the Student's profile image.
      *

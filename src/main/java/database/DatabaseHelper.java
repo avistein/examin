@@ -184,7 +184,7 @@ public class DatabaseHelper {
      * @return Status of the INSERT operation or the total no of insertions in the database.
      * @link https://docs.oracle.com/javase/8/docs/api/java/sql/BatchUpdateException.html#getUpdateCounts--
      */
-    public int batchInsert(String sql, List<List<String>> list) {
+    public int batchInsertUpdate(String sql, List<List<String>> list) {
 
         //stores the status for each insertion
         List<Integer> statusList = new ArrayList<>();

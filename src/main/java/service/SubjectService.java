@@ -68,7 +68,7 @@ public class SubjectService {
         List<Subject> list = new ArrayList<>();
 
         final String query = "SELECT v_course_id, v_degree, v_discipline, v_sub_id, v_sub_name, v_credit, int_semester" +
-                ", v_full_marks, v_sub_type from t_subject natural join t_course" + additionalQuery;
+                ", v_full_marks, v_sub_type from t_subject natural join t_course " + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
@@ -355,7 +355,7 @@ public class SubjectService {
                 }
 
                 /*get the no of insertions or error status of the INSERT operation in the t_prof_sub table in the DB*/
-                int tProfSubStatus = databaseHelper.batchInsert(sql1, listOfSubjectAllocations);
+                int tProfSubStatus = databaseHelper.batchInsertUpdate(sql1, listOfSubjectAllocations);
 
                 //if any DB error is present
                 if (tProfSubStatus == DATABASE_ERROR) {
