@@ -93,10 +93,6 @@ public class MarksService {
                 /*
                 Whatever be the column names, those will be mapped to the data of the Professor Bean
                  */
-                columnNameMapping.put(map.get("examDate"), "examDate");
-                columnNameMapping.put(map.get("degree"), "degree");
-                columnNameMapping.put(map.get("discipline"), "discipline");
-                columnNameMapping.put(map.get("subId"), "subId");
                 columnNameMapping.put(map.get("regId"), "regId");
                 columnNameMapping.put(map.get("obtainedMarks"), "obtainedMarks");
 
@@ -144,9 +140,7 @@ public class MarksService {
             @Override
             protected Integer call() {
 
-
-                ExamService examService = new ExamService();
-                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE v_exam_id=? AND v_reg_id=?";
+                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE int_exam_id=? AND v_reg_id=?";
 
                 /*
                 Each item in the list is itself a list of strings ;in the inner list each item is the data
@@ -186,7 +180,7 @@ public class MarksService {
                 }
 
                 //return success ,if all professors are inserted
-                else if (tStudentMarksStatus == SUCCESS) {
+                else if (tStudentMarksStatus == marksList.size()) {
 
                     return SUCCESS;
                 }

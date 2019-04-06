@@ -117,14 +117,14 @@ public class ImportMarksCsvModalController {
             List<String> list = CSVUtil.getColumnNames(file);
 
             //checking if all 18 columns are present in the csv file uploaded
-            if (list.size() == 18) {
+            if (list.size() == 2) {
 
                 setComboBoxes(list);
                 submitButton.setDisable(false);
             } else {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("CSV file should have 6 columns!");
+                alert.setContentText("CSV file should have 2 columns!");
                 alert.show();
                 chosenFileLabel.setText("");
                 submitButton.setDisable(true);
@@ -233,16 +233,16 @@ public class ImportMarksCsvModalController {
                 //no error found
                 if (csvDataStatus) {
 
-                    Task<Integer> addMarksrFromMemoryToDataBaseTask = marksService.getAddMarksFromMemoryToDataBaseTask
+                    Task<Integer> addMarksFromMemoryToDataBaseTask = marksService.getAddMarksFromMemoryToDataBaseTask
                             (marksListFromCsv, examId);
-                    new Thread(addMarksrFromMemoryToDataBaseTask).start();
+                    new Thread(addMarksFromMemoryToDataBaseTask).start();
 
-                    addMarksrFromMemoryToDataBaseTask.setOnSucceeded(new EventHandler<>() {
+                    addMarksFromMemoryToDataBaseTask.setOnSucceeded(new EventHandler<>() {
                         @Override
                         public void handle(WorkerStateEvent event) {
 
                             //get the status of the INSERT operation
-                            int status = addMarksrFromMemoryToDataBaseTask.getValue();
+                            int status = addMarksFromMemoryToDataBaseTask.getValue();
 
                             //disable progress indicator and display status got from the method above
                             progressIndicator.setVisible(false);
@@ -268,7 +268,7 @@ public class ImportMarksCsvModalController {
                             } else {
 
                                 statusImageView.setImage(new Image("/png/error.png"));
-                                statusLabel.setText("Marks added to +" + status + "students who have given this exam !");
+                                statusLabel.setText("Marks added to " + status + "students who have given this exam !");
                                 tableUpdateStatus = true;
                             }
                         }
@@ -282,54 +282,6 @@ public class ImportMarksCsvModalController {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-        if (marks.getExamDate() == null || marks.getExamDate().trim().isEmpty()) {
-
-            alert.setContentText("Exam Date cannot be empty in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateDateFormat(marks.getExamDate().trim())) {
-
-            alert.setContentText("Invalid Exam Date Format in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (marks.getDegree() == null || marks.getDegree().trim().isEmpty()) {
-
-            alert.setContentText("Degree cannot be empty in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateAcademicItem(marks.getDegree().trim())) {
-
-            alert.setContentText("Invalid Degree in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (marks.getDiscipline() == null || marks.getDiscipline().trim().isEmpty()) {
-
-            alert.setContentText("Discipline cannot be empty in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateAcademicItem(marks.getDiscipline().trim())) {
-
-            alert.setContentText("Invalid Discipline in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (marks.getSubId() == null || marks.getSubId().trim().isEmpty()) {
-
-            alert.setContentText("Subject ID cannot be empty in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateId(marks.getSubId())) {
-
-            alert.setContentText("Invalid Subject ID in Row : " + currMarksIndex + "!");
-            alert.show();
-            return false;
-        }
         if (marks.getRegId() == null || marks.getRegId().trim().isEmpty()) {
 
             alert.setContentText("Registration ID cannot be empty in Row : " + currMarksIndex + "!");

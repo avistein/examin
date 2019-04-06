@@ -18,9 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0"
-            prefWidth="505.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.ImportMarksCsvModalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportMarksCsvModalController">
    <children>
       <GridPane fx:id="mainGridPane" layoutX="30.0" layoutY="32.0" prefHeight="450.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -77,7 +75,7 @@
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="regIdComboBox" onAction="#handleRegIdComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="regIdComboBox" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
@@ -86,7 +84,7 @@
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="obtainedMarksComboBox" onAction="#handleObtainedMarksComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="obtainedMarksComboBox" prefWidth="150.0" />
                      </children></VBox>
                </children>
             </GridPane>
