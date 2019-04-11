@@ -223,6 +223,35 @@ public class MarksSectionController {
     @FXML
     private void handleAddMarksButtonAction(){
 
+        Marks marks = marksListTableView.getSelectionModel().getSelectedItem();
+
+        if(marks != null && examId != null){
+
+            //create a modal window
+            Stage addMarksModal = new Stage();
+
+            //get the main stage
+            Stage parentStage = (Stage) addMarksButton.getScene().getWindow();
+
+            //set the modal window
+            FXMLLoader loader = UISetterUtil.setModalWindow("/view/AddMarksModal.fxml"
+                    , addMarksModal, parentStage, "Import Marks");
+
+            //get the controller
+            AddMarksModalController addMarksModalController = loader.getController();
+
+
+            marks.setExamId(examId);
+
+            addMarksModalController.setMarksDetails(marks);
+
+            addMarksModal.showAndWait();
+
+            if(addMarksModalController.getTableUpdateStatus()){
+
+                populateMarksTable();
+            }
+        }
     }
 
     @FXML

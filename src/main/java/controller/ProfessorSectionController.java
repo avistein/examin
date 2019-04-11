@@ -310,7 +310,7 @@ public class ProfessorSectionController {
                         if (empty) {
                             setText(null);
                         } else {
-                            setText(item.stream().map(Subject::getSubName)
+                            setText(item.stream().map(Subject::getSubName).distinct()
                                     .collect(Collectors.joining("\n")));
                         }
                     }

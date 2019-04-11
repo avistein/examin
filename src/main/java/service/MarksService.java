@@ -78,6 +78,42 @@ public class MarksService {
         return list;
     }
 
+    public Task<Integer> getAddMarksToDataBaseTask(Marks marks) {
+        Task<Integer> addMarksToDataBaseTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE int_exam_id=? AND v_reg_id=?";
+
+
+                /*get the no of insertions or error status of the INSERT operation*/
+                int tStudentMarksStatus = databaseHelper.updateDelete(sql, marks.getObtainedMarks(), marks.getExamId(),
+                        marks.getRegId());
+
+                //if any DB error is present
+                if (tStudentMarksStatus == DATABASE_ERROR ) {
+
+                    return DATABASE_ERROR;
+                }
+
+                //return success ,if all professors are inserted
+                else if (tStudentMarksStatus == SUCCESS) {
+
+                    return SUCCESS;
+                }
+
+                //return the no of professor inserted
+                else {
+
+                    return DATA_ALREADY_EXIST_ERROR;
+                }
+            }
+        };
+        return addMarksToDataBaseTask;
+    }
+
+
     public Task<List<Marks>> getLoadMarksFromCsvToMemoryTask(final File file, final Map<String, String> map) {
 
         Task<List<Marks>> loadMarksFromCsvToMemoryTask = new Task<>() {

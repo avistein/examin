@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static util.ConstantsUtil.*;
 
 /**
  * This class is used to handle the logic needed for Exam Administration.
@@ -415,8 +416,7 @@ public class ExamCommand {
 
                 for (Batch batch : batchesList) {
 
-                    String additionalQuery = "where v_batch_id=? " +
-                            "ORDER BY v_reg_id";
+                    String additionalQuery = "where v_batch_id=? ORDER BY v_reg_id";
 
                     //get the list of students for each batch
                     List<Student> studentListOfTheBatch = studentService.getStudentData
@@ -428,7 +428,7 @@ public class ExamCommand {
 
                         Map<Integer, Integer> allocIdMap = roomAllocation.getRoomAllocationMap();
                         int currAllocId = 0;
-                        while(allocIdMap.keySet().contains(String.valueOf(currAllocId))){
+                        while(allocIdMap.keySet().contains(currAllocId)){
 
                             currAllocId++;
                         }
@@ -442,7 +442,7 @@ public class ExamCommand {
                                 && currStudentIndex < studentListOfTheBatch.size()
                                 && currAllocId < roomCapacity) {
 
-                            allocIdMap.put(currAllocId, currStudentIndex);
+                            allocIdMap.put(currAllocId, roomAllocation.getStudentList().size());
                             currAllocId += 2;
                             Student student = studentListOfTheBatch.get(currStudentIndex++);
 
@@ -458,6 +458,8 @@ public class ExamCommand {
                 }
 
                 //save the room allocations details to the database
+
+
                 int addRoomAllocationToDbStatus = examService.addRoomAllocationToDatabase(roomAllocationList);
 
                 return addRoomAllocationToDbStatus;
@@ -486,6 +488,10 @@ public class ExamCommand {
                 List<Exam> examRoutine = examService.getExamRoutine("WHERE v_exam_details_id=?"
                         , examDetails.getExamDetailsId());
 
+                if(examRoutine.isEmpty()){
+
+                    return DATA_INEXISTENT_ERROR;
+                }
                 //true value in this array denotes a professor has been assigned an invigilation duty in the cycle
                 boolean[] invigilatorsAssignment = new boolean[professorList.size()];
 
@@ -536,6 +542,10 @@ public class ExamCommand {
                     //get the list of exams happening on the particular date
                     List<ExamsOnRoom> examsOnRoomList = examService.getExamsOnRoomData(additionalQuery);
 
+                    if(examsOnRoomList.isEmpty()){
+
+                        return DATA_INEXISTENT_ERROR;
+                    }
                     System.out.println("-----------------------------------------------------------------");
                     System.out.println("Date : " + entry.getKey());
                     System.out.println("-----------------------------------------------------------------");

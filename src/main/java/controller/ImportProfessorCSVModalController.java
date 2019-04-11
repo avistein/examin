@@ -158,17 +158,18 @@ public class ImportProfessorCSVModalController {
             List<String> list = CSVUtil.getColumnNames(file);
 
             //checking if all 12 columns are present in the csv file uploaded
-            if (list.size() == 12) {
+            if (list.size() == 13) {
                 setComboBoxes(list);
                 submitButton.setDisable(false);
+            } else {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("CSV file should have 12 columns!");
+                alert.show();
+                chosenFileLabel.setText("");
+                submitButton.setDisable(true);
+                unSetComboBoxes();
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("CSV file should have 12 columns!");
-            alert.show();
-            chosenFileLabel.setText("");
-            submitButton.setDisable(true);
-            unSetComboBoxes();
         }
     }
 

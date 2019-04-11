@@ -289,6 +289,7 @@
                                           <Button fx:id="invigilationDutyCreateButton" mnemonicParsing="false" onAction="#handleInvigilationDutyCreateButtonAction" text="Create" />
                                           <Button fx:id="invigilationDutyGeneratePdfButton" layoutX="20.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleInvigilationDutyGeneratePdfButtonAction" text="Generate PDF" />
                                           <Button fx:id="invigilationDutyViewButton" mnemonicParsing="false" onAction="#handleInvigilationDutyViewButtonAction" text="View" />
+                                          <Button fx:id="invigilationDutyEditButton" layoutX="174.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleInvigilationDutyEditButtonAction" text="Edit" />
                                           <Button fx:id="invigilationDutyDeleteButton" mnemonicParsing="false" onAction="#handleInvigilationDutyDeleteButtonAction" text="Delete" />
                                        </children>
                                     </HBox>

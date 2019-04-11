@@ -285,6 +285,40 @@ public class ExamService {
         return list;
     }
 
+
+    public Task<Integer> getDeleteExamRoutineTask(final ExamDetails examDetails) {
+
+        final String sql = "DELETE FROM t_exam_time_table where v_exam_details_id=?";
+
+        Task<Integer> deleteExamRoutineTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                /*
+                holds the status of deletion of student in the DB, i.e success or failure
+                 */
+                int tExamTimeTableStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tExamTimeTableStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tExamTimeTableStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else if (tExamTimeTableStatus == DATA_DEPENDENCY_ERROR) {
+
+                    return DATA_DEPENDENCY_ERROR;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return deleteExamRoutineTask;
+    }
+
     /**
      *
      * @param roomAllocationList
@@ -301,7 +335,6 @@ public class ExamService {
         //for each RoomAllocation ,form the data in the List<List<String>> structure
         for (RoomAllocation roomAllocation : roomAllocationList) {
 
-            int i = 0;
             for (Map.Entry<Integer, Integer> entry : roomAllocation.getRoomAllocationMap().entrySet()) {
 
                 List<String> singleRoomAllocation = new ArrayList<>();
@@ -330,6 +363,39 @@ public class ExamService {
 
             return tRoomAllocationStatus;
         }
+    }
+
+    public Task<Integer> getDeleteRoomAllocationTask(final ExamDetails examDetails) {
+
+        final String sql = "DELETE FROM t_room_allocation where v_exam_details_id=?";
+
+        Task<Integer> deleteRoomAllocationTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                /*
+                holds the status of deletion of student in the DB, i.e success or failure
+                 */
+                int tRoomAllocationStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tRoomAllocationStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tRoomAllocationStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else if (tRoomAllocationStatus == DATA_DEPENDENCY_ERROR) {
+
+                    return DATA_DEPENDENCY_ERROR;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return deleteRoomAllocationTask;
     }
 
     /**
@@ -396,6 +462,7 @@ public class ExamService {
         }
         return list;
     }
+
 
     /**
      *
@@ -486,6 +553,40 @@ public class ExamService {
         }
     }
 
+
+    public Task<Integer> getDeleteInvigilationDutyTask(final ExamDetails examDetails) {
+
+        final String sql = "DELETE FROM t_invigilation_duty where v_exam_details_id=?";
+
+        Task<Integer> deleteInvigilationDutyTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                /*
+                holds the status of deletion of student in the DB, i.e success or failure
+                 */
+                int tInvigilationDutyStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tInvigilationDutyStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tInvigilationDutyStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else if (tInvigilationDutyStatus == DATA_DEPENDENCY_ERROR) {
+
+                    return DATA_DEPENDENCY_ERROR;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return deleteInvigilationDutyTask;
+    }
+
     public Task<List<InvigilationDuty>> getInvigilationDutyDataTask(String examDetailsId){
 
         Task<List<InvigilationDuty>> invigilationDutyDataTask = new Task<List<InvigilationDuty>>() {
@@ -519,5 +620,34 @@ public class ExamService {
             list.add(invigilationDuty);
         }
         return list;
+    }
+
+    public Task<Integer> getUpdateInvigilationDutyTask(String oldInvigilatorId, InvigilationDuty invigilationDuty) {
+
+        final String sql = "UPDATE t_invigilation_duty SET v_prof_id=? where d_exam_date=? AND v_prof_id=?";
+
+        Task<Integer> updateInvigilationDutyTask = new Task<>() {
+
+            @Override
+            protected Integer call() {
+
+                //holds the status of updation of student in the DB, i.e success or failure
+                int tInvigilationDutyStatus = databaseHelper.updateDelete
+                        (sql, invigilationDuty.getProfId(), invigilationDuty.getExamDate(), oldInvigilatorId);
+
+                /*returns an integer holding the different status i.e success, failure etc.*/
+                if (tInvigilationDutyStatus == DATABASE_ERROR) {
+
+                    return DATABASE_ERROR;
+                } else if (tInvigilationDutyStatus == SUCCESS) {
+
+                    return SUCCESS;
+                } else {
+
+                    return DATA_INEXISTENT_ERROR;
+                }
+            }
+        };
+        return updateInvigilationDutyTask;
     }
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import static util.ConstantsUtil.*;
 
@@ -214,7 +215,7 @@ public class ProfessorService {
                         "VALUES(?, ?, ?, ?)";
 
                 final String sql2 = "INSERT INTO t_professor (v_prof_id, v_first_name, v_middle_name, v_last_name" +
-                        ", d_dob, d_date_of_joining, v_highest_qualification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        ", d_dob, d_date_of_joining, v_highest_qualification) VALUES(?, ?, ?, ?, ?, ?, ?)";
 
                 final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_first_name, v_contact_no" +
                         ", v_address, v_email_id) VALUES(?, ?, ?, ?, ?)";
@@ -230,14 +231,14 @@ public class ProfessorService {
                 professorObj1 = profId : 1, firstName : Dennis, middleName : MacAlistair, lastName : Ritchie...;
                 professorObj2 = profId : 2, firstName : Donald, middleName : E, lastName : Knuth...;
 
-                Then, listOfProfessors will be stored as :
+                Then, professorList will be stored as :
 
-                listOfProfessors = {{"1", "Dennis", "MacAlistair", "Ritchie", ...}, {"2", "Donald" , "E", "Knuth", ...}}
+                professorList = {{"1", "Dennis", "MacAlistair", "Ritchie", ...}, {"2", "Donald" , "E", "Knuth", ...}}
 
                  professorDeptList stores the data in the same way for t_prof_dept table in DB.
                  */
                 List<List<String>> professorsLoginDetailsList = new ArrayList<>();
-                List<List<String>> listOfProfessors = new ArrayList<>();
+                List<List<String>> professorList = new ArrayList<>();
                 List<List<String>> professorDeptList = new ArrayList<>();
                 List<List<String>> profContactDetailsList = new ArrayList<>();
 
@@ -270,10 +271,12 @@ public class ProfessorService {
                     singleProfessorDetails.add(professor.getHighestQualification());
 
                     //add details of a particular professor into the list
-                    listOfProfessors.add(singleProfessorDetails);
+                    professorList.add(singleProfessorDetails);
 
 
                     //single professor contact details
+                    singleProfContactDetails.add(professor.getProfId());
+                    singleProfContactDetails.add(professor.getFirstName());
                     singleProfContactDetails.add(professor.getContactNo());
                     singleProfContactDetails.add(professor.getAddress());
                     singleProfContactDetails.add(professor.getEmail());
@@ -293,20 +296,22 @@ public class ProfessorService {
 
                 /*get the no of insertions or error status of the INSERT operation*/
                 int tLoginDetailsStatus = databaseHelper.batchInsertUpdate(sql1, professorsLoginDetailsList);
-                int tProfessorStatus = databaseHelper.batchInsertUpdate(sql2, listOfProfessors);
-                int tUserContactDetails = databaseHelper.batchInsertUpdate(sql3, profContactDetailsList);
+                int tProfessorStatus = databaseHelper.batchInsertUpdate(sql2, professorList);
+                int tUserContactDetailsStatus = databaseHelper.batchInsertUpdate(sql3, profContactDetailsList);
                 int tProfessorDeptStatus = databaseHelper.batchInsertUpdate(sql4, professorDeptList);
 
                 //if any DB error is present
                 if (tLoginDetailsStatus == DATABASE_ERROR || tProfessorStatus == DATABASE_ERROR
-                        || tProfessorDeptStatus == DATABASE_ERROR || tUserContactDetails == DATABASE_ERROR) {
+                        || tProfessorDeptStatus == DATABASE_ERROR || tUserContactDetailsStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
                 }
 
                 //return success ,if all professors are inserted
-                else if (tLoginDetailsStatus == SUCCESS && tProfessorStatus == SUCCESS
-                        && tProfessorDeptStatus == SUCCESS && tUserContactDetails == SUCCESS) {
+                else if (tLoginDetailsStatus == professorsLoginDetailsList.size()
+                        && tProfessorStatus == professorList.size()
+                        && tProfessorDeptStatus == professorDeptList.size()
+                        && tUserContactDetailsStatus == profContactDetailsList.size()) {
 
                     return SUCCESS;
                 }
@@ -314,7 +319,7 @@ public class ProfessorService {
                 //return the no of professor inserted
                 else {
 
-                    return DATA_ALREADY_EXIST_ERROR;
+                    return tProfessorStatus;
                 }
             }
         };

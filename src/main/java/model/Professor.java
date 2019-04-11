@@ -31,6 +31,7 @@ public class Professor extends Department implements Serializable {
     private SimpleStringProperty highestQualification;
     private SimpleStringProperty profId;
     private SimpleStringProperty hodStatus;
+    private SimpleStringProperty designation;
     private SimpleListProperty<Subject> subjects;
 
     /*------------------------------------End of Initialization-------------------------------------*/
@@ -51,6 +52,7 @@ public class Professor extends Department implements Serializable {
         this.highestQualification = new SimpleStringProperty("");
         this.profId = new SimpleStringProperty("");
         this.hodStatus = new SimpleStringProperty("");
+        this.designation = new SimpleStringProperty("");
         this.subjects = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
 
@@ -272,6 +274,14 @@ public class Professor extends Department implements Serializable {
     public void setHodStatus(String status) {
 
         this.hodStatus.set(status);
+    }
+
+    public String getDesignation() {
+        return designation.get();
+    }
+
+    public void setDesignation(String designation) {
+        this.designation.set(designation);
     }
 
     public ObservableList<Subject> getSubjects() {
