@@ -32,8 +32,6 @@ public class ExamCommand {
     private ExamService examService;
     private ClassRoomService classRoomService;
     private StudentService studentService;
-    private ProfessorService professorService;
-    private List<Exam> examRoutine;
 
     /*---------------------------------------End of Declaration of Variables------------------------------------------*/
 
@@ -50,11 +48,12 @@ public class ExamCommand {
         examService = new ExamService();
         classRoomService = new ClassRoomService();
         studentService = new StudentService();
-        professorService = new ProfessorService();
-        examRoutine = new ArrayList<>();
 
         //listOfHolidays for creating exam routine
         listOfHolidays = new ArrayList<>();
+
+        //get the Holidays List,so that exam routine can be created
+        listOfHolidays = holidayService.getHolidaysData();
     }
 
     /**
@@ -70,11 +69,10 @@ public class ExamCommand {
             @Override
             protected Integer call() {
 
+                List<Exam> examRoutine = new ArrayList<>();
+
                 //parse the exam date string as Date
                 LocalDate examStartDate = LocalDate.parse(examDetails.getStartDate());
-
-                //get the Holidays List,so that exam routine can be created
-                listOfHolidays = holidayService.getHolidaysData();
 
                 //get all courses in the DB
                 List<Course> listOfCourses = courseService.getCourseData("");
@@ -164,7 +162,7 @@ public class ExamCommand {
 
                             //if the exam for the subject is already created , then get the date of that exam
                             String examDateIfSubjectPresentInRoutine = getExamDateOfSubjectPresentInRoutine
-                                    (subject.getSubId());
+                                    (subject.getSubId(), examRoutine);
 
                             String examDate;
 
@@ -240,7 +238,7 @@ public class ExamCommand {
      * @param subId The Sub ID whose presence will be checked in the exam routine.
      * @return The examination date.
      */
-    private String getExamDateOfSubjectPresentInRoutine(String subId) {
+    private String getExamDateOfSubjectPresentInRoutine(String subId, List<Exam> examRoutine) {
 
         for (Exam exam : examRoutine) {
 

@@ -163,6 +163,7 @@ public class ExamService {
 
         List<List<String>> routine = new ArrayList<>();
 
+        System.out.println(examRoutine.size());
         //for each exam in the exam routine ,form the data in the List<List<String>> structure
         for (Exam exam : examRoutine) {
 

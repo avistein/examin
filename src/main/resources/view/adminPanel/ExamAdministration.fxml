@@ -324,7 +324,7 @@
                         </TableView>
                      </children>
                   </GridPane>
-                  <StackPane fx:id="manageExamTabStatusStackPane" onMouseClicked="#handleManageExamStatusStackPaneOnMouseClicked" prefHeight="494.0" prefWidth="722.0" visible="false">
+                  <StackPane fx:id="manageExamTabStatusStackPane" onMouseClicked="#handleManageExamStatusStackPaneOnMouseClicked" prefHeight="494.0" prefWidth="722.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                            <children>
