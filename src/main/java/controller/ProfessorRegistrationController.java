@@ -16,13 +16,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import model.Department;
 import model.Professor;
 import service.DepartmentService;
 import service.ProfessorService;
 import util.ValidatorUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +55,13 @@ public class ProfessorRegistrationController {
 
     private List<Department> listOfDepartment;
 
+    private File imageFile;
+
     @FXML
     private ComboBox<String> deptComboBox;
+
+    @FXML
+    private ComboBox<String> designationComboBox;
 
     @FXML
     private TextField highestQualificationTextField;
@@ -66,6 +74,12 @@ public class ProfessorRegistrationController {
 
     @FXML
     private TextField profIdTextField;
+
+    @FXML
+    private ImageView profileImageImageView;
+
+    @FXML
+    private Button chooseImageButton;
 
     @FXML
     private TextField firstNameTextField;
@@ -157,8 +171,27 @@ public class ProfessorRegistrationController {
             }
         });
 
+        designationComboBox.setItems(FXCollections.observableArrayList("Professor"
+                , "Assistant Professor", "Associate Professor"));
     }
 
+    /**
+     * Callback method to handle Choose Image Button Action
+     */
+    @FXML
+    private void handleChooseImageButtonAction() {
+
+        //choose a profile image for the student from the system
+        FileChooser fileChooser = new FileChooser();
+        configureFileChooser(fileChooser);
+        imageFile = fileChooser.showOpenDialog(chooseImageButton.getScene().getWindow());
+
+        //if an image is chosen then set the imageView with that image
+        if (imageFile != null) {
+
+            profileImageImageView.setImage(new Image("file:" + imageFile.getAbsoluteFile()));
+        }
+    }
 
     /**
      * Callback method to handle Submit button.
@@ -190,6 +223,7 @@ public class ProfessorRegistrationController {
             professor.setEmail(emailIdTextField.getText().trim());
             professor.setDoj(dojDatePicker.getValue().toString());
             professor.setHighestQualification(highestQualificationTextField.getText().trim());
+            professor.setAcademicRank(designationComboBox.getValue());
             if (hodCheckBox.isSelected()) {
 
                 professor.setHodStatus("HOD");
@@ -202,6 +236,18 @@ public class ProfessorRegistrationController {
 
             //if edit signal is sent
             if (editOrAddProfessorChoice == EDIT_CHOICE) {
+
+                /*
+                If a image is chosen from the FileChooser, then set the path of the image in Student.profileImagePath,
+                otherwise set the previous location i.e. the location specified in the database before editing.
+                 */
+                if (imageFile != null) {
+
+                    professor.setProfileImagePath(imageFile.getAbsolutePath());
+                }
+                else {
+                    professor.setProfileImagePath(this.professor.getProfileImagePath());
+                }
 
                 Task<Integer> updateProfessorTask = professorService
                         .getUpdateProfessorTask(professor);
@@ -242,7 +288,13 @@ public class ProfessorRegistrationController {
             }
 
             //if add new professor is chosen
-            else {
+            else if (editOrAddProfessorChoice == ADD_CHOICE) {
+
+                //if a image is chosen from the FileChooser, then set the path of the image in Student.profileImagePath
+                if (imageFile != null) {
+
+                    professor.setProfileImagePath(imageFile.getAbsolutePath());
+                }
 
                 Task<Integer> addProfessorToDatabaseTask = professorService
                         .getAddProfessorToDatabaseTask(professor);
@@ -296,6 +348,11 @@ public class ProfessorRegistrationController {
 
         if (deptComboBox.getValue() == null) {
             alert.setContentText("Please select a department first!");
+            alert.show();
+            return false;
+        }
+        if (designationComboBox.getValue() == null) {
+            alert.setContentText("Please select a designation!");
             alert.show();
             return false;
         }
@@ -401,6 +458,17 @@ public class ProfessorRegistrationController {
         return true;
     }
 
+    /**
+     * Method for configuring the fileChooser.
+     */
+    private void configureFileChooser(FileChooser fileChooser) {
+
+        fileChooser.setTitle("Choose Image");
+
+        //only .png,.jpg and .jpeg files can be chosen
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+    }
 
     /**
      * Callback method to handle Add Another button and Reset button.
@@ -428,6 +496,7 @@ public class ProfessorRegistrationController {
         addressTextArea.clear();
         contactNoTextField.clear();
         deptComboBox.setValue(null);
+        designationComboBox.setValue(null);
         highestQualificationTextField.clear();
         hodCheckBox.setSelected(false);
         dojDatePicker.getEditor().clear();
@@ -435,6 +504,7 @@ public class ProfessorRegistrationController {
 
         deptComboBox.setDisable(false);
         profIdTextField.setDisable(false);
+        profileImageImageView.setImage(new Image("/png/placeholder.png"));
     }
 
     /**
@@ -463,6 +533,15 @@ public class ProfessorRegistrationController {
 
         editOrAddProfessorChoice = editSignal;
 
+        //if the Image exists in the location ,set the ImageView with that ,otherwise set with a placeholder
+        if (Paths.get(professor.getProfileImagePath()).toFile().exists()) {
+
+            profileImageImageView.setImage(new Image("file:" + professor.getProfileImagePath()));
+        } else {
+
+            profileImageImageView.setImage(new Image("/png/placeholder.png"));
+        }
+
         firstNameTextField.setText(professor.getFirstName());
         middleNameTextField.setText(professor.getMiddleName());
         lastNameTextField.setText(professor.getLastName());
@@ -474,6 +553,7 @@ public class ProfessorRegistrationController {
         contactNoTextField.setText(professor.getContactNo());
         deptComboBox.setValue(professor.getDeptName());
         highestQualificationTextField.setText(professor.getHighestQualification());
+        designationComboBox.setValue(professor.getAcademicRank());
 
         if (professor.getHodStatus().equals("HOD")) {
 

@@ -156,6 +156,8 @@ public class DashboardController {
 
     private ProfessorService professorService;
 
+    private ClassRoomService classRoomService;
+
     private FileHandlingService fileHandlingService;
 
     private ObservableList<Holiday> holidayObsList;
@@ -183,6 +185,8 @@ public class DashboardController {
         departmentService = new DepartmentService();
         examCellMemberService = new ExamCellMemberService();
         professorService = new ProfessorService();
+        classRoomService = new ClassRoomService();
+
         fileHandlingService = new FileHandlingService();
 
         //for the tableView
@@ -198,6 +202,7 @@ public class DashboardController {
         updateTotalStudentsCount();
         updateTotalProfessorsCount();
         updateTotalSubjectsCount();
+        updateTotalClassroomsCount();
 
         /*
         Initialize columns and populate tableView.
@@ -435,6 +440,21 @@ public class DashboardController {
 
                 int totalExamCellMembers = examCellMembersCountTask.getValue();
                 totalExamCellMembersLabel.setText(Integer.toString(totalExamCellMembers));
+            }
+        });
+    }
+
+    private void updateTotalClassroomsCount(){
+
+        Task<Integer> classroomsCountTask = classRoomService.getClassroomCountTask();
+        new Thread(classroomsCountTask).start();
+
+        classroomsCountTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                int totalClassrooms = classroomsCountTask.getValue();
+                totalClassroomsLabel.setText(Integer.toString(totalClassrooms));
             }
         });
     }

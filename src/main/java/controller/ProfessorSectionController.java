@@ -293,7 +293,7 @@ public class ProfessorSectionController {
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        academicRankCol.setCellValueFactory(new PropertyValueFactory<>("highestQualification"));
+        academicRankCol.setCellValueFactory(new PropertyValueFactory<>("academicRank"));
         deptCol.setCellValueFactory(new PropertyValueFactory<>("deptName"));
         hodStatusCol.setCellValueFactory(new PropertyValueFactory<>("hodStatus"));
         subCol.setCellValueFactory(new PropertyValueFactory<>("subjects"));

@@ -113,6 +113,10 @@ public class ImportProfessorCSVModalController {
     @FXML
     private ComboBox<String> hodStatusComboBox;
 
+    @FXML
+    private ComboBox<String> designationComboBox;
+
+
     /*-----------------------------------End of declaration and initialization----------------------------------*/
 
     /**
@@ -157,14 +161,14 @@ public class ImportProfessorCSVModalController {
             chosenFileLabel.setText(file.getName());
             List<String> list = CSVUtil.getColumnNames(file);
 
-            //checking if all 12 columns are present in the csv file uploaded
+            //checking if all 13 columns are present in the csv file uploaded
             if (list.size() == 13) {
                 setComboBoxes(list);
                 submitButton.setDisable(false);
             } else {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("CSV file should have 12 columns!");
+                alert.setContentText("CSV file should have 13 columns!");
                 alert.show();
                 chosenFileLabel.setText("");
                 submitButton.setDisable(true);
@@ -246,7 +250,7 @@ public class ImportProfessorCSVModalController {
         map.put("highestQualification", highestQualificationComboBox.getValue());
         map.put("contactNo", contactNoComboBox.getValue());
         map.put("hodStatus", hodStatusComboBox.getValue());
-
+        map.put("academicRank", designationComboBox.getValue());
 
         //display the loading spinner and fade the background
         mainGridPane.setOpacity(0.5);
@@ -335,7 +339,6 @@ public class ImportProfessorCSVModalController {
         });
 
     }
-
 
     /**
      * This method validates a particular professor.
@@ -480,9 +483,20 @@ public class ImportProfessorCSVModalController {
             alert.show();
             return false;
         }
+        if (professor.getAcademicRank() == null || professor.getAcademicRank().trim().isEmpty()) {
+
+            alert.setContentText("Academic Rank cannot be empty in Row : " + currProfessorIndex + "!");
+            alert.show();
+            return false;
+        }
+        if (!ValidatorUtil.validateAcademicItem(professor.getAcademicRank().trim())) {
+
+            alert.setContentText("Invalid Academic Rank in Row : " + currProfessorIndex + "!");
+            alert.show();
+            return false;
+        }
         return true;
     }
-
 
     /**
      * Callback method for statusAnchorPane Mouse Clicked.
@@ -573,6 +587,9 @@ public class ImportProfessorCSVModalController {
         hodStatusComboBox.setItems(options);
         hodStatusComboBox.setValue(list.get(11));
 
+        designationComboBox.setDisable(false);
+        designationComboBox.setItems(options);
+        designationComboBox.setValue(list.get(12));
     }
 
 
@@ -618,6 +635,8 @@ public class ImportProfessorCSVModalController {
         hodStatusComboBox.setDisable(true);
         hodStatusComboBox.setValue("");
 
+        designationComboBox.setDisable(true);
+        designationComboBox.setValue("");
     }
 
 

@@ -17,6 +17,7 @@ import model.Professor;
 import service.ProfessorService;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static util.ConstantsUtil.*;
@@ -36,6 +37,9 @@ public class ViewProfessorModalController {
     private boolean professorDeletedStatus;
 
     private ProfessorService professorService;
+
+    @FXML
+    private ImageView profileImageView;
 
     @FXML
     private Label nameLabel;
@@ -81,6 +85,9 @@ public class ViewProfessorModalController {
 
     @FXML
     private Label statusLabel;
+
+    @FXML
+    private Label academicRankLabel;
 
     /*---------------------------------------End of Initialization & Declaration -------------------------------------*/
 
@@ -140,6 +147,11 @@ public class ViewProfessorModalController {
         contentStackPane.getChildren().setAll(professorRegistrationFxml);
     }
 
+    /**
+     * Callback method to handle the Delete Button action.
+     *
+     * @throws IOException Load exception while loading the FXML document.
+     */
     @FXML
     private void handleDeleteButtonAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -204,6 +216,14 @@ public class ViewProfessorModalController {
 
         this.professor = professor;
 
+        //if the Image exists in that location, then set the ImageView with that, otherwise set a placeholder
+        if (Paths.get(professor.getProfileImagePath()).toFile().exists()) {
+
+            profileImageView.setImage(new Image("file:" + professor.getProfileImagePath()));
+        } else {
+
+            profileImageView.setImage(new Image("/png/placeholder.png"));
+        }
         nameLabel.setText(this.professor.getFirstName() + " " + this.professor.getMiddleName() + " " +
                 this.professor.getLastName());
         dobLabel.setText(this.professor.getDob());
@@ -218,6 +238,7 @@ public class ViewProfessorModalController {
             hodCheckBox.setSelected(true);
         }
         deptLabel.setText(this.professor.getDeptName());
+        academicRankLabel.setText(this.professor.getAcademicRank());
     }
 
     /**

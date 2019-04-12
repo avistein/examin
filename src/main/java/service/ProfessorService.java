@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 import static util.ConstantsUtil.*;
 
@@ -68,64 +67,72 @@ public class ProfessorService {
         return professorTask;
     }
 
-
+    @SuppressWarnings("Duplicates")
     public List<Professor> getProfessorData(String additionalQuery, final String... params) {
 
         SubjectService subjectService = new SubjectService();
 
         final String query = "SELECT v_prof_id, t_professor.v_first_name, v_middle_name, v_last_name, d_dob" +
                 ", d_date_of_joining, v_dept_name, v_highest_qualification, int_hod, v_contact_no, v_address" +
-                ", v_email_id FROM t_professor natural join t_prof_dept inner join t_user_contact_details on " +
-                "t_professor.v_prof_id = t_user_contact_details.v_user_id " + additionalQuery;
+                ", v_email_id, v_profile_picture_location, v_designation FROM t_professor natural join t_prof_dept" +
+                " inner join t_user_contact_details on t_professor.v_prof_id = t_user_contact_details.v_user_id " +
+                additionalQuery;
 
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
+        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
-                //each item in the list is a single professor details
-                List<Professor> list = new ArrayList<>();
+        //each item in the list is a single professor details
+        List<Professor> list = new ArrayList<>();
 
                 /*
                 v_prof_id is the primary key, total items in the map1 will always be equal to no of
                 v_prof_id retrieved
                  */
-                for (int i = 0; i < map.get("v_prof_id").size(); i++) {
+        for (int i = 0; i < map.get("v_prof_id").size(); i++) {
 
-                    //get the list of subjects for the respective professor
-                    List<Subject> listOfSubjects = subjectService.getSubjectData
-                            ("natural join t_prof_sub WHERE v_prof_id=?", map.get("v_prof_id").get(i));
+            //get the list of subjects for the respective professor
+            List<Subject> listOfSubjects = subjectService.getSubjectData
+                    ("natural join t_prof_sub WHERE v_prof_id=?", map.get("v_prof_id").get(i));
 
-                    Professor professor = new Professor();
+            Professor professor = new Professor();
 
-                    professor.setProfId(map.get("v_prof_id").get(i));
-                    professor.setFirstName(map.get("v_first_name").get(i));
+            professor.setProfId(map.get("v_prof_id").get(i));
+            professor.setFirstName(map.get("v_first_name").get(i));
 
-                    //to avoid storing "null"
-                    if (!(map.get("v_middle_name").get(i) == null)) {
+            //to avoid storing "null"
+            if (!(map.get("v_middle_name").get(i) == null)) {
 
-                        professor.setMiddleName(map.get("v_middle_name").get(i));
-                    }
+                professor.setMiddleName(map.get("v_middle_name").get(i));
+            }
 
-                    //to avoid storing "null"
-                    if (!(map.get("v_last_name").get(i) == null)) {
+            //to avoid storing "null"
+            if (!(map.get("v_last_name").get(i) == null)) {
 
-                        professor.setLastName(map.get("v_last_name").get(i));
-                    }
-                    professor.setDob(map.get("d_dob").get(i));
-                    professor.setDoj(map.get("d_date_of_joining").get(i));
-                    professor.setEmail(map.get("v_email_id").get(i));
-                    professor.setAddress(map.get("v_address").get(i));
-                    professor.setContactNo(map.get("v_contact_no").get(i));
-                    professor.setHighestQualification(map.get("v_highest_qualification").get(i));
-                    professor.setDeptName(map.get("v_dept_name").get(i));
-                    professor.setHodStatus(map.get("int_hod").get(i).equals("1") ? "HOD" : "");
-                    professor.setSubjects(FXCollections.observableArrayList(listOfSubjects));
+                professor.setLastName(map.get("v_last_name").get(i));
+            }
+            professor.setDob(map.get("d_dob").get(i));
+            professor.setDoj(map.get("d_date_of_joining").get(i));
+            professor.setEmail(map.get("v_email_id").get(i));
+            professor.setAddress(map.get("v_address").get(i));
+            professor.setContactNo(map.get("v_contact_no").get(i));
+            professor.setHighestQualification(map.get("v_highest_qualification").get(i));
+            professor.setDeptName(map.get("v_dept_name").get(i));
+            professor.setHodStatus(map.get("int_hod").get(i).equals("1") ? "HOD" : "");
+            professor.setSubjects(FXCollections.observableArrayList(listOfSubjects));
 
-                    //a single professor details is added to the list
-                    list.add(professor);
-                }
+            //to avoid storing "null" in image location
+            if (!(map.get("v_profile_picture_location").get(i) == null)) {
 
-                //a list of professor details
-                return list;
+                professor.setProfileImagePath(map.get("v_profile_picture_location").get(i));
+            }
+            professor.setAcademicRank(map.get("v_designation").get(i));
+
+            //a single professor details is added to the list
+            list.add(professor);
+        }
+
+        //a list of professor details
+        return list;
     }
 
     /**
@@ -164,6 +171,7 @@ public class ProfessorService {
                 columnNameMapping.put(map.get("email"), "email");
                 columnNameMapping.put(map.get("doj"), "doj");
                 columnNameMapping.put(map.get("highestQualification"), "highestQualification");
+                columnNameMapping.put(map.get("academicRank"), "academicRank");
                 columnNameMapping.put(map.get("hodStatus"), "hodStatus");
                 columnNameMapping.put(map.get("deptName"), "deptName");
 
@@ -215,10 +223,10 @@ public class ProfessorService {
                         "VALUES(?, ?, ?, ?)";
 
                 final String sql2 = "INSERT INTO t_professor (v_prof_id, v_first_name, v_middle_name, v_last_name" +
-                        ", d_dob, d_date_of_joining, v_highest_qualification) VALUES(?, ?, ?, ?, ?, ?, ?)";
+                        ", d_dob, d_date_of_joining, v_highest_qualification, v_designation) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
-                final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_first_name, v_contact_no" +
-                        ", v_address, v_email_id) VALUES(?, ?, ?, ?, ?)";
+                final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_address, v_contact_no" +
+                        ", v_email_id, v_first_name) VALUES(?, ?, ?, ?, ?)";
 
                 final String sql4 = "INSERT INTO t_prof_dept (v_prof_id" +
                         ", v_dept_name, int_hod) VALUES(?, ?, ?)";
@@ -269,6 +277,7 @@ public class ProfessorService {
                     singleProfessorDetails.add(professor.getDob());
                     singleProfessorDetails.add(professor.getDoj());
                     singleProfessorDetails.add(professor.getHighestQualification());
+                    singleProfessorDetails.add(professor.getAcademicRank());
 
                     //add details of a particular professor into the list
                     professorList.add(singleProfessorDetails);
@@ -276,10 +285,10 @@ public class ProfessorService {
 
                     //single professor contact details
                     singleProfContactDetails.add(professor.getProfId());
-                    singleProfContactDetails.add(professor.getFirstName());
-                    singleProfContactDetails.add(professor.getContactNo());
                     singleProfContactDetails.add(professor.getAddress());
+                    singleProfContactDetails.add(professor.getContactNo());
                     singleProfContactDetails.add(professor.getEmail());
+                    singleProfContactDetails.add(professor.getFirstName());
 
                     //add contact details of a particular professor into the list
                     profContactDetailsList.add(singleProfContactDetails);
@@ -345,11 +354,11 @@ public class ProfessorService {
                         "VALUES(?, ?, ?, ?)";
 
                 final String sql2 = "INSERT INTO t_professor (v_prof_id, v_first_name, v_middle_name" +
-                        ", v_last_name, d_dob, d_date_of_joining, v_highest_qualification) " +
-                        "values(?, ?, ?, ?, ?, ?, ?)";
+                        ", v_last_name, d_dob, d_date_of_joining, v_highest_qualification" +
+                        ", v_profile_picture_location, v_designation) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_first_name, v_contact_no" +
-                        ", v_address, v_email_id) values(?, ?, ?, ?, ?)";
+                final String sql3 = "INSERT INTO t_user_contact_details (v_user_id, v_address, v_contact_no" +
+                        ", v_email_id, v_first_name) values(?, ?, ?, ?, ?)";
 
                 final String sql4 = "INSERT INTO t_prof_dept(v_prof_id" +
                         ", v_dept_name, int_hod) VALUES(?, ?, ?)";
@@ -361,12 +370,13 @@ public class ProfessorService {
                 //get the status of insertion of professor details into t_professor in the DB
                 int tProfessorStatus = databaseHelper.updateDelete(sql2, professor.getProfId()
                         , professor.getFirstName(), professor.getMiddleName(), professor.getLastName()
-                        , professor.getDob(), professor.getDoj(), professor.getHighestQualification());
+                        , professor.getDob(), professor.getDoj(), professor.getHighestQualification()
+                        , professor.getProfileImagePath(), professor.getAcademicRank());
 
                 // get the status of insertion of professor details into t_user_contact_details in the DB
                 int tUserContactDetails = databaseHelper.updateDelete(sql3, professor.getProfId()
-                        , professor.getFirstName(), professor.getContactNo(), professor.getAddress()
-                        , professor.getEmail());
+                        , professor.getAddress(), professor.getContactNo(), professor.getEmail()
+                        , professor.getFirstName());
 
                 // get the status of insertion of professor details into t_prof_dept in the DB
                 int tProfessorDeptStatus = databaseHelper.updateDelete(sql4, professor.getProfId()
@@ -442,12 +452,13 @@ public class ProfessorService {
     public Task<Integer> getUpdateProfessorTask(final Professor professor) {
 
         final String sql1 = "UPDATE t_professor SET v_first_name=?, v_middle_name=?, v_last_name=?, d_dob=?" +
-                ", d_date_of_joining=?, v_highest_qualification=? where v_prof_id=?";
+                ", d_date_of_joining=?, v_highest_qualification=?, v_profile_picture_location=?" +
+                ",v_designation=? where v_prof_id=?";
 
         final String sql2 = "UPDATE t_user_contact_details SET v_contact_no=?, v_address=?, v_email_id=? " +
-                "where v_user_id=?";
+                ", v_first_name=? where v_user_id=?";
 
-        final String sql3 = "UPDATE t_prof_Dept SET int_hod=? where v_prof_id=?";
+        final String sql3 = "UPDATE t_prof_Dept SET v_dept_name=?, int_hod=? where v_prof_id=?";
 
         final String sql4 = "UPDATE t_login_details SET int_gid=? where v_user_id=?";
 
@@ -460,14 +471,15 @@ public class ProfessorService {
                 int tProfessorStatus = databaseHelper.updateDelete
                         (sql1, professor.getFirstName(), professor.getMiddleName(), professor.getLastName()
                                 , professor.getDob(), professor.getDoj(), professor.getHighestQualification()
-                                , professor.getProfId());
+                                , professor.getProfileImagePath(), professor.getAcademicRank(), professor.getProfId());
 
                 int tUserContactDetailsStatus = databaseHelper.updateDelete
                         (sql2, professor.getContactNo(), professor.getAddress(), professor.getEmail()
-                                , professor.getProfId());
+                                , professor.getFirstName(), professor.getProfId());
 
                 int tProfDeptStatus = databaseHelper.updateDelete
-                        (sql3, String.valueOf(professor.getHodStatus().equals("HOD") ? 1 : 0), professor.getProfId());
+                        (sql3, professor.getDeptName(), String.valueOf(professor.getHodStatus().equals("HOD") ? 1 : 0)
+                                , professor.getProfId());
 
                 int tLoginDetails = databaseHelper.updateDelete
                         (sql4, String.valueOf(professor.getHodStatus().equals("HOD") ? PROFESSOR_HOD_GID : PROFESSOR_GID)

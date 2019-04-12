@@ -55,6 +55,8 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Separator prefWidth="200.0" GridPane.rowIndex="1" />
@@ -106,7 +108,7 @@
                                 </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <Label fx:id="nameLabel" alignment="CENTER" prefHeight="45.0" prefWidth="132.0" text="Label" />
+                              <Label fx:id="nameLabel" alignment="CENTER" prefHeight="20.0" prefWidth="132.0" text="Label" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -129,6 +131,18 @@
                            <children>
                               <Label fx:id="highestQualificationLabel" alignment="CENTER" prefHeight="23.0" prefWidth="126.0" text="Label" />
                            </children></HBox>
+                        <Separator layoutX="142.0" layoutY="342.0" prefWidth="200.0" GridPane.rowIndex="9" />
+                        <Separator layoutX="10.0" layoutY="430.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <HBox layoutX="142.0" layoutY="365.0" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="10">
+                           <children>
+                              <Label alignment="TOP_LEFT" prefHeight="23.0" prefWidth="126.0" text="Designation" />
+                           </children>
+                        </HBox>
+                        <HBox layoutX="142.0" layoutY="277.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                           <children>
+                              <Label fx:id="academicRankLabel" alignment="TOP_CENTER" prefHeight="44.0" prefWidth="131.0" text="Label" />
+                           </children>
+                        </HBox>
                             </children>
                         </GridPane>
                         <GridPane GridPane.columnIndex="3">
@@ -146,6 +160,8 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Separator prefWidth="200.0" GridPane.rowIndex="1" />
@@ -221,11 +237,13 @@
                               <CheckBox fx:id="hodCheckBox" disable="true" mnemonicParsing="false" />
                            </children>
                         </HBox>
+                        <Separator layoutX="142.0" layoutY="342.0" prefWidth="200.0" GridPane.rowIndex="9" />
+                        <Separator layoutX="10.0" layoutY="430.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                             </children>
                         </GridPane>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                      <children>
-                        <ImageView fitHeight="98.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="profileImageView" fitHeight="98.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../png/placeholder.png" />
                            </image>

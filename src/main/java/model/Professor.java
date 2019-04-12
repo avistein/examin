@@ -31,8 +31,9 @@ public class Professor extends Department implements Serializable {
     private SimpleStringProperty highestQualification;
     private SimpleStringProperty profId;
     private SimpleStringProperty hodStatus;
-    private SimpleStringProperty designation;
     private SimpleListProperty<Subject> subjects;
+    private SimpleStringProperty profileImagePath;
+    private SimpleStringProperty academicRank;
 
     /*------------------------------------End of Initialization-------------------------------------*/
 
@@ -52,8 +53,9 @@ public class Professor extends Department implements Serializable {
         this.highestQualification = new SimpleStringProperty("");
         this.profId = new SimpleStringProperty("");
         this.hodStatus = new SimpleStringProperty("");
-        this.designation = new SimpleStringProperty("");
         this.subjects = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.profileImagePath = new SimpleStringProperty("");
+        this.academicRank = new SimpleStringProperty("");
     }
 
     /**
@@ -276,19 +278,63 @@ public class Professor extends Department implements Serializable {
         this.hodStatus.set(status);
     }
 
-    public String getDesignation() {
-        return designation.get();
-    }
-
-    public void setDesignation(String designation) {
-        this.designation.set(designation);
-    }
-
+    /**
+     * Getter method to get the list of the Subjects
+     *
+     * @return the subject list
+     */
     public ObservableList<Subject> getSubjects() {
+
         return subjects.get();
     }
 
+    /**
+     * Setter method to set subjects of the Professor.
+     *
+     * @param subjects The subject list to set.
+     */
     public void setSubjects(ObservableList<Subject> subjects) {
+
         this.subjects.set(subjects);
+    }
+
+    /**
+     * Getter method to get the file path of the Professor's profile image.
+     *
+     * @return The file path.
+     */
+    public String getProfileImagePath() {
+
+        return profileImagePath.get();
+    }
+
+    /**
+     * Setter method to set path of the Professor's profile image.
+     *
+     * @param path The file path to set.
+     */
+    public void setProfileImagePath(String path) {
+
+        this.profileImagePath.set(path);
+    }
+
+    /**
+     * Getter method to get the Designation of the Professor.
+     *
+     * @return The academicRank.
+     */
+    public String getAcademicRank() {
+
+        return academicRank.get();
+    }
+
+    /**
+     * Setter method to set academicRank of the Professor.
+     *
+     * @param academicRank The file path to set.
+     */
+    public void setAcademicRank(String academicRank) {
+
+        this.academicRank.set(academicRank);
     }
 }

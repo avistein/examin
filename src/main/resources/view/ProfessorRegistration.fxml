@@ -7,8 +7,10 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -65,14 +67,15 @@
                         <RowConstraints maxHeight="132.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="177.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="216.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="225.0" minHeight="10.0" prefHeight="133.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="235.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="216.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="225.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
                            <children>
-                              <Label prefHeight="22.0" prefWidth="100.0" text="Department">
+                              <Label text="Department">
                                  <VBox.margin>
                                     <Insets left="20.0" />
                                  </VBox.margin>
@@ -87,9 +90,9 @@
                               </ComboBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <Label prefHeight="21.0" prefWidth="163.0" text="Highest Qualification">
+                              <Label text="Highest Qualification">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
@@ -112,14 +115,14 @@
                               </CheckBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="2">
                            <children>
                               <Label text="Professor ID">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                               </Label>
                               <TextField fx:id="profIdTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
@@ -141,7 +144,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <children>
                               <Label text="First Name">
                                  <VBox.margin>
@@ -158,11 +161,11 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                            <children>
                               <Label text="Middle Name">
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                                  <font>
                                     <Font size="14.0" />
@@ -175,11 +178,11 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
                            <children>
                               <Label text="Last Name">
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                                  <font>
                                     <Font size="14.0" />
@@ -192,7 +195,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="7">
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="8">
                            <children>
                               <Label text="Contact Details:">
                                  <font>
@@ -204,11 +207,11 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="89.0" prefWidth="210.0" GridPane.rowIndex="8">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="89.0" prefWidth="210.0" spacing="5.0" GridPane.rowIndex="9">
                            <children>
                               <Label text="Email Id">
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                                  <font>
                                     <Font size="14.0" />
@@ -221,14 +224,14 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                            <children>
                               <Label text="Contact No">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                               </Label>
                               <TextField fx:id="contactNoTextField" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
@@ -238,11 +241,11 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
                            <children>
                               <Label text="Address">
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                                  <font>
                                     <Font size="14.0" />
@@ -255,7 +258,7 @@
                               </TextArea>
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="100.0">
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                            <children>
                               <Label prefHeight="25.0" prefWidth="104.0" text="Office Details:">
                                  <font>
@@ -267,14 +270,14 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="371.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="371.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                            <children>
                               <Label text="Date Of Birth">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                               </Label>
                               <DatePicker fx:id="dobDatePicker" maxWidth="-Infinity" prefHeight="30.0" prefWidth="180.0">
@@ -284,14 +287,14 @@
                               </DatePicker>
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
                               <Label text="Date of Joining">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets left="20.0" />
+                                    <Insets />
                                  </VBox.margin>
                               </Label>
                               <DatePicker fx:id="dojDatePicker" prefHeight="32.0" prefWidth="183.0">
@@ -304,6 +307,36 @@
                               <Insets left="10.0" />
                            </padding>
                         </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5" GridPane.rowSpan="2">
+                           <children>
+                              <ImageView fx:id="profileImageImageView" fitHeight="83.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../png/placeholder.png" />
+                                 </image></ImageView>
+                              <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#handleChooseImageButtonAction" text="Choose Image">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Button>
+                           </children></VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Designation">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="designationComboBox" prefHeight="30.0" prefWidth="180.0" />
+                           </children></VBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
+                           <children>
+                              <Separator prefWidth="1368.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="177.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="7">
+                           <children>
+                              <Separator prefWidth="1368.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </GridPane>
                   <HBox alignment="CENTER" prefHeight="95.0" prefWidth="860.0" spacing="10.0" GridPane.rowIndex="1">
