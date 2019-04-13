@@ -43,7 +43,6 @@ public class StudentSectionController {
 
     /*------------------------------Declaration and initialization of variables------------------------------*/
 
-    String duration;
     private StudentService studentService;
     private CourseService courseService;
     private BatchService batchService;
@@ -57,9 +56,6 @@ public class StudentSectionController {
 
     @FXML
     private StackPane statusStackPane;
-
-    @FXML
-    private ProgressIndicator progressIndicator;
 
     @FXML
     private Label titleLabel;
@@ -305,7 +301,6 @@ public class StudentSectionController {
                         && course.getDiscipline().equals(disciplineComboBox.getValue())) {
 
                     totalSemesters = Integer.parseInt(course.getDuration());
-                    duration = course.getDuration();
                 }
             }
             //set the semester combo box from 1 to totalSemesters
@@ -470,14 +465,13 @@ public class StudentSectionController {
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                             alert1.setHeaderText("Student promotion successful!");
                             alert1.show();
-                        }
-                        else if(status == PROMOTION_ERROR){
+                            studentObsList.remove(student);
+                        } else if (status == PROMOTION_ERROR) {
 
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                             alert1.setHeaderText("Cannot award degree completion. Student has pending backlogs!");
                             alert1.show();
-                        }
-                        else {
+                        } else {
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                             alert1.setHeaderText("Student doesn't exist!");
                             alert1.show();

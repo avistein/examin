@@ -250,7 +250,8 @@ public class MarksSectionController {
                     }
                 }
                 String additionalQuery = "WHERE v_course_id=? AND int_semester=?";
-                Task<List<Subject>> subjectDataTask = subjectService.getSubjectsTask(additionalQuery, courseId, semesterComboBox.getValue());
+                Task<List<Subject>> subjectDataTask = subjectService.getSubjectsTask(additionalQuery, courseId
+                        , semesterComboBox.getValue());
                 new Thread(subjectDataTask).start();
 
                 subjectDataTask.setOnSucceeded(new EventHandler<>() {
