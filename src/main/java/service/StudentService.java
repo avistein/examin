@@ -8,6 +8,7 @@ import database.DatabaseHelper;
 import javafx.concurrent.Task;
 import model.Batch;
 import model.Student;
+import model.Subject;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,6 +31,7 @@ public class StudentService {
     /*--------------------------------Declaration of variables---------------------------------------*/
 
     private DatabaseHelper databaseHelper;
+    private SubjectService subjectService;
 
     /*------------------------------------End of Declaration-----------------------------------------*/
 
@@ -39,6 +41,7 @@ public class StudentService {
     public StudentService() {
 
         databaseHelper = new DatabaseHelper();
+        subjectService = new SubjectService();
     }
 
     /**
@@ -66,7 +69,6 @@ public class StudentService {
     }
 
     /**
-     *
      * @param additionalQuery
      * @param params
      * @return
@@ -79,64 +81,64 @@ public class StudentService {
                 ", v_profile_picture_location FROM t_student natural join t_student_enrollment_details natural join " +
                 "t_course natural join t_batch " + additionalQuery;
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
+        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
-                //each item in the list is a single student details
-                List<Student> list = new ArrayList<>();
+        //each item in the list is a single student details
+        List<Student> list = new ArrayList<>();
 
                 /*
                 v_reg_id is the primary key, total items in the map will always be equal to no of
                 v_reg_id retrieved
                  */
-                for (int i = 0; i < map.get("v_reg_id").size(); i++) {
+        for (int i = 0; i < map.get("v_reg_id").size(); i++) {
 
-                    Student student = new Student();
+            Student student = new Student();
 
-                    student.setFirstName(map.get("v_first_name").get(i));
+            student.setFirstName(map.get("v_first_name").get(i));
 
-                    //to avoid storing "null"
-                    if (!(map.get("v_middle_name").get(i) == null)) {
+            //to avoid storing "null"
+            if (!(map.get("v_middle_name").get(i) == null)) {
 
-                        student.setMiddleName(map.get("v_middle_name").get(i));
-                    }
+                student.setMiddleName(map.get("v_middle_name").get(i));
+            }
 
-                    //to avoid storing "null"
-                    if (!(map.get("v_last_name").get(i) == null)) {
+            //to avoid storing "null"
+            if (!(map.get("v_last_name").get(i) == null)) {
 
-                        student.setLastName(map.get("v_last_name").get(i));
-                    }
-                    student.setDob(map.get("d_dob").get(i));
-                    student.setGender(map.get("v_gender").get(i));
-                    student.setRegYear(map.get("v_reg_year").get(i));
-                    student.setEmail(map.get("v_email_id").get(i));
-                    student.setAddress(map.get("v_address").get(i));
+                student.setLastName(map.get("v_last_name").get(i));
+            }
+            student.setDob(map.get("d_dob").get(i));
+            student.setGender(map.get("v_gender").get(i));
+            student.setRegYear(map.get("v_reg_year").get(i));
+            student.setEmail(map.get("v_email_id").get(i));
+            student.setAddress(map.get("v_address").get(i));
 
-                    //to avoid storing "null"
-                    if (!(map.get("v_mother_name").get(i) == null)) {
+            //to avoid storing "null"
+            if (!(map.get("v_mother_name").get(i) == null)) {
 
-                        student.setMotherName(map.get("v_mother_name").get(i));
-                    }
-                    student.setGuardianContactNo(map.get("v_guardian_contact_no").get(i));
-                    student.setRegId(map.get("v_reg_id").get(i));
-                    student.setRollNo(map.get("v_roll_no").get(i));
-                    student.setContactNo(map.get("v_contact_no").get(i));
-                    student.setGuardianName(map.get("v_father_guardian_name").get(i));
-                    student.setCurrSemester(map.get("int_curr_semester").get(i));
-                    student.setBatchName(map.get("v_batch_name").get(i));
-                    student.setDiscipline(map.get("v_discipline").get(i));
-                    student.setDegree(map.get("v_degree").get(i));
-                    student.setDeptName(map.get("v_dept_name").get(i));
+                student.setMotherName(map.get("v_mother_name").get(i));
+            }
+            student.setGuardianContactNo(map.get("v_guardian_contact_no").get(i));
+            student.setRegId(map.get("v_reg_id").get(i));
+            student.setRollNo(map.get("v_roll_no").get(i));
+            student.setContactNo(map.get("v_contact_no").get(i));
+            student.setGuardianName(map.get("v_father_guardian_name").get(i));
+            student.setCurrSemester(map.get("int_curr_semester").get(i));
+            student.setBatchName(map.get("v_batch_name").get(i));
+            student.setDiscipline(map.get("v_discipline").get(i));
+            student.setDegree(map.get("v_degree").get(i));
+            student.setDeptName(map.get("v_dept_name").get(i));
 
-                    //to avoid storing "null" in image location
-                    if (!(map.get("v_profile_picture_location").get(i) == null)) {
+            //to avoid storing "null" in image location
+            if (!(map.get("v_profile_picture_location").get(i) == null)) {
 
-                        student.setProfileImagePath(map.get("v_profile_picture_location").get(i));
-                    }
+                student.setProfileImagePath(map.get("v_profile_picture_location").get(i));
+            }
 
-                    //a single student details is added to the list
-                    list.add(student);
-                }
-                return list;
+            //a single student details is added to the list
+            list.add(student);
+        }
+        return list;
     }
 
     /**
@@ -227,7 +229,6 @@ public class StudentService {
 
             @Override
             protected Integer call() {
-
                 BatchService batchService = new BatchService();
 
                 final String sql1 = "INSERT INTO t_student (v_first_name, v_middle_name, v_last_name, v_reg_id" +
@@ -237,6 +238,8 @@ public class StudentService {
 
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id, v_reg_id, int_curr_semester)" +
                         " VALUES(?, ?, ?)";
+
+                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id) VALUES (?, ?, ?)";
 
                 //get the list of batches
                 List<Batch> listOfBatches = batchService.getBatchData("");
@@ -258,6 +261,7 @@ public class StudentService {
                  */
                 List<List<String>> listOfStudents = new ArrayList<>();
                 List<List<String>> studentEnrollmentList = new ArrayList<>();
+                List<List<String>> listOfStudentAssignmentsInSubjects = new ArrayList<>();
 
                 //for each student ,form the data in the List<List<String>> structure
                 for (Student student : list) {
@@ -265,6 +269,8 @@ public class StudentService {
                     List<String> singleStudentDetails = new ArrayList<>();
                     List<String> singleStudentEnrollment = new ArrayList<>();
 
+                    List<Subject> subjectList = subjectService.getSubjectData("WHERE v_degree=? " +
+                            "AND v_discipline=?", student.getDegree(), student.getDiscipline());
                     /*
                     iterate each batch to find out the batchId corresponding to the particular Course and semester, the
                     student is undertaking.
@@ -284,6 +290,16 @@ public class StudentService {
                         }
                     }
 
+                    for (Subject subject : subjectList) {
+
+                        List<String> singleStudentAssignmentInSubjects = new ArrayList<>();
+
+                        singleStudentAssignmentInSubjects.add(student.getRegId());
+                        singleStudentAssignmentInSubjects.add(subject.getCourseId());
+                        singleStudentAssignmentInSubjects.add(subject.getSubId());
+
+                        listOfStudentAssignmentsInSubjects.add(singleStudentAssignmentInSubjects);
+                    }
                     singleStudentDetails.add(student.getFirstName());
                     singleStudentDetails.add(student.getMiddleName());
                     singleStudentDetails.add(student.getLastName());
@@ -306,16 +322,19 @@ public class StudentService {
                 /*get the no of insertions or error status of the INSERT operation*/
                 int tStudentStatus = databaseHelper.batchInsertUpdate(sql1, listOfStudents);
                 int tStudentEnrollmentStatus = databaseHelper.batchInsertUpdate(sql2, studentEnrollmentList);
+                int tStudentMarksStatus = databaseHelper.batchInsertUpdate(sql3, listOfStudentAssignmentsInSubjects);
 
                 //if any DB error is present
-                if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR) {
+                if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR
+                        || tStudentMarksStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
                 }
 
                 //return success ,if all students are inserted
                 else if (tStudentStatus == listOfStudents.size()
-                        && tStudentEnrollmentStatus == studentEnrollmentList.size()) {
+                        && tStudentEnrollmentStatus == studentEnrollmentList.size()
+                        && tStudentMarksStatus == listOfStudentAssignmentsInSubjects.size()) {
 
                     return SUCCESS;
                 }
@@ -352,6 +371,25 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
                         ", v_reg_id, int_curr_semester) VALUES(?, ?, ?)";
 
+                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id) VALUES (?, ?, ?)";
+
+                List<Subject> subjectList = subjectService.getSubjectData("WHERE v_course_id=?"
+                        , student.getCourseId());
+
+                List<List<String>> listOfStudentAssignmentsInSubjects = new ArrayList<>();
+
+                for (Subject subject : subjectList) {
+
+                    List<String> singleStudentAssignmentInSubjects = new ArrayList<>();
+
+                    singleStudentAssignmentInSubjects.add(student.getRegId());
+                    singleStudentAssignmentInSubjects.add(student.getCourseId());
+                    singleStudentAssignmentInSubjects.add(subject.getSubId());
+
+                    listOfStudentAssignmentsInSubjects.add(singleStudentAssignmentInSubjects);
+                }
+
+
                 //get the status of insertion of student details into t_student in the DB
                 int tStudentStatus = databaseHelper.insert(sql1, student.getFirstName(), student.getMiddleName()
                         , student.getLastName(), student.getRegId(), student.getRollNo(), student.getDob()
@@ -363,11 +401,15 @@ public class StudentService {
                 int tStudentEnrollmentStatus = databaseHelper.insert(sql2, student.getBatchId()
                         , student.getRegId(), student.getCurrSemester());
 
+                int tStudentMarksStatus = databaseHelper.batchInsertUpdate(sql3, listOfStudentAssignmentsInSubjects);
+
                 //return the status of insertion of student details
-                if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR) {
+                if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR
+                        || tStudentMarksStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
-                } else if (tStudentStatus == SUCCESS && tStudentEnrollmentStatus == SUCCESS) {
+                } else if (tStudentStatus == SUCCESS && tStudentEnrollmentStatus == SUCCESS
+                        && tStudentMarksStatus == listOfStudentAssignmentsInSubjects.size()) {
 
                     return SUCCESS;
                 } else {
@@ -462,35 +504,58 @@ public class StudentService {
         return updateStudentTask;
     }
 
-    public Task<Integer> getPromoteStudentTask(final Student student) {
+    public int promoteStudentToNextSemester(final Student student) {
 
         final String sql = "UPDATE t_student_enrollment_details SET int_curr_semester=? where v_reg_id=?";
 
-        Task<Integer> promoteStudentTask = new Task<>() {
 
-            @Override
-            protected Integer call() {
+        //holds the status of updation of student in the DB, i.e success or failure
+        int tStudentEnrollmentStatus = databaseHelper.updateDelete
+                (sql, student.getCurrSemester(), student.getRegId());
 
-                //holds the status of updation of student in the DB, i.e success or failure
-                int tStudentEnrollmentStatus = databaseHelper.updateDelete
-                        (sql, student.getCurrSemester(), student.getRegId());
+        /*returns an integer holding the different status i.e success, failure etc.*/
+        if (tStudentEnrollmentStatus == DATABASE_ERROR) {
 
-                /*returns an integer holding the different status i.e success, failure etc.*/
-                if (tStudentEnrollmentStatus == DATABASE_ERROR) {
+            return DATABASE_ERROR;
+        } else if (tStudentEnrollmentStatus == SUCCESS) {
 
-                    return DATABASE_ERROR;
-                } else if (tStudentEnrollmentStatus == SUCCESS) {
+            return SUCCESS;
+        } else {
 
-                    return SUCCESS;
-                } else {
-
-                    return DATA_INEXISTENT_ERROR;
-                }
-            }
-        };
-        return promoteStudentTask;
+            return DATA_INEXISTENT_ERROR;
+        }
     }
 
+    public int awardDegreeCompletion(final Student student) {
+
+        final String sql1 = "DELETE FROM t_student_enrollment_details where v_reg_id=?";
+        final String sql2 = "INSERT INTO t_degree_completed_student(v_reg_id, v_batch_id) VALUES(?, ?)";
+
+
+        String batchId = new BatchService().getBatchData("WHERE v_degree=? AND v_discipline=? " +
+                        "AND v_batch_name=?", student.getDegree(), student.getDiscipline(), student.getBatchName())
+                        .get(0).getBatchId();
+
+        //holds the status of updation of student in the DB, i.e success or failure
+        int tStudentEnrollmentDetailsStatus = databaseHelper.updateDelete
+                (sql1, student.getRegId());
+
+        int tDegreeCompletedStudentStatus = databaseHelper.updateDelete
+                (sql2, student.getRegId(), batchId);
+
+        /*returns an integer holding the different status i.e success, failure etc.*/
+        if (tDegreeCompletedStudentStatus == DATABASE_ERROR
+                || tStudentEnrollmentDetailsStatus == DATABASE_ERROR) {
+
+            return DATABASE_ERROR;
+        } else if (tDegreeCompletedStudentStatus == SUCCESS && tStudentEnrollmentDetailsStatus == SUCCESS) {
+
+            return SUCCESS;
+        } else {
+
+            return DATA_INEXISTENT_ERROR;
+        }
+    }
 
     /**
      * This method is used to get a single studentsCountTask object which is used to get total no of Students in the DB.

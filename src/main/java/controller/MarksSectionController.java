@@ -15,156 +15,108 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
-import service.CourseService;
-import service.ExamService;
-import service.MarksService;
+import service.*;
 import util.UISetterUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MarksSectionController {
 
+    String courseId;
     @FXML
     private ChoiceBox<String> examTypeChoiceBox;
-
     @FXML
     private ComboBox<String> academicYearComboBox;
-
     @FXML
     private Label examIdLabel;
-
     @FXML
     private ComboBox<String> degreeComboBox;
-
     @FXML
     private ComboBox<String> disciplineComboBox;
-
+    @FXML
+    private ComboBox<String> batchNameComboBox;
+    @FXML
+    private ComboBox<String> semesterComboBox;
     @FXML
     private ComboBox<String> subjectComboBox;
-
     @FXML
     private TextField searchTextField;
-
     @FXML
     private Button addMarksButton;
-
     @FXML
     private Button importMarksButton;
-
     @FXML
     private TableView<Marks> marksListTableView;
-
     @FXML
     private TableColumn<Marks, String> regIdCol;
-
     @FXML
     private TableColumn<Marks, String> marksCol;
-
     private MarksService marksService;
-
-    private ExamService examService;
-
+    private SubjectService subjectService;
     private CourseService courseService;
-
+    private BatchService batchService;
+    private StudentService studentService;
     private List<ExamDetails> examDetailsList;
-
     private List<Course> courseList;
 
-    String courseId;
-    String examId;
-    List<Exam> examList;
+    private ObservableList<Marks> marksObsList;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
 
         marksService = new MarksService();
-        examService = new ExamService();
         courseService = new CourseService();
+        subjectService = new SubjectService();
+        batchService = new BatchService();
+        studentService = new StudentService();
 
-        initCol();
+        marksObsList = FXCollections.observableArrayList();
 
-        examTypeChoiceBox.setItems(FXCollections.observableArrayList("Theory", "Practical"));
-    }
+        //get the list of courses available in the db
+        Task<List<Course>> coursesTask = courseService
+                .getCoursesTask("");
+        new Thread(coursesTask).start();
 
-    @FXML
-    private void handleExamTypeChoiceBox(){
-
-        academicYearComboBox.getSelectionModel().clearSelection();
-        academicYearComboBox.getItems().clear();
-
-        examIdLabel.setText("");
-
-        String additionalQuery = "WHERE v_exam_type=?";
-
-        Task<List<ExamDetails>> examDetailsTask = examService.getExamDetailsTask(additionalQuery
-                , examTypeChoiceBox.getValue());
-        new Thread(examDetailsTask).start();
-
-        examDetailsTask.setOnSucceeded(new EventHandler<>() {
+        coursesTask.setOnSucceeded(new EventHandler<>() {
             @Override
             public void handle(WorkerStateEvent event) {
 
-                examDetailsList = examDetailsTask.getValue();
-                List<String> items = new ArrayList<>();
-                for(ExamDetails examDetails : examDetailsList){
+                //store the list of all courses available in the DB
+                courseList = coursesTask.getValue();
 
-                    items.add(examDetails.getAcademicYear());
+                //only if there's any course in the db
+
+                List<String> items = new ArrayList<>();
+
+                for (Course course : courseList) {
+
+                    //add only unique degree items to degree combobox
+                    if (!items.contains(course.getDegree())) {
+
+                        items.add(course.getDegree());
+                    }
                 }
+
                 ObservableList<String> options = FXCollections.observableArrayList(items);
-                academicYearComboBox.setItems(options);
+                degreeComboBox.setItems(options);
             }
         });
+
+        initCol();
     }
 
     @FXML
-    private void handleAcademicYearComboBox(){
-
-        degreeComboBox.getSelectionModel().clearSelection();
-        degreeComboBox.getItems().clear();
-
-        if(examDetailsList != null && academicYearComboBox.getValue() != null){
-
-            for(ExamDetails examDetails : examDetailsList){
-
-                if(examTypeChoiceBox.getValue().equals(examDetails.getExamType())
-                        && academicYearComboBox.getValue().equals(examDetails.getAcademicYear())){
-
-                    examIdLabel.setText(examDetails.getExamDetailsId());
-                }
-            }
-            String additionalQuery = "NATURAL JOIN t_exam_time_table WHERE v_exam_details_id=?";
-            Task<List<Course>> courseTask = courseService.getCoursesTask(additionalQuery, examIdLabel.getText());
-            new Thread(courseTask).start();
-
-            courseTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-
-                    courseList = courseTask.getValue();
-                    List<String> items = new ArrayList<>();
-                    for(Course course : courseList){
-
-                        if(!items.contains(course.getDegree())){
-
-                            items.add(course.getDegree());
-                        }
-                    }
-                    ObservableList<String> options = FXCollections.observableArrayList(items);
-                    degreeComboBox.setItems(options);
-                }
-            });
-        }
-    }
-
-    @FXML
-    private void handleDegreeComboBox(){
+    private void handleDegreeComboBox() {
 
         disciplineComboBox.getSelectionModel().clearSelection();
         disciplineComboBox.getItems().clear();
 
-        if(degreeComboBox.getValue() != null) {
+        marksObsList.clear();
+
+        if (degreeComboBox.getValue() != null) {
 
             List<String> items = new ArrayList<>();
             for (Course course : courseList) {
@@ -180,52 +132,162 @@ public class MarksSectionController {
         }
     }
 
+
+    /**
+     * Callback method for disciplineComboBox.
+     * Clears batchNameComboBox,semesterComboBox & table items and sets
+     * the batchNameComboBoxes.
+     */
+    @SuppressWarnings("Duplicates")
     @FXML
-    private void handleDisciplineComboBox(){
+    private void handleDisciplineComboBox() {
 
-        if(courseList != null && disciplineComboBox.getValue() != null) {
+        //clears batch combo box and semester combo box upon selecting a discipline
+        batchNameComboBox.getSelectionModel().clearSelection();
+        batchNameComboBox.getItems().clear();
 
-            for(Course course : courseList){
+        marksObsList.clear();
 
-                if(course.getDegree().equals(degreeComboBox.getValue())
-                        && course.getDiscipline().equals(disciplineComboBox.getValue())){
+        //only if a discipline is selected
+        if (disciplineComboBox.getValue() != null) {
 
-                    courseId = course.getCourseId();
-                }
-            }
-            String additionalQuery = "WHERE v_course_id=?";
-            Task<List<Exam>> examRoutineTask = examService.getExamRoutineTask(additionalQuery, courseId);
-            new Thread(examRoutineTask).start();
+            final String additionalQuery = "where v_degree=? and v_discipline =?";
 
-            examRoutineTask.setOnSucceeded(new EventHandler<>() {
+            //get all batches for particular degree and discipline
+            Task<List<Batch>> batchesTask = batchService.getBatchesTask(additionalQuery, degreeComboBox.getValue()
+                    , disciplineComboBox.getValue());
+            new Thread(batchesTask).start();
+
+            batchesTask.setOnSucceeded(new EventHandler<>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
 
-                    examList = examRoutineTask.getValue();
-                    List<String> items = new ArrayList<>();
-                    for(Exam exam : examList){
+                    List<Batch> listOfBatches = batchesTask.getValue();
 
-                        items.add(exam.getSubId());
+                    List<String> items = new ArrayList<>();
+
+                    for (Batch batch : listOfBatches) {
+
+                        //Add unique batch names to the batchComboBox for the corresponding degree and discipline
+                        if (!items.contains(batch.getBatchName())) {
+
+                            items.add(batch.getBatchName());
+                        }
                     }
                     ObservableList<String> options = FXCollections.observableArrayList(items);
-                    subjectComboBox.setItems(options);
+                    batchNameComboBox.setItems(options);
                 }
             });
         }
     }
 
+    /**
+     * Callback method for batchNameComboBox.
+     * Clears semesterComboBox & table items and sets
+     * the semesterComboBoxes.
+     */
+    @SuppressWarnings("Duplicates")
     @FXML
-    private void handleSubjectComboBox(){
+    private void handleBatchNameComboBox() {
 
-        populateMarksTable();
+        //clears the semester combo box upon selecting a batch name
+        semesterComboBox.getSelectionModel().clearSelection();
+        semesterComboBox.getItems().clear();
+
+        marksObsList.clear();
+
+        //only if a batchName is selected
+        if (batchNameComboBox.getValue() != null) {
+
+            List<String> items = new ArrayList<>();
+            int totalSemesters = 0;
+                /*
+                Get the total no.of semesters for the selected Degree,discipline &
+                set the semesterComboBox with semester values from 1 to total no.
+                 */
+            for (Course course : courseList) {
+
+                if (course.getDegree().equals(degreeComboBox.getValue())
+                        && course.getDiscipline().equals(disciplineComboBox.getValue())) {
+
+                    totalSemesters = Integer.parseInt(course.getDuration());
+                }
+            }
+            //set the semester combo box from 1 to totalSemesters
+            for (int i = 1; i <= totalSemesters; i++) {
+
+                items.add(Integer.toString(i));
+            }
+            ObservableList<String> options = FXCollections.observableArrayList(items);
+            semesterComboBox.setItems(options);
+        }
+    }
+
+    /**
+     * Callback method for semesterComboBox.
+     * Clears table items and populate the tableView.
+     * the semesterComboBoxes.
+     */
+    @FXML
+    private void handleSemesterComboBox() {
+
+        subjectComboBox.getSelectionModel().clearSelection();
+        subjectComboBox.getItems().clear();
+
+        marksObsList.clear();
+
+        //only if a semester is selected , populate the table
+        if (semesterComboBox.getValue() != null) {
+
+            if (courseList != null && disciplineComboBox.getValue() != null) {
+
+                for (Course course : courseList) {
+
+                    if (course.getDegree().equals(degreeComboBox.getValue())
+                            && course.getDiscipline().equals(disciplineComboBox.getValue())) {
+
+                        courseId = course.getCourseId();
+                    }
+                }
+                String additionalQuery = "WHERE v_course_id=? AND int_semester=?";
+                Task<List<Subject>> subjectDataTask = subjectService.getSubjectsTask(additionalQuery, courseId, semesterComboBox.getValue());
+                new Thread(subjectDataTask).start();
+
+                subjectDataTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        List<Subject> subjectList = subjectDataTask.getValue();
+                        List<String> items = new ArrayList<>();
+                        for (Subject subject : subjectList) {
+
+                            items.add(subject.getSubId());
+                        }
+                        ObservableList<String> options = FXCollections.observableArrayList(items);
+                        subjectComboBox.setItems(options);
+                    }
+                });
+            }
+        }
     }
 
     @FXML
-    private void handleAddMarksButtonAction(){
+    private void handleSubjectComboBox() {
+
+        marksObsList.clear();
+
+        if(subjectComboBox.getValue() != null) {
+
+               populateMarksTable();
+        }
+    }
+
+    @FXML
+    private void handleAddMarksButtonAction() {
 
         Marks marks = marksListTableView.getSelectionModel().getSelectedItem();
 
-        if(marks != null && examId != null){
+        if (marks != null) {
 
             //create a modal window
             Stage addMarksModal = new Stage();
@@ -240,14 +302,11 @@ public class MarksSectionController {
             //get the controller
             AddMarksModalController addMarksModalController = loader.getController();
 
-
-            marks.setExamId(examId);
-
             addMarksModalController.setMarksDetails(marks);
 
             addMarksModal.showAndWait();
 
-            if(addMarksModalController.getTableUpdateStatus()){
+            if (addMarksModalController.getTableUpdateStatus()) {
 
                 populateMarksTable();
             }
@@ -255,9 +314,9 @@ public class MarksSectionController {
     }
 
     @FXML
-    private void handleImportMarksButtonAction(){
+    private void handleImportMarksButtonAction() {
 
-        if(isAllComboBoxesSelected() && examId != null){
+        if (isAllComboBoxesSelected()) {
 
             //create a modal window
             Stage importMarksCsvModal = new Stage();
@@ -271,46 +330,46 @@ public class MarksSectionController {
 
             //get the controller
             ImportMarksCsvModalController importMarksCsvModalController = loader.getController();
-            importMarksCsvModalController.setExamId(examId);
+            importMarksCsvModalController.setSubjectDetails(courseId, subjectComboBox.getValue());
 
             importMarksCsvModal.showAndWait();
 
-            if(importMarksCsvModalController.getTableUpdateStatus()){
+            if (importMarksCsvModalController.getTableUpdateStatus()) {
 
                 populateMarksTable();
             }
         }
     }
 
-    private boolean isAllComboBoxesSelected(){
+    private boolean isAllComboBoxesSelected() {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-        if(examTypeChoiceBox.getValue() == null){
+        if (examTypeChoiceBox.getValue() == null) {
 
             alert.setHeaderText("Please select the exam type!");
             alert.show();
             return false;
         }
-        if(academicYearComboBox.getValue() == null){
+        if (academicYearComboBox.getValue() == null) {
 
             alert.setHeaderText("Please select the Academic Year!");
             alert.show();
             return false;
         }
-        if(degreeComboBox.getValue() == null){
+        if (degreeComboBox.getValue() == null) {
 
             alert.setHeaderText("Please select the degree!");
             alert.show();
             return false;
         }
-        if(disciplineComboBox.getValue() == null){
+        if (disciplineComboBox.getValue() == null) {
 
             alert.setHeaderText("Please select the discipline!");
             alert.show();
             return false;
         }
-        if(subjectComboBox.getValue() == null){
+        if (subjectComboBox.getValue() == null) {
 
             alert.setHeaderText("Please select the Subject ID!");
             alert.show();
@@ -318,82 +377,89 @@ public class MarksSectionController {
         }
         return true;
     }
-    private void initCol(){
+
+    private void initCol() {
 
         regIdCol.setCellValueFactory(new PropertyValueFactory<>("regId"));
         marksCol.setCellValueFactory(new PropertyValueFactory<>("obtainedMarks"));
     }
 
-    private void populateMarksTable(){
+    private void populateMarksTable() {
 
-        if(examList != null) {
+        String additionalQuery = "WHERE v_degree=? AND v_discipline=? AND v_batch_name=?";
 
-            for (Exam exam : examList) {
+        Task<List<Student>> studentDataTask = studentService.getStudentTask(additionalQuery, degreeComboBox.getValue()
+                , disciplineComboBox.getValue(), batchNameComboBox.getValue());
+        new Thread(studentDataTask).start();
 
-                if (exam.getCourseId().equals(courseId) && exam.getSubId().equals(subjectComboBox.getValue())) {
+        studentDataTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
 
-                    examId = exam.getExamId();
-                }
-            }
+                List<Student> studentList = studentDataTask.getValue();
 
-            String additionalQuery = "WHERE int_exam_id=?";
+                String additionalQuery = "WHERE v_reg_id IN (" + studentList.stream().map(Student::getRegId)
+                        .collect(Collectors.joining(",")) + ") AND v_course_id=? AND v_sub_id=?";
 
-            Task<List<Marks>> marksDataTask = marksService.getMarksDataTask(additionalQuery, examId);
-            new Thread(marksDataTask).start();
+                Task<List<Marks>> marksDataTask = marksService.getMarksDataTask(additionalQuery, courseId
+                        , subjectComboBox.getValue());
+                new Thread(marksDataTask).start();
 
-            marksDataTask.setOnSucceeded(new EventHandler<>() {
+                marksDataTask.setOnSucceeded(new EventHandler<>() {
 
-                @Override
-                public void handle(WorkerStateEvent event) {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
 
-                    ObservableList<Marks> marksObsList = FXCollections.observableArrayList(marksDataTask.getValue());
+                        marksObsList = FXCollections.observableArrayList(marksDataTask.getValue());
 
-                    FilteredList<Marks> marksFilteredList = new FilteredList<>(marksObsList, null);
+                        FilteredList<Marks> marksFilteredList = new FilteredList<>(marksObsList, null);
 
-                    //FilteredList is unmodifiable, so wrap it in a SortedList for sorting functionality in the TableView
-                    SortedList<Marks> marksSortedList = new SortedList<>(marksFilteredList);
+                        //FilteredList is unmodifiable, so wrap it in a SortedList for sorting functionality in the TableView
+                        SortedList<Marks> marksSortedList = new SortedList<>(marksFilteredList);
 
                     /*
                     Attach a listener to the Search field to display only those Students in the TableView that matches
                     with the Search box data.
                     */
-                    searchTextField.textProperty().addListener(new ChangeListener<String>() {
+                        searchTextField.textProperty().addListener(new ChangeListener<String>() {
 
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable, String oldValue
-                                , String newValue) {
+                            @Override
+                            public void changed(ObservableValue<? extends String> observable, String oldValue
+                                    , String newValue) {
 
-                            //set the predicate which will be used for filtering Student
-                            marksFilteredList.setPredicate(new Predicate<>() {
+                                //set the predicate which will be used for filtering Student
+                                marksFilteredList.setPredicate(new Predicate<>() {
 
-                                @Override
-                                public boolean test(Marks marks) {
+                                    @Override
+                                    public boolean test(Marks marks) {
 
-                                    String lowerCaseFilter = newValue.toLowerCase();
+                                        String lowerCaseFilter = newValue.toLowerCase();
 
-                                    if (newValue.isEmpty()) {
+                                        if (newValue.isEmpty()) {
 
-                                        return true;
-                                    } else if (marks.getRegId().contains(lowerCaseFilter)) {
+                                            return true;
+                                        } else if (marks.getRegId().contains(lowerCaseFilter)) {
 
-                                        return true;
-                                    } else if (marks.getObtainedMarks().contains(newValue)) {
+                                            return true;
+                                        } else if (marks.getObtainedMarks().contains(newValue)) {
 
-                                        return true;
+                                            return true;
+                                        }
+                                        return false;
                                     }
-                                    return false;
-                                }
-                            });
-                        }
-                    });
+                                });
+                            }
+                        });
 
-                    //set items in the TableView
-                    marksListTableView.setItems(marksSortedList);
+                        //set items in the TableView
+                        marksListTableView.setItems(marksSortedList);
 
-                    //attach the comparator ,so that sorting can be done
-                    marksSortedList.comparatorProperty().bind(marksListTableView.comparatorProperty());
-                }
-            });
-        }
+                        //attach the comparator ,so that sorting can be done
+                        marksSortedList.comparatorProperty().bind(marksListTableView.comparatorProperty());
+                    }
+                });
+            }
+        });
+
     }
 }

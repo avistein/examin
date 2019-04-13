@@ -51,8 +51,8 @@ public class MarksService {
      */
     public List<Marks> getMarksData(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_reg_id, int_obtained_marks FROM t_student_marks " + additionalQuery;
-
+        final String query = "SELECT v_reg_id, int_obtained_marks, v_sub_id, v_course_id, int_semester FROM " +
+                "t_student_marks NATURAL JOIN t_subject " + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
@@ -68,7 +68,13 @@ public class MarksService {
             Marks marks = new Marks();
 
             marks.setRegId(map.get("v_reg_id").get(i));
-            marks.setObtainedMarks(map.get("int_obtained_marks").get(i));
+            marks.setCourseId(map.get("v_course_id").get(i));
+            marks.setSubId(map.get("v_sub_id").get(i));
+            if(map.get("int_obtained_marks").get(i) != null ){
+
+                marks.setObtainedMarks(map.get("int_obtained_marks").get(i));
+            }
+            marks.setSemester(map.get("int_semester").get(i));
 
             //a single holiday details is added to the list
             list.add(marks);
@@ -84,12 +90,13 @@ public class MarksService {
             @Override
             protected Integer call() {
 
-                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE int_exam_id=? AND v_reg_id=?";
+                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE v_course_id=? AND v_sub_id=? " +
+                        "AND v_reg_id=?";
 
 
                 /*get the no of insertions or error status of the INSERT operation*/
-                int tStudentMarksStatus = databaseHelper.updateDelete(sql, marks.getObtainedMarks(), marks.getExamId(),
-                        marks.getRegId());
+                int tStudentMarksStatus = databaseHelper.updateDelete(sql, marks.getObtainedMarks(), marks.getCourseId()
+                        , marks.getSubId(), marks.getRegId());
 
                 //if any DB error is present
                 if (tStudentMarksStatus == DATABASE_ERROR ) {
@@ -170,13 +177,14 @@ public class MarksService {
      * @return A task which can be used to add list of Professors to database.
      */
     @SuppressWarnings("Duplicates")
-    public Task<Integer> getAddMarksFromMemoryToDataBaseTask(List<Marks> list, String examId) {
+    public Task<Integer> getAddMarksFromMemoryToDataBaseTask(List<Marks> list, String courseId, String subId) {
         Task<Integer> addMarksFromMemoryToDataBaseTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE int_exam_id=? AND v_reg_id=?";
+                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE v_course_id=? AND v_sub_id=? " +
+                        "AND v_reg_id=?";
 
                 /*
                 Each item in the list is itself a list of strings ;in the inner list each item is the data
@@ -199,7 +207,8 @@ public class MarksService {
                     List<String> singleMarksDetails = new ArrayList<>();
 
                     singleMarksDetails.add(marks.getObtainedMarks());
-                    singleMarksDetails.add(examId);
+                    singleMarksDetails.add(courseId);
+                    singleMarksDetails.add(subId);
                     singleMarksDetails.add(marks.getRegId());
 
                     //add profId,deptName,hodStatus of a particular professor into the list

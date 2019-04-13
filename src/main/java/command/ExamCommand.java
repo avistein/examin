@@ -78,8 +78,7 @@ public class ExamCommand {
                 List<Course> listOfCourses = courseService.getCourseData("");
 
                 //generate valid Exam Dates and store in the list
-                List<String> validExamDates = generateExamDates(examStartDate, examDetails.getIsExamOnSaturday(),
-                        Integer.parseInt(examDetails.getExamInterval()));
+                List<String> validExamDates = generateExamDates(examStartDate, examDetails.getIsExamOnSaturday());
 
                 /*
                 Get the subjects of ODD or EVEN semesters.
@@ -142,9 +141,13 @@ public class ExamCommand {
                 //for each course and it's subjects
                 for (Map.Entry<String, List<List<Subject>>> entry : courseSubjectMap.entrySet()) {
 
+                    int interval = entry.getValue().size();
+                    int initialDateIndex = 0;
+
                     //for subjects of each semesters(odd or even)
                     for (List<Subject> subjectList : entry.getValue()) {
 
+                        System.out.println(subjectList.size());
                         //routine of each semester in the Course
                         List<Exam> currSemExamRoutine = new ArrayList<>();
 
@@ -154,7 +157,7 @@ public class ExamCommand {
                         //list of exam whose dates need to be modified in case of any collisions
                         List<Integer> examsToBeModified = new ArrayList<>();
 
-                        int currExamDateIndex = 0;
+                        int currExamDateIndex = initialDateIndex;
                         boolean isCurrentExamRoutineNeedsModification = false;
 
                         //for each subject in the Subject List of the current semester of the Course
@@ -163,11 +166,10 @@ public class ExamCommand {
                             //if the exam for the subject is already created , then get the date of that exam
                             String examDateIfSubjectPresentInRoutine = getExamDateOfSubjectPresentInRoutine
                                     (subject.getSubId(), examRoutine);
-
                             String examDate;
 
                             //exam is already created for the subject
-                            if (examDateIfSubjectPresentInRoutine != null) {
+                            if (examDateIfSubjectPresentInRoutine != null && !listOfDatesUsed.contains(examDateIfSubjectPresentInRoutine)) {
 
                                 examDate = examDateIfSubjectPresentInRoutine;
                                 listOfDatesUsed.add(examDateIfSubjectPresentInRoutine);
@@ -177,7 +179,9 @@ public class ExamCommand {
                             //exam for the subject is not there in the routine
                             else {
 
-                                examDate = validExamDates.get(currExamDateIndex++);
+//                                System.out.println(currExamDateIndex);
+                                examDate = validExamDates.get(currExamDateIndex);
+                                currExamDateIndex += interval;
                                 examsToBeModified.add(subjectList.indexOf(subject));
                             }
 
@@ -201,13 +205,13 @@ public class ExamCommand {
 
                             for (int examNo : examsToBeModified) {
 
-                                for (String date : validExamDates) {
+                                for (int i = initialDateIndex; i < validExamDates.size(); i += interval) {
 
                                     //take a date excluding the dates already used in the current routine
-                                    if (!listOfDatesUsed.contains(date)) {
+                                    if (!listOfDatesUsed.contains(validExamDates.get(i))) {
 
-                                        listOfDatesUsed.add(date);
-                                        currSemExamRoutine.get(examNo).setExamDate(date);
+                                        listOfDatesUsed.add(validExamDates.get(i));
+                                        currSemExamRoutine.get(examNo).setExamDate(validExamDates.get(i));
                                         break;
                                     }
                                 }
@@ -219,6 +223,7 @@ public class ExamCommand {
                         other semesters routine
                          */
                         examRoutine.addAll(currSemExamRoutine);
+                        initialDateIndex++;
                     }
                 }
 
@@ -257,19 +262,18 @@ public class ExamCommand {
      * @param currExamDate     Initially it is the start date of the examination, and will be updated to get the next
      *                         exam dates
      * @param isExamOnSaturday Boolean value to indicate if any exam can happen on Saturday.
-     * @param examInterval     The no of days gap between two exams.
      * @return A list of valid exam dates.
      */
-    private List<String> generateExamDates(LocalDate currExamDate, boolean isExamOnSaturday, int examInterval) {
+    private List<String> generateExamDates(LocalDate currExamDate, boolean isExamOnSaturday) {
 
         List<String> validExamDates = new ArrayList<>();
 
         //only 30 valid exam dates are generated
-        for (int i = 1; i <= 30; i++) {
+        for (int i = 1; i <= 60; i++) {
 
             currExamDate = getNextExamDate(currExamDate, isExamOnSaturday);
             validExamDates.add(currExamDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            currExamDate = currExamDate.plusDays(examInterval);
+            currExamDate = currExamDate.plusDays(1);
         }
         return validExamDates;
     }
@@ -339,40 +343,6 @@ public class ExamCommand {
             }
         }
         return currExamDate;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Task<Integer> getAssignStudentsToExamTask(){
-
-        Task<Integer> assignStudentsToExamTask = new Task<>() {
-            @Override
-            protected Integer call(){
-
-                List<Exam> examRoutine = examService.getExamRoutine("");
-                List<Marks> studentAssignmentInExamsList = new ArrayList<>();
-                for (Exam exam : examRoutine) {
-
-                    List<Student> studentList = studentService.getStudentData("WHERE " +
-                            "v_course_id=? AND int_curr_semester=?", exam.getCourseId(), exam.getSemester());
-
-                    for (Student student : studentList) {
-
-                        Marks studentAssignmentInExams = new Marks();
-
-                        studentAssignmentInExams.setRegId(student.getRegId());
-                        studentAssignmentInExams.setExamId(exam.getExamId());
-
-                        studentAssignmentInExamsList.add(studentAssignmentInExams);
-                    }
-                }
-                int status = examService.assignExamsToStudents(studentAssignmentInExamsList);
-                return status;
-            }
-        };
-        return assignStudentsToExamTask;
     }
 
     /*--------------------------------------------------Room Allocation-----------------------------------------------*/

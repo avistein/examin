@@ -59,7 +59,6 @@ public class ExamService {
                     examDetails.setStartDate(map.get("d_start_date").get(i));
                     examDetails.setEndDate(map.get("d_end_date").get(i) != null ? map.get("d_end_date").get(i) : "");
                     examDetails.setAcademicYear(map.get("v_academic_year").get(i));
-                    examDetails.setExamInterval(map.get("int_exam_interval").get(i));
                     examDetails.setStartTime(map.get("t_start_time").get(i));
                     examDetails.setEndTime(map.get("t_end_time").get(i));
                     examDetails.setIsExamOnSaturday(map.get("int_is_exam_on_saturday").get(i).equals("1"));
@@ -80,7 +79,7 @@ public class ExamService {
     public Task<Integer> getAddExamDetailsTask(ExamDetails examDetails) {
 
         String sql = "INSERT INTO t_exam_details(v_exam_details_id, v_exam_type, v_semester_type, d_start_date, " +
-                "int_exam_interval, t_start_time, t_end_time, v_academic_year, int_is_exam_on_saturday)" +
+                "t_start_time, t_end_time, v_academic_year, int_is_exam_on_saturday)" +
                 " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Task<Integer> addExamDetailsTask = new Task<>() {
@@ -93,7 +92,6 @@ public class ExamService {
                         examDetails.getExamType(),
                         examDetails.getSemesterType(),
                         examDetails.getStartDate(),
-                        examDetails.getExamInterval(),
                         examDetails.getStartTime(),
                         examDetails.getEndTime(),
                         examDetails.getAcademicYear(),
@@ -190,45 +188,6 @@ public class ExamService {
         } else {
 
             return tExamTimeTableStatus;
-        }
-    }
-
-    /**
-     *
-     * @param marksList
-     * @return
-     */
-    @SuppressWarnings("Duplicates")
-    public int assignExamsToStudents(List<Marks> marksList) {
-
-        final String sql = "INSERT INTO t_student_marks(v_reg_id, int_exam_id) VALUES(?, ?)";
-
-        List<List<String>> studentAssignment = new ArrayList<>();
-
-        //for each Student-Exam Assignment ,form the data in the List<List<String>> structure
-        for (Marks marks : marksList) {
-
-            List<String> singleMarks = new ArrayList<>();
-
-            singleMarks.add(marks.getRegId());
-            singleMarks.add(marks.getExamId());
-
-            //add details of a particular Student-Exam Assignment into the list
-            studentAssignment.add(singleMarks);
-        }
-
-        /*get the no of insertions or error status of the INSERT operation*/
-        int tStudentStatus = databaseHelper.batchInsertUpdate(sql, studentAssignment);
-
-        if (tStudentStatus == DATABASE_ERROR) {
-
-            return DATABASE_ERROR;
-        } else if (tStudentStatus == studentAssignment.size()) {
-
-            return SUCCESS;
-        } else {
-
-            return tStudentStatus;
         }
     }
 

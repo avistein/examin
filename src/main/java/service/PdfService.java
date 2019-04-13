@@ -119,7 +119,7 @@ public class PdfService {
                             PdfPCell c1 = new PdfPCell(new Phrase("DATE-" + formattedDate, BLUE_SUBTITLE_FONT));
                             table1.addCell(c1);
 
-                            c1 = new PdfPCell(new Phrase("DAY-" + i++, BLUE_SUBTITLE_FONT));
+                            c1 = new PdfPCell(new Phrase("DAY-" + i, BLUE_SUBTITLE_FONT));
                             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                             table1.addCell(c1);
 
@@ -176,6 +176,8 @@ public class PdfService {
                                 document.add(table3);
 
                                 document.newPage();
+
+                                i++;
                             }
                         }
                         status = true;

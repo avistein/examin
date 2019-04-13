@@ -26,6 +26,8 @@ public final class ConstantsUtil {
 
     public static final int LOGIN_ERROR = -2;
 
+    public static final int PROMOTION_ERROR = -6;
+
     public static final int DATA_ALREADY_EXIST_ERROR = -3;
 
     public static final int DATA_INEXISTENT_ERROR = -4;

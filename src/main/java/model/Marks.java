@@ -2,7 +2,7 @@ package model;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class Marks extends Exam {
+public class Marks extends Subject {
 
     private SimpleStringProperty regId;
     private SimpleStringProperty obtainedMarks;

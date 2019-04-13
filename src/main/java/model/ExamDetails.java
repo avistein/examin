@@ -13,7 +13,6 @@ public class ExamDetails{
     private SimpleStringProperty endDate;
     private SimpleStringProperty startTime;
     private SimpleStringProperty endTime;
-    private SimpleStringProperty examInterval;
     private SimpleBooleanProperty isExamOnSaturday;
     private SimpleStringProperty academicYear;
 
@@ -26,7 +25,6 @@ public class ExamDetails{
         this.endDate = new SimpleStringProperty("");
         this.startTime = new SimpleStringProperty("");
         this.endTime = new SimpleStringProperty("");
-        this.examInterval = new SimpleStringProperty("");
         this.isExamOnSaturday = new SimpleBooleanProperty(false);
         this.academicYear = new SimpleStringProperty("");
     }
@@ -87,15 +85,6 @@ public class ExamDetails{
 
     public void setEndTime(String endTime) {
         this.endTime.set(endTime);
-    }
-
-    public String getExamInterval() {
-        return examInterval.get();
-    }
-
-
-    public void setExamInterval(String examInterval) {
-        this.examInterval.set(examInterval);
     }
 
     public boolean getIsExamOnSaturday() {

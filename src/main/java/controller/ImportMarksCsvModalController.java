@@ -76,7 +76,8 @@ public class ImportMarksCsvModalController {
     private FileHandlingService fileHandlingService;
     private boolean tableUpdateStatus;
     private File file;
-    private String examId;
+    private String courseId;
+    private String subId;
 
     @FXML
     public void initialize() {
@@ -234,7 +235,7 @@ public class ImportMarksCsvModalController {
                 if (csvDataStatus) {
 
                     Task<Integer> addMarksFromMemoryToDataBaseTask = marksService.getAddMarksFromMemoryToDataBaseTask
-                            (marksListFromCsv, examId);
+                            (marksListFromCsv, courseId, subId);
                     new Thread(addMarksFromMemoryToDataBaseTask).start();
 
                     addMarksFromMemoryToDataBaseTask.setOnSucceeded(new EventHandler<>() {
@@ -389,9 +390,10 @@ public class ImportMarksCsvModalController {
         return tableUpdateStatus;
     }
 
-    public void setExamId(String examId){
+    public void setSubjectDetails(String courseId, String subId){
 
-        this.examId = examId;
+        this.courseId = courseId;
+        this.subId = subId;
     }
 }
 

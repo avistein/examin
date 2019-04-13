@@ -1,5 +1,6 @@
 package controller;
 
+import command.PromotionCommand;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,8 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static util.ConstantsUtil.DATABASE_ERROR;
-import static util.ConstantsUtil.SUCCESS;
+import static util.ConstantsUtil.*;
 
 /**
  * Controller class for StudentSection.fxml
@@ -51,8 +51,15 @@ public class StudentSectionController {
     private List<Student> listOfStudents;
     private List<Course> listOfCourses;
     private ObservableList<Student> studentObsList;
+
     @FXML
     private GridPane studentListGridPane;
+
+    @FXML
+    private StackPane statusStackPane;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     @FXML
     private Label titleLabel;
@@ -430,59 +437,54 @@ public class StudentSectionController {
 
         if (student != null) {
 
-            Task<List<Course>> coursesTask = courseService.getCoursesTask("WHERE v_degree=? AND " +
-                            "v_discipline=?", student.getDegree(), student.getDiscipline());
-            new Thread(coursesTask).start();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Do you want to promote student with Reg Id " + student.getRegId());
+            Optional<ButtonType> result = alert.showAndWait();
 
-            coursesTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
+            if (result.get() == ButtonType.OK) {
 
-                    if (!coursesTask.getValue().get(0).getDuration().equals(student.getCurrSemester())) {
+                PromotionCommand promotionCommand = new PromotionCommand();
 
-                        String newSemester = String.valueOf(Integer.parseInt(student.getCurrSemester()) + 1);
+                studentListGridPane.setOpacity(0.2);
+                statusStackPane.setVisible(true);
 
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.setHeaderText("Do you want to promote student with Reg Id " + student.getRegId() +
-                                " to Semester " +
-                                newSemester);
-                        Optional<ButtonType> result = alert.showAndWait();
+                Task<Integer> promoteStudentTask = promotionCommand.getPromoteStudentTask(student);
+                new Thread(promoteStudentTask).start();
 
-                        if (result.get() == ButtonType.OK) {
+                promoteStudentTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
 
-                            student.setCurrSemester(newSemester);
-                            Task<Integer> promoteStudentTask = studentService.getPromoteStudentTask(student);
-                            new Thread(promoteStudentTask).start();
+                        int status = promoteStudentTask.getValue();
 
-                            promoteStudentTask.setOnSucceeded(new EventHandler<>() {
-                                @Override
-                                public void handle(WorkerStateEvent event) {
+                        studentListGridPane.setOpacity(1);
+                        statusStackPane.setVisible(false);
 
-                                    int status = promoteStudentTask.getValue();
+                        if (status == DATABASE_ERROR) {
 
+                            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                            alert1.setHeaderText("Error in database!");
+                            alert1.show();
+                        } else if (status == SUCCESS) {
 
-                                    if (status == DATABASE_ERROR) {
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText("Student promotion successful!");
+                            alert1.show();
+                        }
+                        else if(status == PROMOTION_ERROR){
 
-                                        Alert alert1 = new Alert(Alert.AlertType.ERROR);
-                                        alert1.setHeaderText("Error in database!");
-                                        alert1.show();
-                                    } else if (status == SUCCESS) {
-
-                                        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                                        alert1.setHeaderText("Promoted student to Semester " + newSemester + "!");
-                                        alert1.show();
-                                    } else {
-                                        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                                        alert1.setHeaderText("Student doesn't exist!");
-                                        alert1.show();
-                                    }
-                                }
-                            });
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText("Cannot award degree completion. Student has pending backlogs!");
+                            alert1.show();
+                        }
+                        else {
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText("Student doesn't exist!");
+                            alert1.show();
                         }
                     }
-
-                }
-            });
+                });
+            }
         }
     }
 

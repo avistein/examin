@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
@@ -31,32 +30,19 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="750.0" />
         </columnConstraints>
         <rowConstraints>
-                <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="69.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox prefHeight="100.0" prefWidth="923.0" spacing="5.0" style="-fx-background-color: D2D2D4;">
-               <children>
-                  <Label text="Select Exam Type" />
-                  <ChoiceBox fx:id="examTypeChoiceBox" onAction="#handleExamTypeChoiceBox" prefWidth="150.0" />
-                  <Label text="Select Academic Year" />
-                  <ComboBox fx:id="academicYearComboBox" onAction="#handleAcademicYearComboBox" prefWidth="150.0" />
-                  <Label text="Exam ID" />
-                  <Label fx:id="examIdLabel" />
-               </children>
-               <padding>
-                  <Insets left="10.0" top="10.0" />
-               </padding>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="873.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.rowIndex="1">
+            <HBox prefHeight="100.0" prefWidth="873.0" spacing="5.0" style="-fx-background-color: D2D2D4;">
                <children>
                   <Label layoutX="20.0" layoutY="20.0" text="Select Degree" />
                   <ComboBox fx:id="degreeComboBox" layoutX="109.0" layoutY="20.0" onAction="#handleDegreeComboBox" prefWidth="150.0" />
                   <Label layoutX="20.0" layoutY="20.0" text="Select Discipline" />
                   <ComboBox fx:id="disciplineComboBox" layoutX="99.0" layoutY="20.0" onAction="#handleDisciplineComboBox" prefWidth="150.0" />
-                  <Label layoutX="254.0" layoutY="20.0" text="Select Subject" />
-                  <ComboBox fx:id="subjectComboBox" layoutX="254.0" layoutY="20.0" onAction="#handleSubjectComboBox" prefWidth="150.0" />
+                  <Label text="Select Batch" />
+                  <ComboBox fx:id="batchNameComboBox" onAction="#handleBatchNameComboBox" prefWidth="150.0" />
                </children>
                <padding>
                   <Insets left="10.0" top="10.0" />
@@ -75,6 +61,17 @@
                </children>
                <padding>
                   <Insets left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="1">
+               <children>
+                  <Label layoutX="10.0" layoutY="10.0" text="Select Semester" />
+                  <ComboBox fx:id="semesterComboBox" layoutX="84.0" layoutY="10.0" onAction="#handleSemesterComboBox" prefWidth="150.0" />
+                  <Label text="Select Subject" />
+                  <ComboBox fx:id="subjectComboBox" onAction="#handleSubjectComboBox" prefWidth="150.0" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
                </padding>
             </HBox>
          </children>

@@ -57,9 +57,6 @@ public class ExamAdministrationController {
     private DatePicker startDateDatePicker;
 
     @FXML
-    private TextField examIntervalTextField;
-
-    @FXML
     private TextField startTimeTextField;
 
     @FXML
@@ -192,7 +189,6 @@ public class ExamAdministrationController {
             examDetails.setStartTime(startTimeTextField.getText().trim());
             examDetails.setEndTime(endTimeTextField.getText().trim());
             examDetails.setAcademicYear(academicYearTextField.getText().trim());
-            examDetails.setExamInterval(examIntervalTextField.getText().trim());
             examDetails.setIsExamOnSaturday(examOnSaturdayCheckBox.isSelected());
 
             createExamTabMainGridPane.setOpacity(0.2);
@@ -260,7 +256,6 @@ public class ExamAdministrationController {
         endTimeTextField.clear();
         academicYearTextField.clear();
         examOnSaturdayCheckBox.setSelected(false);
-        examIntervalTextField.clear();
     }
 
     private boolean validateCreateExamTabItems() {
@@ -331,19 +326,6 @@ public class ExamAdministrationController {
         if (!ValidatorUtil.validateBatchName(academicYearTextField.getText().trim())) {
 
             alert.setHeaderText("Invalid Academic Year!");
-            alert.show();
-            return false;
-        }
-
-        if (examIntervalTextField.getText() == null || examIntervalTextField.getText().trim().isEmpty()) {
-
-            alert.setHeaderText("Exam Interval cannot be empty!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateNumber(examIntervalTextField.getText().trim())) {
-
-            alert.setHeaderText("Invalid Exam Interval format!");
             alert.show();
             return false;
         }
@@ -453,35 +435,35 @@ public class ExamAdministrationController {
                             manageExamTabMsgLabel.setText("Assigning students to exams now. Please do not close this.");
 
 
-                            Task<Integer> assignStudentsToExamTask = examCommand.getAssignStudentsToExamTask();
-                            new Thread(assignStudentsToExamTask).start();
-
-                            assignStudentsToExamTask.setOnSucceeded(new EventHandler<>() {
-                                @Override
-                                public void handle(WorkerStateEvent event) {
-
-                                    manageExamTabProgressIndicator.setVisible(false);
-                                    manageExamTabStatusImageView.setVisible(true);
-                                    manageExamTabStatusLabel.setVisible(true);
-                                    manageExamTabMsgLabel.setText("Click anywhere to proceed! ");
-
-                                    int status = assignStudentsToExamTask.getValue();
-
-                                    if (status == DATABASE_ERROR) {
-
-                                        manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
-                                        manageExamTabStatusLabel.setText("Error!");
-                                    } else if (status == SUCCESS) {
-
-                                        manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
-                                        manageExamTabStatusLabel.setText("Successfully assigned all students to exams!");
-                                    } else {
-
-                                        manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
-                                        manageExamTabStatusLabel.setText("Student assignment already exists!");
-                                    }
-                                }
-                            });
+//                            Task<Integer> assignStudentsToExamTask = examCommand.getAssignStudentsToExamTask();
+//                            new Thread(assignStudentsToExamTask).start();
+//
+//                            assignStudentsToExamTask.setOnSucceeded(new EventHandler<>() {
+//                                @Override
+//                                public void handle(WorkerStateEvent event) {
+//
+//                                    manageExamTabProgressIndicator.setVisible(false);
+//                                    manageExamTabStatusImageView.setVisible(true);
+//                                    manageExamTabStatusLabel.setVisible(true);
+//                                    manageExamTabMsgLabel.setText("Click anywhere to proceed! ");
+//
+//                                    int status = assignStudentsToExamTask.getValue();
+//
+//                                    if (status == DATABASE_ERROR) {
+//
+//                                        manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
+//                                        manageExamTabStatusLabel.setText("Error!");
+//                                    } else if (status == SUCCESS) {
+//
+//                                        manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
+//                                        manageExamTabStatusLabel.setText("Successfully assigned all students to exams!");
+//                                    } else {
+//
+//                                        manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
+//                                        manageExamTabStatusLabel.setText("Student assignment already exists!");
+//                                    }
+//                                }
+//                            });
                         } else {
 
                             manageExamTabProgressIndicator.setVisible(false);
