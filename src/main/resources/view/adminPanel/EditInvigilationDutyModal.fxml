@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="209.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.EditInvigilationDutyModalController">
    <children>
@@ -37,7 +38,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="295.0" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="295.0" spacing="10.0" style="-fx-background-color: #d6d6d6;" GridPane.columnSpan="2147483647">
                      <children>
                         <Label text="Select Exam Date" />
                         <DatePicker fx:id="examDatePicker" onAction="#handleExamDatePickerAction" />
@@ -46,7 +47,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="295.0" spacing="10.0" GridPane.rowIndex="1">
+                  <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="295.0" spacing="10.0" style="-fx-background-color: #d6d6d6;" GridPane.rowIndex="1">
                      <children>
                         <Label text="Select Invigilator to replace" />
                         <ComboBox fx:id="invigilatorComboBox" prefWidth="150.0" />
@@ -55,7 +56,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="295.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <HBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="295.0" spacing="10.0" style="-fx-background-color: #d6d6d6;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <Label text="Select Professor to replace with" />
                         <ComboBox fx:id="professorComboBox" prefWidth="150.0" />
@@ -66,16 +67,22 @@
                   </HBox>
                </children>
             </GridPane>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;">
                <children>
-                  <Label text="Edit Invigilation Duty for Exam ID " />
-                  <Label fx:id="examDetailsIdLabel" layoutX="20.0" layoutY="26.0" />
+                  <Label text="Edit Invigilation Duty for Exam ID " textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label fx:id="examDetailsIdLabel" layoutX="20.0" layoutY="26.0" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
                <children>
                   <Button mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit" />
                </children>

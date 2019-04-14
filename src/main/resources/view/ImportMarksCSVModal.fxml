@@ -12,13 +12,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportProfessorCSVModalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportMarksCsvModalController">
    <children>
       <GridPane fx:id="mainGridPane" layoutX="30.0" layoutY="32.0" prefHeight="450.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -35,11 +35,11 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <VBox layoutX="-12.0" layoutY="-16.0" prefHeight="167.0" prefWidth="175.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="CENTER" layoutX="-12.0" layoutY="-16.0" prefHeight="167.0" prefWidth="175.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Label text="Attach CSV file" />
+                              <Hyperlink fx:id="sampleCsvHyperLink" onAction="#handleSampleCsvHyperLinkAction" text="Sample CSV" />
                               <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButtonAction" text="Choose File" />
-                              <Hyperlink fx:id="sampleCsvHyperLink" onAction="#handleSampleCsvHyperLinkAction" text="Get Sample CSV" />
                               <Label fx:id="chosenFileLabel" />
                            </children>
                            <padding>
@@ -55,11 +55,18 @@
                   </AnchorPane>
               </items>
             </SplitPane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <HBox alignment="CENTER_LEFT" style="-fx-background-color: #d6d6d6;" GridPane.rowIndex="1">
                <children>
-                  <Label layoutX="11.0" layoutY="5.0" text="Choose Columns" />
+                  <Label text="Choose Columns">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
                </children>
-            </Pane>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
             <GridPane hgap="10.0" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -69,35 +76,38 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="Reg ID">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="regIdComboBox" onAction="#handleRegIdComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="regIdComboBox" prefWidth="150.0" />
                      </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                      <children>
                         <Label text="Obtained Marks">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin></Label>
-                        <ComboBox fx:id="obtainedMarksComboBox" onAction="#handleObtainedMarksComboBox" prefWidth="150.0" />
-                     </children></VBox>
+                        <ComboBox fx:id="obtainedMarksComboBox" prefWidth="150.0" />
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding></VBox>
                </children>
             </GridPane>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit">
+                  <Button fx:id="submitButton" disable="true" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit">
                      <HBox.margin>
-                        <Insets right="80.0" />
+                        <Insets />
                      </HBox.margin></Button>
                </children>
-               <padding>
-                  <Insets right="10.0" />
-               </padding>
             </HBox>
          </children>
       </GridPane>

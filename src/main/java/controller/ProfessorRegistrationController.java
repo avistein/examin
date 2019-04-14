@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -516,11 +517,9 @@ public class ProfessorRegistrationController {
     @FXML
     private void handleBackAndCancelButtonAction() throws IOException {
 
-        StackPane contentStackPane = (StackPane) rootAnchorPane.getParent();
-        Parent professorRegistrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/ProfessorSection.fxml"));
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(professorRegistrationFxml);
+        Scene mainScene = mainGridPane.getScene();
+        Button professorSectionButton = (Button) mainScene.lookup("#professorButton");
+        professorSectionButton.fire();
     }
 
     /**

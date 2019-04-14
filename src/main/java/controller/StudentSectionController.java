@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -490,8 +491,12 @@ public class StudentSectionController {
     @FXML
     private void handleAddStudentButtonAction() throws IOException {
 
+        Scene mainScene = titleLabel.getScene();
+        Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
+        subSubTitleLabel.setText("/ Add Student");
+
         //get the stackPane first in which the content is loaded
-        StackPane contentStackPane = (StackPane) studentListGridPane.getParent();
+        StackPane contentStackPane = (StackPane) studentListGridPane.getParent().getParent();
 
         Parent studentRegistrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentRegistration.fxml"));

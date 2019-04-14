@@ -73,6 +73,9 @@ public final class UISetterUtil {
         //set title of the modal
         modal.setTitle(title);
 
+        //modal windows cannot be resized
+        modal.setResizable(false);
+
         //set the stage as modal window
         modal.initModality(Modality.WINDOW_MODAL);
 

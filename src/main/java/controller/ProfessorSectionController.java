@@ -11,7 +11,9 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -214,11 +216,16 @@ public class ProfessorSectionController {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
 
+                Scene mainScene = professorSectionTabPane.getScene();
+                Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
+
                 if (newValue == professorsListTab) {
 
+                    subSubTitleLabel.setText("/ Professor List");
                     initProfessorsListTab();
                 } else if (newValue == subjectAllocationTab) {
 
+                    subSubTitleLabel.setText("/ Subject Allocation");
                     initSubAllocationTab();
                 }
             }
@@ -504,6 +511,10 @@ public class ProfessorSectionController {
      */
     @FXML
     private void handleAddProfButtonAction() throws IOException {
+
+        Scene mainScene = professorSectionTabPane.getScene();
+        Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
+        subSubTitleLabel.setText("/ Add Professor");
 
         //get the stackPane first in which the content is loaded
         StackPane contentStackPane = (StackPane) professorSectionTabPane.getParent();

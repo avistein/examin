@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddMarksModalController">
    <children>
@@ -21,14 +22,17 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="127.0" minHeight="0.0" prefHeight="58.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="267.0" minHeight="10.0" prefHeight="104.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="127.0" minHeight="0.0" prefHeight="47.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="267.0" minHeight="10.0" prefHeight="128.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="261.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;">
                <children>
-                  <Label text="Add / Update Marks" />
+                  <Label text="Add / Update Marks" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -42,9 +46,9 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #d6d6d6;">
                      <children>
-                        <Label text="Reg ID" />
+                        <Label text="Reg ID : " />
                         <Label fx:id="regIdLabel">
                            <HBox.margin>
                               <Insets right="50.0" />

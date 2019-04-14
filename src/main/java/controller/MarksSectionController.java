@@ -25,13 +25,8 @@ import java.util.stream.Collectors;
 
 public class MarksSectionController {
 
-    String courseId;
-    @FXML
-    private ChoiceBox<String> examTypeChoiceBox;
-    @FXML
-    private ComboBox<String> academicYearComboBox;
-    @FXML
-    private Label examIdLabel;
+    private String courseId;
+
     @FXML
     private ComboBox<String> degreeComboBox;
     @FXML
@@ -53,13 +48,13 @@ public class MarksSectionController {
     @FXML
     private TableColumn<Marks, String> regIdCol;
     @FXML
+
     private TableColumn<Marks, String> marksCol;
     private MarksService marksService;
     private SubjectService subjectService;
     private CourseService courseService;
     private BatchService batchService;
     private StudentService studentService;
-    private List<ExamDetails> examDetailsList;
     private List<Course> courseList;
 
     private ObservableList<Marks> marksObsList;
@@ -346,18 +341,6 @@ public class MarksSectionController {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-        if (examTypeChoiceBox.getValue() == null) {
-
-            alert.setHeaderText("Please select the exam type!");
-            alert.show();
-            return false;
-        }
-        if (academicYearComboBox.getValue() == null) {
-
-            alert.setHeaderText("Please select the Academic Year!");
-            alert.show();
-            return false;
-        }
         if (degreeComboBox.getValue() == null) {
 
             alert.setHeaderText("Please select the degree!");
@@ -367,6 +350,18 @@ public class MarksSectionController {
         if (disciplineComboBox.getValue() == null) {
 
             alert.setHeaderText("Please select the discipline!");
+            alert.show();
+            return false;
+        }
+        if (batchNameComboBox.getValue() == null) {
+
+            alert.setHeaderText("Please select the batch name!");
+            alert.show();
+            return false;
+        }
+        if (semesterComboBox.getValue() == null) {
+
+            alert.setHeaderText("Please select the semester!");
             alert.show();
             return false;
         }

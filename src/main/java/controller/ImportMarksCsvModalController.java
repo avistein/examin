@@ -6,9 +6,9 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -168,10 +168,25 @@ public class ImportMarksCsvModalController {
                 Task<Boolean> createAndWriteToFileTask = fileHandlingService.getCreateAndWriteToFileTask
                         (in.readAllBytes(), CSV_DIR, "marksSample.csv");
                 new Thread(createAndWriteToFileTask).start();
+
+                createAndWriteToFileTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        try {
+                            Desktop.getDesktop().open(new File(filePath));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
-            //open the CSV file with the appropriate Application available in the user's system
-            Desktop.getDesktop().open(new File(filePath));
+            else {
+
+                //open the CSV file with the appropriate Application available in the user's system
+                Desktop.getDesktop().open(new File(filePath));
+            }
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -260,8 +275,7 @@ public class ImportMarksCsvModalController {
                                 statusImageView.setImage(new javafx.scene.image.Image("/png/success.png"));
                                 statusLabel.setText("Successfully added marks to students!");
                                 tableUpdateStatus = true;
-                            }
-                            else if (status == 0) {
+                            } else if (status == 0) {
 
                                 statusImageView.setImage(new javafx.scene.image.Image("/png/error.png"));
                                 statusLabel.setText("No students with the provided Reg Id gives this exam!");
@@ -340,7 +354,6 @@ public class ImportMarksCsvModalController {
     }
 
 
-
     private void setComboBoxes(List<String> list) {
 
         ObservableList<String> options = FXCollections.observableArrayList(list);
@@ -390,7 +403,7 @@ public class ImportMarksCsvModalController {
         return tableUpdateStatus;
     }
 
-    public void setSubjectDetails(String courseId, String subId){
+    public void setSubjectDetails(String courseId, String subId) {
 
         this.courseId = courseId;
         this.subId = subId;

@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -485,20 +486,28 @@ public class AcademicAdministrationController {
                     @Override
                     public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
 
+                        Scene mainScene = academicAdministrationTabPane.getScene();
+                        Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
+
                         if (newValue == departmentsTab) {
 
+                            subSubTitleLabel.setText("/ Departments");
                             initDepartmentsTab();
                         } else if (newValue == coursesTab) {
 
+                            subSubTitleLabel.setText("/ Courses");
                             initCoursesTab();
                         } else if (newValue == batchesTab) {
 
+                            subSubTitleLabel.setText("/ Batches");
                             initBatchesTab();
                         } else if (newValue == subjectsTab) {
 
+                            subSubTitleLabel.setText("/ Subjects");
                             initSubjectsTab();
                         } else if (newValue == classRoomsTab) {
 
+                            subSubTitleLabel.setText("/ Classrooms");
                             initClassroomsTab();
                         }
                     }

@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
@@ -34,17 +33,16 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="45.0" minHeight="34.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="45.0" minHeight="-Infinity" prefHeight="45.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="124.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="432.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <HBox alignment="CENTER_LEFT" style="-fx-background-color: #747390;">
                            <children>
-                              <Label fx:id="titleLabel" text="Professors List" textFill="WHITE">
+                              <Label fx:id="titleLabel" text="List Of Professors" textFill="WHITE">
                                  <font>
-                                    <Font size="13.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
                            </children>
@@ -72,11 +70,6 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
-                           <children>
-                              <Pagination prefHeight="200.0" prefWidth="200.0" />
-                           </children>
-                        </HBox>
                         <GridPane GridPane.rowIndex="1">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="500.0" />
@@ -139,13 +132,16 @@
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="210.0" minWidth="10.0" prefWidth="210.0" />
                                 </columnConstraints>
                                 <rowConstraints>
-                                  <RowConstraints maxHeight="40.0" minHeight="0.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
                                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="499.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;">
                                        <children>
-                                          <Label text="Import Subject Allocation CSV" />
+                                          <Label text="Import Subject Allocation CSV" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font></Label>
                                        </children>
                                        <padding>
                                           <Insets left="10.0" />
@@ -161,9 +157,12 @@
                                           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="368.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d6d6d6;" GridPane.rowIndex="1">
                                              <children>
-                                                <Label text="Choose Columns" />
+                                                <Label text="Choose Columns">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font></Label>
                                              </children>
                                              <padding>
                                                 <Insets left="10.0" />
@@ -171,10 +170,10 @@
                                           </HBox>
                                           <VBox alignment="CENTER" prefHeight="80.0" prefWidth="206.0">
                                              <children>
+                                                <Label text="Attach CSV File" />
+                                                <Hyperlink onAction="#handleSampleCsvHyperlinkAction" text="Sample CSV" />
                                                 <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButtonAction" text="Choose File" />
                                                 <Label fx:id="chosenFileLabel" />
-                                                <Hyperlink onAction="#handleSampleCsvHyperlinkAction" text="Download Sample CSV" />
-                                                <Label text="Attach CSV File" />
                                              </children>
                                           </VBox>
                                           <GridPane GridPane.rowIndex="2">
@@ -190,7 +189,7 @@
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
                                                    <children>
                                                       <Button fx:id="submitCsvButton" mnemonicParsing="false" onAction="#handleSubmitCsvButton" text="Submit" />
                                                    </children>
@@ -198,7 +197,7 @@
                                                       <Insets right="10.0" />
                                                    </padding>
                                                 </HBox>
-                                                <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                                <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                                    <children>
                                                       <Label text="Degree">
                                                          <font>
@@ -210,7 +209,7 @@
                                                       <Insets left="10.0" />
                                                    </padding>
                                                 </VBox>
-                                                <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+                                                <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                                                    <children>
                                                       <Label text="Discipline">
                                                          <font>
@@ -222,7 +221,7 @@
                                                       <Insets left="10.0" />
                                                    </padding>
                                                 </VBox>
-                                                <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
+                                                <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
                                                    <children>
                                                       <Label text="Professor ID">
                                                          <font>
@@ -234,7 +233,7 @@
                                                       <Insets left="10.0" />
                                                    </padding>
                                                 </VBox>
-                                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
                                                    <children>
                                                       <Label text="Subject ID">
                                                          <VBox.margin>
@@ -251,7 +250,7 @@
                                                       </ComboBox>
                                                    </children>
                                                 </VBox>
-                                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
+                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
                                                    <children>
                                                       <Label text="Subject Name">
                                                          <font>
@@ -292,9 +291,9 @@
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="589.0" minHeight="10.0" prefHeight="551.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="41.0" minHeight="-Infinity" prefHeight="41.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="589.0" minHeight="10.0" prefHeight="539.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
                                           <TableView fx:id="subAllocTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -307,9 +306,12 @@
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                              </columnResizePolicy>
                                           </TableView>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;">
                                              <children>
-                                                <Label text="Subject Allocation List" />
+                                                <Label text="Subject Allocation List" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="System Bold" size="14.0" />
+                                                   </font></Label>
                                              </children>
                                              <padding>
                                                 <Insets left="10.0" />
@@ -349,8 +351,8 @@
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                        <RowConstraints maxHeight="40.0" minHeight="0.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="560.0" minHeight="10.0" prefHeight="556.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="560.0" minHeight="10.0" prefHeight="537.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="47.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
@@ -405,9 +407,12 @@
                                                 </VBox>
                                              </children>
                                           </GridPane>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;">
                                              <children>
-                                                <Label text="Subject Allocation Form" />
+                                                <Label text="Subject Allocation Form" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="System Bold" size="14.0" />
+                                                   </font></Label>
                                              </children>
                                              <padding>
                                                 <Insets left="10.0" />

@@ -11,10 +11,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportProfessorCSVModalController">
@@ -25,8 +26,8 @@
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="183.0" minHeight="10.0" prefHeight="114.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="183.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="320.0" minHeight="10.0" prefHeight="287.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="320.0" minHeight="10.0" prefHeight="253.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="115.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
@@ -34,11 +35,11 @@
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                             <children>
-                                <VBox layoutX="-12.0" layoutY="-16.0" prefHeight="167.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <VBox alignment="CENTER" layoutX="-12.0" layoutY="-16.0" prefHeight="167.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                         <Label text="Attach CSV file" />
+                                        <Hyperlink fx:id="sampleCsvHyperLink" onAction="#handleSampleCsvHyperLinkAction" text="Sample CSV" />
                                         <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButtonAction" text="Choose File" />
-                                        <Hyperlink fx:id="sampleCsvHyperLink" onAction="#handleSampleCsvHyperLinkAction" text="Get Sample CSV" />
                                         <Label fx:id="chosenFileLabel" />
                                     </children>
                                 </VBox>
@@ -51,16 +52,22 @@
                         </AnchorPane>
                     </items>
                 </SplitPane>
-                <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
-                    <children>
-                        <Button fx:id="submitButton" layoutX="650.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit" />
-                    </children>
-                </Pane>
-                <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                    <children>
-                        <Label layoutX="11.0" layoutY="5.0" text="Choose Columns" />
-                    </children>
-                </Pane>
+            <HBox alignment="CENTER" GridPane.rowIndex="3">
+               <children>
+                        <Button fx:id="submitButton" disable="true" mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Submit" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" style="-fx-background-color: #d6d6d6;" GridPane.rowIndex="1">
+               <children>
+                        <Label text="Choose Columns">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
                 <GridPane hgap="10.0" GridPane.rowIndex="2">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -75,7 +82,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                             <children>
                                 <Label text="First Name">
                                     <VBox.margin>
@@ -87,7 +94,7 @@
                                     </VBox.margin></ComboBox>
                             </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                             <children>
                                 <Label text="Middle Name">
                                     <VBox.margin>
@@ -96,7 +103,7 @@
                                 <ComboBox fx:id="middleNameComboBox" prefWidth="150.0" />
                             </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
                             <children>
                                 <Label text="Last Name">
                                     <VBox.margin>
@@ -104,7 +111,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="lastNameComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3">
                             <children>
                                 <Label text="DOB">
                                     <VBox.margin>
@@ -112,7 +119,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="dobComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4">
                             <children>
                                 <Label text="Department">
                                     <VBox.margin>
@@ -120,7 +127,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="deptComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                             <children>
                                 <Label text="Professor ID">
                                     <VBox.margin>
@@ -131,7 +138,7 @@
                                         <Insets left="5.0" />
                                     </VBox.margin></ComboBox>
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <children>
                                 <Label text="Address">
                                     <VBox.margin>
@@ -139,7 +146,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="addressComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                             <children>
                                 <Label text="Email ID">
                                     <VBox.margin>
@@ -147,7 +154,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="emailIdComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                             <children>
                                 <Label text="Date of Joining">
                                     <VBox.margin>
@@ -155,7 +162,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="dojComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                             <children>
                                 <Label text="Highest Qualification">
                                     <VBox.margin>
@@ -163,7 +170,7 @@
                                     </VBox.margin></Label>
                                 <ComboBox fx:id="highestQualificationComboBox" prefWidth="150.0" />
                             </children></VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                             <children>
                                 <Label text="Contact No">
                                     <VBox.margin>
@@ -177,7 +184,7 @@
                                 </ComboBox>
                             </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <children>
                                 <Label text="HOD Status">
                                     <VBox.margin>
@@ -187,7 +194,7 @@
                                 <ComboBox fx:id="hodStatusComboBox" prefWidth="150.0" />
                             </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                             <children>
                                 <Label text="Academic Rank" />
                                 <ComboBox fx:id="designationComboBox" prefWidth="150.0" />

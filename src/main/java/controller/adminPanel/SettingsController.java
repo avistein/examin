@@ -205,14 +205,19 @@ public class SettingsController {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
 
+                Scene mainScene = settingsTabPane.getScene();
+                Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
                 if (newValue == profileSettingsTab) {
 
+                    subSubTitleLabel.setText("/ Profile Settings");
                     initProfileSettingsTab();
                 } else if (newValue == universityInfoTab) {
 
+                    subSubTitleLabel.setText("/ University Information Settings");
                     initUniversityInfoTab();
                 } else if (newValue == emailSettingsTab) {
 
+                    subSubTitleLabel.setText("/ Email Settings");
                     initEmailSettingsTab();
                 }
             }

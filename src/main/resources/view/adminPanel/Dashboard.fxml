@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -20,14 +19,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="667.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.DashboardController">
+<GridPane prefHeight="667.0" prefWidth="908.0" stylesheets="@../../css/adminPanel/Dashboard.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.DashboardController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="210.0" minHeight="10.0" prefHeight="201.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="39.0" minHeight="-Infinity" prefHeight="39.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="434.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
@@ -40,29 +40,32 @@
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="35.0" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="381.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="381.0" minHeight="10.0" prefHeight="258.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="35.0" minHeight="-Infinity" prefHeight="35.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="381.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="381.0" minHeight="10.0" prefHeight="249.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                            <children>
+                              <Hyperlink onAction="#handleSampleCsvHyperlinkAction" text="Sample CSV" />
                               <Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#handleChooseFileButtonAction" text="Choose File" />
-                              <Hyperlink onAction="#handleSampleCsvHyperlinkAction" text="Get Sample CSV" />
-                              <Label fx:id="fileChosenLabel" text="Label" />
+                              <Label fx:id="fileChosenLabel" />
                            </children>
                         </VBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="267.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="267.0" style="-fx-background-color: #8e8e8e;">
                            <children>
-                              <Label text="Import Holiday List CSV" />
+                              <Label text="Import Holiday List CSV" textFill="WHITE">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                            </children>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                            <children>
                               <Button fx:id="submitHolidayButton" mnemonicParsing="false" onAction="#handleSubmitHolidayButtonAction" text="Submit" />
                            </children>
@@ -78,7 +81,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="1">
                                  <children>
                                     <Label text="Holiday Name" />
                                     <ComboBox fx:id="holidayNameComboBox" prefWidth="150.0" />
@@ -90,7 +93,7 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </VBox>
-                              <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="2">
                                  <children>
                                     <Label text="Start Date" />
                                     <ComboBox fx:id="startDateComboBox" prefWidth="150.0" />
@@ -99,7 +102,7 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </VBox>
-                              <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="3">
                                  <children>
                                     <Label text="End Date" />
                                     <ComboBox fx:id="endDateComboBox" prefWidth="150.0" />
@@ -108,7 +111,7 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </VBox>
-                              <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="73.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                              <VBox alignment="CENTER" layoutX="10.0" layoutY="73.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                                  <children>
                                     <Label text="Holiday ID" />
                                     <ComboBox fx:id="holidayIdComboBox" prefWidth="150.0" />
@@ -122,7 +125,7 @@
                               </VBox>
                            </children>
                         </GridPane>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d6d6d6;" GridPane.rowIndex="2">
                            <children>
                               <Label text="Choose Columns" />
                            </children>
@@ -161,10 +164,9 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="35.0" minHeight="-Infinity" prefHeight="35.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="324.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <TableView fx:id="holidaysTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -178,9 +180,12 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #8e8e8e;" GridPane.columnIndex="1">
                            <children>
-                              <Label text="Holidays List" />
+                              <Label text="Holidays List" textFill="WHITE">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font></Label>
                            </children>
                            <padding>
                               <Insets left="10.0" />
@@ -193,11 +198,6 @@
                            <padding>
                               <Insets right="10.0" />
                            </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <children>
-                              <Pagination prefHeight="28.0" prefWidth="197.0" />
-                           </children>
                         </HBox>
                      </children>
                   </GridPane>
@@ -234,30 +234,20 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox alignment="CENTER_LEFT" onMouseClicked="#handleTotalStudentsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+            <VBox id="students" alignment="CENTER" onMouseClicked="#handleTotalStudentsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../png/students.png" />
-                     </image></ImageView>
-                  <Label fx:id="totalStudentsLabel" />
-                  <Label text="Total Students" />
-               </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalProfessorsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1">
-               <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/prof.png" />
                      </image></ImageView>
-                  <Label fx:id="totalProfessorsLabel" />
-                  <Label text="Total Professors" />
+                  <Label fx:id="totalStudentsLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Students">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -266,14 +256,20 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalExamCellMembersVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2">
+            <VBox id="professors" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalProfessorsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/prof.png" />
                      </image></ImageView>
-                  <Label fx:id="totalExamCellMembersLabel" />
-                  <Label text="Total Exam Cell Members" />
+                  <Label fx:id="totalProfessorsLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Professors">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -282,15 +278,43 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalDepartmentsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
+            <VBox id="examCellMembers" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="2">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../png/departments.png" />
+                        <Image url="@../../png/prof.png" />
+                     </image></ImageView>
+                  <Label fx:id="totalExamCellMembersLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Exam Cell Members">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </VBox>
+            <VBox id="departments" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalDepartmentsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../png/font-awesome_4-7-0_graduation-cap_256_0_222051_none.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="totalDeptsLabel" />
-                  <Label text="Total Departments" />
+                  <Label fx:id="totalDeptsLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Departments">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -299,15 +323,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalCoursesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalCoursesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/courses.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="totalCoursesLabel" />
-                  <Label text="Total Courses" />
+                  <Label fx:id="totalCoursesLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Courses">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -316,14 +346,20 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalBatchesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <VBox id="batches" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalBatchesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/batches.png" />
                      </image></ImageView>
-                  <Label fx:id="totalBatchesLabel" />
-                  <Label text="Total Batches" />
+                  <Label fx:id="totalBatchesLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Batches">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -332,14 +368,20 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalSubjectsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <VBox id="subjects" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalSubjectsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/subjects.png" />
                      </image></ImageView>
-                  <Label fx:id="totalSubjectsLabel" />
-                  <Label text="Total Subjects" />
+                  <Label fx:id="totalSubjectsLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Subjects">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -348,14 +390,20 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER_LEFT" layoutX="453.0" layoutY="111.0" onMouseClicked="#handleTotalClassroomsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <VBox id="classrooms" alignment="CENTER" layoutX="453.0" layoutY="111.0" onMouseClicked="#handleTotalClassroomsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="43.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/classrooms.png" />
                      </image></ImageView>
-                  <Label fx:id="totalClassroomsLabel" />
-                  <Label text="Total Classrooms" />
+                  <Label fx:id="totalClassroomsLabel" textFill="#07072b">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label text="Classrooms">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -364,11 +412,15 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="4" />
          </children>
       </GridPane>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #6d6ea0;" GridPane.rowIndex="1">
          <children>
-            <Label text="Holidays" />
+            <Label text="Holidays" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
          </children>
          <padding>
             <Insets left="10.0" />

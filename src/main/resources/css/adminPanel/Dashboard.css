@@ -1,0 +1,63 @@
+#students{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#professors{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#examCellMembers{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#departments{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#courses{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#batches{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#subjects{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#classrooms{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}

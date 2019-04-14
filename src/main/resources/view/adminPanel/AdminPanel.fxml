@@ -11,12 +11,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" stylesheets="@../../css/AdminPanel.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.AdminPanelController">
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" stylesheets="@../../css/adminPanel/AdminPanel.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.adminPanel.AdminPanelController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="165.0" prefWidth="187.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="576.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="165.0" prefWidth="201.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="560.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -27,11 +29,11 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="160.0" minHeight="10.0" prefHeight="160.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="396.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="212.0" minHeight="10.0" prefHeight="212.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="344.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #222051;" GridPane.rowIndex="1">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0" style="-fx-background-color: #222051;" GridPane.rowIndex="1">
                <children>
                   <Button id="dashboardButton" fx:id="dashboardButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleDashboardButtonAction" prefHeight="44.0" prefWidth="200.0" text="Dashboard">
                      <graphic>
@@ -43,12 +45,13 @@
                      </graphic>
                      <padding>
                         <Insets left="10.0" />
-                     </padding></Button>
+                     </padding>
+                  </Button>
                   <Button id="studentButton" fx:id="studentListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../png/students.png" />
+                              <Image url="@../../png/prof.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -66,22 +69,11 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
-                  <Button id="examCellMemberButton" fx:id="examCellMemberListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleExamCellMemberListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Exam Cell Member">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../png/prof.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding></Button>
                   <Button id="academicAdministrationButton" fx:id="academicAdministrationButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleAcademicAdministrationButtonAction" prefHeight="44.0" prefWidth="200.0" text="Academic Administration">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../png/admin.png" />
+                              <Image url="@../../png/font-awesome_4-7-0_graduation-cap_256_0_222051_none.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -99,46 +91,11 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding></Button>
-                  <Button id="examAdministrationButton" fx:id="examsListButton1" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="206.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="200.0" text="Admit Cards">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../png/subjects.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Button>
                   <Button id="marksButton" fx:id="marksListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../png/marks.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding></Button>
-                  <Button id="marksButton" fx:id="marksListButton11" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="274.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marksheets">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../png/marks.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Button>
-                  <Button id="notifyButton" fx:id="noticesListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleNoticesListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Notify">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../png/notices.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -167,13 +124,65 @@
                      <padding>
                         <Insets left="10.0" />
                      </padding>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </Button>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label text="Version 1.0">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
+                           <textFill>
+                              <LinearGradient endX="0.02857142857142861" endY="0.6380952380952382" startX="0.02380952380952382">
+                                 <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="WHITE" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </textFill>
+                        </Label>
+                        <Label text="Copyright ©2019. ABC University">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                           <textFill>
+                              <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                 <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="WHITE" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </textFill>
+                        </Label>
+                        <Label text="Developed by Pitchers">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                           <textFill>
+                              <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                 <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="WHITE" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </textFill>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="80.0" />
+                     </VBox.margin>
+                  </VBox>
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #222051;">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
                <children>
                   <ImageView id="profileImageImageView" fx:id="profileImageImageView" fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -195,6 +204,9 @@
                      </children>
                   </HBox>
                </children>
+               <padding>
+                  <Insets top="17.0" />
+               </padding>
             </VBox>
          </children>
       </GridPane>
@@ -206,7 +218,8 @@
         <rowConstraints>
           <RowConstraints maxHeight="48.0" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="48.0" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="464.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="428.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <StackPane id="contentStackPane" fx:id="contentStackPane" prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
@@ -273,6 +286,11 @@
                      </font>
                   </Label>
                   <Label fx:id="subTitleLabel" textFill="WHITE">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label id="subSubTitle" fx:id="subSubTitleLabel" layoutX="99.0" layoutY="24.0" textFill="WHITE">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>

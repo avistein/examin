@@ -51,9 +51,6 @@ public class DashboardController {
     private Label totalExamCellMembersLabel;
 
     @FXML
-    private Label totalOfficeMembersLabel;
-
-    @FXML
     private Label totalDeptsLabel;
 
     @FXML
@@ -232,23 +229,7 @@ public class DashboardController {
         Button professorListButton = (Button) (adminPanelScene.lookup("#professorButton"));
         professorListButton.fire();
     }
-
-    /**
-     * Callback method to open the /adminPanel/ExamCellMemberList.fxml UI when clicked on the Vbox.
-     */
-    @FXML
-    private void handleTotalExamCellMembersVboxOnMouseClickedAction() {
-
-    }
-
-    /**
-     * Callback method to open the /adminPanel/OfficeMembers.fxml UI when clicked on the Vbox.
-     */
-    @FXML
-    private void handleTotalOfficeMembersVboxOnMouseClickedAction() {
-
-    }
-
+    
     /**
      * Callback method to open the /adminPanel/AcademicAdministration.fxml UI when clicked on the Vbox.
      */
@@ -534,10 +515,24 @@ public class DashboardController {
                         (in.readAllBytes(), CSV_DIR, "holidaySample.csv");
                 new Thread(createAndWriteToFileTask).start();
 
+                createAndWriteToFileTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        try {
+                            Desktop.getDesktop().open(new File(filePath));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
-            //open the csv file with the available application
-            Desktop.getDesktop().open(new File(filePath));
+            else {
+
+                //open the csv file with the available application
+                Desktop.getDesktop().open(new File(filePath));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

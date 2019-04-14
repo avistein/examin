@@ -62,6 +62,9 @@ public class AdminPanelController {
     private Label subTitleLabel;
 
     @FXML
+    private Label subSubTitleLabel;
+
+    @FXML
     private Button dashboardButton;
 
     @FXML
@@ -96,6 +99,7 @@ public class AdminPanelController {
         Parent dashboardFxml = FXMLLoader.load(getClass()
                 .getResource("/view/adminPanel/Dashboard.fxml"));
         subTitleLabel.setText("");
+        subSubTitleLabel.setText("");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(dashboardFxml);
     }
@@ -110,6 +114,7 @@ public class AdminPanelController {
         Parent studentsListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/StudentSection.fxml"));
         subTitleLabel.setText("Student");
+        subSubTitleLabel.setText("/ Student List");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(studentsListFxml);
     }
@@ -124,22 +129,9 @@ public class AdminPanelController {
         Parent professorListFxml = FXMLLoader.load(getClass()
                 .getResource("/view/ProfessorSection.fxml"));
         subTitleLabel.setText("Professor");
+        subSubTitleLabel.setText("/ Professor List");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(professorListFxml);
-    }
-
-    /**
-     * Callback method for handling examCellMemberListButton.
-     * Opens StudentSection.fxml upon clicking examCellMemberListButton.
-     */
-    @FXML
-    private void handleExamCellMemberListButtonAction() throws IOException {
-
-        Parent examCellMemberListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/adminPanel/ExamCellMembersList.fxml"));
-        subTitleLabel.setText("Exam Cell Member");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(examCellMemberListFxml);
     }
 
     /**
@@ -153,6 +145,7 @@ public class AdminPanelController {
         Parent academicAdministrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/adminPanel/AcademicAdministration.fxml"));
         subTitleLabel.setText("Academic Administration");
+        subSubTitleLabel.setText("/ Departments");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(academicAdministrationFxml);
     }
@@ -163,6 +156,7 @@ public class AdminPanelController {
         Parent examAdministrationFxml = FXMLLoader.load(getClass()
                 .getResource("/view/adminPanel/ExamAdministration.fxml"));
         subTitleLabel.setText("Exam Administration");
+        subSubTitleLabel.setText("/ Create Exam");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(examAdministrationFxml);
     }
@@ -173,13 +167,9 @@ public class AdminPanelController {
         Parent marksSectionFxml = FXMLLoader.load(getClass()
                 .getResource("/view/MarksSection.fxml"));
         subTitleLabel.setText("Marks List");
+        subSubTitleLabel.setText("");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(marksSectionFxml);
-    }
-
-    @FXML
-    private void handleNoticesListButtonAction() {
-
     }
 
     /**
@@ -202,6 +192,7 @@ public class AdminPanelController {
         settingsController.setAdminProfileDetails(admin);
 
         subTitleLabel.setText("Settings");
+        subSubTitleLabel.setText("/ Profile Settings");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(adminSettingsFxml);
     }
@@ -224,6 +215,7 @@ public class AdminPanelController {
 
         changePasswordController.setUserLoginDetails(adminLogin);
         subTitleLabel.setText("Change Password");
+        subSubTitleLabel.setText("");
         contentStackPane.getChildren().removeAll();
         contentStackPane.getChildren().setAll(adminSettingsFxml);
     }

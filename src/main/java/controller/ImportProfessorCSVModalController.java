@@ -213,10 +213,25 @@ public class ImportProfessorCSVModalController {
                 Task<Boolean> createAndWriteToFileTask = fileHandlingService.getCreateAndWriteToFileTask
                         (in.readAllBytes(), CSV_DIR, "professorSample.csv");
                 new Thread(createAndWriteToFileTask).start();
+
+                createAndWriteToFileTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        try {
+                            Desktop.getDesktop().open(new File(filePath));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
-            //open the CSV file with the appropriate Application available in the user's system
-            Desktop.getDesktop().open(new File(filePath));
+            else {
+
+                //open the CSV file with the appropriate Application available in the user's system
+                Desktop.getDesktop().open(new File(filePath));
+            }
         } catch (IOException e) {
 
             e.printStackTrace();

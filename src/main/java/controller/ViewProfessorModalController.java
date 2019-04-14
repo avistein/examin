@@ -42,6 +42,9 @@ public class ViewProfessorModalController {
     private ImageView profileImageView;
 
     @FXML
+    private Label profNameLabel;
+
+    @FXML
     private Label nameLabel;
 
     @FXML
@@ -224,6 +227,8 @@ public class ViewProfessorModalController {
 
             profileImageView.setImage(new Image("/png/placeholder.png"));
         }
+
+        profNameLabel.setText(this.professor.getFirstName() + "'s ");
         nameLabel.setText(this.professor.getFirstName() + " " + this.professor.getMiddleName() + " " +
                 this.professor.getLastName());
         dobLabel.setText(this.professor.getDob());

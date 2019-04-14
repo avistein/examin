@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -241,9 +240,8 @@
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="147.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="252.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="181.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="263.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Accordion GridPane.rowIndex="1">
@@ -297,11 +295,6 @@
                             </TitledPane>
                           </panes>
                         </Accordion>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
-                           <children>
-                              <Pagination prefHeight="200.0" prefWidth="200.0" />
-                           </children>
-                        </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Button fx:id="deleteExamButton" mnemonicParsing="false" onAction="#handleDeleteExamButtonAction" text="Delete Exam" />

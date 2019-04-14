@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="529.0" prefWidth="669.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ViewStudentModalController">
     <children>
@@ -73,11 +74,14 @@
                                 <Separator prefWidth="200.0" GridPane.rowIndex="15" />
                                 <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label text="Full Name" />
+                              <Label text="Name" />
                            </children>
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
                                 </HBox>
                                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
                            <children>
@@ -118,6 +122,9 @@
                            <children>
                               <Label fx:id="nameLabel" wrapText="true" />
                            </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
@@ -193,6 +200,9 @@
                            <children>
                               <Label text="Degree" />
                            </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
                                 </HBox>
                                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                            <children>
@@ -236,6 +246,9 @@
                            <children>
                               <Label fx:id="degreeLabel" wrapText="true" />
                            </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
@@ -306,10 +319,16 @@
                   </VBox>
                     </children>
                 </GridPane>
-                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #747390;">
                <children>
-                  <Label fx:id="nameLabelInTitle" />
-                  <Label text="Profile" />
+                  <Label fx:id="nameLabelInTitle" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font></Label>
+                  <Label text="Profile" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font></Label>
                </children>
                <padding>
                   <Insets left="10.0" />

@@ -1,6 +1,8 @@
 package controller.adminPanel;
 
 import command.ExamCommand;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -8,6 +10,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -164,6 +167,24 @@ public class ExamAdministrationController {
 
         examDetailsObsList = FXCollections.observableArrayList();
         populateExamTable();
+
+        examAdministrationTabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+
+                Scene mainScene = examAdministrationTabPane.getScene();
+                Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
+
+                if(newValue == createExamTab){
+
+                    subSubTitleLabel.setText("/ Create Exam");
+                }
+                else if(newValue == manageExamTab){
+
+                    subSubTitleLabel.setText("/ Manage Exam");
+                }
+            }
+        });
     }
 
     /*------------------------------------------Create Exam Tab Operation---------------------------------------------*/

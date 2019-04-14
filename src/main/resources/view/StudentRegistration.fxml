@@ -7,7 +7,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -28,18 +27,18 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="333.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="638.0" minHeight="10.0" prefHeight="638.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="41.0" minHeight="-Infinity" prefHeight="41.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="638.0" minHeight="10.0" prefHeight="626.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;">
                <children>
-                  <Label prefHeight="55.0" prefWidth="269.0" text="Student Registration">
+                  <Label prefHeight="55.0" prefWidth="269.0" text="Student Registration" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
                </children>
@@ -61,22 +60,19 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="152.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="67.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="73.0" minHeight="9.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="152.0" minHeight="10.0" prefHeight="72.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="78.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="54.0" minHeight="9.0" prefHeight="27.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="58.0" minHeight="8.0" prefHeight="31.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="85.0" minHeight="7.0" prefHeight="71.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="40.0" minHeight="-Infinity" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="85.0" minHeight="7.0" prefHeight="66.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                            <children>
                               <Label prefHeight="22.0" prefWidth="100.0" text="Degree">
                                  <VBox.margin>
@@ -93,7 +89,7 @@
                               </ComboBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
                               <Label prefHeight="22.0" prefWidth="100.0" text="Disccipline">
                                  <VBox.margin>
@@ -110,7 +106,7 @@
                               </ComboBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
                               <Label prefHeight="22.0" prefWidth="100.0" text="Batch">
                                  <VBox.margin>
@@ -127,7 +123,7 @@
                               </ComboBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
                               <Label prefHeight="22.0" prefWidth="132.0" text="Current Semester">
                                  <font>
@@ -144,7 +140,7 @@
                               </ComboBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                            <children>
                               <Label text="Academic Year">
                                  <font>
@@ -161,7 +157,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <Label text="Registration ID">
                                  <VBox.margin>
@@ -178,7 +174,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #c4c4c4;" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                            <children>
                               <Label prefHeight="25.0" prefWidth="117.0" text="Personal Details:">
                                  <font>
@@ -190,7 +186,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <children>
                               <Label text="First Name">
                                  <VBox.margin>
@@ -207,7 +203,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                            <children>
                               <Label text="Middle Name">
                                  <VBox.margin>
@@ -224,7 +220,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
                            <children>
                               <Label text="Last Name">
                                  <VBox.margin>
@@ -241,7 +237,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                            <children>
                               <Label text="Gender">
                                  <VBox.margin>
@@ -258,7 +254,7 @@
                               </ChoiceBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="8">
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #c4c4c4;" GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
                            <children>
                               <Label text="Contact Details:">
                                  <font>
@@ -270,7 +266,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="9">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="7">
                            <children>
                               <Label text="Email Id">
                                  <VBox.margin>
@@ -287,7 +283,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                            <children>
                               <Label text="Contact No">
                                  <font>
@@ -304,7 +300,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
                            <children>
                               <Label text="Address">
                                  <VBox.margin>
@@ -321,7 +317,7 @@
                               </TextArea>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="11">
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #c4c4c4;" GridPane.columnSpan="2147483647" GridPane.rowIndex="8">
                            <children>
                               <Label text="Guardian's Details:">
                                  <VBox.margin>
@@ -333,7 +329,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="12">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="9">
                            <children>
                               <Label text="Father's/Guardian's Name">
                                  <VBox.margin>
@@ -350,7 +346,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="388.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="12">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="388.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                            <children>
                               <Label text="Mother's Name">
                                  <VBox.margin>
@@ -367,7 +363,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="12">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
                            <children>
                               <Label text="Parent's Contact No">
                                  <VBox.margin>
@@ -384,7 +380,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="100.0">
+                        <VBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #c4c4c4;" GridPane.columnSpan="2147483647">
                            <children>
                               <Label prefHeight="25.0" prefWidth="104.0" text="Office Details:">
                                  <font>
@@ -396,7 +392,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <children>
                               <Label text="Roll No">
                                  <VBox.margin>
@@ -413,7 +409,7 @@
                               </TextField>
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <children>
                               <Label text="Date Of Birth">
                                  <font>
@@ -430,7 +426,7 @@
                               </DatePicker>
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="5" GridPane.rowSpan="2">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4" GridPane.rowSpan="2">
                            <children>
                               <ImageView fx:id="profileImageImageView" fitHeight="83.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -440,21 +436,6 @@
                               <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#handleChooseImageButtonAction" text="Choose Image" />
                            </children>
                         </VBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3">
-                           <children>
-                              <Separator maxWidth="-Infinity" prefWidth="1368.0" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="143.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="7">
-                           <children>
-                              <Separator maxWidth="-Infinity" prefWidth="1368.0" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="388.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="10">
-                           <children>
-                              <Separator maxWidth="-Infinity" prefWidth="1368.0" />
-                           </children>
-                        </HBox>
                      </children>
                   </GridPane>
                   <HBox alignment="CENTER" prefHeight="51.0" prefWidth="860.0" spacing="10.0" GridPane.rowIndex="1">
