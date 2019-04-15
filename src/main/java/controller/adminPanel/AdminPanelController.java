@@ -1,6 +1,9 @@
 package controller.adminPanel;
 
 import controller.ChangePasswordController;
+import controller.MarksSectionController;
+import controller.ProfessorSectionController;
+import controller.StudentSectionController;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -15,17 +18,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import model.ExamCellMember;
-import model.User;
+import model.*;
 import service.ExamCellMemberService;
+import service.FileHandlingService;
 import util.UISetterUtil;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import static util.ConstantsUtil.PROJECT_NAME;
+import static util.ConstantsUtil.*;
 
 /**
  * Controller class for adminPanel.fxml.
@@ -42,6 +48,12 @@ public class AdminPanelController {
     private ExamCellMember admin;
 
     private User adminLogin;
+
+    @FXML
+    private Label copyrightYearLabel;
+
+    @FXML
+    private Label universityNameLabel;
 
     @FXML
     private Label userIdLabel;
@@ -84,6 +96,24 @@ public class AdminPanelController {
     @FXML
     private void initialize() {
 
+        //get the location of settings.properties to set the University logo
+        Path path = Paths.get(USER_HOME, ROOT_DIR, CONFIG_DIR, "settings.properties");
+
+        //check if the settings.properties exists the user's system
+        if (Files.exists(path)) {
+
+            FileHandlingService fileHandlingService = new FileHandlingService();
+
+            //get the location of University logo
+            Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
+                    ("settings.properties", "universityName", "copyrightYear");
+
+            copyrightYearLabel.setText(propMap.get("copyrightYear") + ". ");
+            universityNameLabel.setText(propMap.get("universityName"));
+
+        }
+
+
         roleLabel.setText("Admin");
         examCellMemberService = new ExamCellMemberService();
         dashboardButton.fire();
@@ -94,14 +124,10 @@ public class AdminPanelController {
      * Opens Dashboard.fxml upon clicking Dashboard button.
      */
     @FXML
-    private void handleDashboardButtonAction() throws IOException {
+    private void handleDashboardButtonAction(){
 
-        Parent dashboardFxml = FXMLLoader.load(getClass()
-                .getResource("/view/adminPanel/Dashboard.fxml"));
-        subTitleLabel.setText("");
-        subSubTitleLabel.setText("");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(dashboardFxml);
+        UISetterUtil.setContentUI("/view/adminPanel/dashboard.fxml", contentStackPane, subTitleLabel
+                , subSubTitleLabel, "", "");
     }
 
     /**
@@ -109,14 +135,13 @@ public class AdminPanelController {
      * Opens StudentSection.fxml upon clicking studentListButton.
      */
     @FXML
-    private void handleStudentListButtonAction() throws IOException {
+    private void handleStudentListButtonAction(){
 
-        Parent studentsListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/StudentSection.fxml"));
-        subTitleLabel.setText("Student");
-        subSubTitleLabel.setText("/ Student List");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(studentsListFxml);
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/StudentSection.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Student", "/ Student List");
+
+        StudentSectionController studentSectionController = loader.getController();
+        studentSectionController.initController(ADMIN_GID, "");
     }
 
     /**
@@ -124,77 +149,61 @@ public class AdminPanelController {
      * Opens StudentSection.fxml upon clicking professorListButtonAction.
      */
     @FXML
-    private void handleProfessorListButtonAction() throws IOException {
+    private void handleProfessorListButtonAction(){
 
-        Parent professorListFxml = FXMLLoader.load(getClass()
-                .getResource("/view/ProfessorSection.fxml"));
-        subTitleLabel.setText("Professor");
-        subSubTitleLabel.setText("/ Professor List");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(professorListFxml);
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/ProfessorSection.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Professor", "/ Professor List");
+
+        ProfessorSectionController professorSectionController = loader.getController();
+        professorSectionController.initController(ADMIN_GID, "");
     }
 
     /**
      * Callback method for handling clicking event on Academic Administration Button
      *
-     * @throws IOException Load exception on loading the fxml
      */
     @FXML
-    private void handleAcademicAdministrationButtonAction() throws IOException {
+    private void handleAcademicAdministrationButtonAction(){
 
-        Parent academicAdministrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/adminPanel/AcademicAdministration.fxml"));
-        subTitleLabel.setText("Academic Administration");
-        subSubTitleLabel.setText("/ Departments");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(academicAdministrationFxml);
+        UISetterUtil.setContentUI("/view/adminPanel/AcademicAdministration.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Academic Administration", "/ Departments");
     }
 
     @FXML
-    private void handleExamsAdministrationButtonAction() throws IOException{
+    private void handleExamsAdministrationButtonAction(){
 
-        Parent examAdministrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/adminPanel/ExamAdministration.fxml"));
-        subTitleLabel.setText("Exam Administration");
-        subSubTitleLabel.setText("/ Create Exam");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(examAdministrationFxml);
+        UISetterUtil.setContentUI("/view/adminPanel/ExamAdministration.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Exam Administration", "/ Create Exam");
     }
 
     @FXML
-    private void handleMarksListButtonAction() throws IOException{
+    private void handleMarksListButtonAction(){
 
-        Parent marksSectionFxml = FXMLLoader.load(getClass()
-                .getResource("/view/MarksSection.fxml"));
-        subTitleLabel.setText("Marks List");
-        subSubTitleLabel.setText("");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(marksSectionFxml);
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/MarksSection.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Marks List", "");
+
+        MarksSectionController marksSectionController = loader.getController();
+
+        marksSectionController.initController(null);
     }
 
     /**
      * Callback method to handle Setting button.
      * This loads the Settings UI when clicked on Setting button.
      *
-     * @throws IOException Load exception during loading the FXML document.
      */
     @FXML
-    private void handleAdminSettingsButtonAction() throws IOException {
+    private void handleAdminSettingsButtonAction() {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/adminPanel/Settings.fxml"));
 
-        Parent adminSettingsFxml = loader.load();
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/adminPanel/Settings.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Settings", "/ Profile Settings");
 
         //get the controller
         SettingsController settingsController = loader.getController();
 
         //send the admin profile details to the controller
         settingsController.setAdminProfileDetails(admin);
-
-        subTitleLabel.setText("Settings");
-        subSubTitleLabel.setText("/ Profile Settings");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(adminSettingsFxml);
     }
 
     /**
@@ -206,18 +215,12 @@ public class AdminPanelController {
     @FXML
     private void handleChangePasswordButtonAction() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass()
-                .getResource("/view/adminPanel/ChangePassword.fxml"));
-
-        Parent adminSettingsFxml = loader.load();
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/adminPanel/ChangePassword.fxml"
+                , contentStackPane, subTitleLabel, subSubTitleLabel, "Change Password", "");
 
         ChangePasswordController changePasswordController = loader.getController();
 
         changePasswordController.setUserLoginDetails(adminLogin);
-        subTitleLabel.setText("Change Password");
-        subSubTitleLabel.setText("");
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(adminSettingsFxml);
     }
 
     /**

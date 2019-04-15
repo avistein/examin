@@ -126,54 +126,54 @@ public class ProfessorRegistrationController {
 
     /*--------------------------------------End of declaration and initialization-------------------------------------*/
 
-    /**
-     * This method is used to initialize variables of this Class.
-     * This method is called when the FXMLLoader.load() is called.
-     * <p>
-     * Do not try to get the Scene or Window of any node in this method.
-     */
-    @FXML
-    private void initialize() {
+    public void initController(int gid, String deptName){
+
         departmentService = new DepartmentService();
         professorService = new ProfessorService();
 
         //initially adding of new student is opted
         editOrAddProfessorChoice = ADD_CHOICE;
 
-        //get a list of available departments in the DB
-        Task<List<Department>> deptTask = departmentService
-                .getDepartmentsTask("");
-        new Thread(deptTask).start();
-
-        deptTask.setOnSucceeded(new EventHandler<>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-
-                //get the list of departments to get the list of departments
-                listOfDepartment = deptTask.getValue();
-
-                //only when any department is present in the listofdepartments then only set the the department combo box
-                if (!listOfDepartment.isEmpty()) {
-
-                    List<String> items = new ArrayList<>();
-
-                    //only add unique department to the profDeptComboBox
-                    for (Department dept : listOfDepartment) {
-
-                        if (!items.contains(dept.getDeptName()))
-                            items.add(dept.getDeptName());
-                    }
-
-                    ObservableList<String> options = FXCollections.observableArrayList(items);
-
-                    //set items in profDeptComboBox
-                    deptComboBox.setItems(options);
-                }
-            }
-        });
-
         designationComboBox.setItems(FXCollections.observableArrayList("Professor"
                 , "Assistant Professor", "Associate Professor"));
+
+        if(gid == PROFESSOR_HOD_GID){
+
+            deptComboBox.setValue(deptName);
+        }
+        else {
+
+            //get a list of available departments in the DB
+            Task<List<Department>> deptTask = departmentService.getDepartmentsTask("");
+            new Thread(deptTask).start();
+
+            deptTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+
+                    //get the list of departments to get the list of departments
+                    listOfDepartment = deptTask.getValue();
+
+                    //only when any department is present in the listofdepartments then only set the the department combo box
+                    if (!listOfDepartment.isEmpty()) {
+
+                        List<String> items = new ArrayList<>();
+
+                        //only add unique department to the profDeptComboBox
+                        for (Department dept : listOfDepartment) {
+
+                            if (!items.contains(dept.getDeptName()))
+                                items.add(dept.getDeptName());
+                        }
+
+                        ObservableList<String> options = FXCollections.observableArrayList(items);
+
+                        //set items in profDeptComboBox
+                        deptComboBox.setItems(options);
+                    }
+                }
+            });
+        }
     }
 
     /**

@@ -71,9 +71,9 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="176.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.columnIndex="1">
                      <children>
-                        <Button layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#handlePromoteStudentButtonAction" text="Promote" />
-                        <Button mnemonicParsing="false" onAction="#handleViewStudentButtonAction" text="View" />
-                        <Button fx:id="addStudentButton" mnemonicParsing="false" onAction="#handleAddStudentButtonAction" text="Add" />
+                        <Button fx:id="promoteButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#handlePromoteStudentButtonAction" text="Promote" />
+                        <Button fx:id="viewButton" mnemonicParsing="false" onAction="#handleViewStudentButtonAction" text="View" />
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddStudentButtonAction" text="Add" />
                         <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImportButtonAction" text="Import" />
                      </children>
                      <padding>

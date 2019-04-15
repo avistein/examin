@@ -118,6 +118,9 @@ public class SettingsController {
     private TextField universityInfoNameTextField;
 
     @FXML
+    private TextField copyrightYearTextField;
+
+    @FXML
     private ImageView universityInfoLogoImageView;
 
     @FXML
@@ -593,8 +596,9 @@ public class SettingsController {
             Value : Property Value
              */
             Map<String, String> propMap = new HashMap<>();
-            propMap.put("universityName", universityInfoNameTextField.getText());
+            propMap.put("universityName", universityInfoNameTextField.getText().trim());
             propMap.put("universityLogoLocation", "file:" + universityInfoLogo.getAbsolutePath());
+            propMap.put("copyrightYear", copyrightYearTextField.getText().trim());
 
             Task<Boolean> createPropertiesFileTask = fileHandlingService.getCreatePropertiesFile(
                     "settings.properties", propMap);
@@ -679,6 +683,7 @@ public class SettingsController {
 
             universityInfoLogoImageView.setImage(new Image(propMap.get("universityLogoLocation")));
             universityInfoNameTextField.setText(propMap.get("universityName"));
+            copyrightYearTextField.setText(propMap.get("copyrightYear"));
         }
     }
 

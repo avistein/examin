@@ -3,6 +3,8 @@ package util;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -90,6 +92,27 @@ public final class UISetterUtil {
 
             //initialize the parent as the owner of the modal
             modal.initOwner(parent);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return loader;
+    }
+
+    public static FXMLLoader setContentUI(String resourcePath, StackPane contentStackPane, Label subTitleLabel
+            , Label subSubTitleLabel, String subTitleText, String subSubTitleText){
+
+
+        FXMLLoader loader = new FXMLLoader(UISetterUtil.class.getResource(resourcePath));
+
+
+        try {
+
+            Parent root = loader.load();
+
+            subTitleLabel.setText(subTitleText);
+            subSubTitleLabel.setText(subSubTitleText);
+            contentStackPane.getChildren().setAll(root);
         } catch (Exception e) {
 
             e.printStackTrace();

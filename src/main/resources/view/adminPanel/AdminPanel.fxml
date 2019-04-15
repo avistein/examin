@@ -130,12 +130,25 @@
                   </Button>
                   <VBox alignment="CENTER">
                      <children>
+                        <Label layoutX="74.0" layoutY="10.0" text="examin">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <textFill>
+                              <LinearGradient endX="0.02857142857142861" endY="0.6380952380952382" startX="0.02380952380952382">
+                                 <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="WHITE" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </textFill>
+                        </Label>
                         <Label text="Version 1.0">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="20.0" />
+                              <Insets bottom="10.0" />
                            </VBox.margin>
                            <textFill>
                               <LinearGradient endX="0.02857142857142861" endY="0.6380952380952382" startX="0.02380952380952382">
@@ -146,10 +159,53 @@
                               </LinearGradient>
                            </textFill>
                         </Label>
-                        <Label text="Copyright ©2019. ABC University">
+                        <HBox alignment="CENTER">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
+                           <children>
+                              <Label text="Copyright ©">
+                                 <font>
+                                    <Font name="System Italic" size="12.0" />
+                                 </font>
+                                 <textFill>
+                                    <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                       <stops>
+                                          <Stop color="BLACK" />
+                                          <Stop color="WHITE" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </textFill>
+                              </Label>
+                              <Label fx:id="copyrightYearLabel" layoutX="10.0" layoutY="10.0">
+                                 <font>
+                                    <Font name="System Italic" size="12.0" />
+                                 </font>
+                                 <textFill>
+                                    <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                       <stops>
+                                          <Stop color="BLACK" />
+                                          <Stop color="WHITE" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </textFill>
+                              </Label>
+                              <Label fx:id="universityNameLabel" layoutX="76.0" layoutY="10.0">
+                                 <font>
+                                    <Font name="System Italic" size="12.0" />
+                                 </font>
+                                 <textFill>
+                                    <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                       <stops>
+                                          <Stop color="BLACK" />
+                                          <Stop color="WHITE" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </textFill>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Label layoutX="54.0" layoutY="87.0" text="All rights reserved.">
                            <font>
                               <Font name="System Italic" size="12.0" />
                            </font>
@@ -161,6 +217,9 @@
                                  </stops>
                               </LinearGradient>
                            </textFill>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </Label>
                         <Label text="Developed by Pitchers">
                            <font>
@@ -227,7 +286,7 @@
                   <Insets />
                </GridPane.margin>
             </StackPane>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #222051;">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #080638;">
                <children>
                   <Label text="Name :" textFill="WHITE">
                      <HBox.margin>
@@ -270,7 +329,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #222051;" GridPane.columnIndex="1">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #080638;" GridPane.columnIndex="1">
                <children>
                   <Button id="logoutButton" fx:id="logOutButton" mnemonicParsing="false" onAction="#handleLogOutButtonAction" text="Logout" />
                </children>
@@ -285,7 +344,7 @@
                         <Font name="System Italic" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="subTitleLabel" textFill="WHITE">
+                  <Label id="subTitle" fx:id="subTitleLabel" textFill="WHITE">
                      <font>
                         <Font name="System Italic" size="14.0" />
                      </font>

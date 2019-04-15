@@ -229,7 +229,7 @@ public class DashboardController {
         Button professorListButton = (Button) (adminPanelScene.lookup("#professorButton"));
         professorListButton.fire();
     }
-    
+
     /**
      * Callback method to open the /adminPanel/AcademicAdministration.fxml UI when clicked on the Vbox.
      */

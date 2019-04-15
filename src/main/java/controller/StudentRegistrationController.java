@@ -145,14 +145,7 @@ public class StudentRegistrationController {
 
     /*------------------------------------End of declaration and initialization----------------------------------*/
 
-    /**
-     * This method is used to initialize variables of this Class.
-     * This method is called when the FXMLLoader.load() is called.
-     * <p>
-     * Do not try to get the Scene or Window of any node in this method.
-     */
-    @FXML
-    private void initialize() {
+    public void initController(String deptName){
 
         courseService = new CourseService();
         batchService = new BatchService();
@@ -161,9 +154,23 @@ public class StudentRegistrationController {
         //initially adding of new student is opted
         editOrAddStudentChoice = ADD_CHOICE;
 
-        //get a list of available courses in the DB
-        Task<List<Course>> coursesTask = courseService
-                .getCoursesTask("");
+        //set items in the gender choice box
+        genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
+                , "Female", "Others"));
+
+        Task<List<Course>> coursesTask;
+
+        if(deptName.isEmpty()){
+
+            //get a list of available courses in the DB
+            coursesTask = courseService.getCoursesTask("");
+        }
+
+        else{
+
+            //get a list of available courses in the DB
+            coursesTask = courseService.getCoursesTask("WHERE v_dept_name=?", deptName);
+        }
         new Thread(coursesTask).start();
 
         coursesTask.setOnSucceeded(new EventHandler<>() {
@@ -190,10 +197,6 @@ public class StudentRegistrationController {
                     //set items in degreeComboBox
                     degreeComboBox.setItems(options);
                 }
-
-                //set items in the gender choice box
-                genderChoiceBox.setItems(FXCollections.observableArrayList("Male"
-                        , "Female", "Others"));
             }
         });
     }

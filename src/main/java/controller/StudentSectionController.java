@@ -62,6 +62,15 @@ public class StudentSectionController {
     private Label titleLabel;
 
     @FXML
+    private Button promoteButton;
+
+    @FXML
+    private Button viewButton;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
     private Button importButton;
 
     @FXML
@@ -118,18 +127,11 @@ public class StudentSectionController {
     @FXML
     private TableColumn<Student, String> regYearCol;
 
+    private int gid;
 
     /*-----------------------------------------End of initialization-------------------------------------------*/
 
-    /**
-     * This method is used to initialize variables of this Class.
-     * This method is called when the FXMLLoader.load() is called.
-     * <p>
-     * Do not try to get the Scene or Window of any node in this method.
-     */
-    @SuppressWarnings("Duplicates")
-    @FXML
-    public void initialize() {
+    public void initController(int gid, String deptName){
 
         studentService = new StudentService();
         courseService = new CourseService();
@@ -141,9 +143,26 @@ public class StudentSectionController {
         //initialize this for the studentTableView
         studentObsList = FXCollections.observableArrayList();
 
-        //get the list of courses available in the db
-        Task<List<Course>> coursesTask = courseService
-                .getCoursesTask("");
+        this.gid = gid;
+        if(gid == PROFESSOR_GID){
+
+            promoteButton.setVisible(false);
+            addButton.setVisible(false);
+            importButton.setVisible(false);
+        }
+
+        Task<List<Course>> coursesTask;
+        if(deptName.isEmpty()){
+
+            //get the list of courses available in the db
+            coursesTask = courseService.getCoursesTask("");
+        }
+        else{
+
+            //get the list of courses available in the db
+            coursesTask = courseService.getCoursesTask("WHERE v_dept_name=?", deptName);
+        }
+
         new Thread(coursesTask).start();
 
         coursesTask.setOnSucceeded(new EventHandler<>() {
@@ -173,7 +192,6 @@ public class StudentSectionController {
                 degreeComboBox.setItems(options);
             }
         });
-
     }
 
     /**
@@ -409,6 +427,8 @@ public class StudentSectionController {
             //get the controller
             ViewStudentModalController viewStudentModalController = loader.getController();
 
+            viewStudentModalController.initController(gid);
+
             //send the Student to the controller
             viewStudentModalController.setStudentPojo(student);
 
@@ -486,23 +506,22 @@ public class StudentSectionController {
     /**
      * Callback method to handle ADD STUDENT Button action.
      *
-     * @throws IOException Error while loading the FXML file.
      */
     @FXML
-    private void handleAddStudentButtonAction() throws IOException {
+    private void handleAddStudentButtonAction(){
 
         Scene mainScene = titleLabel.getScene();
         Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
-        subSubTitleLabel.setText("/ Add Student");
+        Label subTitleLabel = (Label) mainScene.lookup("#subTitle");
 
         //get the stackPane first in which the content is loaded
         StackPane contentStackPane = (StackPane) studentListGridPane.getParent().getParent();
 
-        Parent studentRegistrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/StudentRegistration.fxml"));
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/StudentRegistration.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Student", "/ Add Student");
 
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(studentRegistrationFxml);
+        StudentRegistrationController studentRegistrationController = loader.getController();
+        studentRegistrationController.initController("");
     }
 
     /**

@@ -369,28 +369,28 @@
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
                                                    <children>
                                                       <Label text="Department" />
-                                                      <ComboBox fx:id="subAllocFormDeptComboBox" onAction="#handleDeptFormComboBox" prefWidth="150.0" />
+                                                      <ComboBox fx:id="subAllocFormDeptComboBox" onAction="#handleSubAllocFormDeptComboBox" prefWidth="150.0" />
                                                    </children>
                                                 </VBox>
-                                                <VBox fx:id="subSingleDegreeComboBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                                <VBox fx:id="subSingleDegreeComboBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                                    <children>
                                                       <Label text="Degree" />
-                                                      <ComboBox fx:id="subAllocFormDegreeComboBox" onAction="#handleSubDegreeFormComboBox" prefWidth="150.0" />
+                                                      <ComboBox fx:id="subAllocFormDegreeComboBox" onAction="#handleSubAllocFormDegreeComboBox" prefWidth="150.0" />
                                                    </children>
                                                 </VBox>
-                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
                                                    <children>
                                                       <Label text="Discipline" />
-                                                      <ComboBox fx:id="subAllocFormDisciplineComboBox" onAction="#handleSubDisciplineFormComboBox" prefWidth="150.0" />
+                                                      <ComboBox fx:id="subAllocFormDisciplineComboBox" onAction="#handleSubAllocFormDisciplineComboBox" prefWidth="150.0" />
                                                    </children>
                                                 </VBox>
                                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
                                                    <children>
                                                       <Label text="Professor ID" />
-                                                      <ComboBox fx:id="subAllocFormProfIdComboBox" onAction="#handleSubProfFormComboBox" prefWidth="150.0" />
+                                                      <ComboBox fx:id="subAllocFormProfIdComboBox" onAction="#handleSubAllocFormProfIdComboBox" prefWidth="150.0" />
                                                    </children>
                                                 </VBox>
                                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
@@ -399,10 +399,10 @@
                                                       <Label fx:id="subAllocFormProfNameLabel" />
                                                    </children>
                                                 </VBox>
-                                                <VBox alignment="CENTER" layoutX="10.0" layoutY="378.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+                                                <VBox alignment="CENTER" layoutX="10.0" layoutY="378.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
                                                    <children>
                                                       <Label text="Subject ID" />
-                                                      <ComboBox fx:id="subAllocFormSubjectIdComboBox" onAction="#handleSubProfFormComboBox" prefWidth="150.0" />
+                                                      <ComboBox fx:id="subAllocFormSubjectIdComboBox" prefWidth="150.0" />
                                                    </children>
                                                 </VBox>
                                              </children>

@@ -56,11 +56,12 @@ public class MarksSectionController {
     private BatchService batchService;
     private StudentService studentService;
     private List<Course> courseList;
-
+    private Professor professor;
     private ObservableList<Marks> marksObsList;
 
-    @FXML
-    private void initialize() {
+    public void initController(Professor professor){
+
+        this.professor = professor;
 
         marksService = new MarksService();
         courseService = new CourseService();
@@ -244,7 +245,17 @@ public class MarksSectionController {
                         courseId = course.getCourseId();
                     }
                 }
-                String additionalQuery = "WHERE v_course_id=? AND int_semester=?";
+                String additionalQuery;
+                if(professor != null){
+
+                    additionalQuery = "WHERE v_course_id=? AND int_semester=? AND v_sub_id IN ('"
+                            + professor.getSubjects().stream().map(Subject::getSubId)
+                            .collect(Collectors.joining("','")) + "')";
+                }
+                else {
+
+                    additionalQuery = "WHERE v_course_id=? AND int_semester=?";
+                }
                 Task<List<Subject>> subjectDataTask = subjectService.getSubjectsTask(additionalQuery, courseId
                         , semesterComboBox.getValue());
                 new Thread(subjectDataTask).start();

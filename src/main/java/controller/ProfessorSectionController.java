@@ -183,19 +183,12 @@ public class ProfessorSectionController {
     private File file;
     private List<Course> listOfCourses;
     private List<Professor> listOfProfInSubAllocForm;
+    private int gid;
+    private String deptName;
 
     /*-----------------End of Declaration and initialization of variables of Subject Allocation Tab-------------------*/
 
-    /**
-     * This method is used to initialize variables of this Class.
-     * This method is called when the FXMLLoader.load() is called.
-     * <p>
-     * Do not try to get the Scene or Window of any node in this method.
-     */
-    @SuppressWarnings("Duplicates")
-    @FXML
-
-    public void initialize() {
+    public void initController(int gid, String deptName){
 
         professorService = new ProfessorService();
         departmentService = new DepartmentService();
@@ -210,6 +203,10 @@ public class ProfessorSectionController {
         initProfessorListCols();
 
         initSubAllocCols();
+
+        this.gid = gid;
+        this.deptName = deptName;
+
         //initialize the respective tabs if it is selected
         professorSectionTabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<>() {
 
@@ -230,6 +227,42 @@ public class ProfessorSectionController {
                 }
             }
         });
+
+        if(gid == PROFESSOR_HOD_GID){
+
+            subAllocFormDeptComboBox.setValue(deptName);
+            profDeptComboBox.setValue(deptName);
+        }
+        else{
+
+            //get the list of departments available in the db
+            Task<List<Department>> deptTask = departmentService
+                    .getDepartmentsTask("");
+            new Thread(deptTask).start();
+
+            deptTask.setOnSucceeded(new EventHandler<>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+
+                    List<String> items = new ArrayList<>();
+
+                    for (Department dept : deptTask.getValue()) {
+
+                        //add only unique department items to Sub Allocation form deptCombobox
+                        if (!items.contains(dept.getDeptName()))
+                            items.add(dept.getDeptName());
+                    }
+
+                    ObservableList<String> options1 = FXCollections.observableArrayList(items);
+
+                    subAllocFormDeptComboBox.setItems(options1);
+
+                    ObservableList<String> options2 = FXCollections.observableArrayList(items);
+                    options2.add("all");
+                    profDeptComboBox.setItems(options2);
+                }
+            });
+        }
     }
 
     /*---------------------------------------------Professor List Tab-------------------------------------------------*/
@@ -255,39 +288,6 @@ public class ProfessorSectionController {
 
         //initialize this for the professorTableView
         professorObsList = FXCollections.observableArrayList();
-
-        //get the list of departments available in the db
-        Task<List<Department>> deptTask = departmentService
-                .getDepartmentsTask("");
-        new Thread(deptTask).start();
-
-        deptTask.setOnSucceeded(new EventHandler<>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-
-                //store the list of all departments available in the DB
-                listOfDepartment = deptTask.getValue();
-
-                //only if there's any department in the db
-                if (!listOfDepartment.isEmpty()) {
-
-                    List<String> items = new ArrayList<>();
-
-                    for (Department dept : listOfDepartment) {
-
-                        //add only unique department items to deptCombobox
-                        if (!items.contains(dept.getDeptName()))
-                            items.add(dept.getDeptName());
-                    }
-
-                    //choosing this will display professors from all department
-                    items.add("all");
-
-                    ObservableList<String> options = FXCollections.observableArrayList(items);
-                    profDeptComboBox.setItems(options);
-                }
-            }
-        });
     }
 
     /**
@@ -507,23 +507,22 @@ public class ProfessorSectionController {
     /**
      * Callback method to handle ADD PROFESSOR Button action.
      *
-     * @throws IOException Error while loading the FXML file.
      */
     @FXML
-    private void handleAddProfButtonAction() throws IOException {
+    private void handleAddProfButtonAction(){
 
         Scene mainScene = professorSectionTabPane.getScene();
+        Label subTitleLabel = (Label) mainScene.lookup("#subTitle");
         Label subSubTitleLabel = (Label) mainScene.lookup("#subSubTitle");
-        subSubTitleLabel.setText("/ Add Professor");
 
         //get the stackPane first in which the content is loaded
         StackPane contentStackPane = (StackPane) professorSectionTabPane.getParent();
 
-        Parent professorRegistrationFxml = FXMLLoader.load(getClass()
-                .getResource("/view/ProfessorRegistration.fxml"));
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/ProfessorRegistration.fxml", contentStackPane
+                , subTitleLabel, subSubTitleLabel, "Professor", "/ Add Professor");
 
-        contentStackPane.getChildren().removeAll();
-        contentStackPane.getChildren().setAll(professorRegistrationFxml);
+        ProfessorRegistrationController professorRegistrationController = loader.getController();
+        professorRegistrationController.initController(gid, deptName);
     }
 
     /*---------------------------------------End of Professor List Tab------------------------------------------------*/
@@ -895,26 +894,29 @@ public class ProfessorSectionController {
 
         subAllocObsList = FXCollections.observableArrayList();
         populateSubAllocTable();
-        //get the list of departments available in the db
-        Task<List<Department>> deptTask = departmentService
-                .getDepartmentsTask("");
-        new Thread(deptTask).start();
 
-        deptTask.setOnSucceeded(new EventHandler<>() {
+        //get the list of Courses available in the db for that particular Dept.
+        Task<List<Course>> coursesTask = courseService.getCoursesTask("");
+        new Thread(coursesTask).start();
+
+        coursesTask.setOnSucceeded(new EventHandler<>() {
             @Override
             public void handle(WorkerStateEvent event) {
 
+                //store the list of all courses available in the DB for that particular department
+                listOfCourses = coursesTask.getValue();
+
                 List<String> items = new ArrayList<>();
 
-                for (Department dept : deptTask.getValue()) {
+                for (Course course : listOfCourses) {
 
-                    //add only unique department items to Sub Allocation form deptCombobox
-                    if (!items.contains(dept.getDeptName()))
-                        items.add(dept.getDeptName());
+                    //add only unique degree items to Degree combo box
+                    if (!items.contains(course.getDegree()))
+                        items.add(course.getDegree());
                 }
 
                 ObservableList<String> options = FXCollections.observableArrayList(items);
-                subAllocFormDeptComboBox.setItems(options);
+                subAllocFormDegreeComboBox.setItems(options);
             }
         });
     }
@@ -1034,72 +1036,10 @@ public class ProfessorSectionController {
     /*---------------------------------------------Subject Allocation Form--------------------------------------------*/
 
     /**
-     * Callback method to handle selection of a Department from the Dept Combo Box in the Subject Allocation Form.
-     */
-    @FXML
-    private void handleDeptFormComboBox() {
-
-        subAllocFormDegreeComboBox.getSelectionModel().clearSelection();
-        subAllocFormDegreeComboBox.getItems().clear();
-
-        subAllocFormProfIdComboBox.getSelectionModel().clearSelection();
-        subAllocFormProfIdComboBox.getItems().clear();
-
-        //get the list of Courses available in the db for that particular Dept.
-        Task<List<Course>> coursesTask = courseService.getCoursesTask("where v_dept_name=?"
-                , subAllocFormDeptComboBox.getValue());
-        new Thread(coursesTask).start();
-
-        coursesTask.setOnSucceeded(new EventHandler<>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-
-                //store the list of all courses available in the DB for that particular department
-                listOfCourses = coursesTask.getValue();
-
-                List<String> items = new ArrayList<>();
-
-                for (Course course : listOfCourses) {
-
-                    //add only unique degree items to Degree combo box
-                    if (!items.contains(course.getDegree()))
-                        items.add(course.getDegree());
-                }
-
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                subAllocFormDegreeComboBox.setItems(options);
-            }
-        });
-
-        //get the list of professors for that particular department
-        Task<List<Professor>> profsTask = professorService.getProfessorTask("where v_dept_name=?"
-                , subAllocFormDeptComboBox.getValue());
-        new Thread(profsTask).start();
-
-        profsTask.setOnSucceeded(new EventHandler<>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-
-                listOfProfInSubAllocForm = profsTask.getValue();
-
-                List<String> items = new ArrayList<>();
-
-                for (Professor professor : listOfProfInSubAllocForm) {
-
-                    items.add(professor.getProfId());
-                }
-
-                ObservableList<String> options = FXCollections.observableArrayList(items);
-                subAllocFormProfIdComboBox.setItems(options);
-            }
-        });
-    }
-
-    /**
      * This method is used to handle the selection of a Degree from the Degree Combo Box in the Subject Allocation Form.
      */
     @FXML
-    private void handleSubDegreeFormComboBox() {
+    private void handleSubAllocFormDegreeComboBox() {
 
         subAllocFormDisciplineComboBox.getSelectionModel().clearSelection();
         subAllocFormDisciplineComboBox.getItems().clear();
@@ -1127,7 +1067,7 @@ public class ProfessorSectionController {
      * Method to handle the selection of Discipline from the combo Boxes in the Subject Allocation Form.
      */
     @FXML
-    private void handleSubDisciplineFormComboBox() {
+    private void handleSubAllocFormDisciplineComboBox() {
 
         subAllocFormSubjectIdComboBox.getSelectionModel().clearSelection();
         subAllocFormSubjectIdComboBox.getItems().clear();
@@ -1170,11 +1110,47 @@ public class ProfessorSectionController {
         }
     }
 
+
+    /**
+     * Callback method to handle selection of a Department from the Dept Combo Box in the Subject Allocation Form.
+     */
+    @FXML
+    private void handleSubAllocFormDeptComboBox() {
+
+        subAllocFormProfIdComboBox.getSelectionModel().clearSelection();
+        subAllocFormProfIdComboBox.getItems().clear();
+
+        subAllocFormProfNameLabel.setText("");
+
+        //get the list of professors for that particular department
+        Task<List<Professor>> profsTask = professorService.getProfessorTask("where v_dept_name=?"
+                , subAllocFormDeptComboBox.getValue());
+        new Thread(profsTask).start();
+
+        profsTask.setOnSucceeded(new EventHandler<>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+
+                listOfProfInSubAllocForm = profsTask.getValue();
+
+                List<String> items = new ArrayList<>();
+
+                for (Professor professor : listOfProfInSubAllocForm) {
+
+                    items.add(professor.getProfId());
+                }
+
+                ObservableList<String> options = FXCollections.observableArrayList(items);
+                subAllocFormProfIdComboBox.setItems(options);
+            }
+        });
+    }
+
     /**
      * This method is used to handle the selection of Prof ID from the comboBox in the Subject Allocation form.
      */
     @FXML
-    private void handleSubProfFormComboBox() {
+    private void handleSubAllocFormProfIdComboBox() {
 
         if (subAllocFormProfIdComboBox.getValue() != null) {
 
