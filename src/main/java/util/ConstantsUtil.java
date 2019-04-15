@@ -20,19 +20,21 @@ public final class ConstantsUtil {
 
     public static final int PROFESSOR_GID = 4;
 
-    public static final int SUCCESS = 200;
+    public static final int SUCCESS = -10;
 
-    public static final int DATABASE_ERROR = -1;
+    public static final int DATABASE_ERROR = -11;
 
-    public static final int LOGIN_ERROR = -2;
+    public static final int LOGIN_ERROR = -12;
 
-    public static final int PROMOTION_ERROR = -6;
+    public static final int PROMOTION_ERROR = -16;
 
-    public static final int DATA_ALREADY_EXIST_ERROR = -3;
+    public static final int DATA_ALREADY_EXIST_ERROR = -13;
 
-    public static final int DATA_INEXISTENT_ERROR = -4;
+    public static final int DATA_INEXISTENT_ERROR = -14;
 
-    public static final int DATA_DEPENDENCY_ERROR = -5;
+    public static final int DATA_DEPENDENCY_ERROR = -15;
+
+    public static final int INSUFFICIENT_DATA_ERROR = -17;
 
     public static final int ADD_CHOICE = 1;
 

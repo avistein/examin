@@ -39,7 +39,7 @@ public class PdfService {
             table.setWidths(new float[]{2, 5, 2});
 
             Image image = Image.getInstance(propMap.get("universityLogoLocation"));
-            image.scaleAbsolute(100, 100);
+            image.scaleAbsolute(80, 80);
 
             Phrase phrase = new Phrase();
             phrase.add(new Phrase(propMap.get("universityName") + "\n\n", TITLE_FONT));
@@ -85,8 +85,8 @@ public class PdfService {
                     Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                     String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                            + FILE_SEPARATOR + "routine_Semester" + semester + "_" + examDetails.getAcademicYear()
-                            + ".pdf";
+                            + FILE_SEPARATOR + "routine_semester" + semester + "_" + examDetails.getExamType()
+                            .toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                     Phrase pdfTitle = new Phrase("Routine for Semester " + semester + " "
                             + examDetails.getExamType() + " Examination\n"
@@ -212,8 +212,8 @@ public class PdfService {
                 Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                 String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                        + FILE_SEPARATOR + "room_allocation" + "_" + examDetails.getAcademicYear()
-                        + ".pdf";
+                        + FILE_SEPARATOR + "room_allocation_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                        examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                 Phrase pdfTitle = new Phrase("Room Allocation for " + examDetails.getExamType()
                         + " Examination\n" + examDetails.getAcademicYear(), RED_SUBTITLE_FONT);
@@ -323,8 +323,8 @@ public class PdfService {
                 Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                 String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                        + FILE_SEPARATOR + "seat_arrangement" + "_" + examDetails.getAcademicYear()
-                        + ".pdf";
+                        + FILE_SEPARATOR + "seat_arrangement_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                        examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                 Phrase pdfTitle = new Phrase("Seat Arrangement for " + examDetails.getExamType()
                         + " Examination\n" + examDetails.getAcademicYear(), RED_SUBTITLE_FONT);
@@ -456,8 +456,8 @@ public class PdfService {
                 Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                 String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                        + FILE_SEPARATOR + "invigilation_duty" + "_" + examDetails.getAcademicYear()
-                        + ".pdf";
+                        + FILE_SEPARATOR + "invigilation_duty_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                        examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                 Phrase pdfTitle = new Phrase("Invigilation Duty Chart for " + examDetails.getExamType()
                         + " Examination\n" + examDetails.getAcademicYear(), RED_SUBTITLE_FONT);

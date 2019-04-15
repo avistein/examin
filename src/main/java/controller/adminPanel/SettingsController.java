@@ -679,7 +679,8 @@ public class SettingsController {
         if (settingsPropsFileLocation.toFile().exists()) {
 
             Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
-                    ("settings.properties", "universityName", "universityLogoLocation");
+                    ("settings.properties", "universityName", "universityLogoLocation"
+                            , "copyrightYear");
 
             universityInfoLogoImageView.setImage(new Image(propMap.get("universityLogoLocation")));
             universityInfoNameTextField.setText(propMap.get("universityName"));

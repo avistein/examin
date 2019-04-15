@@ -478,6 +478,14 @@ public class ExamCommand {
                     examMap.get(exam.getExamDate()).add(exam);
                 }
 
+                for(Map.Entry<String, List<Exam>> entry : examMap.entrySet()){
+
+                    if(entry.getValue().size() > professorList.size()){
+
+                        return INSUFFICIENT_DATA_ERROR;
+                    }
+                }
+
                 /*
                 This HashMap is used to count the no of duties assigned to each professor.
                 The data structure is as follows :
@@ -545,6 +553,11 @@ public class ExamCommand {
 
                             invigilationDuty.setProfId(getValidInvigilator(professorList, examsOnRoom
                                     , invigilatorsAssignment, invigilatorAssignedInTheCurrentDate));
+
+                            if(invigilationDuty.getProfId() == null){
+
+                                return INSUFFICIENT_DATA_ERROR;
+                            }
                             invigilationDuty.setRoomNo(examsOnRoom.getRoomNo());
                             invigilationDuty.setExamDetailId(examsOnRoom.getExamDetailsId());
                             invigilationDuty.setExamDate(entry.getKey());

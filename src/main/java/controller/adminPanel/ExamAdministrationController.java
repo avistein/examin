@@ -1,6 +1,7 @@
 package controller.adminPanel;
 
 import command.ExamCommand;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -12,6 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +28,10 @@ import service.PdfService;
 import util.UISetterUtil;
 import util.ValidatorUtil;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -99,6 +107,9 @@ public class ExamAdministrationController {
 
     @FXML
     private TableView<ExamDetails> manageExamTableView;
+
+    @FXML
+    private ComboBox<String> viewTimeTableComboBox;
 
     @FXML
     private TableColumn<ExamDetails, String> examDetailsIdCol;
@@ -358,6 +369,35 @@ public class ExamAdministrationController {
 
     /*-----------------------------------------Manage Exam Tab operation----------------------------------------------*/
 
+    @FXML
+    private void handleManageExamTableViewOnMouseClickedAction() {
+
+        ExamDetails examDetails = manageExamTableView.getSelectionModel().getSelectedItem();
+
+        if(examDetails != null){
+
+            viewTimeTableComboBox.getItems().clear();
+            viewTimeTableComboBox.getSelectionModel().clearSelection();
+
+            int initialSemester = examDetails.getSemesterType().equals("ODD")? 1 : 0;
+
+            List<String> items = new ArrayList<>();
+            for(int i = initialSemester; i <= 10; i += 2) {
+
+                String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
+                        + FILE_SEPARATOR + "routine_semester" + i + "_" + examDetails.getExamType()
+                        .toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
+
+                if(Paths.get(filePath).toFile().exists()){
+
+                    items.add("Semester " + i);
+                }
+            }
+            ObservableList<String> options = FXCollections.observableArrayList(items);
+            viewTimeTableComboBox.setItems(options);
+        }
+    }
+
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleDeleteExamButtonAction() {
@@ -441,54 +481,22 @@ public class ExamAdministrationController {
                     public void handle(WorkerStateEvent event) {
 
                         manageExamTabStatusLabel.setVisible(true);
+                        manageExamTabProgressIndicator.setVisible(false);
+                        manageExamTabStatusImageView.setVisible(true);
+                        manageExamTabMsgLabel.setText("Click anywhere to proceed.");
 
                         int status = createExamRoutineTask.getValue();
 
                         if (status == DATABASE_ERROR) {
 
-                            manageExamTabProgressIndicator.setVisible(false);
-                            manageExamTabStatusImageView.setVisible(true);
                             manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
                             manageExamTabStatusLabel.setText("Error!");
                         } else if (status == SUCCESS) {
 
                             manageExamTabStatusLabel.setText("Successfully created Exam Routine!");
-                            manageExamTabMsgLabel.setText("Assigning students to exams now. Please do not close this.");
-
-
-//                            Task<Integer> assignStudentsToExamTask = examCommand.getAssignStudentsToExamTask();
-//                            new Thread(assignStudentsToExamTask).start();
-//
-//                            assignStudentsToExamTask.setOnSucceeded(new EventHandler<>() {
-//                                @Override
-//                                public void handle(WorkerStateEvent event) {
-//
-//                                    manageExamTabProgressIndicator.setVisible(false);
-//                                    manageExamTabStatusImageView.setVisible(true);
-//                                    manageExamTabStatusLabel.setVisible(true);
-//                                    manageExamTabMsgLabel.setText("Click anywhere to proceed! ");
-//
-//                                    int status = assignStudentsToExamTask.getValue();
-//
-//                                    if (status == DATABASE_ERROR) {
-//
-//                                        manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
-//                                        manageExamTabStatusLabel.setText("Error!");
-//                                    } else if (status == SUCCESS) {
-//
-//                                        manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
-//                                        manageExamTabStatusLabel.setText("Successfully assigned all students to exams!");
-//                                    } else {
-//
-//                                        manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
-//                                        manageExamTabStatusLabel.setText("Student assignment already exists!");
-//                                    }
-//                                }
-//                            });
+                            manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
                         } else {
 
-                            manageExamTabProgressIndicator.setVisible(false);
-                            manageExamTabStatusImageView.setVisible(true);
                             manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
                             manageExamTabStatusLabel.setText("Routine for this exam already exists!");
                         }
@@ -572,6 +580,7 @@ public class ExamAdministrationController {
 
                                     manageExamTabStatusImageView.setImage(new Image("/png/success.png"));
                                     manageExamTabStatusLabel.setText("Successfully created Exam Routine PDF!");
+                                    handleManageExamTableViewOnMouseClickedAction();
                                 } else {
 
                                     manageExamTabStatusImageView.setImage(new Image("/png/critical error.png"));
@@ -586,8 +595,42 @@ public class ExamAdministrationController {
     }
 
     @FXML
-    private void handleTimeTableViewButtonAction() {
+    private void handleViewTimeTableComboBox() {
 
+        ExamDetails examDetails = manageExamTableView.getSelectionModel().getSelectedItem();
+
+        if(examDetails != null && viewTimeTableComboBox.getValue() != null){
+
+            String semester = viewTimeTableComboBox.getValue().split(" ")[1];
+            //location where the new csv will be created in the user's system
+            String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
+                    + FILE_SEPARATOR + "routine_semester" + semester + "_" + examDetails.getExamType()
+                    .toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
+
+            if(Paths.get(filePath).toFile().exists()){
+
+                try {
+
+                    Desktop.getDesktop().open(new File(filePath));
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+            else{
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Please generate PDF first !");
+                alert.show();
+            }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+
+                    viewTimeTableComboBox.getSelectionModel().clearSelection();
+                }
+            });
+        }
     }
 
     @FXML
@@ -597,7 +640,7 @@ public class ExamAdministrationController {
 
         if (examDetails != null) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Do you really want to delete the Exam Routine for Exam ID "
                     + examDetails.getExamDetailsId() + " ?");
             Optional<ButtonType> result = alert.showAndWait();
@@ -757,6 +800,32 @@ public class ExamAdministrationController {
     @FXML
     private void handleRoomAllocationViewButtonAction() {
 
+        ExamDetails examDetails = manageExamTableView.getSelectionModel().getSelectedItem();
+
+        if(examDetails != null){
+
+            //location where the new csv will be created in the user's system
+            String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
+                    + FILE_SEPARATOR + "room_allocation_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                    examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
+
+            if(Paths.get(filePath).toFile().exists()){
+
+                try {
+
+                    Desktop.getDesktop().open(new File(filePath));
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+            else{
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Please generate PDF first!  ");
+                alert.show();
+            }
+        }
     }
 
     @FXML
@@ -766,7 +835,7 @@ public class ExamAdministrationController {
 
         if (examDetails != null) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Do you really want to delete the Room Allocation for Exam ID "
                     + examDetails.getExamDetailsId() + " ?");
             Optional<ButtonType> result = alert.showAndWait();
@@ -884,6 +953,32 @@ public class ExamAdministrationController {
     @FXML
     private void handleSeatArrangementViewButtonAction() {
 
+        ExamDetails examDetails = manageExamTableView.getSelectionModel().getSelectedItem();
+
+        if(examDetails != null){
+
+            //location where the new csv will be created in the user's system
+            String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
+                    + FILE_SEPARATOR + "seat_arrangement_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                    examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
+
+            if(Paths.get(filePath).toFile().exists()){
+
+                try {
+
+                    Desktop.getDesktop().open(new File(filePath));
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+            else{
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Please generate PDF first!");
+                alert.show();
+            }
+        }
     }
 
     @FXML
@@ -955,7 +1050,13 @@ public class ExamAdministrationController {
 
                                 manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
                                 manageExamTabStatusLabel.setText("Invigilation Duty for this exam already exists!");
-                            } else {
+                            }
+                            else if(status == INSUFFICIENT_DATA_ERROR){
+
+                                manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
+                                manageExamTabStatusLabel.setText("Professors chosen for invigilation aren't enough!");
+                            }
+                            else {
 
                                 manageExamTabStatusImageView.setImage(new Image("/png/error.png"));
                                 manageExamTabStatusLabel.setText("First create exam routine and room allocation!");
@@ -1041,6 +1142,32 @@ public class ExamAdministrationController {
     @FXML
     private void handleInvigilationDutyViewButtonAction() {
 
+        ExamDetails examDetails = manageExamTableView.getSelectionModel().getSelectedItem();
+
+        if(examDetails != null){
+
+            //location where the new csv will be created in the user's system
+            String filePath = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
+                    + FILE_SEPARATOR + "invigilation_duty_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                    examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
+
+            if(Paths.get(filePath).toFile().exists()){
+
+                try {
+
+                    Desktop.getDesktop().open(new File(filePath));
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+            else{
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Please generate PDF first! ");
+                alert.show();
+            }
+        }
     }
 
     @FXML
@@ -1083,7 +1210,7 @@ public class ExamAdministrationController {
 
         if (examDetails != null) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Do you really want to delete the Invigilation Duty for Exam ID "
                     + examDetails.getExamDetailsId() + " ?");
             Optional<ButtonType> result = alert.showAndWait();

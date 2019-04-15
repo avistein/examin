@@ -58,7 +58,7 @@
                            <children>
                               <Label text="Import Holiday List CSV" textFill="WHITE">
                                  <font>
-                                    <Font size="13.0" />
+                                    <Font name="System Bold" size="12.0" />
                                  </font></Label>
                            </children>
                            <padding>
@@ -184,7 +184,7 @@
                            <children>
                               <Label text="Holidays List" textFill="WHITE">
                                  <font>
-                                    <Font size="13.0" />
+                                    <Font name="System Bold" size="12.0" />
                                  </font></Label>
                            </children>
                            <padding>
