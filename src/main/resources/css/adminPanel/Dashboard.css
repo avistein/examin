@@ -61,3 +61,10 @@
 	-fx-border-style: solid;
 	-fx-border-radius: 5px;
 }
+#dummy{
+
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}

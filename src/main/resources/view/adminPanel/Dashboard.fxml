@@ -26,7 +26,7 @@
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints maxHeight="210.0" minHeight="10.0" prefHeight="201.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="201.0" minHeight="-Infinity" prefHeight="201.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="39.0" minHeight="-Infinity" prefHeight="39.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="434.0" vgrow="SOMETIMES" />
   </rowConstraints>
@@ -323,7 +323,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalCoursesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox id="courses" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalCoursesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -412,7 +412,8 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="4" />
+            <HBox id="dummy" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="4" />
+            <VBox id="dummy" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" />
          </children>
       </GridPane>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #6d6ea0;" GridPane.rowIndex="1">
