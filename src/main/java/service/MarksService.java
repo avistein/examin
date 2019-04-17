@@ -51,7 +51,7 @@ public class MarksService {
      */
     public List<Marks> getMarksData(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_reg_id, int_obtained_marks, v_sub_id, v_course_id, int_semester FROM " +
+        final String query = "SELECT v_reg_id, v_obtained_marks, v_sub_id, v_course_id, int_semester FROM " +
                 "t_student_marks NATURAL JOIN t_subject " + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
@@ -70,9 +70,9 @@ public class MarksService {
             marks.setRegId(map.get("v_reg_id").get(i));
             marks.setCourseId(map.get("v_course_id").get(i));
             marks.setSubId(map.get("v_sub_id").get(i));
-            if(map.get("int_obtained_marks").get(i) != null ){
+            if(map.get("v_obtained_marks").get(i) != null ){
 
-                marks.setObtainedMarks(map.get("int_obtained_marks").get(i));
+                marks.setObtainedMarks(map.get("v_obtained_marks").get(i));
             }
             marks.setSemester(map.get("int_semester").get(i));
 
@@ -90,7 +90,7 @@ public class MarksService {
             @Override
             protected Integer call() {
 
-                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE v_course_id=? AND v_sub_id=? " +
+                final String sql = "UPDATE t_student_marks SET v_obtained_marks=? WHERE v_course_id=? AND v_sub_id=? " +
                         "AND v_reg_id=?";
 
 
@@ -183,7 +183,7 @@ public class MarksService {
             @Override
             protected Integer call() {
 
-                final String sql = "UPDATE t_student_marks SET int_obtained_marks=? WHERE v_course_id=? AND v_sub_id=? " +
+                final String sql = "UPDATE t_student_marks SET v_obtained_marks=? WHERE v_course_id=? AND v_sub_id=? " +
                         "AND v_reg_id=?";
 
                 /*
