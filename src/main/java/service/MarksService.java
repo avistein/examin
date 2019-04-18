@@ -216,7 +216,7 @@ public class MarksService {
                 }
 
                 /*get the no of insertions or error status of the INSERT operation*/
-                int tStudentMarksStatus = databaseHelper.batchInsertUpdate(sql, marksList);
+                int tStudentMarksStatus = databaseHelper.batchInsertUpdateDelete(sql, marksList);
 
                 //if any DB error is present
                 if (tStudentMarksStatus == DATABASE_ERROR ) {

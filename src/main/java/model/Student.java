@@ -1,5 +1,6 @@
 package model;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -33,6 +34,7 @@ public class Student extends Batch implements Serializable {
     private SimpleStringProperty guardianName;
     private SimpleStringProperty currSemester;
     private SimpleStringProperty profileImagePath;
+    private SimpleBooleanProperty selected;
 
     /*------------------------------------End of Initialization-------------------------------------*/
 
@@ -57,6 +59,7 @@ public class Student extends Batch implements Serializable {
         this.guardianName = new SimpleStringProperty("");
         this.currSemester = new SimpleStringProperty("");
         this.profileImagePath = new SimpleStringProperty("");
+        this.selected = new SimpleBooleanProperty(false);
     }
 
     /**
@@ -381,5 +384,17 @@ public class Student extends Batch implements Serializable {
     public void setProfileImagePath(String path) {
 
         this.profileImagePath.set(path);
+    }
+
+    public boolean isSelected() {
+        return selected.get();
+    }
+
+    public SimpleBooleanProperty selectedProperty() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected.set(selected);
     }
 }

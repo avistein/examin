@@ -9,12 +9,14 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -126,6 +128,9 @@ public class StudentSectionController {
 
     @FXML
     private TableColumn<Student, String> regYearCol;
+
+    @FXML
+    private TableColumn<Student, Boolean> selectCol;
 
     private int gid;
 
@@ -449,12 +454,19 @@ public class StudentSectionController {
     @FXML
     private void handlePromoteStudentButtonAction() {
 
-        Student student = studentTableView.getSelectionModel().getSelectedItem();
+        List<Student> studentList = new ArrayList<>();
+        for(Student student : studentObsList){
 
-        if (student != null) {
+            if(student.isSelected()){
+
+                studentList.add(student);
+            }
+        }
+
+        if (!studentList.isEmpty()) {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText("Do you want to promote student with Reg Id " + student.getRegId());
+            alert.setHeaderText("Do you want to promote the selected students ?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.get() == ButtonType.OK) {
@@ -464,7 +476,7 @@ public class StudentSectionController {
                 studentListGridPane.setOpacity(0.2);
                 statusStackPane.setVisible(true);
 
-                Task<Integer> promoteStudentTask = promotionCommand.getPromoteStudentTask(student);
+                Task<Integer> promoteStudentTask = promotionCommand.getPromoteStudentTask(studentList);
                 new Thread(promoteStudentTask).start();
 
                 promoteStudentTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
@@ -486,16 +498,18 @@ public class StudentSectionController {
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                             alert1.setHeaderText("Student promotion successful!");
                             alert1.show();
-                            studentObsList.remove(student);
+                            populateTable();
                         } else if (status == PROMOTION_ERROR) {
 
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                            alert1.setHeaderText("Cannot award degree completion. Student has pending backlogs!");
+                            alert1.setHeaderText("Few students have pending backlogs! Others have been promoted!");
                             alert1.show();
+                            populateTable();
                         } else {
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
-                            alert1.setHeaderText("Student doesn't exist!");
+                            alert1.setHeaderText("Few students doesn't exist in the system! Others have been promoted! ");
                             alert1.show();
+                            populateTable();
                         }
                     }
                 });
@@ -541,8 +555,18 @@ public class StudentSectionController {
         disciplineCol.setCellValueFactory(new PropertyValueFactory<>("discipline"));
         batchCol.setCellValueFactory(new PropertyValueFactory<>("batchName"));
         regYearCol.setCellValueFactory(new PropertyValueFactory<>("regYear"));
+        selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
+        selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
     }
 
+    @FXML
+    public void handleSelectAllCheckBoxAction(ActionEvent e){
+
+        for(Student student : studentObsList){
+
+            student.setSelected(((CheckBox) e.getSource()).isSelected());
+        }
+    }
     /**
      * This method populates and updates the Student Table.
      */

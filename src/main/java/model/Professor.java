@@ -1,5 +1,6 @@
 package model;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -34,6 +35,7 @@ public class Professor extends Department implements Serializable {
     private SimpleListProperty<Subject> subjects;
     private SimpleStringProperty profileImagePath;
     private SimpleStringProperty academicRank;
+    private SimpleBooleanProperty selected;
 
     /*------------------------------------End of Initialization-------------------------------------*/
 
@@ -56,6 +58,7 @@ public class Professor extends Department implements Serializable {
         this.subjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.profileImagePath = new SimpleStringProperty("");
         this.academicRank = new SimpleStringProperty("");
+        this.selected = new SimpleBooleanProperty(false);
     }
 
     /**
@@ -336,5 +339,17 @@ public class Professor extends Department implements Serializable {
     public void setAcademicRank(String academicRank) {
 
         this.academicRank.set(academicRank);
+    }
+
+    public boolean isSelected() {
+        return selected.get();
+    }
+
+    public SimpleBooleanProperty selectedProperty() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected.set(selected);
     }
 }

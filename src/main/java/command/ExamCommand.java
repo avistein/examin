@@ -453,7 +453,7 @@ public class ExamCommand {
             @Override
             protected Integer call() {
 
-                List<Exam> examRoutine = examService.getExamRoutine("WHERE v_exam_details_id=?"
+                List<Exam> examRoutine = examService.getExamRoutine("WHERE v_exam_details_id=? ORDER BY d_exam_date"
                         , examDetails.getExamDetailsId());
 
                 if(examRoutine.isEmpty()){
@@ -478,13 +478,13 @@ public class ExamCommand {
                     examMap.get(exam.getExamDate()).add(exam);
                 }
 
-                for(Map.Entry<String, List<Exam>> entry : examMap.entrySet()){
-
-                    if(entry.getValue().size() > professorList.size()){
-
-                        return INSUFFICIENT_DATA_ERROR;
-                    }
-                }
+//                for(Map.Entry<String, List<Exam>> entry : examMap.entrySet()){
+//
+//                    if(entry.getValue().size() > professorList.size()){
+//
+//                        return INSUFFICIENT_DATA_ERROR;
+//                    }
+//                }
 
                 /*
                 This HashMap is used to count the no of duties assigned to each professor.
@@ -512,11 +512,17 @@ public class ExamCommand {
                      */
                     boolean[] invigilatorAssignedInTheCurrentDate = new boolean[professorList.size()];
 
-                    String additionalQuery = "WHERE int_exam_id IN (" + entry.getValue().stream().map(Exam::getExamId)
-                            .collect(Collectors.joining(",")) + ")";
+                    StringBuilder additionalQuery = new StringBuilder("WHERE v_exam_details_id=? AND (");
+                    for(Exam exam : examRoutine){
 
+                        additionalQuery.append("OR (v_course_id='").append(exam.getCourseId()).append("'").append(" AND ").append("v_sub_id='")
+                                .append(exam.getSubId()).append("'").append(")");
+                    }
+                    additionalQuery.delete(31, 34);
+                    additionalQuery.append(")");
                     //get the list of exams happening on the particular date
-                    List<ExamsOnRoom> examsOnRoomList = examService.getExamsOnRoomData(additionalQuery);
+                    List<ExamsOnRoom> examsOnRoomList = examService.getExamsOnRoomData(String.valueOf(additionalQuery)
+                            , examDetails.getExamDetailsId());
 
                     if(examsOnRoomList.isEmpty()){
 

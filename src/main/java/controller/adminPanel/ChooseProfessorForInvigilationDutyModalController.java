@@ -4,9 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Professor;
@@ -20,6 +22,9 @@ public class ChooseProfessorForInvigilationDutyModalController {
 
     @FXML
     private TableView<Professor> professorTableView;
+
+    @FXML
+    private TableColumn<Professor, Boolean> selectCol;
 
     @FXML
     private TableColumn<Professor, String> profIdCol;
@@ -42,43 +47,47 @@ public class ChooseProfessorForInvigilationDutyModalController {
     private Stage modalStage;
     private ProfessorService professorService;
 
-    private List<Professor> listOfProfessors;
+    private ObservableList<Professor> profObsList;
+    private List<Professor> invigilatorsList;
 
 
     @FXML
     private void initialize() {
 
         professorService = new ProfessorService();
-        professorTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        listOfProfessors = new ArrayList<>();
+        profObsList = FXCollections.observableArrayList();
+        invigilatorsList = new ArrayList<>();
         initCols();
         populateTable();
     }
 
     @FXML
-    private void handleSelectAllButtonAction() {
+    private void handleSelectAllCheckBoxAction(ActionEvent event) {
 
-        professorTableView.getSelectionModel().selectAll();
-    }
+        for(Professor professor : profObsList){
 
-    @FXML
-    private void handleDeselectAllButtonAction(){
-
-        professorTableView.getSelectionModel().clearSelection();
+            professor.setSelected(((CheckBox)event.getSource()).isSelected());
+        }
     }
 
     @FXML
     private void handleSubmitButtonAction() {
 
-        listOfProfessors = professorTableView.getSelectionModel().getSelectedItems();
-        if (listOfProfessors.isEmpty()) {
+        for (Professor professor : profObsList) {
+
+            if (professor.isSelected()) {
+
+                invigilatorsList.add(professor);
+            }
+        }
+        if (invigilatorsList.isEmpty()) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("No professor is selected!");
             alert.show();
         } else {
 
-            modalStage = (Stage)submitButton.getScene().getWindow();
+            modalStage = (Stage) submitButton.getScene().getWindow();
             modalStage.hide();
         }
     }
@@ -86,7 +95,7 @@ public class ChooseProfessorForInvigilationDutyModalController {
     @FXML
     private void handleCancelButtonAction() {
 
-        modalStage = (Stage)submitButton.getScene().getWindow();
+        modalStage = (Stage) submitButton.getScene().getWindow();
         modalStage.hide();
     }
 
@@ -97,6 +106,8 @@ public class ChooseProfessorForInvigilationDutyModalController {
         middleNameCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         deptCol.setCellValueFactory(new PropertyValueFactory<>("deptName"));
+        selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
+        selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
     }
 
 
@@ -113,14 +124,15 @@ public class ChooseProfessorForInvigilationDutyModalController {
             public void handle(WorkerStateEvent event) {
 
                 //set items in the TableView
-                professorTableView.setItems(FXCollections.observableArrayList(professorTask.getValue()));
+                profObsList.setAll(professorTask.getValue());
+                professorTableView.setItems(profObsList);
 
             }
         });
     }
 
-    public List<Professor> getProfessorsList(){
+    public List<Professor> getProfessorsList() {
 
-        return listOfProfessors;
+        return invigilatorsList;
     }
 }

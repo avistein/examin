@@ -355,7 +355,7 @@ public class SubjectService {
                 }
 
                 /*get the no of insertions or error status of the INSERT operation in the t_prof_sub table in the DB*/
-                int tProfSubStatus = databaseHelper.batchInsertUpdate(sql1, listOfSubjectAllocations);
+                int tProfSubStatus = databaseHelper.batchInsertUpdateDelete(sql1, listOfSubjectAllocations);
 
                 //if any DB error is present
                 if (tProfSubStatus == DATABASE_ERROR) {

@@ -320,9 +320,9 @@ public class StudentService {
                 }
 
                 /*get the no of insertions or error status of the INSERT operation*/
-                int tStudentStatus = databaseHelper.batchInsertUpdate(sql1, listOfStudents);
-                int tStudentEnrollmentStatus = databaseHelper.batchInsertUpdate(sql2, studentEnrollmentList);
-                int tStudentMarksStatus = databaseHelper.batchInsertUpdate(sql3, listOfStudentAssignmentsInSubjects);
+                int tStudentStatus = databaseHelper.batchInsertUpdateDelete(sql1, listOfStudents);
+                int tStudentEnrollmentStatus = databaseHelper.batchInsertUpdateDelete(sql2, studentEnrollmentList);
+                int tStudentMarksStatus = databaseHelper.batchInsertUpdateDelete(sql3, listOfStudentAssignmentsInSubjects);
 
                 //if any DB error is present
                 if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR
@@ -401,7 +401,7 @@ public class StudentService {
                 int tStudentEnrollmentStatus = databaseHelper.insert(sql2, student.getBatchId()
                         , student.getRegId(), student.getCurrSemester());
 
-                int tStudentMarksStatus = databaseHelper.batchInsertUpdate(sql3, listOfStudentAssignmentsInSubjects);
+                int tStudentMarksStatus = databaseHelper.batchInsertUpdateDelete(sql3, listOfStudentAssignmentsInSubjects);
 
                 //return the status of insertion of student details
                 if (tStudentStatus == DATABASE_ERROR || tStudentEnrollmentStatus == DATABASE_ERROR
@@ -504,56 +504,73 @@ public class StudentService {
         return updateStudentTask;
     }
 
-    public int promoteStudentToNextSemester(final Student student) {
+    public int promoteStudentToNextSemester(final List<Student> studentList) {
 
         final String sql = "UPDATE t_student_enrollment_details SET int_curr_semester=? where v_reg_id=?";
 
+        List<List<String>> list = new ArrayList<>();
+
+        for (Student student : studentList) {
+
+            List<String> singleStudent = new ArrayList<>();
+
+            singleStudent.add(student.getCurrSemester());
+            singleStudent.add(student.getRegId());
+
+            list.add(singleStudent);
+        }
 
         //holds the status of updation of student in the DB, i.e success or failure
-        int tStudentEnrollmentStatus = databaseHelper.updateDelete
-                (sql, student.getCurrSemester(), student.getRegId());
+        int tStudentEnrollmentStatus = databaseHelper.batchInsertUpdateDelete(sql, list);
 
         /*returns an integer holding the different status i.e success, failure etc.*/
         if (tStudentEnrollmentStatus == DATABASE_ERROR) {
 
             return DATABASE_ERROR;
-        } else if (tStudentEnrollmentStatus == SUCCESS) {
-
-            return SUCCESS;
         } else {
 
-            return DATA_INEXISTENT_ERROR;
+            return tStudentEnrollmentStatus;
         }
     }
 
-    public int awardDegreeCompletion(final Student student) {
+    public int awardDegreeCompletion(final List<Student> studentList) {
 
         final String sql1 = "DELETE FROM t_student_enrollment_details where v_reg_id=?";
         final String sql2 = "INSERT INTO t_degree_completed_student(v_reg_id, v_batch_id) VALUES(?, ?)";
 
+        List<List<String>> list1 = new ArrayList<>();
+        List<List<String>> list2 = new ArrayList<>();
 
-        String batchId = new BatchService().getBatchData("WHERE v_degree=? AND v_discipline=? " +
-                        "AND v_batch_name=?", student.getDegree(), student.getDiscipline(), student.getBatchName())
-                        .get(0).getBatchId();
+        for (Student student : studentList) {
+
+            List<String> singleStudentInStudentEnrollment = new ArrayList<>();
+            List<String> singleStudentInDegreeCompleted = new ArrayList<>();
+
+            String batchId = new BatchService().getBatchData("WHERE v_degree=? AND v_discipline=? " +
+                    "AND v_batch_name=?", student.getDegree(), student.getDiscipline(), student.getBatchName())
+                    .get(0).getBatchId();
+
+            singleStudentInStudentEnrollment.add(student.getRegId());
+
+            singleStudentInDegreeCompleted.add(student.getRegId());
+            singleStudentInDegreeCompleted.add(batchId);
+
+            list1.add(singleStudentInStudentEnrollment);
+            list2.add(singleStudentInDegreeCompleted);
+        }
 
         //holds the status of updation of student in the DB, i.e success or failure
-        int tStudentEnrollmentDetailsStatus = databaseHelper.updateDelete
-                (sql1, student.getRegId());
+        int tStudentEnrollmentDetailsStatus = databaseHelper.batchInsertUpdateDelete(sql1, list1);
 
-        int tDegreeCompletedStudentStatus = databaseHelper.updateDelete
-                (sql2, student.getRegId(), batchId);
+        int tDegreeCompletedStudentStatus = databaseHelper.batchInsertUpdateDelete(sql2, list2);
 
         /*returns an integer holding the different status i.e success, failure etc.*/
-        if (tDegreeCompletedStudentStatus == DATABASE_ERROR
-                || tStudentEnrollmentDetailsStatus == DATABASE_ERROR) {
+        if (tDegreeCompletedStudentStatus == DATABASE_ERROR || tStudentEnrollmentDetailsStatus == DATABASE_ERROR) {
 
             return DATABASE_ERROR;
-        } else if (tDegreeCompletedStudentStatus == SUCCESS && tStudentEnrollmentDetailsStatus == SUCCESS) {
+        }  else {
 
-            return SUCCESS;
-        } else {
-
-            return DATA_INEXISTENT_ERROR;
+            return tDegreeCompletedStudentStatus;
         }
     }
 

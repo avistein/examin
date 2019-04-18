@@ -177,7 +177,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tExamTimeTableStatus = databaseHelper.batchInsertUpdate(sql, routine);
+        int tExamTimeTableStatus = databaseHelper.batchInsertUpdateDelete(sql, routine);
 
         if (tExamTimeTableStatus == DATABASE_ERROR) {
 
@@ -311,7 +311,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tRoomAllocationStatus = databaseHelper.batchInsertUpdate(sql, list);
+        int tRoomAllocationStatus = databaseHelper.batchInsertUpdateDelete(sql, list);
 
         if (tRoomAllocationStatus == DATABASE_ERROR) {
 
@@ -434,13 +434,14 @@ public class ExamService {
 
         List<ExamsOnRoom> listOfExamsGoingOnInRoom = new ArrayList<>();
 
-        String query = "SELECT int_ralloc_id ,int_room_no, v_reg_id, int_exam_id, v_exam_details_id from " +
+        String query = "SELECT int_ralloc_id ,int_room_no, v_reg_id, v_sub_id, v_exam_details_id from " +
                 "t_room_allocation natural join t_student_marks " + additionalQuery + " ORDER BY int_room_no";
 
+        System.out.println(query);
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
         String prevRoomNo = "";
-        List<String> examIdsUsed = new ArrayList<>();
+        List<String> subIdsUsed = new ArrayList<>();
 
         ExamsOnRoom examsOnRoom = new ExamsOnRoom();
 
@@ -449,23 +450,20 @@ public class ExamService {
             if (!prevRoomNo.equals(map.get("int_room_no").get(i))) {
 
                 examsOnRoom = new ExamsOnRoom();
-                examIdsUsed.clear();
+                subIdsUsed.clear();
                 examsOnRoom.setExamDetailsId(map.get("v_exam_details_id").get(i));
                 examsOnRoom.setRoomNo(map.get("int_room_no").get(i));
                 listOfExamsGoingOnInRoom.add(examsOnRoom);
                 prevRoomNo = examsOnRoom.getRoomNo();
             }
-            if(!examIdsUsed.contains(map.get("int_exam_id").get(i))){
+            if(!subIdsUsed.contains(map.get("v_sub_id").get(i))){
 
                 Exam exam = new Exam();
-                List<Exam> examList = getExamRoutine("WHERE int_exam_id=?", map.get("int_exam_id").get(i));
-
-                exam.setSubId(examList.get(0).getSubId());
-                exam.setExamId(map.get("int_exam_id").get(i));
+                exam.setSubId(map.get("v_sub_id").get(i));
 
                 examsOnRoom.getExamsList().add(exam);
 
-                examIdsUsed.add(exam.getExamId());
+                subIdsUsed.add(map.get("v_sub_id").get(i));
             }
 
             Student student = new Student();
@@ -499,7 +497,7 @@ public class ExamService {
         }
 
         /*get the no of insertions or error status of the INSERT operation*/
-        int tInvigilationDutyStatus = databaseHelper.batchInsertUpdate(sql, list);
+        int tInvigilationDutyStatus = databaseHelper.batchInsertUpdateDelete(sql, list);
 
         if (tInvigilationDutyStatus == DATABASE_ERROR) {
 
