@@ -315,8 +315,6 @@ public class PdfService {
 
             @Override
             protected Boolean call() {
-//public boolean getCreateSeatArrangementPdfTask(List<RoomAllocation> roomAllocationList
-//            , ExamDetails examDetails) {
 
                 boolean status = false;
 
@@ -344,10 +342,7 @@ public class PdfService {
 
                         List<Student> studentListInRoom = roomAllocation.getStudentList();
                         Map<Integer, Integer> roomAllocationIdMap = roomAllocation.getRoomAllocationMap();
-                        for(Map.Entry<Integer, Integer> entry : roomAllocationIdMap.entrySet()){
 
-                            System.out.println(entry.getKey() + ":" + entry.getValue());
-                        }
                         PdfPTable mainTable = new PdfPTable(cols);
 
                         PdfPTable tableTitle = new PdfPTable(1);

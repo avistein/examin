@@ -34,10 +34,6 @@ public class ViewProfessorModalController {
 
     private Professor professor;
 
-    private boolean professorDeletedStatus;
-
-    private ProfessorService professorService;
-
     @FXML
     private ImageView profileImageView;
 
@@ -95,20 +91,6 @@ public class ViewProfessorModalController {
     /*---------------------------------------End of Initialization & Declaration -------------------------------------*/
 
     /**
-     * This method is used to initialize variables of this Class.
-     * This method is called when the FXMLLoader.load() is called.
-     * <p>
-     * Do not try to get the Scene or Window of any node in this method.
-     */
-    @FXML
-    private void initialize() {
-        professorService = new ProfessorService();
-
-        //default status, no professor has been deleted
-        professorDeletedStatus = false;
-    }
-
-    /**
      * Callback method to handle the Edit Button action.
      *
      * @throws IOException Load exception while loading the FXML document.
@@ -151,65 +133,6 @@ public class ViewProfessorModalController {
     }
 
     /**
-     * Callback method to handle the Delete Button action.
-     *
-     * @throws IOException Load exception while loading the FXML document.
-     */
-    @FXML
-    private void handleDeleteButtonAction() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete");
-        alert.setHeaderText("Are you really want to delete?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-
-        //if OK is pressed in the Confirmation alert
-        if (result.get() == ButtonType.OK) {
-
-            mainGridPane.setOpacity(0.5);
-            statusStackPane.setVisible(true);
-            progressIndicator.setVisible(true);
-
-            Task<Integer> deleteProfessorTask = professorService
-                    .getDeleteProfessorTask(professor);
-            new Thread(deleteProfessorTask).start();
-
-            deleteProfessorTask.setOnSucceeded(new EventHandler<>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-
-                    //get the status of the deletion operation
-                    int status = deleteProfessorTask.getValue();
-
-                    /*disable the loading spinner and display status*/
-                    progressIndicator.setVisible(false);
-                    statusImageView.setVisible(true);
-                    statusLabel.setVisible(true);
-
-                    if (status == DATABASE_ERROR) {
-                        statusImageView.setImage(new Image("/png/critical error.png"));
-                        statusLabel.setText("Database Error!");
-                        professorDeletedStatus = false;
-                    } else if (status == SUCCESS) {
-                        statusImageView.setImage(new Image("/png/success.png"));
-                        statusLabel.setText("Successfully Deleted!");
-                        professorDeletedStatus = true;
-                    } else if (status == DATA_DEPENDENCY_ERROR) {
-
-                        statusImageView.setImage(new Image("/png/error.png"));
-                        statusLabel.setText("Cannot delete professor!");
-                        professorDeletedStatus = false;
-                    } else {
-                        statusImageView.setImage(new Image("/png/error.png"));
-                        statusLabel.setText("Professor not found!");
-                        professorDeletedStatus = false;
-                    }
-                }
-            });
-        }
-    }
-
-    /**
      * This method is used to set the Professor object for editing or deleting it.
      * Also sets the text of the labels.
      *
@@ -244,16 +167,5 @@ public class ViewProfessorModalController {
         }
         deptLabel.setText(this.professor.getDeptName());
         academicRankLabel.setText(this.professor.getAcademicRank());
-    }
-
-    /**
-     * This method is used to send the status to the controller calling it whether a particular professor is deleted or
-     * not.
-     *
-     * @return The deletion status in boolean type.
-     */
-    public boolean getProfessorDeletedStatus() {
-
-        return professorDeletedStatus;
     }
 }

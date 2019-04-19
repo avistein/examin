@@ -26,7 +26,6 @@ public class DatabaseHelper {
     private String username;
     private String password;
 
-    private FileHandlingService fileHandlingService;
     /*------------------------------------End of Declaration-------------------------------------*/
 
     /**
@@ -34,7 +33,7 @@ public class DatabaseHelper {
      */
     public DatabaseHelper() {
 
-        fileHandlingService = new FileHandlingService();
+        FileHandlingService fileHandlingService = new FileHandlingService();
 
         Map<String, String> propMap = fileHandlingService.loadPropertiesValuesFromPropertiesFile
                 ("db.properties", "jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password");
@@ -219,7 +218,6 @@ public class DatabaseHelper {
 
                 statusList.add(i);
             }
-
         }
 
         //catch exception for example, due to duplicate data insertion in the DB

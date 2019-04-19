@@ -407,39 +407,43 @@ public class ProfessorService {
      * @return A deleteProfessor Task instance which is used to delete a professor in the DB in a separate thread.
      */
 
-    public Task<Integer> getDeleteProfessorTask(final Professor professor) {
+    public Task<Integer> getDeleteProfessorsTask(final List<Professor> professorList) {
 
         final String sql = "DELETE FROM t_login_details where v_user_id=?";
-//
-//        final String sql2 = "DELETE FROM t_professor where v_prof_id=?";
-//
-//        final String sql3 = "DELETE FROM t_user_contact_details where v_user_id=?";
 
-        Task<Integer> deleteProfessorTask = new Task<>() {
+        Task<Integer> deleteProfessorsTask = new Task<>() {
             @Override
             protected Integer call() {
-//                boolean t_loginDetailsStatus = databaseHelper.insertUpdateDelete
-//                (sql1, student.getRegId());
+
+                List<List<String>> listOfProfessors = new ArrayList<>();
+
+                for (Professor professor : professorList) {
+
+                    List<String> singleProfessor = new ArrayList<>();
+
+                    singleProfessor.add(professor.getProfId());
+
+                    listOfProfessors.add(singleProfessor);
+                }
 
                 /*
                 holds the status of deletion of professor in the DB, i.e success or failure
                  */
-                int tLoginDetailsStatus = databaseHelper.updateDelete
-                        (sql, professor.getProfId());
+                int tLoginDetailsStatus = databaseHelper.batchInsertUpdateDelete(sql, listOfProfessors);
 
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
                 if (tLoginDetailsStatus == DATABASE_ERROR)
                     return DATABASE_ERROR;
 
-                else if (tLoginDetailsStatus == SUCCESS)
+                else if (tLoginDetailsStatus == listOfProfessors.size())
                     return SUCCESS;
 
                 else
-                    return DATA_INEXISTENT_ERROR;
+                    return tLoginDetailsStatus;
             }
         };
-        return deleteProfessorTask;
+        return deleteProfessorsTask;
     }
 
     /**

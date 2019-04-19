@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -29,7 +28,6 @@ import service.CourseService;
 import service.StudentService;
 import util.UISetterUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,9 +63,6 @@ public class StudentSectionController {
 
     @FXML
     private Button promoteButton;
-
-    @FXML
-    private Button viewButton;
 
     @FXML
     private Button addButton;
@@ -407,11 +402,8 @@ public class StudentSectionController {
 
     }
 
-    /**
-     * Callback method to handle View Student button action.
-     */
     @FXML
-    private void handleViewStudentButtonAction() {
+    private void handleStudentTableViewOnMouseClicked(){
 
         //get the selected student in the TableView
         Student student = studentTableView.getSelectionModel().getSelectedItem();
@@ -441,13 +433,9 @@ public class StudentSectionController {
             showAndWait() ensures that the data studentDeletedStatus is fetched after the modal window is closed.
             This method blocks the UI thread here.
              */
-            viewStudentModalWindow.showAndWait();
+            viewStudentModalWindow.show();
 
-            //if a student is deleted in the DB, remove the student from the TableView
-            if (viewStudentModalController.getStudentDeletedStatus()) {
-
-                studentObsList.remove(student);
-            }
+            studentTableView.getSelectionModel().clearSelection();
         }
     }
 
@@ -538,6 +526,62 @@ public class StudentSectionController {
         studentRegistrationController.initController("");
     }
 
+    @FXML
+    private void handleDeleteStudentButtonAction(){
+
+        List<Student> studentList = new ArrayList<>();
+        for(Student student : studentObsList){
+
+            if(student.isSelected()){
+
+                studentList.add(student);
+            }
+        }
+        if(!studentList.isEmpty()){
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Do you want to delete the selected students ?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if(result.get() == ButtonType.OK) {
+
+                studentListGridPane.setOpacity(0.2);
+                statusStackPane.setVisible(true);
+
+                Task<Integer> deleteStudentsTask = studentService.getDeleteStudentsTask(studentList);
+                new Thread(deleteStudentsTask).start();
+
+                deleteStudentsTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        int status = deleteStudentsTask.getValue();
+
+                        studentListGridPane.setOpacity(1);
+                        statusStackPane.setVisible(false);
+
+                        if (status == DATABASE_ERROR) {
+
+                            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                            alert1.setHeaderText("Error in database!");
+                            alert1.show();
+                        } else if (status == SUCCESS) {
+
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText("Deletion of students is successful!");
+                            alert1.show();
+                            populateTable();
+                        }  else {
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText(status + " students have been deleted successfully!");
+                            alert1.show();
+                            populateTable();
+                        }
+                    }
+                });
+            }
+        }
+    }
     /**
      * This method initializes the columns of the Student Table.
      */

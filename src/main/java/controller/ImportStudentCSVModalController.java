@@ -595,7 +595,10 @@ public class ImportStudentCSVModalController {
     @FXML
     private void handleStatusStackPaneMouseClickedAction() {
 
-        deactivateProgressAndStatus();
+        if(!progressIndicator.isVisible()) {
+
+            deactivateProgressAndStatus();
+        }
     }
 
     /**

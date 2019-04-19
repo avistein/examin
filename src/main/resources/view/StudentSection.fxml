@@ -73,9 +73,9 @@
                   <HBox prefHeight="100.0" prefWidth="176.0" spacing="5.0" style="-fx-background-color: D2D2D4;" GridPane.columnIndex="1">
                      <children>
                         <Button fx:id="promoteButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#handlePromoteStudentButtonAction" text="Promote" />
-                        <Button fx:id="viewButton" mnemonicParsing="false" onAction="#handleViewStudentButtonAction" text="View" />
                         <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddStudentButtonAction" text="Add" />
                         <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImportButtonAction" text="Import" />
+                        <Button fx:id="deleteButton" layoutX="134.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleDeleteStudentButtonAction" text="Delete" />
                      </children>
                      <padding>
                         <Insets left="10.0" top="10.0" />
@@ -98,7 +98,7 @@
                   <Insets left="10.0" />
                </padding>
             </HBox>
-            <TableView fx:id="studentTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+            <TableView fx:id="studentTableView" editable="true" onMouseClicked="#handleStudentTableViewOnMouseClicked" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
               <columns>
                   <TableColumn fx:id="selectCol" prefWidth="43.0">
                      <graphic>

@@ -33,15 +33,8 @@ public class ViewStudentModalController {
 
     private Student student;
 
-    private boolean studentDeletedStatus;
-
-    private StudentService studentService;
-
     @FXML
     private Button editButton;
-
-    @FXML
-    private Button deleteButton;
 
     @FXML
     private Label nameLabelInTitle;
@@ -116,15 +109,9 @@ public class ViewStudentModalController {
 
     public void initController(int gid){
 
-        studentService = new StudentService();
-
-        //default status, no student has been deleted
-        studentDeletedStatus = false;
-
         if(gid == PROFESSOR_GID){
 
             editButton.setVisible(false);
-            deleteButton.setVisible(false);
         }
     }
 
@@ -168,68 +155,6 @@ public class ViewStudentModalController {
         contentStackPane.getChildren().setAll(studentRegistrationFxml);
     }
 
-
-
-    @FXML
-    private void handleDeleteButtonAction() {
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete");
-        alert.setHeaderText("Are you really want to delete?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-
-        //if OK is pressed in the Confirmation alert
-        if (result.get() == ButtonType.OK) {
-
-            /*fade the background and show loading spinner*/
-            mainGridPane.setOpacity(0.5);
-            statusStackPane.setVisible(true);
-            progressIndicator.setVisible(true);
-
-            Task<Integer> deleteStudentTask = studentService
-                    .getDeleteStudentTask(student);
-            new Thread(deleteStudentTask).start();
-
-            deleteStudentTask.setOnSucceeded(new EventHandler<>() {
-
-                @Override
-                public void handle(WorkerStateEvent event) {
-
-                    //get the status of the deletion operation
-                    int status = deleteStudentTask.getValue();
-
-                    /*disable the loading spinner and display status*/
-                    progressIndicator.setVisible(false);
-                    statusImageView.setVisible(true);
-                    statusLabel.setVisible(true);
-
-                    if (status == DATABASE_ERROR) {
-
-                        statusImageView.setImage(new Image("/png/critical error.png"));
-                        statusLabel.setText("Database Error!");
-                        studentDeletedStatus = false;
-                    } else if (status == SUCCESS) {
-
-                        statusImageView.setImage(new Image("/png/success.png"));
-                        statusLabel.setText("Successfully Deleted!");
-                        studentDeletedStatus = true;
-                    } else if (status == DATA_DEPENDENCY_ERROR) {
-
-                        statusImageView.setImage(new Image("/png/error.png"));
-                        statusLabel.setText("Cannot delete student!");
-                        studentDeletedStatus = false;
-                    } else {
-
-                        statusImageView.setImage(new Image("/png/error.png"));
-                        statusLabel.setText("Student not found!");
-                        studentDeletedStatus = false;
-                    }
-                }
-            });
-        }
-    }
-
     /**
      * This method is used to set the Student object for editing or deleting it.
      * Also sets the text of the labels.
@@ -267,16 +192,5 @@ public class ViewStudentModalController {
         emailLabel.setText(this.student.getEmail());
         guardianContactNoLabel.setText(this.student.getGuardianContactNo());
         addressLabel.setText(this.student.getAddress());
-    }
-
-    /**
-     * This method is used to send the status to the controller calling it whether a particular student is deleted or
-     * not.
-     *
-     * @return The deletion status in boolean type.
-     */
-    public boolean getStudentDeletedStatus() {
-
-        return studentDeletedStatus;
     }
 }

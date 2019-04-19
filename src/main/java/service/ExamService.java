@@ -161,7 +161,6 @@ public class ExamService {
 
         List<List<String>> routine = new ArrayList<>();
 
-        System.out.println(examRoutine.size());
         //for each exam in the exam routine ,form the data in the List<List<String>> structure
         for (Exam exam : examRoutine) {
 
@@ -297,10 +296,9 @@ public class ExamService {
 
             for (Map.Entry<Integer, Integer> entry : roomAllocation.getRoomAllocationMap().entrySet()) {
 
-                System.out.println(entry.getKey() + ":" + entry.getValue());
                 List<String> singleRoomAllocation = new ArrayList<>();
+
                 Student student = roomAllocation.getStudentList().get(entry.getValue());
-                System.out.println(student.getRegId());
                 singleRoomAllocation.add(String.valueOf(entry.getKey()));
                 singleRoomAllocation.add(roomAllocation.getExamDetailsId());
                 singleRoomAllocation.add(roomAllocation.getRoomNo());

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -28,7 +29,7 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <GridPane fx:id="professorListGridPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="626.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane fx:id="professorTabGridPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="626.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
@@ -50,8 +51,13 @@
                               <Insets left="10.0" />
                            </padding>
                         </HBox>
-                        <TableView fx:id="professorTableView" prefHeight="447.0" prefWidth="1212.0" GridPane.rowIndex="2">
+                        <TableView fx:id="professorTableView" editable="true" onMouseClicked="#handleProfessorTableViewOnMouseClicked" prefHeight="447.0" prefWidth="1212.0" GridPane.rowIndex="2">
                            <columns>
+                              <TableColumn fx:id="selectCol" minWidth="0.0" prefWidth="110.0">
+                                 <graphic>
+                                    <CheckBox mnemonicParsing="false" onAction="#handleSelectAllCheckBoxAction" />
+                                 </graphic>
+                              </TableColumn>
                               <TableColumn fx:id="profIdCol" minWidth="0.0" prefWidth="110.0" text="Prof. ID" />
                               <TableColumn minWidth="4.0" prefWidth="153.0" text="Name">
                                  <columns>
@@ -82,10 +88,9 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #D2D2D4;" GridPane.columnIndex="1">
                                  <children>
-                                    <Button layoutX="20.0" layoutY="26.0" mnemonicParsing="false" onAction="#handleViewProfessorButtonAction" text="View Professor" />
                                     <Button fx:id="addProfButton" mnemonicParsing="false" onAction="#handleAddProfButtonAction" text="Add Professor" />
                                     <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImportButtonAction" text="Import" />
-                                    <Button disable="true" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" text="Export" />
+                                    <Button fx:id="deleteProfessorButton" layoutX="225.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleDeleteProfessorButtonAction" text="Delete" />
                                  </children>
                                  <padding>
                                     <Insets left="10.0" />
@@ -116,6 +121,15 @@
                         </GridPane>
                      </children>
                   </GridPane>
+                  <StackPane fx:id="professorTabStatusStackPane" prefHeight="626.0" prefWidth="860.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <ProgressIndicator prefHeight="33.0" prefWidth="42.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </StackPane>
                </children></AnchorPane>
       </content>
     </Tab>

@@ -432,44 +432,44 @@ public class StudentService {
         return addStudentToDatabaseTask;
     }
 
-    /**
-     * This method is used to get a deleteStudentTask which is used to delete a single student in the DB.
-     *
-     * @param student The student to be deleted.
-     * @return A deleteStudent Task instance which is used to delete a single student in the DB in a separate thread.
-     */
-    @SuppressWarnings("Duplicates")
-    public Task<Integer> getDeleteStudentTask(final Student student) {
+    public Task<Integer> getDeleteStudentsTask(final List<Student> studentList) {
 
         final String sql = "DELETE FROM t_student where v_reg_id=?";
 
-        Task<Integer> deleteStudentTask = new Task<>() {
+        Task<Integer> deleteStudentsTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
+                List<List<String>> listOfStudents = new ArrayList<>();
+
+                for (Student student : studentList) {
+
+                    List<String> singleStudent = new ArrayList<>();
+
+                    singleStudent.add(student.getRegId());
+
+                    listOfStudents.add(singleStudent);
+                }
                 /*
                 holds the status of deletion of student in the DB, i.e success or failure
                  */
-                int tStudentStatus = databaseHelper.updateDelete(sql, student.getRegId());
+                int tStudentStatus = databaseHelper.batchInsertUpdateDelete(sql, listOfStudents);
 
                 /*returns an integer holding the different status i.e success, failure etc.*/
                 if (tStudentStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
-                } else if (tStudentStatus == SUCCESS) {
+                } else if (tStudentStatus == listOfStudents.size()) {
 
                     return SUCCESS;
-                } else if (tStudentStatus == DATA_DEPENDENCY_ERROR) {
-
-                    return DATA_DEPENDENCY_ERROR;
                 } else {
 
-                    return DATA_INEXISTENT_ERROR;
+                    return tStudentStatus;
                 }
             }
         };
-        return deleteStudentTask;
+        return deleteStudentsTask;
     }
 
     /**

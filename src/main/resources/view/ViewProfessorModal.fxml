@@ -264,7 +264,6 @@
                            </image>
                         </ImageView>
                         <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEditButtonAction" text="Edit" />
-                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteButtonAction" text="Delete" />
                      </children>
                      <GridPane.margin>
                         <Insets />

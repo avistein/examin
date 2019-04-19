@@ -8,16 +8,16 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,14 +60,23 @@ public class ProfessorSectionController {
 
 
     /*-------------------------Declaration and initialization of variables of Professor List Tab----------------------*/
-    ObservableList<SubjectAllocation> subAllocObsList;
-    @FXML
-    private TabPane professorSectionTabPane;
+
+    private ObservableList<SubjectAllocation> subAllocObsList;
     private ProfessorService professorService;
     private DepartmentService departmentService;
     private List<Professor> listOfProfessors;
-    private List<Department> listOfDepartment;
     private ObservableList<Professor> professorObsList;
+
+
+    @FXML
+    private TabPane professorSectionTabPane;
+
+    @FXML
+    private GridPane professorTabGridPane;
+
+    @FXML
+    private StackPane professorTabStatusStackPane;
+
     @FXML
     private Tab professorsListTab;
     @FXML
@@ -100,6 +109,9 @@ public class ProfessorSectionController {
     private TableColumn<Professor, String> emailCol;
     @FXML
     private TableColumn<Professor, String> contactNoCol;
+    @FXML
+    private TableColumn<Professor, Boolean> selectCol;
+
     /*-------------------End of Declaration and initialization of variables of Professor List Tab---------------------*/
 
 
@@ -188,7 +200,7 @@ public class ProfessorSectionController {
 
     /*-----------------End of Declaration and initialization of variables of Subject Allocation Tab-------------------*/
 
-    public void initController(int gid, String deptName){
+    public void initController(int gid, String deptName) {
 
         professorService = new ProfessorService();
         departmentService = new DepartmentService();
@@ -228,12 +240,11 @@ public class ProfessorSectionController {
             }
         });
 
-        if(gid == PROFESSOR_HOD_GID){
+        if (gid == PROFESSOR_HOD_GID) {
 
             subAllocFormDeptComboBox.setValue(deptName);
             profDeptComboBox.setValue(deptName);
-        }
-        else{
+        } else {
 
             //get the list of departments available in the db
             Task<List<Department>> deptTask = departmentService
@@ -281,6 +292,15 @@ public class ProfessorSectionController {
         populateTable();
     }
 
+    @FXML
+    public void handleSelectAllCheckBoxAction(ActionEvent e) {
+
+        for (Professor professor : professorObsList) {
+
+            professor.setSelected(((CheckBox) e.getSource()).isSelected());
+        }
+    }
+
     /**
      * Initialization of Professor List Tab
      */
@@ -306,6 +326,8 @@ public class ProfessorSectionController {
         subCol.setCellValueFactory(new PropertyValueFactory<>("subjects"));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         contactNoCol.setCellValueFactory(new PropertyValueFactory<>("contactNo"));
+        selectCol.setCellValueFactory(new PropertyValueFactory<>("selected"));
+        selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
 
         subCol.setCellFactory(new Callback<>() {
             @Override
@@ -465,7 +487,7 @@ public class ProfessorSectionController {
      */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleViewProfessorButtonAction() {
+    private void handleProfessorTableViewOnMouseClicked() {
 
         //get the selected professor in the TableView
         Professor professor = professorTableView.getSelectionModel().getSelectedItem();
@@ -493,23 +515,17 @@ public class ProfessorSectionController {
             showAndWait() ensures that the data professorDeletedStatus is fetched after the modal window is closed.
             This method blocks the UI thread here.
              */
-            viewProfessorModalWindow.showAndWait();
-
-            //if a professor is deleted in the DB, remove the professor from the TableView
-            if (viewProfessorModalController.getProfessorDeletedStatus()) {
-
-                professorObsList.remove(professor);
-            }
+            viewProfessorModalWindow.show();
+            professorTableView.getSelectionModel().clearSelection();
         }
     }
 
 
     /**
      * Callback method to handle ADD PROFESSOR Button action.
-     *
      */
     @FXML
-    private void handleAddProfButtonAction(){
+    private void handleAddProfButtonAction() {
 
         Scene mainScene = professorSectionTabPane.getScene();
         Label subTitleLabel = (Label) mainScene.lookup("#subTitle");
@@ -518,11 +534,68 @@ public class ProfessorSectionController {
         //get the stackPane first in which the content is loaded
         StackPane contentStackPane = (StackPane) professorSectionTabPane.getParent();
 
-        FXMLLoader loader =  UISetterUtil.setContentUI("/view/ProfessorRegistration.fxml", contentStackPane
+        FXMLLoader loader = UISetterUtil.setContentUI("/view/ProfessorRegistration.fxml", contentStackPane
                 , subTitleLabel, subSubTitleLabel, "Professor", "/ Add Professor");
 
         ProfessorRegistrationController professorRegistrationController = loader.getController();
         professorRegistrationController.initController(gid, deptName);
+    }
+
+    @FXML
+    private void handleDeleteProfessorButtonAction() {
+
+        List<Professor> professorList = new ArrayList<>();
+        for (Professor professor : professorObsList) {
+
+            if (professor.isSelected()) {
+
+                professorList.add(professor);
+            }
+        }
+        if (!professorList.isEmpty()) {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Do you want to delete the selected professors?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.OK) {
+
+                professorTabGridPane.setOpacity(0.2);
+                professorTabStatusStackPane.setVisible(true);
+
+                Task<Integer> deleteProfessorsTask = professorService.getDeleteProfessorsTask(professorList);
+                new Thread(deleteProfessorsTask).start();
+
+                deleteProfessorsTask.setOnSucceeded(new EventHandler<>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        int status = deleteProfessorsTask.getValue();
+
+                        professorTabGridPane.setOpacity(1);
+                        professorTabStatusStackPane.setVisible(false);
+
+                        if (status == DATABASE_ERROR) {
+
+                            Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                            alert1.setHeaderText("Error in database!");
+                            alert1.show();
+                        } else if (status == SUCCESS) {
+
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText("Deletion of professors is successful!");
+                            alert1.show();
+                            populateTable();
+                        } else {
+                            Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                            alert1.setHeaderText(status + " professors have been deleted successfully!");
+                            alert1.show();
+                            populateTable();
+                        }
+                    }
+                });
+            }
+        }
     }
 
     /*---------------------------------------End of Professor List Tab------------------------------------------------*/
@@ -954,7 +1027,7 @@ public class ProfessorSectionController {
 
     /**
      * Callback method to handle the action of Delete button in the Subject Allocation list tableView.
-     *
+     * <p>
      * This basically deletes a single Subject Allocation from the table as well as the db.
      */
     @FXML
