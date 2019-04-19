@@ -49,7 +49,7 @@ public class PromotionCommand {
 
                         for (Marks marks : marksList) {
 
-                            if (marks.getObtainedMarks().isEmpty() || Integer.parseInt(marks.getObtainedMarks()) < 40) {
+                            if (marks.getObtainedMarks().isEmpty() || marks.getObtainedMarks().equals("ABSENT") || Integer.parseInt(marks.getObtainedMarks()) < 40) {
 
                                 awardDegreeCompletion = false;
                                 break;

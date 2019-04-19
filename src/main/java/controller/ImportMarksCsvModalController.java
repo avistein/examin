@@ -93,8 +93,7 @@ public class ImportMarksCsvModalController {
         Text text2 = new Text("In MS Excel save as comma delimited CSV file\n");
         Text text3 = new Text("Make sure there is no heading or any other content" +
                 " than column header and values in CSV file\n");
-        Text text4 = new Text("Any date column should have values in the format " +
-                "YYYY-MM-DD");
+        Text text4 = new Text("Marks of absent students should be stored as 'ABSENT' without quotes");
         csvInstructionsTextFlow.getChildren().addAll(text1, text2, text3, text4);
     }
 
@@ -299,7 +298,7 @@ public class ImportMarksCsvModalController {
 
         if (marks.getRegId() == null || marks.getRegId().trim().isEmpty()) {
 
-            alert.setContentText("Registration ID cannot be empty in Row : " + currMarksIndex + "!");
+            alert.setContentText("Registration ID cannot be empty in Row : " + currMarksIndex + " !");
             alert.show();
             return false;
         }
@@ -315,7 +314,7 @@ public class ImportMarksCsvModalController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateNumber(marks.getObtainedMarks().trim())) {
+        if (!ValidatorUtil.validateNumber(marks.getObtainedMarks().trim()) || !marks.getObtainedMarks().trim().equals("ABSENT")) {
 
             alert.setContentText("Invalid Obtained Marks in Row : " + currMarksIndex + "!");
             alert.show();

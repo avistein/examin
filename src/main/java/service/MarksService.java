@@ -70,7 +70,7 @@ public class MarksService {
             marks.setRegId(map.get("v_reg_id").get(i));
             marks.setCourseId(map.get("v_course_id").get(i));
             marks.setSubId(map.get("v_sub_id").get(i));
-            if(map.get("v_obtained_marks").get(i) != null ){
+            if(!map.get("v_obtained_marks").get(i).equals("TBC")){
 
                 marks.setObtainedMarks(map.get("v_obtained_marks").get(i));
             }

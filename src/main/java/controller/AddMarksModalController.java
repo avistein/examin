@@ -25,6 +25,9 @@ public class AddMarksModalController {
     private TextField obtainedMarksTextField;
 
     @FXML
+    private CheckBox absentCheckBox;
+
+    @FXML
     private GridPane mainGridPane;
 
     @FXML
@@ -53,6 +56,13 @@ public class AddMarksModalController {
 
         marksService = new MarksService();
         tableUpdateStatus = false;
+    }
+
+    @FXML
+    private void handleAbsentCheckBoxAction(){
+
+        obtainedMarksTextField.setText("ABSENT");
+        obtainedMarksTextField.setDisable(absentCheckBox.isSelected());
     }
 
     @FXML
@@ -116,17 +126,20 @@ public class AddMarksModalController {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
 
-        if(obtainedMarksTextField.getText() == null || obtainedMarksTextField.getText().trim().isEmpty()){
+        if(!absentCheckBox.isSelected()) {
 
-            alert.setHeaderText("Obtained Marks field cannot be empty!");
-            alert.show();
-            return false;
-        }
-        if(!ValidatorUtil.validateNumber(obtainedMarksTextField.getText().trim())){
+            if (obtainedMarksTextField.getText() == null || obtainedMarksTextField.getText().trim().isEmpty()) {
 
-            alert.setHeaderText("Not a valid obtained marks!");
-            alert.show();
-            return false;
+                alert.setHeaderText("Obtained Marks field cannot be empty!");
+                alert.show();
+                return false;
+            }
+            if (!ValidatorUtil.validateNumber(obtainedMarksTextField.getText().trim())) {
+
+                alert.setHeaderText("Not a valid obtained marks!");
+                alert.show();
+                return false;
+            }
         }
         return true;
     }
