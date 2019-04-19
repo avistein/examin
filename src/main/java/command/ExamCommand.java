@@ -10,7 +10,9 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static util.ConstantsUtil.*;
+
+import static util.ConstantsUtil.DATA_INEXISTENT_ERROR;
+import static util.ConstantsUtil.INSUFFICIENT_DATA_ERROR;
 
 /**
  * This class is used to handle the logic needed for Exam Administration.
@@ -375,52 +377,83 @@ public class ExamCommand {
                     roomAllocation.setRoomNo(classroom.getRoomNo());
                     roomAllocation.setCapacity(classroom.getCapacity());
                     roomAllocation.setExamDetailsId(examDetails.getExamDetailsId());
+                    roomAllocation.setNoOfCols(classroom.getNoOfCols());
+                    roomAllocation.setNoOfRows(classroom.getNoOfRows());
 
                     roomAllocationList.add(roomAllocation);
                 }
 
+                List<Course> courseList = courseService.getCourseData("");
+                List<List<String>> batchesList = new ArrayList<>();
+
+                for (Course course : courseList) {
+
+                    List<Batch> list = batchService.getBatchData("WHERE v_course_id=? " +
+                            "ORDER BY v_batch_name", course.getCourseId());
+                    batchesList.add(list.stream().map(Batch::getBatchId).collect(Collectors.toList()));
+                }
                 //get the list of batches available in the db
-                List<Batch> batchesList = batchService.getBatchData("");
 
-                for (Batch batch : batchesList) {
 
-                    String additionalQuery = "where v_batch_id=? ORDER BY v_reg_id";
+                for (int j = 0; j < batchesList.get(0).size(); j++) {
 
-                    //get the list of students for each batch
-                    List<Student> studentListOfTheBatch = studentService.getStudentData
-                            (additionalQuery, batch.getBatchId());
+                    for (List<String> strings : batchesList) {
 
-                    int currStudentIndex = 0;
+                        String additionalQuery = "where v_batch_id=? ORDER BY v_reg_id";
 
-                    for (RoomAllocation roomAllocation : roomAllocationList) {
+                        //get the list of students for each batch
+                        List<Student> studentListOfTheBatch = studentService.getStudentData
+                                (additionalQuery, strings.get(j));
 
-                        Map<Integer, Integer> allocIdMap = roomAllocation.getRoomAllocationMap();
-                        int currAllocId = 0;
-                        while(allocIdMap.keySet().contains(currAllocId)){
+                        int currStudentIndex = 0;
+                        int lastAllocId = 0;
+                        for (RoomAllocation roomAllocation : roomAllocationList) {
 
-                            currAllocId++;
-                        }
-                        int roomCapacity = Integer.parseInt(roomAllocation.getCapacity());
+                            Map<Integer, Integer> allocIdMap = roomAllocation.getRoomAllocationMap();
 
-                        /*
-                        For each room , ensure that the total students in the room is less than or equal to the capacity
-                        of the room and put students of a batch in the seats alternatively.
-                         */
-                        while(roomAllocation.getStudentList().size() < roomCapacity
-                                && currStudentIndex < studentListOfTheBatch.size()
-                                && currAllocId < roomCapacity) {
+                            int noOfRows = Integer.parseInt(roomAllocation.getNoOfRows());
+                            int noOfCols = Integer.parseInt(roomAllocation.getNoOfCols());
+                            int k = 0;
+                            int col = 0;
+                            while (allocIdMap.keySet().contains(col * noOfRows + k)) {
 
-                            allocIdMap.put(currAllocId, roomAllocation.getStudentList().size());
-                            currAllocId += 2;
-                            Student student = studentListOfTheBatch.get(currStudentIndex++);
+                                k = col % 2 == 0 ? k + 1 : k - 1;
+                                if (k >= noOfRows) {
 
-                            roomAllocation.getStudentList().add(student);
-                        }
+                                    k = noOfRows - 1;
+                                    col++;
+                                } else if (k < 0) {
 
-                        //all students of a batch have been allocated a seat, so now take a new batch
-                        if (currStudentIndex >= studentListOfTheBatch.size()) {
+                                    k = 0;
+                                    col++;
+                                }
+                            }
 
-                            break;
+                            for (; col < noOfCols; col++) {
+
+                                if (lastAllocId != 0) {
+                                    if (lastAllocId % 2 == 0) {
+                                        k = col % 2 == 0 ? 1 : noOfRows - 1;
+                                    } else {
+                                        k = col % 2 == 0 ? 0 : noOfRows - 2;
+                                    }
+                                }
+
+                                while (currStudentIndex < studentListOfTheBatch.size() && k >= 0 && k < noOfRows) {
+
+                                    allocIdMap.put(col * noOfRows + k, roomAllocation.getStudentList().size());
+                                    lastAllocId = col * noOfRows + k;
+                                    Student student = studentListOfTheBatch.get(currStudentIndex++);
+                                    roomAllocation.getStudentList().add(student);
+                                    k = col % 2 == 0 ? k + 2 : k - 2;
+                                }
+
+                            }
+
+                            if (currStudentIndex >= studentListOfTheBatch.size()) {
+
+                                break;
+                            }
                         }
                     }
                 }
@@ -431,6 +464,7 @@ public class ExamCommand {
                 int addRoomAllocationToDbStatus = examService.addRoomAllocationToDatabase(roomAllocationList);
 
                 return addRoomAllocationToDbStatus;
+
             }
         };
         return createRoomAllocationTask;
@@ -456,7 +490,8 @@ public class ExamCommand {
                 List<Exam> examRoutine = examService.getExamRoutine("WHERE v_exam_details_id=? ORDER BY d_exam_date"
                         , examDetails.getExamDetailsId());
 
-                if(examRoutine.isEmpty()){
+
+                if (examRoutine.isEmpty()) {
 
                     return DATA_INEXISTENT_ERROR;
                 }
@@ -470,21 +505,20 @@ public class ExamCommand {
                 Key : Exam date
                 Value : Exams on that date
                  */
-                Map<String, List<Exam>> examMap = new HashMap<>();
+                Map<String, List<Exam>> examMap = new TreeMap<>();
 
                 for (Exam exam : examRoutine) {
 
                     examMap.putIfAbsent(exam.getExamDate(), new ArrayList<>());
                     examMap.get(exam.getExamDate()).add(exam);
                 }
+                for (Map.Entry<String, List<Exam>> entry : examMap.entrySet()) {
 
-//                for(Map.Entry<String, List<Exam>> entry : examMap.entrySet()){
-//
-//                    if(entry.getValue().size() > professorList.size()){
-//
-//                        return INSUFFICIENT_DATA_ERROR;
-//                    }
-//                }
+                    if (entry.getValue().size() > professorList.size()) {
+
+                        return INSUFFICIENT_DATA_ERROR;
+                    }
+                }
 
                 /*
                 This HashMap is used to count the no of duties assigned to each professor.
@@ -512,19 +546,19 @@ public class ExamCommand {
                      */
                     boolean[] invigilatorAssignedInTheCurrentDate = new boolean[professorList.size()];
 
-                    StringBuilder additionalQuery = new StringBuilder("WHERE v_exam_details_id=? AND (");
-                    for(Exam exam : examRoutine){
+                    StringBuilder additionalQuery = new StringBuilder("WHERE v_exam_details_id=? AND v_obtained_marks='TBC' AND (");
+                    for (Exam exam : entry.getValue()) {
 
                         additionalQuery.append("OR (v_course_id='").append(exam.getCourseId()).append("'").append(" AND ").append("v_sub_id='")
                                 .append(exam.getSubId()).append("'").append(")");
                     }
-                    additionalQuery.delete(31, 34);
+                    additionalQuery.delete(58, 61);
                     additionalQuery.append(")");
                     //get the list of exams happening on the particular date
                     List<ExamsOnRoom> examsOnRoomList = examService.getExamsOnRoomData(String.valueOf(additionalQuery)
                             , examDetails.getExamDetailsId());
 
-                    if(examsOnRoomList.isEmpty()){
+                    if (examsOnRoomList.isEmpty()) {
 
                         return DATA_INEXISTENT_ERROR;
                     }
@@ -560,7 +594,7 @@ public class ExamCommand {
                             invigilationDuty.setProfId(getValidInvigilator(professorList, examsOnRoom
                                     , invigilatorsAssignment, invigilatorAssignedInTheCurrentDate));
 
-                            if(invigilationDuty.getProfId() == null){
+                            if (invigilationDuty.getProfId() == null) {
 
                                 return INSUFFICIENT_DATA_ERROR;
                             }

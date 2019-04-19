@@ -297,9 +297,10 @@ public class ExamService {
 
             for (Map.Entry<Integer, Integer> entry : roomAllocation.getRoomAllocationMap().entrySet()) {
 
+                System.out.println(entry.getKey() + ":" + entry.getValue());
                 List<String> singleRoomAllocation = new ArrayList<>();
                 Student student = roomAllocation.getStudentList().get(entry.getValue());
-
+                System.out.println(student.getRegId());
                 singleRoomAllocation.add(String.valueOf(entry.getKey()));
                 singleRoomAllocation.add(roomAllocation.getExamDetailsId());
                 singleRoomAllocation.add(roomAllocation.getRoomNo());
@@ -415,7 +416,8 @@ public class ExamService {
 
                     student.setRegId(map.get("v_reg_id").get(i));
 
-                    roomAllocation.getRoomAllocationMap().put(Integer.valueOf(map.get("int_ralloc_id").get(i)), i);
+                    roomAllocation.getRoomAllocationMap().put(Integer.parseInt(map.get("int_ralloc_id").get(i)), i);
+//                    roomAllocation.getAllocIdList().add(map.get("int_ralloc_id").get(i));
                     roomAllocation.getStudentList().add(student);
                 }
             }
@@ -434,10 +436,9 @@ public class ExamService {
 
         List<ExamsOnRoom> listOfExamsGoingOnInRoom = new ArrayList<>();
 
-        String query = "SELECT int_ralloc_id ,int_room_no, v_reg_id, v_sub_id, v_exam_details_id from " +
+        String query = "SELECT int_ralloc_id ,int_room_no, v_reg_id, v_sub_id, v_course_id, v_exam_details_id from " +
                 "t_room_allocation natural join t_student_marks " + additionalQuery + " ORDER BY int_room_no";
 
-        System.out.println(query);
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
         String prevRoomNo = "";
@@ -456,14 +457,14 @@ public class ExamService {
                 listOfExamsGoingOnInRoom.add(examsOnRoom);
                 prevRoomNo = examsOnRoom.getRoomNo();
             }
-            if(!subIdsUsed.contains(map.get("v_sub_id").get(i))){
+            if(!subIdsUsed.contains(map.get("v_course_id").get(i) + map.get("v_sub_id").get(i) )){
 
                 Exam exam = new Exam();
                 exam.setSubId(map.get("v_sub_id").get(i));
 
                 examsOnRoom.getExamsList().add(exam);
 
-                subIdsUsed.add(map.get("v_sub_id").get(i));
+                subIdsUsed.add(map.get("v_course_id").get(i) + map.get("v_sub_id").get(i) );
             }
 
             Student student = new Student();

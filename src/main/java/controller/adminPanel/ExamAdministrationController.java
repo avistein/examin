@@ -916,6 +916,8 @@ public class ExamAdministrationController {
                     } else {
 
                         manageExamTabMsgLabel.setText("Creating PDFs now.Please do not close this window.");
+//                        pdfService.getCreateSeatArrangementPdfTask
+//                                (roomAllocationTask.getValue(), examDetails);
                         Task<Boolean> generateSeatArrangementPdfTask = pdfService.getCreateSeatArrangementPdfTask
                                 (roomAllocationTask.getValue(), examDetails);
                         new Thread(generateSeatArrangementPdfTask).start();

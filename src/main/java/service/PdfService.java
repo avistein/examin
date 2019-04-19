@@ -16,10 +16,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static util.ConstantsUtil.*;
 
@@ -317,6 +315,8 @@ public class PdfService {
 
             @Override
             protected Boolean call() {
+//public boolean getCreateSeatArrangementPdfTask(List<RoomAllocation> roomAllocationList
+//            , ExamDetails examDetails) {
 
                 boolean status = false;
 
@@ -344,6 +344,10 @@ public class PdfService {
 
                         List<Student> studentListInRoom = roomAllocation.getStudentList();
                         Map<Integer, Integer> roomAllocationIdMap = roomAllocation.getRoomAllocationMap();
+                        for(Map.Entry<Integer, Integer> entry : roomAllocationIdMap.entrySet()){
+
+                            System.out.println(entry.getKey() + ":" + entry.getValue());
+                        }
                         PdfPTable mainTable = new PdfPTable(cols);
 
                         PdfPTable tableTitle = new PdfPTable(1);
@@ -441,7 +445,7 @@ public class PdfService {
 
                 boolean status = false;
 
-                Map<String, Map<String, List<String>>> map = new HashMap<>();
+                Map<String, Map<String, List<String>>> map = new TreeMap<>();
 
                 for (InvigilationDuty invigilationDuty : invigilationDutyList) {
 

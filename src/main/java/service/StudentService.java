@@ -239,7 +239,7 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id, v_reg_id, int_curr_semester)" +
                         " VALUES(?, ?, ?)";
 
-                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id) VALUES (?, ?, ?)";
+                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks) VALUES (?, ?, ?, ?)";
 
                 //get the list of batches
                 List<Batch> listOfBatches = batchService.getBatchData("");
@@ -297,6 +297,15 @@ public class StudentService {
                         singleStudentAssignmentInSubjects.add(student.getRegId());
                         singleStudentAssignmentInSubjects.add(subject.getCourseId());
                         singleStudentAssignmentInSubjects.add(subject.getSubId());
+
+                        if(subject.getSemester().equals(student.getCurrSemester())){
+
+                            singleStudentAssignmentInSubjects.add("TBC");
+                        }
+                        else{
+
+                            singleStudentAssignmentInSubjects.add("40");
+                        }
 
                         listOfStudentAssignmentsInSubjects.add(singleStudentAssignmentInSubjects);
                     }
@@ -371,7 +380,7 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
                         ", v_reg_id, int_curr_semester) VALUES(?, ?, ?)";
 
-                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id) VALUES (?, ?, ?)";
+                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks) VALUES (?, ?, ?, ?)";
 
                 List<Subject> subjectList = subjectService.getSubjectData("WHERE v_course_id=?"
                         , student.getCourseId());
@@ -385,6 +394,7 @@ public class StudentService {
                     singleStudentAssignmentInSubjects.add(student.getRegId());
                     singleStudentAssignmentInSubjects.add(student.getCourseId());
                     singleStudentAssignmentInSubjects.add(subject.getSubId());
+                    singleStudentAssignmentInSubjects.add("TBC");
 
                     listOfStudentAssignmentsInSubjects.add(singleStudentAssignmentInSubjects);
                 }
