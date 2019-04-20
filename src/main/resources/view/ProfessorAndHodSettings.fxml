@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="settingsAnchorPane" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProfessorAndHodSettingsController">
+
+    <children>
+        <GridPane fx:id="profileSettingsMainGridPane" alignment="CENTER" layoutX="-23.0" prefHeight="675.0" prefWidth="860.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="155.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="636.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <GridPane alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="1.0" minHeight="0.0" prefHeight="0.0" />
+                        <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="74.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="61.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Separator prefWidth="200.0" GridPane.rowIndex="4" />
+                        <Separator prefWidth="200.0" GridPane.rowIndex="6" />
+                        <Separator prefWidth="200.0" GridPane.rowIndex="8" />
+                        <Separator prefWidth="200.0" GridPane.rowIndex="10" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="10" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+                            <children>
+                                <Label fx:id="firstNameLabel" text="First Name" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="7">
+                            <children>
+                                <Label fx:id="lastNameLabel" text="Last Name" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="9">
+                            <children>
+                                <Label fx:id="contactNoLabel" text="Contact No" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <children>
+                                <TextField fx:id="profileSettingsFirstNameTextField" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                            <children>
+                                <TextField fx:id="profileSettingsLastNameTextField" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                            <children>
+                                <TextField fx:id="profileSettingsContactNoTextField" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                            <children>
+                                <Label fx:id="dojLabel" text="Date of Joining" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                            <children>
+                                <Label fx:id="dobLabel" text="Date Of Birth" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                            <children>
+                                <Label fx:id="addressLabel" text="Address" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                            <children>
+                                <DatePicker fx:id="profileSettingsDojDatePicker" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                            <children>
+                                <DatePicker fx:id="profileSettingsDobDatePicker" />
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="7">
+                            <children>
+                                <TextArea fx:id="profileSettingsAddressTextArea" prefHeight="200.0" prefWidth="200.0" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
+                            <children>
+                                <Label fx:id="middleNameLabel" text="Middle Name" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                            <children>
+                                <TextField fx:id="profileSettingsMiddleNameTextFiled" />
+                            </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" GridPane.rowIndex="2" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                            <children>
+                                <Label alignment="CENTER" text="Emp ID" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="profileSettingsEmpIdLabel" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="emailIdLabel" text="Email" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <children>
+                                <TextField fx:id="profileSettingsEmailIdTextField" />
+                            </children>
+                        </HBox>
+                  <HBox alignment="CENTER" layoutX="539.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="9">
+                     <children>
+                        <TextField fx:id="profileSettingsHighestQualificationTextField" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="363.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                     <children>
+                        <Label fx:id="highestQualificationLabel" text="Highest Qualification" />
+                     </children>
+                  </HBox>
+                    </children>
+                </GridPane>
+                <VBox alignment="TOP_CENTER" spacing="20.0" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                    <children>
+                        <ImageView fx:id="profileSettingPictureImageView" fitHeight="136.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../png/placeholder.png" />
+                            </image>
+                        </ImageView>
+                        <Button fx:id="profileSettingsChooseImageButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsChooseImageButtonAction" prefHeight="25.0" prefWidth="120.0" text="Choose Image" />
+                        <Button fx:id="profileSettingsEditButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsEditButtonAction" prefWidth="60.0" text="Edit" />
+                        <Button fx:id="profileSettingsSubmitButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleProfileSettingsSubmitButtonAction" prefHeight="20.0" prefWidth="60.0" text="Submit" />
+                    </children>
+                    <padding>
+                        <Insets top="20.0" />
+                    </padding>
+                </VBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #747390;" GridPane.columnSpan="2">
+                    <children>
+                        <Label text="Profile Settings" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </GridPane>
+        <StackPane fx:id="profileSettingsStatusStackPane" prefHeight="675.0" prefWidth="860.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <ProgressIndicator fx:id="profileSettingsProgressIndicator" prefHeight="42.0" prefWidth="33.0" visible="false" />
+                        <ImageView fx:id="profileSettingsStatusImageView" fitHeight="40.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+                        <Label fx:id="profileSettingsStatusLabel" visible="false" />
+                        <HBox fx:id="profileSettingsHboxButtons" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
+                            <children>
+                                <Button fx:id="profileSettingsOkButton" mnemonicParsing="false" onAction="#handleProfileSettingsOkButtonAction" text="OK" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </children>
+
+</AnchorPane>

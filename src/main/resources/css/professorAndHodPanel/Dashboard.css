@@ -1,0 +1,50 @@
+#students{
+	
+	-fx-background-color: #c4c4c4;
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#professors{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#courses{
+	
+	-fx-background-color: #c4c4c4;
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#batches{
+	
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#subjects{
+	
+	-fx-background-color: #c4c4c4;
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}
+
+#dummy{
+
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 2px;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
+}

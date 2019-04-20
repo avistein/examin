@@ -1,0 +1,120 @@
+#logoutButton{
+	
+    -fx-background-color: linear-gradient( #A9A9A9, #DCDCDC) ;
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+
+}
+#dashboardButton{
+	
+    -fx-background-color: linear-gradient( #A9A9A9, #DCDCDC) ;
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+
+}
+#studentButton{
+	
+    -fx-background-color: linear-gradient( #A9A9A9, #DCDCDC) ;
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+}
+#professorButton{
+	
+    -fx-background-color: linear-gradient( #A9A9A9, #DCDCDC);
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+}
+#marksButton{
+    
+	-fx-background-color: linear-gradient( #A9A9A9, #DCDCDC);
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+
+}
+#changePasswordButton{
+    
+	-fx-background-color: linear-gradient( #A9A9A9, #DCDCDC);
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+  
+}
+#settingsButton{
+    
+	-fx-background-color: linear-gradient( #A9A9A9, #DCDCDC);
+    -fx-font-family: "Georgia";
+    -fx-font-size:  12px;
+    -fx-font-style: normal;
+
+
+}
+#logoutButton:hover {
+	
+     -fx-background-color: linear-gradient(#55547D, #D3D3D3);
+     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+     -fx-background-radius: 3px, 3px, 2px, 1px;
+     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+     -fx-text-fill: White;
+     -fx-alignment: CENTER;
+     -fx-content-display: LEFT;
+ }
+
+#dashboardButton:hover{
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: White;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+#studentButton:hover{
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: WHITE;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+#professorButton:hover {
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: WHITE;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+#marksButton:hover {
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill:WHITE;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+#changePasswordButton:hover {
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: WHITE;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+#settingsButton:hover {
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: WHITE;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
