@@ -189,16 +189,16 @@ public class DepartmentService {
      * @return A departmentsCountTask object which is used to get the total no. of departments in the DB in a separate
      * thread.
      */
-    public Task<Integer> getDepartmentsCountTask() {
+    public Task<Integer> getDepartmentsCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_dept_name FROM t_department";
+        final String query = "SELECT v_dept_name FROM t_department " + additionalQuery;
 
         Task<Integer> departmentsCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 /*
                 v_dept_name is the primary key, so total count will always be equal to the no of v_dept_name

@@ -71,6 +71,9 @@ public class StudentSectionController {
     private Button importButton;
 
     @FXML
+    private Button deleteButton;
+
+    @FXML
     private ComboBox<String> batchNameComboBox;
 
     @FXML
@@ -149,6 +152,7 @@ public class StudentSectionController {
             promoteButton.setVisible(false);
             addButton.setVisible(false);
             importButton.setVisible(false);
+            deleteButton.setVisible(false);
         }
 
         Task<List<Course>> coursesTask;

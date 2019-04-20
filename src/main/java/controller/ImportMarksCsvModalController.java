@@ -314,7 +314,7 @@ public class ImportMarksCsvModalController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateNumber(marks.getObtainedMarks().trim()) || !marks.getObtainedMarks().trim().equals("ABSENT")) {
+        if (!ValidatorUtil.validateNumber(marks.getObtainedMarks().trim()) && !marks.getObtainedMarks().trim().equals("ABSENT")) {
 
             alert.setContentText("Invalid Obtained Marks in Row : " + currMarksIndex + "!");
             alert.show();

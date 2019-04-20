@@ -1,5 +1,6 @@
 #students{
 	
+	-fx-background-color: #c4c4c4;
 	-fx-border-color: #FFFFFF;
 	-fx-border-width: 2px;
 	-fx-border-style: solid;
@@ -16,6 +17,7 @@
 
 #examCellMembers{
 	
+	-fx-background-color: #c4c4c4;
 	-fx-border-color: #FFFFFF;
 	-fx-border-width: 2px;
 	-fx-border-style: solid;
@@ -24,6 +26,7 @@
 
 #departments{
 	
+	-fx-background-color: #c4c4c4;
 	-fx-border-color: #FFFFFF;
 	-fx-border-width: 2px;
 	-fx-border-style: solid;
@@ -40,6 +43,7 @@
 
 #batches{
 	
+	-fx-background-color: #c4c4c4;
 	-fx-border-color: #FFFFFF;
 	-fx-border-width: 2px;
 	-fx-border-style: solid;
@@ -56,6 +60,7 @@
 
 #classrooms{
 	
+	-fx-background-color: #c4c4c4;
 	-fx-border-color: #FFFFFF;
 	-fx-border-width: 2px;
 	-fx-border-style: solid;
@@ -67,4 +72,36 @@
 	-fx-border-width: 2px;
 	-fx-border-style: solid;
 	-fx-border-radius: 5px;
+}
+#students:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#professors:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#examCellMembers:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#departments:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#courses:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#batches:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#subjects:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
+}
+#classrooms:hover{
+
+    -fx-background-color: linear-gradient( #55547D, #D3D3D3);
 }

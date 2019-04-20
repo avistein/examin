@@ -50,7 +50,7 @@ public class ChangePasswordController {
     private Label statusLabel;
 
     @FXML
-    private Button okButton;
+    private Label msgLabel;
 
     private LoginCommand loginCommand;
 
@@ -67,11 +67,12 @@ public class ChangePasswordController {
      * Do not try to get the Scene or Window of any node in this method.
      */
     @FXML
-    private void initialize() {
+    public void initController(User userLoginDetails) {
 
         loginCommand = new LoginCommand();
-        userLoginDetails = new User();
         userService = new UserService();
+
+        this.userLoginDetails = userLoginDetails;
     }
 
     /**
@@ -117,7 +118,7 @@ public class ChangePasswordController {
                         progressIndicator.setVisible(false);
                         statusImageView.setVisible(true);
                         statusLabel.setVisible(true);
-                        okButton.setVisible(true);
+                        msgLabel.setVisible(true);
 
                         //display status
                         if (status == DATABASE_ERROR) {
@@ -152,16 +153,19 @@ public class ChangePasswordController {
      */
     @SuppressWarnings("Duplicates")
     @FXML
-    private void handleOkButtonAction() {
+    private void handleStatusStackPaneOnMouseClicked() {
 
-        mainGridPane.setOpacity(1);
-        statusStackPane.setVisible(false);
-        statusImageView.setVisible(false);
-        statusLabel.setVisible(false);
-        okButton.setVisible(false);
-        newPasswordField.clear();
-        confirmNewPasswordField.clear();
-        currentPasswordField.clear();
+        if(!progressIndicator.isVisible()){
+
+            mainGridPane.setOpacity(1);
+            statusStackPane.setVisible(false);
+            statusImageView.setVisible(false);
+            statusLabel.setVisible(false);
+            msgLabel.setVisible(false);
+            newPasswordField.clear();
+            confirmNewPasswordField.clear();
+            currentPasswordField.clear();
+        }
     }
 
     /**
@@ -197,15 +201,5 @@ public class ChangePasswordController {
             return false;
         }
         return true;
-    }
-
-    /**
-     * The respective controllers sets the login details of the User through this method.
-     *
-     * @param userLoginDetails The login details which will be used to set the login details of User.
-     */
-    public void setUserLoginDetails(User userLoginDetails) {
-
-        this.userLoginDetails = userLoginDetails;
     }
 }

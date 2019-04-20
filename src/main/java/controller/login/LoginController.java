@@ -2,6 +2,8 @@ package controller.login;
 
 import command.LoginCommand;
 import controller.adminPanel.AdminPanelController;
+import controller.professorHodPanel.ProfessorHodPanelController;
+import controller.professorPanel.ProfessorPanelController;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -165,22 +167,10 @@ public class LoginController {
                             FXMLLoader loader = UISetterUtil.setStage("/view/adminPanel/AdminPanel.fxml"
                                     , mainStage, PROJECT_NAME, 768, 1024);
 
-                            AdminPanelController adminPanelController = loader
-                                    .getController();
+                            AdminPanelController adminPanelController = loader.getController();
 
                             //send admin's login details to the admin panel controller
-                            adminPanelController.setAdminProfileDetails
-                                    (usersTask.getValue().get(0));
-
-                            mainStage.show();
-                            loginStage.hide();
-
-                            break;
-
-                        case EXAM_CELL_MEMBER_GID:
-
-                            loader = UISetterUtil.setStage("/view/examCellMemberPanel/ExamCellMemberPanel.fxml"
-                                    , mainStage, PROJECT_NAME, 768, 1024);
+                            adminPanelController.setAdminProfileDetails(usersTask.getValue().get(0));
 
                             mainStage.show();
                             loginStage.hide();
@@ -192,6 +182,10 @@ public class LoginController {
                             loader = UISetterUtil.setStage("/view/professorHodPanel/ProfessorHodPanel.fxml"
                                     , mainStage, PROJECT_NAME, 768, 1024);
 
+                            ProfessorHodPanelController professorHodPanelController = loader.getController();
+
+                            professorHodPanelController.setProfessorHodProfileDetails(usersTask.getValue().get(0));
+
                             mainStage.show();
                             loginStage.hide();
 
@@ -201,6 +195,10 @@ public class LoginController {
 
                             loader = UISetterUtil.setStage("/view/professorPanel/ProfessorPanel.fxml", mainStage
                                     , PROJECT_NAME, 768, 1024);
+
+                            ProfessorPanelController professorPanelController = loader.getController();
+
+                            professorPanelController.setProfessorProfileDetails(usersTask.getValue().get(0));
 
                             mainStage.show();
                             loginStage.hide();

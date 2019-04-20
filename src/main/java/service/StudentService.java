@@ -589,16 +589,16 @@ public class StudentService {
      *
      * @return A studentsCountTask object which is used to get the total no. of Students in the DB in a separate thread.
      */
-    public Task<Integer> getStudentsCountTask() {
+    public Task<Integer> getStudentsCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_reg_id FROM t_student";
+        final String query = "SELECT v_reg_id FROM t_student " + additionalQuery;
 
         Task<Integer> studentsCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 /*
                 v_reg_id is the primary key, so total count will always be equal to the no of v_reg_id

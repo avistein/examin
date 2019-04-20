@@ -1089,7 +1089,7 @@ public class ExamAdministrationController {
             manageExamTabMsgLabel.setText("Gathering data now to create pdf. Please do not close this window. ");
 
             Task<List<InvigilationDuty>> invigilationDutyDataTask = examService.getInvigilationDutyDataTask(
-                    examDetails.getExamDetailsId());
+                    "WHERE v_exam_details_id=?", examDetails.getExamDetailsId());
             new Thread(invigilationDutyDataTask).start();
 
             invigilationDutyDataTask.setOnSucceeded(new EventHandler<>() {

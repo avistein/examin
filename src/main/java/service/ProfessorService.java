@@ -515,16 +515,16 @@ public class ProfessorService {
      * thread.
      */
     @SuppressWarnings("Duplicates")
-    public Task<Integer> getProfessorsCountTask() {
+    public Task<Integer> getProfessorsCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_prof_id FROM t_professor";
+        final String query = "SELECT v_prof_id FROM t_professor " + additionalQuery;
 
         Task<Integer> professorsCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 /*
                 v_prof_id is the primary key, so total count will always be equal to the no of v_prof_id

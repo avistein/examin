@@ -77,7 +77,7 @@ public class EditInvigilationDutyModalController {
 
         List<String> invigilators = new ArrayList<>();
 
-        Task<List<InvigilationDuty>> invigilationDutyDataTask = examService.getInvigilationDutyDataTask(examDetailsId);
+        Task<List<InvigilationDuty>> invigilationDutyDataTask = examService.getInvigilationDutyDataTask("WHERE v_exam_details_id=?", examDetailsId);
         new Thread(invigilationDutyDataTask).start();
 
         invigilationDutyDataTask.setOnSucceeded(new EventHandler<>() {

@@ -220,16 +220,16 @@ public class SubjectService {
      * thread.
      */
     @SuppressWarnings("Duplicates")
-    public Task<Integer> getSubjectsCountTask() {
+    public Task<Integer> getSubjectsCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT DISTINCT v_sub_id FROM t_subject";
+        final String query = "SELECT DISTINCT v_sub_id FROM t_subject " + additionalQuery;
 
         Task<Integer> subjectsCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 /*
                 total count will always be equal to the no of unique v_sub_id retrieved

@@ -210,16 +210,16 @@ public class ClassRoomService {
      *
      * @return A classroomCountTask object which is used to get the total no. of Classroom in the DB in a separate thread.
      */
-    public Task<Integer> getClassroomCountTask() {
+    public Task<Integer> getClassroomCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT int_room_no FROM t_classroom";
+        final String query = "SELECT int_room_no FROM t_classroom " + additionalQuery;
 
         Task<Integer> classroomCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 /*
                 int_room_no is the primary key, so total count will always be equal to the no of v_room_no

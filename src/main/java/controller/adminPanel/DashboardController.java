@@ -292,7 +292,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalStudentsCount() {
 
-        Task<Integer> studentsCountTask = studentService.getStudentsCountTask();
+        Task<Integer> studentsCountTask = studentService.getStudentsCountTask("");
         new Thread(studentsCountTask).start();
 
         studentsCountTask.setOnSucceeded(new EventHandler<>() {
@@ -312,7 +312,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalBatchesCount() {
 
-        Task<Integer> batchesCountTask = batchService.getBatchesCountTask();
+        Task<Integer> batchesCountTask = batchService.getBatchesCountTask("");
         new Thread(batchesCountTask).start();
 
         batchesCountTask.setOnSucceeded(new EventHandler<>() {
@@ -332,7 +332,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalDeptsCount() {
 
-        Task<Integer> deptsCountTask = departmentService.getDepartmentsCountTask();
+        Task<Integer> deptsCountTask = departmentService.getDepartmentsCountTask("");
         new Thread(deptsCountTask).start();
 
         deptsCountTask.setOnSucceeded(new EventHandler<>() {
@@ -352,7 +352,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalSubjectsCount() {
 
-        Task<Integer> subjectsCountTask = subjectService.getSubjectsCountTask();
+        Task<Integer> subjectsCountTask = subjectService.getSubjectsCountTask("");
         new Thread(subjectsCountTask).start();
 
         subjectsCountTask.setOnSucceeded(new EventHandler<>() {
@@ -372,7 +372,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalCoursesCount() {
 
-        Task<Integer> coursesCountTask = courseService.getCoursesCountTask();
+        Task<Integer> coursesCountTask = courseService.getCoursesCountTask("");
         new Thread(coursesCountTask).start();
 
         coursesCountTask.setOnSucceeded(new EventHandler<>() {
@@ -392,7 +392,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalProfessorsCount() {
 
-        Task<Integer> profsCountTask = professorService.getProfessorsCountTask();
+        Task<Integer> profsCountTask = professorService.getProfessorsCountTask("");
         new Thread(profsCountTask).start();
 
         profsCountTask.setOnSucceeded(new EventHandler<>() {
@@ -412,7 +412,7 @@ public class DashboardController {
     @SuppressWarnings("Duplicates")
     private void updateTotalExamCellMembersCount() {
 
-        Task<Integer> examCellMembersCountTask = examCellMemberService.getExamCellMembersCountTask();
+        Task<Integer> examCellMembersCountTask = examCellMemberService.getExamCellMembersCountTask("");
         new Thread(examCellMembersCountTask).start();
 
         examCellMembersCountTask.setOnSucceeded(new EventHandler<>() {
@@ -427,7 +427,7 @@ public class DashboardController {
 
     private void updateTotalClassroomsCount(){
 
-        Task<Integer> classroomsCountTask = classRoomService.getClassroomCountTask();
+        Task<Integer> classroomsCountTask = classRoomService.getClassroomCountTask("");
         new Thread(classroomsCountTask).start();
 
         classroomsCountTask.setOnSucceeded(new EventHandler<>() {

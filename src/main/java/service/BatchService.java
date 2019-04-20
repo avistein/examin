@@ -211,16 +211,16 @@ public class BatchService {
      *
      * @return A batchesCountTask object which is used to get the total no. of Batches in the DB in a separate thread.
      */
-    public Task<Integer> getBatchesCountTask() {
+    public Task<Integer> getBatchesCountTask(String additionalQuery, String ...params) {
 
 
-        final String query = "SELECT v_batch_id FROM t_batch";
+        final String query = "SELECT v_batch_id FROM t_batch " + additionalQuery;
 
         Task<Integer> batchesCountTask = new Task<>() {
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 //v_batch_id is the primary key, so total count will always be equal to the no of v_batch_id retrieved
                 return map.get("v_batch_id").size();

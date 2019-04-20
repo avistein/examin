@@ -1,14 +1,365 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.professorHodPanel.ProfessorHodPanelController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="763.0" stylesheets="@../../css/professorAndHodPanel/ProfessprHodPanel.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.professorHodPanel.ProfessorHodPanelController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="165.0" prefWidth="201.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="560.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="212.0" minHeight="10.0" prefHeight="212.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="344.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0" style="-fx-background-color: #222051;" GridPane.rowIndex="1">
+                    <children>
+                        <Button id="dashboardButton" fx:id="dashboardButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleDashboardButtonAction" prefHeight="44.0" prefWidth="200.0" text="Dashboard">
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../png/dashboard.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                        </Button>
+                        <Button id="studentButton" fx:id="studentListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleStudentListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Student">
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../png/prof.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Button id="professorButton" fx:id="professorListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleProfessorListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Professor">
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../png/prof.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Button id="marksButton" fx:id="marksListButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleMarksListButtonAction" prefHeight="44.0" prefWidth="200.0" text="Marks">
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../png/marks.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Button id="settingsButton" fx:id="professorHodSettingsButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#handleProfessorHodSettingsButtonAction" prefHeight="44.0" prefWidth="200.0" text="Settings">
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../png/settings.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                        <Button id="changePasswordButton" fx:id="professorHodChangePasswordButton" alignment="BASELINE_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="370.0" mnemonicParsing="false" onAction="#handleChangePasswordButtonAction" prefHeight="44.0" prefWidth="200.0" text="Change Password">
+                            <graphic>
+                                <ImageView fitHeight="25.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../png/ligature-symbols_2-11-0_key_256_0_0c1544_none.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <padding>
+                                <Insets left="10.0" />
+                            </padding>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                        </Button>
+                        <VBox alignment="CENTER">
+                            <children>
+                                <Label layoutX="74.0" layoutY="10.0" text="examin">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <textFill>
+                                        <LinearGradient endX="0.02857142857142861" endY="0.6380952380952382" startX="0.02380952380952382">
+                                            <stops>
+                                                <Stop color="BLACK" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                </Label>
+                                <Label text="Version 1.0">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" />
+                                    </VBox.margin>
+                                    <textFill>
+                                        <LinearGradient endX="0.02857142857142861" endY="0.6380952380952382" startX="0.02380952380952382">
+                                            <stops>
+                                                <Stop color="BLACK" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                </Label>
+                                <HBox alignment="CENTER">
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                    <children>
+                                        <Label text="Copyright ©">
+                                            <font>
+                                                <Font name="System Italic" size="12.0" />
+                                            </font>
+                                            <textFill>
+                                                <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                                    <stops>
+                                                        <Stop color="BLACK" />
+                                                        <Stop color="WHITE" offset="1.0" />
+                                                    </stops>
+                                                </LinearGradient>
+                                            </textFill>
+                                        </Label>
+                                        <Label fx:id="copyrightYearLabel" layoutX="10.0" layoutY="10.0">
+                                            <font>
+                                                <Font name="System Italic" size="12.0" />
+                                            </font>
+                                            <textFill>
+                                                <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                                    <stops>
+                                                        <Stop color="BLACK" />
+                                                        <Stop color="WHITE" offset="1.0" />
+                                                    </stops>
+                                                </LinearGradient>
+                                            </textFill>
+                                        </Label>
+                                        <Label fx:id="universityNameLabel" layoutX="76.0" layoutY="10.0">
+                                            <font>
+                                                <Font name="System Italic" size="12.0" />
+                                            </font>
+                                            <textFill>
+                                                <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                                    <stops>
+                                                        <Stop color="BLACK" />
+                                                        <Stop color="WHITE" offset="1.0" />
+                                                    </stops>
+                                                </LinearGradient>
+                                            </textFill>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <Label layoutX="54.0" layoutY="87.0" text="All rights reserved.">
+                                    <font>
+                                        <Font name="System Italic" size="12.0" />
+                                    </font>
+                                    <textFill>
+                                        <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                            <stops>
+                                                <Stop color="BLACK" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                                <Label text="Developed by Pitchers">
+                                    <font>
+                                        <Font name="System Italic" size="12.0" />
+                                    </font>
+                                    <textFill>
+                                        <LinearGradient endX="0.06666666666666671" endY="0.7476190476190476" startX="0.06666666666666668">
+                                            <stops>
+                                                <Stop color="BLACK" />
+                                                <Stop color="WHITE" offset="1.0" />
+                                            </stops>
+                                        </LinearGradient>
+                                    </textFill>
+                                </Label>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="80.0" />
+                            </VBox.margin>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #222051;">
+                    <children>
+                        <ImageView id="profileImageImageView" fx:id="profileImageImageView" fitHeight="102.0" fitWidth="105.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../png/placeholder.png" />
+                            </image>
+                        </ImageView>
+                        <HBox alignment="CENTER" prefHeight="28.0" prefWidth="187.0">
+                            <children>
+                                <Label text="User ID - " textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="userIdLabel" textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets top="17.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </GridPane>
+        <GridPane GridPane.columnIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="464.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="134.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="48.0" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="48.0" minHeight="48.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="428.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <StackPane id="contentStackPane" fx:id="contentStackPane" prefHeight="150.0" prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                </StackPane>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #080638;">
+                    <children>
+                        <Label text="Name :" textFill="WHITE">
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <Label id="nameLabel" fx:id="nameLabel" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="10.0" text="Role :" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label fx:id="roleLabel" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <Label text="Last Login : " textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="50.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label fx:id="lastLoginLabel" layoutX="220.0" layoutY="24.0" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #080638;" GridPane.columnIndex="1">
+                    <children>
+                        <Button id="logoutButton" fx:id="logOutButton" mnemonicParsing="false" onAction="#handleLogOutButtonAction" text="Logout">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="3.0" style="-fx-background-color: #55547D;" GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Dashboard /" textFill="WHITE">
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font name="System Italic" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label id="subTitle" fx:id="subTitleLabel" textFill="WHITE">
+                            <font>
+                                <Font name="System Italic" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label id="subSubTitle" fx:id="subSubTitleLabel" layoutX="99.0" layoutY="24.0" textFill="WHITE">
+                            <font>
+                                <Font name="System Italic" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                </HBox>
+            </children>
+        </GridPane>
+    </children>
+</GridPane>

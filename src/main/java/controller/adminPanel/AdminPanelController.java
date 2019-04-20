@@ -9,7 +9,6 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -215,12 +214,12 @@ public class AdminPanelController {
     @FXML
     private void handleChangePasswordButtonAction() throws IOException {
 
-        FXMLLoader loader =  UISetterUtil.setContentUI("/view/adminPanel/ChangePassword.fxml"
+        FXMLLoader loader =  UISetterUtil.setContentUI("/view/ChangePassword.fxml"
                 , contentStackPane, subTitleLabel, subSubTitleLabel, "Change Password", "");
 
         ChangePasswordController changePasswordController = loader.getController();
 
-        changePasswordController.setUserLoginDetails(adminLogin);
+        changePasswordController.initController(adminLogin);
     }
 
     /**

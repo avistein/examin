@@ -544,25 +544,25 @@ public class ExamService {
         return deleteInvigilationDutyTask;
     }
 
-    public Task<List<InvigilationDuty>> getInvigilationDutyDataTask(String examDetailsId){
+    public Task<List<InvigilationDuty>> getInvigilationDutyDataTask(String additionalQuery, String ...params){
 
         Task<List<InvigilationDuty>> invigilationDutyDataTask = new Task<List<InvigilationDuty>>() {
 
             @Override
             protected List<InvigilationDuty> call(){
 
-                return getInvigilationDutyData(examDetailsId);
+                return getInvigilationDutyData(additionalQuery, params);
             }
         };
         return invigilationDutyDataTask;
     }
 
-    public List<InvigilationDuty> getInvigilationDutyData(String examDetailsId){
+    public List<InvigilationDuty> getInvigilationDutyData(String additionalQuery, String ...params){
 
-        String query = "SELECT int_room_no, d_exam_date, v_prof_id FROM t_invigilation_duty WHERE v_exam_details_id=? " +
-                "ORDER BY d_exam_date";
+        String query = "SELECT int_room_no, d_exam_date, v_prof_id FROM t_invigilation_duty " + additionalQuery +
+                " ORDER BY d_exam_date";
 
-        Map<String, List<String>> map = databaseHelper.execQuery(query, examDetailsId);
+        Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
         List<InvigilationDuty> list = new ArrayList<>();
 

@@ -234,7 +234,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox id="students" alignment="CENTER" onMouseClicked="#handleTotalStudentsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;">
+            <VBox id="students" alignment="CENTER" onMouseClicked="#handleTotalStudentsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -256,7 +256,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox id="professors" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalProfessorsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1">
+            <VBox id="professors" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalProfessorsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="2">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -278,20 +278,23 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox id="examCellMembers" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="2">
+            <VBox id="examCellMembers" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="3">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../png/prof.png" />
-                     </image></ImageView>
+                     </image>
+                  </ImageView>
                   <Label fx:id="totalExamCellMembersLabel" textFill="#07072b">
                      <font>
                         <Font name="System Bold" size="14.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                   <Label text="Exam Cell Members">
                      <font>
                         <Font name="System Bold" size="14.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                </children>
                <padding>
                   <Insets left="10.0" />
@@ -323,7 +326,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox id="courses" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalCoursesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox id="courses" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalCoursesVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -368,7 +371,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <VBox id="subjects" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalSubjectsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <VBox id="subjects" alignment="CENTER" layoutX="10.0" layoutY="10.0" onMouseClicked="#handleTotalSubjectsVboxOnMouseClickedAction" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -412,8 +415,8 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <HBox id="dummy" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #c4c4c4;" GridPane.columnIndex="4" />
-            <VBox id="dummy" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" />
+            <HBox id="dummy" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" />
+            <VBox id="dummy" prefHeight="200.0" prefWidth="100.0" />
          </children>
       </GridPane>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #6d6ea0;" GridPane.rowIndex="1">

@@ -212,16 +212,16 @@ public class CourseService {
      *
      * @return A coursesCountTask object which is used to get the total no. of Courses in the DB in a separate thread.
      */
-    public Task<Integer> getCoursesCountTask() {
+    public Task<Integer> getCoursesCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_course_id FROM t_course";
+        final String query = "SELECT v_course_id FROM t_course " + additionalQuery;
 
         Task<Integer> examCoursesCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                 /*
                 v_course_id is the primary key, so total count will always be equal to the no of v_course_id

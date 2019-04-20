@@ -118,8 +118,7 @@ public class ExamCellMemberService {
         Task<Integer> updateExamCellMember = new Task<>() {
 
             final String sql1 = "UPDATE t_exam_cell_member SET v_first_name=?, v_middle_name=?, v_last_name=?," +
-                    " d_dob=?, d_date_of_joining=?, v_email_id=?, v_address=?, v_contact_no=?" +
-                    ", v_profile_picture_location=? WHERE v_emp_id=?";
+                    " d_dob=?, d_date_of_joining=?, v_profile_picture_location=? WHERE v_emp_id=?";
 
             final String sql2 = "UPDATE t_user_contact_details SET v_email_id=?, v_address=?, v_contact_no=?" +
                     "WHERE v_user_id=?";
@@ -160,16 +159,16 @@ public class ExamCellMemberService {
      * @return A examCellMembersCountTask object which is used to get the total no. of Exam Cell members in the
      * DB in a separate thread.
      */
-    public Task<Integer> getExamCellMembersCountTask() {
+    public Task<Integer> getExamCellMembersCountTask(String additionalQuery, String ...params) {
 
-        final String query = "SELECT v_emp_id FROM t_exam_cell_member";
+        final String query = "SELECT v_emp_id FROM t_exam_cell_member " + additionalQuery;
 
         Task<Integer> examCellMembersCountTask = new Task<>() {
 
             @Override
             protected Integer call() {
 
-                Map<String, List<String>> map = databaseHelper.execQuery(query);
+                Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
                  /*
                 v_emp_id is the primary key, so total count will always be equal to the no of v_emp_id

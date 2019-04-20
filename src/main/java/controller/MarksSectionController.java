@@ -71,9 +71,20 @@ public class MarksSectionController {
 
         marksObsList = FXCollections.observableArrayList();
 
-        //get the list of courses available in the db
-        Task<List<Course>> coursesTask = courseService
-                .getCoursesTask("");
+        Task<List<Course>> coursesTask;
+
+        if(professor != null){
+
+            //get the list of courses available in the db
+            coursesTask = courseService.getCoursesTask("WHERE v_course_id IN ('"
+                    + professor.getSubjects().stream().map(Subject::getCourseId)
+                    .collect(Collectors.joining("','")) + "')");
+        }
+       else {
+
+            //get the list of courses available in the db
+            coursesTask = courseService.getCoursesTask("");
+        }
         new Thread(coursesTask).start();
 
         coursesTask.setOnSucceeded(new EventHandler<>() {
@@ -245,35 +256,43 @@ public class MarksSectionController {
                         courseId = course.getCourseId();
                     }
                 }
-                String additionalQuery;
+                List<String> items = new ArrayList<>();
+
                 if(professor != null){
 
-                    additionalQuery = "WHERE v_course_id=? AND int_semester=? AND v_sub_id IN ('"
-                            + professor.getSubjects().stream().map(Subject::getSubId)
-                            .collect(Collectors.joining("','")) + "')";
-                }
-                else {
+                    for(Subject subject : professor.getSubjects()){
 
-                    additionalQuery = "WHERE v_course_id=? AND int_semester=?";
-                }
-                Task<List<Subject>> subjectDataTask = subjectService.getSubjectsTask(additionalQuery, courseId
-                        , semesterComboBox.getValue());
-                new Thread(subjectDataTask).start();
-
-                subjectDataTask.setOnSucceeded(new EventHandler<>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
-
-                        List<Subject> subjectList = subjectDataTask.getValue();
-                        List<String> items = new ArrayList<>();
-                        for (Subject subject : subjectList) {
+                        if(courseId.equals(subject.getCourseId())
+                                && semesterComboBox.getValue().equals(subject.getSemester())){
 
                             items.add(subject.getSubId());
                         }
-                        ObservableList<String> options = FXCollections.observableArrayList(items);
-                        subjectComboBox.setItems(options);
                     }
-                });
+                    ObservableList<String> options = FXCollections.observableArrayList(items);
+                    subjectComboBox.setItems(options);
+                }
+                else {
+
+                    Task<List<Subject>> subjectDataTask = subjectService.getSubjectsTask("WHERE v_course_id=? AND int_semester=?"
+                            , courseId, semesterComboBox.getValue());
+                    new Thread(subjectDataTask).start();
+
+                    subjectDataTask.setOnSucceeded(new EventHandler<>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+
+                            List<Subject> subjectList = subjectDataTask.getValue();
+
+                            for (Subject subject : subjectList) {
+
+                                items.add(subject.getSubId());
+                            }
+                            ObservableList<String> options = FXCollections.observableArrayList(items);
+                            subjectComboBox.setItems(options);
+                        }
+                    });
+                }
+
             }
         }
     }
