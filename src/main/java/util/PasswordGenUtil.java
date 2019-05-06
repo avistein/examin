@@ -70,5 +70,4 @@ public class PasswordGenUtil {
         System.out.println(pass);
         return map;
     }
-
 }

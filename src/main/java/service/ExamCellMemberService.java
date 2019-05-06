@@ -159,7 +159,7 @@ public class ExamCellMemberService {
      * @return A examCellMembersCountTask object which is used to get the total no. of Exam Cell members in the
      * DB in a separate thread.
      */
-    public Task<Integer> getExamCellMembersCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getExamCellMembersCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT v_emp_id FROM t_exam_cell_member " + additionalQuery;
 

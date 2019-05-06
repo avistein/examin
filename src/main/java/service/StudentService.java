@@ -45,7 +45,7 @@ public class StudentService {
     }
 
     /**
-     * This method is used to get a single studentTask object which is used to get student details.
+     * This method is used to get a single studentTask object which is used to get student details in a separate thread.
      *
      * @param additionalQuery Includes WHERE clause or any other extra specific query details.
      * @param params          Parameters for the PreparedStatement i.e. basically column names of t_student.
@@ -69,9 +69,11 @@ public class StudentService {
     }
 
     /**
-     * @param additionalQuery
-     * @param params
-     * @return
+     * This method is used to get a list of students' data which is used to get student details in the same UI thread.
+     *
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_student.
+     * @return A list of students' data.
      */
     public List<Student> getStudentData(String additionalQuery, final String... params) {
 
@@ -298,11 +300,10 @@ public class StudentService {
                         singleStudentAssignmentInSubjects.add(subject.getCourseId());
                         singleStudentAssignmentInSubjects.add(subject.getSubId());
 
-                        if(subject.getSemester().equals(student.getCurrSemester())){
+                        if (subject.getSemester().equals(student.getCurrSemester())) {
 
                             singleStudentAssignmentInSubjects.add("TBC");
-                        }
-                        else{
+                        } else {
 
                             singleStudentAssignmentInSubjects.add("40");
                         }
@@ -382,8 +383,8 @@ public class StudentService {
 
                 final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks) VALUES (?, ?, ?, ?)";
 
-                List<Subject> subjectList = subjectService.getSubjectData("WHERE v_course_id=?"
-                        , student.getCourseId());
+                List<Subject> subjectList = subjectService.getSubjectData("WHERE v_degree=? " +
+                        "AND v_discipline=?", student.getDegree(), student.getDiscipline());
 
                 List<List<String>> listOfStudentAssignmentsInSubjects = new ArrayList<>();
 
@@ -392,7 +393,7 @@ public class StudentService {
                     List<String> singleStudentAssignmentInSubjects = new ArrayList<>();
 
                     singleStudentAssignmentInSubjects.add(student.getRegId());
-                    singleStudentAssignmentInSubjects.add(student.getCourseId());
+                    singleStudentAssignmentInSubjects.add(subject.getCourseId());
                     singleStudentAssignmentInSubjects.add(subject.getSubId());
                     singleStudentAssignmentInSubjects.add("TBC");
 
@@ -432,6 +433,12 @@ public class StudentService {
         return addStudentToDatabaseTask;
     }
 
+    /**
+     * This method is used to delete students from the database in a separate thread.
+     *
+     * @param studentList The students to be deleted.
+     * @return A task object which can be used to delete students from the database in a separate thread.
+     */
     public Task<Integer> getDeleteStudentsTask(final List<Student> studentList) {
 
         final String sql = "DELETE FROM t_student where v_reg_id=?";
@@ -514,6 +521,13 @@ public class StudentService {
         return updateStudentTask;
     }
 
+    /**
+     * This method is used to promote students to next higher semester, basically it updates the int_senester in
+     * t_student_enrollment.
+     *
+     * @param studentList The students whose semesters have to be updates i.e. promoted.
+     * @return Status of the operation i.e. success or failure.
+     */
     public int promoteStudentToNextSemester(final List<Student> studentList) {
 
         final String sql = "UPDATE t_student_enrollment_details SET int_curr_semester=? where v_reg_id=?";
@@ -534,15 +548,16 @@ public class StudentService {
         int tStudentEnrollmentStatus = databaseHelper.batchInsertUpdateDelete(sql, list);
 
         /*returns an integer holding the different status i.e success, failure etc.*/
-        if (tStudentEnrollmentStatus == DATABASE_ERROR) {
-
-            return DATABASE_ERROR;
-        } else {
-
-            return tStudentEnrollmentStatus;
-        }
+        return tStudentEnrollmentStatus;
     }
 
+    /**
+     * This method is used to delete a list of students from the t_student_enrollment and place them in the
+     * t_degree_completed.
+     *
+     * @param studentList The student list to work with.
+     * @return The status  of the operation i.e. success / failure.
+     */
     public int awardDegreeCompletion(final List<Student> studentList) {
 
         final String sql1 = "DELETE FROM t_student_enrollment_details where v_reg_id=?";
@@ -569,7 +584,7 @@ public class StudentService {
             list2.add(singleStudentInDegreeCompleted);
         }
 
-        //holds the status of updation of student in the DB, i.e success or failure
+        //holds the status of deletion of student from the t_student_enrollment in the DB, i.e success or failure
         int tStudentEnrollmentDetailsStatus = databaseHelper.batchInsertUpdateDelete(sql1, list1);
 
         int tDegreeCompletedStudentStatus = databaseHelper.batchInsertUpdateDelete(sql2, list2);
@@ -578,7 +593,7 @@ public class StudentService {
         if (tDegreeCompletedStudentStatus == DATABASE_ERROR || tStudentEnrollmentDetailsStatus == DATABASE_ERROR) {
 
             return DATABASE_ERROR;
-        }  else {
+        } else {
 
             return tDegreeCompletedStudentStatus;
         }
@@ -589,7 +604,7 @@ public class StudentService {
      *
      * @return A studentsCountTask object which is used to get the total no. of Students in the DB in a separate thread.
      */
-    public Task<Integer> getStudentsCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getStudentsCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT v_reg_id FROM t_student " + additionalQuery;
 

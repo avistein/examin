@@ -18,16 +18,35 @@ import java.util.Map;
 
 import static util.ConstantsUtil.*;
 
+/**
+ * Service class to get marks of students, add marks and update marks of the students.
+ *
+ * @author Avik Sarkar
+ */
 public class MarksService {
+
+    /*-------------------------------------------Declaration of variables---------------------------------------------*/
 
     private DatabaseHelper databaseHelper;
 
-    public MarksService(){
+    /*-----------------------------------------------End of Declaration-----------------------------------------------*/
+
+    /**
+     * Public constructor to initialize variables.
+     */
+    public MarksService() {
 
         databaseHelper = new DatabaseHelper();
     }
 
-    public Task<List<Marks>> getMarksDataTask(String additionalQuery, String ...params) {
+    /**
+     * This method is used to get a task object which can be used to get the marks details in a separate thread.
+     *
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_student_marks.
+     * @return A task object which can be used to get the marks details of the student in a separate thread.
+     */
+    public Task<List<Marks>> getMarksDataTask(String additionalQuery, String... params) {
 
         Task<List<Marks>> marksDataTask = new Task<>() {
 
@@ -36,7 +55,7 @@ public class MarksService {
 
                 List<Marks> list = getMarksData(additionalQuery, params);
 
-                //a list of Holiday details
+                //a list of Marks details
                 return list;
             }
         };
@@ -44,25 +63,23 @@ public class MarksService {
     }
 
     /**
-     * This method is used to get a single holidaysTask object which is used to get holidays details.
+     * This method is used to get list of marks from the database.
      *
-     * @return A holidaysTask which can be used to get a list of Holidays details from the DB in a separate
-     * thread.
+     * @return A list of marks from the database.
      */
-    public List<Marks> getMarksData(String additionalQuery, String ...params) {
+    public List<Marks> getMarksData(String additionalQuery, String... params) {
 
         final String query = "SELECT v_reg_id, v_obtained_marks, v_sub_id, v_course_id, int_semester FROM " +
                 "t_student_marks NATURAL JOIN t_subject " + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
-        //each item in the list is a single Holiday details
+        //each item in the list is a single Marks details
         List<Marks> list = new ArrayList<>();
 
-                /*
-                int_holiday_id is the primary key, total items in the map will always be equal to no of
-                int_holiday_id retrieved
-                 */
+        /*
+        v_reg_id is the primary key, total items in the map will always be equal to no of v_reg_id retrieved
+        */
         for (int i = 0; i < map.get("v_reg_id").size(); i++) {
 
             Marks marks = new Marks();
@@ -70,20 +87,26 @@ public class MarksService {
             marks.setRegId(map.get("v_reg_id").get(i));
             marks.setCourseId(map.get("v_course_id").get(i));
             marks.setSubId(map.get("v_sub_id").get(i));
-            if(!map.get("v_obtained_marks").get(i).equals("TBC")){
+            if (!map.get("v_obtained_marks").get(i).equals("TBC")) {
 
                 marks.setObtainedMarks(map.get("v_obtained_marks").get(i));
             }
             marks.setSemester(map.get("int_semester").get(i));
 
-            //a single holiday details is added to the list
+            //a single marks details is added to the list
             list.add(marks);
         }
 
-        //a list of Department details
+        //a list of marks details
         return list;
     }
 
+    /**
+     * This method is used to get a task object which can be used to add marks to the DB in a separate thread.
+     *
+     * @param marks The marks of the student to be added to the database.
+     * @return Status of the operation i.e. success / failure.
+     */
     public Task<Integer> getAddMarksToDataBaseTask(Marks marks) {
         Task<Integer> addMarksToDataBaseTask = new Task<>() {
 
@@ -99,19 +122,13 @@ public class MarksService {
                         , marks.getSubId(), marks.getRegId());
 
                 //if any DB error is present
-                if (tStudentMarksStatus == DATABASE_ERROR ) {
+                if (tStudentMarksStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
-                }
-
-                //return success ,if all professors are inserted
-                else if (tStudentMarksStatus == SUCCESS) {
+                } else if (tStudentMarksStatus == SUCCESS) {
 
                     return SUCCESS;
-                }
-
-                //return the no of professor inserted
-                else {
+                } else {
 
                     return DATA_ALREADY_EXIST_ERROR;
                 }
@@ -120,7 +137,14 @@ public class MarksService {
         return addMarksToDataBaseTask;
     }
 
-
+    /**
+     * This method is used to get a task which can be used to load the contents of marks csv to the memory in a separate
+     * thread.
+     *
+     * @param file The csv file to load into the memory.
+     * @param map  The
+     * @return A task which can be used to get the list of marks from the csv.
+     */
     public Task<List<Marks>> getLoadMarksFromCsvToMemoryTask(final File file, final Map<String, String> map) {
 
         Task<List<Marks>> loadMarksFromCsvToMemoryTask = new Task<>() {
@@ -130,11 +154,11 @@ public class MarksService {
 
                 Map<String, String> columnNameMapping = new HashMap<>();
 
-                //each item in the list is a Professor details obtained from the CSV
+                //each item in the list is a Marks details obtained from the CSV
                 List<Marks> listOfMarksFromCsv = new ArrayList<>();
 
                 /*
-                Whatever be the column names, those will be mapped to the data of the Professor Bean
+                Whatever be the column names, those will be mapped to the data of the Marks Bean
                  */
                 columnNameMapping.put(map.get("regId"), "regId");
                 columnNameMapping.put(map.get("obtainedMarks"), "obtainedMarks");
@@ -156,14 +180,14 @@ public class MarksService {
                     CsvToBean<Marks> csvToBean = new CsvToBeanBuilder<Marks>(reader)
                             .withMappingStrategy(strategy).withSkipLines(1).build();
 
-                    //parse the csv and store list of Professor objects
+                    //parse the csv and store list of Marks objects
                     listOfMarksFromCsv = csvToBean.parse();
                 } catch (IOException e) {
 
                     e.printStackTrace();
                 }
 
-                //list of Professor objects
+                //list of Marks objects
                 return listOfMarksFromCsv;
             }
         };
@@ -171,10 +195,10 @@ public class MarksService {
     }
 
     /**
-     * This method can be used to get a task to add list of Professors to database.
+     * This method can be used to get a task to add marks from the memory to database.
      *
-     * @param list The ArrayList containing the Professors.
-     * @return A task which can be used to add list of Professors to database.
+     * @param list The ArrayList containing the marks from the csv.
+     * @return A task which can be used to add list of marks to database.
      */
     @SuppressWarnings("Duplicates")
     public Task<Integer> getAddMarksFromMemoryToDataBaseTask(List<Marks> list, String courseId, String subId) {
@@ -188,18 +212,16 @@ public class MarksService {
 
                 /*
                 Each item in the list is itself a list of strings ;in the inner list each item is the data
-                of the Professor bean.
-                For example if two Professor objects are professorObj1 and professorObj2 and the structure is as follows :
+                of the Marks bean.
+                For example if two Marks objects are marksObj1 and marksObj2 and the structure is as follows :
 
-                professorObj1 = profId : 1, firstName : Dennis, middleName : MacAlistair, lastName : Ritchie...;
-                professorObj2 = profId : 2, firstName : Donald, middleName : E, lastName : Knuth...;
+                marksObj1 = obtainedMarks : 90, courseId : CSE, subId : CS401, regId : 23900115011;
+                marksObj2 = obtainedMarks : 60, courseId : CSE, subId : CS201, regId : 23900115011;
 
-                Then, listOfProfessors will be stored as :
+                Then, marksList will be stored as :
 
-                listOfProfessors = {{"1", "Dennis", "MacAlistair", "Ritchie", ...}, {"2", "Donald" , "E", "Knuth", ...}}
-
-                 professorDeptList stores the data in the same way for t_prof_dept table in DB.
-                 */
+                marksList = {{"90", "CSE", "CS401", "23900115011"}, {"60", "CSE" , "CS201", "23900115011"}}
+                */
                 List<List<String>> marksList = new ArrayList<>();
 
                 for (Marks marks : list) {
@@ -211,7 +233,7 @@ public class MarksService {
                     singleMarksDetails.add(subId);
                     singleMarksDetails.add(marks.getRegId());
 
-                    //add profId,deptName,hodStatus of a particular professor into the list
+                    //add obtainedMarks, courseId, subId, regId
                     marksList.add(singleMarksDetails);
                 }
 
@@ -219,18 +241,18 @@ public class MarksService {
                 int tStudentMarksStatus = databaseHelper.batchInsertUpdateDelete(sql, marksList);
 
                 //if any DB error is present
-                if (tStudentMarksStatus == DATABASE_ERROR ) {
+                if (tStudentMarksStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
                 }
 
-                //return success ,if all professors are inserted
+                //return success ,if all marks data are inserted
                 else if (tStudentMarksStatus == marksList.size()) {
 
                     return SUCCESS;
                 }
 
-                //return the no of professor inserted
+                //return the no of marks data inserted
                 else {
 
                     return DATA_ALREADY_EXIST_ERROR;

@@ -220,7 +220,7 @@ public class SubjectService {
      * thread.
      */
     @SuppressWarnings("Duplicates")
-    public Task<Integer> getSubjectsCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getSubjectsCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT DISTINCT v_sub_id FROM t_subject " + additionalQuery;
 
@@ -337,7 +337,7 @@ public class SubjectService {
                  */
                 List<List<String>> listOfSubjectAllocations = new ArrayList<>();
 
-                //for each student ,form the data in the List<List<SubjectAllocation>> structure
+                //for each subject allocation ,form the data in the List<List<SubjectAllocation>> structure
                 for (SubjectAllocation subjectAllocation : list) {
 
                     List<String> singleSubjectAllocation = new ArrayList<>();

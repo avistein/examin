@@ -189,7 +189,7 @@ public class DepartmentService {
      * @return A departmentsCountTask object which is used to get the total no. of departments in the DB in a separate
      * thread.
      */
-    public Task<Integer> getDepartmentsCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getDepartmentsCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT v_dept_name FROM t_department " + additionalQuery;
 

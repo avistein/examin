@@ -212,7 +212,7 @@ public class CourseService {
      *
      * @return A coursesCountTask object which is used to get the total no. of Courses in the DB in a separate thread.
      */
-    public Task<Integer> getCoursesCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getCoursesCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT v_course_id FROM t_course " + additionalQuery;
 

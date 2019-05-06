@@ -67,6 +67,14 @@ public class ProfessorService {
         return professorTask;
     }
 
+    /**
+     * This method is used to get the professor details in the same thread where it was called.
+     *
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_professor.
+     * @return A professorTask which can be used to get a list of professor details from the DB in a separate
+     * thread.
+     */
     @SuppressWarnings("Duplicates")
     public List<Professor> getProfessorData(String additionalQuery, final String... params) {
 
@@ -401,10 +409,10 @@ public class ProfessorService {
     }
 
     /**
-     * This method is used to get a deleteProfessorTask which is used to delete a single professor in the DB.
+     * This method is used to get a deleteProfessorTask which is used to delete professors in the DB.
      *
-     * @param professor The professor to be deleted.
-     * @return A deleteProfessor Task instance which is used to delete a professor in the DB in a separate thread.
+     * @param professorList The professors to be deleted.
+     * @return A deleteProfessor Task instance which is used to delete professors in the DB in a separate thread.
      */
 
     public Task<Integer> getDeleteProfessorsTask(final List<Professor> professorList) {
@@ -515,7 +523,7 @@ public class ProfessorService {
      * thread.
      */
     @SuppressWarnings("Duplicates")
-    public Task<Integer> getProfessorsCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getProfessorsCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT v_prof_id FROM t_professor " + additionalQuery;
 

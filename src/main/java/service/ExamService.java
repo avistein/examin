@@ -12,6 +12,8 @@ import static util.ConstantsUtil.*;
 
 /**
  * Service class to perform exam administration and management.
+ *
+ * @author Avik Sarkar
  */
 public class ExamService {
 
@@ -23,7 +25,7 @@ public class ExamService {
 
 
     /**
-     *
+     * Public constructor to initialize variables.
      */
     public ExamService() {
 
@@ -31,10 +33,11 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get a task object which can be used to fetch the details of an examination.
      *
-     * @param additionalQuery
-     * @param params
-     * @return
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_exam_details.
+     * @return A task object which can be used to get the exam details in a separate thread.
      */
     public Task<List<ExamDetails>> getExamDetailsTask(String additionalQuery, String... params) {
 
@@ -72,20 +75,21 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get a task object which can be used to add details of an examination.
      *
-     * @param examDetails
-     * @return
+     * @param examDetails The details of the examination which will be added to the DB.
+     * @return A task object which can be used to add the details of the examination in a separate thread.
      */
     public Task<Integer> getAddExamDetailsTask(ExamDetails examDetails) {
 
         String sql = "INSERT INTO t_exam_details(v_exam_details_id, v_exam_type, v_semester_type, d_start_date, " +
                 "t_start_time, t_end_time, v_academic_year, int_is_exam_on_saturday)" +
-                " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
         Task<Integer> addExamDetailsTask = new Task<>() {
 
             @Override
-            protected Integer call(){
+            protected Integer call() {
 
                 int tExamDetailsStatus = databaseHelper.insert(sql,
                         examDetails.getExamDetailsId(),
@@ -113,9 +117,10 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get a task to delete an examination in a separate thread.
      *
-     * @param examDetails
-     * @return
+     * @param examDetails Exam details to be added.
+     * @return A task object which can be used to delete an examination in a separate thread.
      */
     @SuppressWarnings("Duplicates")
     public Task<Integer> getDeleteExamDetailsTask(ExamDetails examDetails) {
@@ -125,7 +130,7 @@ public class ExamService {
         Task<Integer> deleteExamDetailsTask = new Task<>() {
 
             @Override
-            protected Integer call(){
+            protected Integer call() {
 
                 int tExamDetailsStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
 
@@ -148,15 +153,16 @@ public class ExamService {
     }
 
     /**
+     * This method is used to add the exam routine to the database.
      *
-     * @param examRoutine
-     * @return
+     * @param examRoutine The exam routine to be added to the database.
+     * @return The examRoutine arrayList which contains the exams.
      */
     @SuppressWarnings("Duplicates")
     public int addRoutineToDatabase(List<Exam> examRoutine) {
 
         final String sql = "INSERT INTO t_exam_time_table (v_exam_details_id, v_course_id, v_sub_id, d_exam_date)" +
-        " VALUES(?, ?, ?, ?)";
+                " VALUES(?, ?, ?, ?)";
 
 
         List<List<String>> routine = new ArrayList<>();
@@ -191,10 +197,11 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get the exam routine from the database by using a task in the separate thread.
      *
-     * @param additionalQuery
-     * @param params
-     * @return
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_exam_routine.
+     * @return A task which can be used to get the routine to the DB in a separate thread.
      */
     public Task<List<Exam>> getExamRoutineTask(String additionalQuery, String... params) {
 
@@ -213,10 +220,11 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get the exam routine in the same thread in which the method was called.
      *
-     * @param additionalQuery
-     * @param params
-     * @return
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_exam_routine.
+     * @return The examRoutine.
      */
     public List<Exam> getExamRoutine(String additionalQuery, String... params) {
 
@@ -244,7 +252,13 @@ public class ExamService {
         return list;
     }
 
-
+    /**
+     * This method is used to get a task object to delete the exam routine from the database in a separate thread.
+     *
+     * @param examDetails The exam details of the exam routine to be deleted.
+     * @return A task object which can be used to delete the exam from the database.
+     */
+    @SuppressWarnings("Duplicates")
     public Task<Integer> getDeleteExamRoutineTask(final ExamDetails examDetails) {
 
         final String sql = "DELETE FROM t_exam_time_table where v_exam_details_id=?";
@@ -255,7 +269,7 @@ public class ExamService {
             protected Integer call() {
 
                 /*
-                holds the status of deletion of student in the DB, i.e success or failure
+                holds the status of deletion of exam routine in the DB, i.e success or failure
                  */
                 int tExamTimeTableStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
 
@@ -279,9 +293,10 @@ public class ExamService {
     }
 
     /**
+     * This method is used to add a list of room allocation data to the DB.
      *
-     * @param roomAllocationList
-     * @return
+     * @param roomAllocationList The list of room allocation data.
+     * @return The status of the operation i.e. success / failure.
      */
     @SuppressWarnings("Duplicates")
     public int addRoomAllocationToDatabase(List<RoomAllocation> roomAllocationList) {
@@ -299,6 +314,7 @@ public class ExamService {
                 List<String> singleRoomAllocation = new ArrayList<>();
 
                 Student student = roomAllocation.getStudentList().get(entry.getValue());
+
                 singleRoomAllocation.add(String.valueOf(entry.getKey()));
                 singleRoomAllocation.add(roomAllocation.getExamDetailsId());
                 singleRoomAllocation.add(roomAllocation.getRoomNo());
@@ -324,6 +340,14 @@ public class ExamService {
         }
     }
 
+    /**
+     * This method is used to get a task which can be used to delete the room allocations from the DB in a separate
+     * thread.
+     *
+     * @param examDetails The details of the exam which the room allocations belong to.
+     * @return A task which can be used to delete the room allocations from the DB in a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
     public Task<Integer> getDeleteRoomAllocationTask(final ExamDetails examDetails) {
 
         final String sql = "DELETE FROM t_room_allocation where v_exam_details_id=?";
@@ -334,7 +358,7 @@ public class ExamService {
             protected Integer call() {
 
                 /*
-                holds the status of deletion of student in the DB, i.e success or failure
+                holds the status of deletion of room allocations in the DB, i.e success or failure
                  */
                 int tRoomAllocationStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
 
@@ -358,16 +382,18 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get a task which can be used to delete the room allocations from the DB in a separate
+     * thread.
      *
-     * @param additionalQuery
-     * @param params
-     * @return
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_room_allocation.
+     * @return A task which can be used to get the room allocations in a separate thread.
      */
-    public Task<List<RoomAllocation>> getRoomAllocationTask(String additionalQuery, String ...params) {
+    public Task<List<RoomAllocation>> getRoomAllocationTask(String additionalQuery, String... params) {
 
         Task<List<RoomAllocation>> roomAllocationTask = new Task<>() {
             @Override
-            protected List<RoomAllocation> call(){
+            protected List<RoomAllocation> call() {
 
                 List<RoomAllocation> list = getRoomAllocation(additionalQuery, params);
 
@@ -378,18 +404,19 @@ public class ExamService {
     }
 
     /**
+     * This method is used to get a list of room allocations from the DB in the same thread where it was called.
      *
-     * @param additionalQuery
-     * @param params
-     * @return
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_room_allocation.
+     * @return List of room allocations.
      */
-    public List<RoomAllocation> getRoomAllocation(String additionalQuery, String ...params) {
+    public List<RoomAllocation> getRoomAllocation(String additionalQuery, String... params) {
 
         ClassRoomService classRoomService = new ClassRoomService();
         List<Classroom> classroomList = classRoomService.getClassroomsData("ORDER BY int_room_no");
         List<RoomAllocation> list = new ArrayList<>();
 
-        for(Classroom classroom : classroomList){
+        for (Classroom classroom : classroomList) {
 
             final String query = "SELECT int_ralloc_id ,v_exam_details_id, int_room_no, v_reg_id " +
                     "FROM t_room_allocation natural join t_student_enrollment_details WHERE " +
@@ -397,7 +424,7 @@ public class ExamService {
 
             Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 
-            if(!map.get("int_ralloc_id").isEmpty()){
+            if (!map.get("int_ralloc_id").isEmpty()) {
 
                 RoomAllocation roomAllocation = new RoomAllocation();
 
@@ -415,7 +442,6 @@ public class ExamService {
                     student.setRegId(map.get("v_reg_id").get(i));
 
                     roomAllocation.getRoomAllocationMap().put(Integer.parseInt(map.get("int_ralloc_id").get(i)), i);
-//                    roomAllocation.getAllocIdList().add(map.get("int_ralloc_id").get(i));
                     roomAllocation.getStudentList().add(student);
                 }
             }
@@ -425,12 +451,15 @@ public class ExamService {
 
 
     /**
+     * This method is used to get a list of examsOnRoom objects which stores which exams are taking placing in a room
+     * on the particular date from the DB in the same thread where it was called.
      *
-     * @param additionalQuery
-     * @param params
-     * @return
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_room_allocation
+     *                        or t_student_marks.
+     * @return List of examsOnRoom objects.
      */
-    public List<ExamsOnRoom> getExamsOnRoomData(String additionalQuery, String ...params){
+    public List<ExamsOnRoom> getExamsOnRoomData(String additionalQuery, String... params) {
 
         List<ExamsOnRoom> listOfExamsGoingOnInRoom = new ArrayList<>();
 
@@ -455,14 +484,14 @@ public class ExamService {
                 listOfExamsGoingOnInRoom.add(examsOnRoom);
                 prevRoomNo = examsOnRoom.getRoomNo();
             }
-            if(!subIdsUsed.contains(map.get("v_course_id").get(i) + map.get("v_sub_id").get(i) )){
+            if (!subIdsUsed.contains(map.get("v_course_id").get(i) + map.get("v_sub_id").get(i))) {
 
                 Exam exam = new Exam();
                 exam.setSubId(map.get("v_sub_id").get(i));
 
                 examsOnRoom.getExamsList().add(exam);
 
-                subIdsUsed.add(map.get("v_course_id").get(i) + map.get("v_sub_id").get(i) );
+                subIdsUsed.add(map.get("v_course_id").get(i) + map.get("v_sub_id").get(i));
             }
 
             Student student = new Student();
@@ -472,6 +501,12 @@ public class ExamService {
         return listOfExamsGoingOnInRoom;
     }
 
+    /**
+     * This method is used to add invigilation duties to the database.
+     *
+     * @param invigilationDutyList The invigilation duty list to be added to the DB.
+     * @return The status of the operation i.e. success / failure.
+     */
     @SuppressWarnings("Duplicates")
     public int addInvigilationDutyToDatabase(List<InvigilationDuty> invigilationDutyList) {
 
@@ -481,7 +516,7 @@ public class ExamService {
 
         List<List<String>> list = new ArrayList<>();
 
-        //for each exam in the exam routine ,form the data in the List<List<String>> structure
+        //for each invigilation duty in the list ,form the data in the List<List<String>> structure
         for (InvigilationDuty invigilationDuty : invigilationDutyList) {
 
             List<String> singleInvigilationDuty = new ArrayList<>();
@@ -491,7 +526,7 @@ public class ExamService {
             singleInvigilationDuty.add(invigilationDuty.getProfId());
             singleInvigilationDuty.add(invigilationDuty.getExamDetailId());
 
-            //add details of a particular exam into the list
+            //add details of a particular invigilation duty into the list
             list.add(singleInvigilationDuty);
         }
 
@@ -510,7 +545,14 @@ public class ExamService {
         }
     }
 
-
+    /**
+     * This method is used to get a task which can be used to delete the invigilation duties from the DB in a separate
+     * thread.
+     *
+     * @param examDetails The exam details of the invigilation duty.
+     * @return A task which can be used to delete invigilation duties from the DB in a separate thread.
+     */
+    @SuppressWarnings("Duplicates")
     public Task<Integer> getDeleteInvigilationDutyTask(final ExamDetails examDetails) {
 
         final String sql = "DELETE FROM t_invigilation_duty where v_exam_details_id=?";
@@ -521,7 +563,7 @@ public class ExamService {
             protected Integer call() {
 
                 /*
-                holds the status of deletion of student in the DB, i.e success or failure
+                holds the status of deletion of invigilation duty details in the DB, i.e success or failure
                  */
                 int tInvigilationDutyStatus = databaseHelper.updateDelete(sql, examDetails.getExamDetailsId());
 
@@ -544,12 +586,19 @@ public class ExamService {
         return deleteInvigilationDutyTask;
     }
 
-    public Task<List<InvigilationDuty>> getInvigilationDutyDataTask(String additionalQuery, String ...params){
+    /**
+     * This method is used a task object which is used to get the invigilation duty from the DB in a separate thread.
+     *
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_invigilation_duty.
+     * @return A task which can be used to get the invigilation duty details from the DB in a separate thread.
+     */
+    public Task<List<InvigilationDuty>> getInvigilationDutyDataTask(String additionalQuery, String... params) {
 
-        Task<List<InvigilationDuty>> invigilationDutyDataTask = new Task<List<InvigilationDuty>>() {
+        Task<List<InvigilationDuty>> invigilationDutyDataTask = new Task<>() {
 
             @Override
-            protected List<InvigilationDuty> call(){
+            protected List<InvigilationDuty> call() {
 
                 return getInvigilationDutyData(additionalQuery, params);
             }
@@ -557,7 +606,14 @@ public class ExamService {
         return invigilationDutyDataTask;
     }
 
-    public List<InvigilationDuty> getInvigilationDutyData(String additionalQuery, String ...params){
+    /**
+     * This method is used to get the invigilation duty data.
+     *
+     * @param additionalQuery Includes WHERE clause or any other extra specific query details.
+     * @param params          Parameters for the PreparedStatement i.e. basically column names of t_invigilation_duty
+     * @return The list containing the invigilation duties.
+     */
+    public List<InvigilationDuty> getInvigilationDutyData(String additionalQuery, String... params) {
 
         String query = "SELECT int_room_no, d_exam_date, v_prof_id FROM t_invigilation_duty " + additionalQuery +
                 " ORDER BY d_exam_date";
@@ -579,6 +635,14 @@ public class ExamService {
         return list;
     }
 
+    /**
+     * This method is used to get a task which can be used to update the invigilation duty of an invigilator in a
+     * separate thread.
+     *
+     * @param oldInvigilatorId The invigilator id of the invigilator whose duty has be updated.
+     * @param invigilationDuty The invigilation duty which needs to be updated.
+     * @return A task which can be used to update the invigilation duty in a separate thread.
+     */
     public Task<Integer> getUpdateInvigilationDutyTask(String oldInvigilatorId, InvigilationDuty invigilationDuty) {
 
         final String sql = "UPDATE t_invigilation_duty SET v_prof_id=? where d_exam_date=? AND v_prof_id=?";
@@ -588,7 +652,7 @@ public class ExamService {
             @Override
             protected Integer call() {
 
-                //holds the status of updation of student in the DB, i.e success or failure
+                //holds the status of updation of invigilation duty in the DB, i.e success or failure
                 int tInvigilationDutyStatus = databaseHelper.updateDelete
                         (sql, invigilationDuty.getProfId(), invigilationDuty.getExamDate(), oldInvigilatorId);
 

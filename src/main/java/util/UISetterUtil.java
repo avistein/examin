@@ -99,12 +99,22 @@ public final class UISetterUtil {
         return loader;
     }
 
+    /**
+     * This method sets the content of the UI by swapping children under contentStackPane with the reqd. content.
+     *
+     * @param resourcePath     The path of the FXML file which will be loaded and placed under the contentStackPane.
+     * @param contentStackPane The stack pane whose children will be replaced.
+     * @param subTitleLabel    The Label which will display the subtitle text.
+     * @param subSubTitleLabel The Label which will display the Sub- Subtitle text.
+     * @param subTitleText     The title of the UI.
+     * @param subSubTitleText  The subtitle of the UI.
+     * @return FXMLLoader object which can be used to get the controller.
+     */
     public static FXMLLoader setContentUI(String resourcePath, StackPane contentStackPane, Label subTitleLabel
-            , Label subSubTitleLabel, String subTitleText, String subSubTitleText){
+            , Label subSubTitleLabel, String subTitleText, String subSubTitleText) {
 
 
         FXMLLoader loader = new FXMLLoader(UISetterUtil.class.getResource(resourcePath));
-
 
         try {
 

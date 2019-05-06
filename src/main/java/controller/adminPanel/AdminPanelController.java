@@ -125,7 +125,7 @@ public class AdminPanelController {
     @FXML
     private void handleDashboardButtonAction(){
 
-        UISetterUtil.setContentUI("/view/adminPanel/dashboard.fxml", contentStackPane, subTitleLabel
+        UISetterUtil.setContentUI("/view/adminPanel/Dashboard.fxml", contentStackPane, subTitleLabel
                 , subSubTitleLabel, "", "");
     }
 

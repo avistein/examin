@@ -211,7 +211,7 @@ public class BatchService {
      *
      * @return A batchesCountTask object which is used to get the total no. of Batches in the DB in a separate thread.
      */
-    public Task<Integer> getBatchesCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getBatchesCountTask(String additionalQuery, String... params) {
 
 
         final String query = "SELECT v_batch_id FROM t_batch " + additionalQuery;

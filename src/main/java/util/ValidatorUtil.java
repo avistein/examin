@@ -181,6 +181,12 @@ public final class ValidatorUtil {
 
     }
 
+    /**
+     * This method matches the time format with the regex provided.
+     *
+     * @param time The time format to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateTimeFormat(String time) {
 
         String regex = "^([0-9]{2}:[0-9]{2}:[0-9]{2})$";
@@ -189,6 +195,12 @@ public final class ValidatorUtil {
         return matcher.matches();
     }
 
+    /**
+     * This method matches a number with the regex provided.
+     *
+     * @param number The number to be matched.
+     * @return The result of the operation i.e. true or false.
+     */
     public static boolean validateNumber(String number) {
 
         String regex = "^\\d+$";

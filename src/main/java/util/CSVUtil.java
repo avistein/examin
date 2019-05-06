@@ -47,6 +47,5 @@ public final class CSVUtil {
             e.printStackTrace();
         }
         return listOfColumns;
-
     }
 }

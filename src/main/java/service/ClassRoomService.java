@@ -74,10 +74,10 @@ public class ClassRoomService {
         //each item in the list is a single Classroom details
         List<Classroom> list = new ArrayList<>();
 
-                /*
-                v_course_id and v_room_no is composite primary key, total items in the map will always be equal to no of
-                v_room_no retrieved
-                 */
+        /*
+        v_course_id and int_room_no is composite primary key, total items in the map will always be equal to no of
+        int_room_no retrieved
+         */
         for (int i = 0; i < map.get("int_room_no").size(); i++) {
 
             Classroom classroom = new Classroom();
@@ -86,6 +86,7 @@ public class ClassRoomService {
             classroom.setCapacity(map.get("int_capacity").get(i));
             classroom.setNoOfCols(map.get("int_cols").get(i));
             classroom.setNoOfRows(map.get("int_rows").get(i));
+
             //a single classroom details is added to the list
             list.add(classroom);
         }
@@ -210,7 +211,7 @@ public class ClassRoomService {
      *
      * @return A classroomCountTask object which is used to get the total no. of Classroom in the DB in a separate thread.
      */
-    public Task<Integer> getClassroomCountTask(String additionalQuery, String ...params) {
+    public Task<Integer> getClassroomCountTask(String additionalQuery, String... params) {
 
         final String query = "SELECT int_room_no FROM t_classroom " + additionalQuery;
 

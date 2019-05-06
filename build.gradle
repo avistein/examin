@@ -42,5 +42,5 @@ jfx {
     mainClass = 'application.Main'
 
     // minimal requirement for jfxNative-task
-    vendor = 'avistein'
+    vendor = 'pitchers'
 }
