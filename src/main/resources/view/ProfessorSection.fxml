@@ -55,7 +55,7 @@
                            <columns>
                               <TableColumn fx:id="selectCol" minWidth="0.0" prefWidth="110.0">
                                  <graphic>
-                                    <CheckBox mnemonicParsing="false" onAction="#handleSelectAllCheckBoxAction" />
+                                    <CheckBox fx:id="selectAllCheckBox" mnemonicParsing="false" onAction="#handleSelectAllCheckBoxAction" />
                                  </graphic>
                               </TableColumn>
                               <TableColumn fx:id="profIdCol" minWidth="0.0" prefWidth="110.0" text="Prof. ID" />
@@ -204,9 +204,6 @@
                                             </rowConstraints>
                                              <children>
                                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
-                                                   <children>
-                                                      <Button fx:id="submitCsvButton" mnemonicParsing="false" onAction="#handleSubmitCsvButton" text="Submit" />
-                                                   </children>
                                                    <padding>
                                                       <Insets right="10.0" />
                                                    </padding>
@@ -265,17 +262,12 @@
                                                    </children>
                                                 </VBox>
                                                 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.rowIndex="4">
-                                                   <children>
-                                                      <Label text="Subject Name">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <ComboBox fx:id="subCsvSubNameComboBox" prefWidth="150.0" />
-                                                   </children>
                                                    <padding>
                                                       <Insets left="10.0" />
                                                    </padding>
+                                                   <children>
+                                                      <Button fx:id="submitCsvButton" mnemonicParsing="false" onAction="#handleSubmitCsvButton" text="Submit" />
+                                                   </children>
                                                 </VBox>
                                              </children>
                                           </GridPane>
@@ -289,7 +281,7 @@
                                        <children>
                                           <ProgressIndicator fx:id="importCsvProgressIndicator" prefHeight="45.0" prefWidth="89.0" visible="false" />
                                           <ImageView fx:id="importCsvStatusImageView" fitHeight="45.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" />
-                                          <Label fx:id="importCsvStatusLabel" visible="false" wrapText="true" />
+                                          <Label fx:id="importCsvStatusLabel" textAlignment="CENTER" visible="false" wrapText="true" />
                                        </children>
                                     </VBox>
                                  </children>

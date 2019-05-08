@@ -130,7 +130,12 @@ public class StudentSectionController {
     @FXML
     private TableColumn<Student, Boolean> selectCol;
 
+    @FXML
+    private CheckBox selectAllCheckBox;
+
     private int gid;
+
+    private String deptName;
 
     /*-----------------------------------------End of initialization-------------------------------------------*/
 
@@ -147,6 +152,8 @@ public class StudentSectionController {
         studentObsList = FXCollections.observableArrayList();
 
         this.gid = gid;
+        this.deptName = deptName;
+
         if(gid == PROFESSOR_GID){
 
             promoteButton.setVisible(false);
@@ -527,7 +534,14 @@ public class StudentSectionController {
                 , subTitleLabel, subSubTitleLabel, "Student", "/ Add Student");
 
         StudentRegistrationController studentRegistrationController = loader.getController();
-        studentRegistrationController.initController("");
+        if(gid == ADMIN_GID) {
+
+            studentRegistrationController.initController("");
+        }
+        else{
+
+            studentRegistrationController.initController(deptName);
+        }
     }
 
     @FXML
@@ -575,11 +589,13 @@ public class StudentSectionController {
                             alert1.setHeaderText("Deletion of students is successful!");
                             alert1.show();
                             populateTable();
+                            selectAllCheckBox.setSelected(false);
                         }  else {
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                             alert1.setHeaderText(status + " students have been deleted successfully!");
                             alert1.show();
                             populateTable();
+                            selectAllCheckBox.setSelected(false);
                         }
                     }
                 });
@@ -628,10 +644,16 @@ public class StudentSectionController {
         If 'all' is chosen in the Degree ComboBox, then get all students from the DB, otherwise get students of the
         particular Course and Batch and Semester.
          */
-        if (degreeComboBox.getValue().equals("all")) {
+        if (degreeComboBox.getValue().equals("all") && gid == ADMIN_GID) {
 
             studentsTask = studentService.getStudentTask(additionalQuery);
-        } else {
+        }
+        else if(degreeComboBox.getValue().equals("all")){
+
+            additionalQuery = "WHERE v_dept_name=?";
+            studentsTask = studentService.getStudentTask(additionalQuery, deptName);
+        }
+        else {
 
             additionalQuery = "where v_degree=? and v_discipline=? " +
                     "and v_batch_name=? and int_curr_semester=?";

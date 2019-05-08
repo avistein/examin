@@ -1,10 +1,10 @@
-v_degree,v_discipline,v_prof_id,v_sub_id,v_sub_name
-B.Sc,CS,PCHEM103,CSE103,Java
-B.Tech,ECE,PCHEM104,ECE101,Microprossor
-B.Sc,CS,PCS115,CSE103,Java
-B.Tech,ECE,PECE105,ECE101,Microprossor
-B.Tech,ECE,PCHEM116,ECE201,Microcontrollar
-B.Tech,ECE,PECE119,ECE101,Microprossor
-B.Sc,Electronics,PCHEM117,ECE103,Signals and Systems
-B.Tech,EE,PCS102,EE101,Circuit Theory
-B.Tech,EE,PEE107,EE201,Law and Engineering
+v_degree,v_discipline,v_prof_id,v_sub_id
+B.Sc,CS,PCHEM103,CSE103
+B.Tech,ECE,PCHEM104,ECE101
+B.Sc,CS,PCS115,CSE103
+B.Tech,ECE,PECE105,ECE101
+B.Tech,ECE,PCHEM116,ECE201
+B.Tech,ECE,PECE119,ECE101
+B.Sc,Electronics,PCHEM117,ECE103
+B.Tech,EE,PCS102,EE101
+B.Tech,EE,PEE107,EE201

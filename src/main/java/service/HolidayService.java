@@ -208,14 +208,14 @@ public class HolidayService {
 
                 //status which denotes successful or failed insertion of data
                 int tHolidayDetailsStatus = databaseHelper.batchInsertUpdateDelete(sql, listOfHolidays);
-
+                System.out.println(tHolidayDetailsStatus);
                 /*
                 Returns a status which indicates success or failure in data insertion to the DB.
                  */
                 if (tHolidayDetailsStatus == DATABASE_ERROR) {
 
                     return DATABASE_ERROR;
-                } else if (tHolidayDetailsStatus == SUCCESS) {
+                } else if (tHolidayDetailsStatus == listOfHolidays.size()) {
 
                     return SUCCESS;
                 } else {

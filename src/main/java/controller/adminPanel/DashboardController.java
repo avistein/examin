@@ -562,7 +562,7 @@ public class DashboardController {
         map.put("endDate", endDateComboBox.getValue());
 
         //background faded and loading spinner visible
-        importHolidaysCsvMainGridPane.setOpacity(0.5);
+        importHolidaysCsvMainGridPane.setOpacity(0.1);
         importHolidayCsvStatusStackPane.setVisible(true);
         importHolidayCsvProgressIndicator.setVisible(true);
 
@@ -669,21 +669,9 @@ public class DashboardController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(holiday.getHolidayId().trim())) {
-
-            alert.setContentText("Invalid Holiday ID in Row : " + currHolidayIndex + "!");
-            alert.show();
-            return false;
-        }
         if (holiday.getHolidayName() == null || holiday.getHolidayName().trim().isEmpty()) {
 
             alert.setContentText("Holiday name cannot be empty in Row : " + currHolidayIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateAcademicItem(holiday.getHolidayName().trim())) {
-
-            alert.setContentText("Invalid Holiday Name in Row : " + currHolidayIndex + "!");
             alert.show();
             return false;
         }

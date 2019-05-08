@@ -135,9 +135,6 @@ public class StudentRegistrationController {
     private StackPane statusStackPane;
 
     @FXML
-    private AnchorPane rootAnchorPane;
-
-    @FXML
     private GridPane mainGridPane;
 
     @FXML
@@ -149,7 +146,7 @@ public class StudentRegistrationController {
 
         courseService = new CourseService();
         batchService = new BatchService();
-        studentService = new StudentService();
+
 
         //initially adding of new student is opted
         editOrAddStudentChoice = ADD_CHOICE;
@@ -186,7 +183,7 @@ public class StudentRegistrationController {
                     List<String> items = new ArrayList<>();
 
                     //only add unique degrees to the degreeComboBox
-                    for (Course course : listOfCourses) {
+                    for (Course course : listOfCourses ) {
 
                         if (!items.contains(course.getDegree()))
                             items.add(course.getDegree());
@@ -225,10 +222,13 @@ public class StudentRegistrationController {
                 for (Course course : listOfCourses) {
 
                     //sets the unique discipline items for particular degree
-                    if (course.getDegree().equals(degreeComboBox.getValue()))
+                    if (course.getDegree().equals(degreeComboBox.getValue())) {
 
-                        if (!items.contains(course.getDiscipline()))
+                        if (!items.contains(course.getDiscipline())) {
+
                             items.add(course.getDiscipline());
+                        }
+                    }
                 }
                 ObservableList<String> options = FXCollections.observableArrayList(items);
                 disciplineComboBox.setItems(options);
@@ -345,6 +345,8 @@ public class StudentRegistrationController {
     @SuppressWarnings("Duplicates")
     @FXML
     private void handleSubmitButtonAction() {
+
+        studentService = new StudentService();
 
         //at first validate all the fields
         if (validate()) {
@@ -501,7 +503,7 @@ public class StudentRegistrationController {
         }
         if (disciplineComboBox.getValue() == null) {
 
-            alert.setContentText("Please select a discipline!");
+            alert.setContentText("Please select a discipline! ");
             alert.show();
             return false;
         }
@@ -536,7 +538,7 @@ public class StudentRegistrationController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(regIdTextField.getText().trim())) {
+        if (!ValidatorUtil.validateNumber(regIdTextField.getText().trim())) {
 
             alert.setContentText("Invalid Registration ID!");
             alert.show();
@@ -547,7 +549,7 @@ public class StudentRegistrationController {
             alert.setContentText("Roll No. cannot be empty!");
             return false;
         }
-        if (!ValidatorUtil.validateId(rollNoTextField.getText().trim())) {
+        if (!ValidatorUtil.validateNumber(rollNoTextField.getText().trim())) {
 
             alert.setContentText("Invalid Roll No.!");
             return false;
@@ -557,30 +559,6 @@ public class StudentRegistrationController {
             alert.setContentText("First Name cannot be empty!");
             alert.show();
             return false;
-        }
-        if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
-
-            alert.setContentText("Invalid First Name!");
-            alert.show();
-            return false;
-        }
-        if (!middleNameTextField.getText().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(middleNameTextField.getText().trim())) {
-
-                alert.setContentText("Invalid Middle Name!");
-                alert.show();
-                return false;
-            }
-        }
-        if (!lastNameTextField.getText().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(lastNameTextField.getText().trim())) {
-
-                alert.setContentText("Invalid Last Name!");
-                alert.show();
-                return false;
-            }
         }
         if (dobDatePicker.getValue() == null) {
 
@@ -635,21 +613,6 @@ public class StudentRegistrationController {
             alert.setContentText("Guardian/Father's Name cannot be empty!");
             alert.show();
             return false;
-        }
-        if (!ValidatorUtil.validateName(guardianNameTextField.getText().trim())) {
-
-            alert.setContentText("Invalid Guardian/Father's Name!");
-            alert.show();
-            return false;
-        }
-        if (!motherNameTextField.getText().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(motherNameTextField.getText().trim())) {
-
-                alert.setContentText("Invalid Mother's Name!");
-                alert.show();
-                return false;
-            }
         }
         if (guardianContactNoTextField.getText().isEmpty()) {
 
@@ -717,6 +680,7 @@ public class StudentRegistrationController {
         motherNameTextField.clear();
         guardianContactNoTextField.clear();
         regIdTextField.setDisable(false);
+        regYearTextField.setDisable(false);
         rollNoTextField.setDisable(false);
         batchNameComboBox.setDisable(false);
         disciplineComboBox.setDisable(false);
@@ -764,6 +728,7 @@ public class StudentRegistrationController {
         dobDatePicker.setValue(LocalDate.parse(student.getDob()));
         genderChoiceBox.setValue(student.getGender());
         regYearTextField.setText(student.getRegYear());
+        regYearTextField.setDisable(true);
         emailTextField.setText(student.getEmail());
         addressTextArea.setText(student.getAddress());
         motherNameTextField.setText(student.getMotherName());

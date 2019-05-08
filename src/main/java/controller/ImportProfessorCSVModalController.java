@@ -391,17 +391,14 @@ public class ImportProfessorCSVModalController {
             alert.show();
             return false;
         }
-        if (professor.getHodStatus() == null || professor.getHodStatus().trim().isEmpty()) {
+        if (!professor.getHodStatus().trim().isEmpty()) {
 
-            alert.setContentText("Hod Status cannot be empty in Row : " + currProfessorIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateAcademicItem(professor.getHodStatus().trim())) {
+            if (!professor.getHodStatus().trim().equals("HOD")) {
 
-            alert.setContentText("Invalid Hod Status in Row : " + currProfessorIndex + "!");
-            alert.show();
-            return false;
+                alert.setContentText("Invalid Hod Status in Row : " + currProfessorIndex + "!");
+                alert.show();
+                return false;
+            }
         }
         if (professor.getProfId() == null || professor.getProfId().trim().isEmpty()) {
 
@@ -409,41 +406,12 @@ public class ImportProfessorCSVModalController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(professor.getProfId().trim())) {
 
-            alert.setContentText("Invalid Professor ID in Row : " + currProfessorIndex + "!");
-            alert.show();
-            return false;
-        }
         if (professor.getFirstName() == null || professor.getFirstName().trim().isEmpty()) {
 
             alert.setContentText("First Name cannot be empty in Row : " + currProfessorIndex + "!");
             alert.show();
             return false;
-        }
-        if (!ValidatorUtil.validateName(professor.getFirstName().trim())) {
-
-            alert.setContentText("Invalid First Name in Row : " + currProfessorIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!professor.getMiddleName().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(professor.getMiddleName().trim())) {
-
-                alert.setContentText("Invalid Middle Name in Row : " + currProfessorIndex + "!");
-                alert.show();
-                return false;
-            }
-        }
-        if (!professor.getLastName().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(professor.getLastName().trim())) {
-
-                alert.setContentText("Invalid Last Name in Row : " + currProfessorIndex + "!");
-                alert.show();
-                return false;
-            }
         }
         if (professor.getDob() == null || professor.getDob().trim().isEmpty()) {
 

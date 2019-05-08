@@ -50,7 +50,7 @@ public final class ValidatorUtil {
      */
     public static boolean validateContactNo(String contactNo) {
 
-        String regex = "^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[6-9]\\d{9}$";
+        String regex = "^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[1-9]\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(contactNo);
         return matcher.matches();
@@ -138,20 +138,6 @@ public final class ValidatorUtil {
     }
 
     /**
-     * This method matches a name with the regex provided.
-     *
-     * @param name The name to be matched.
-     * @return The result of the operation i.e. true or false.
-     */
-    public static boolean validateName(String name) {
-
-        String regex = "^([a-zA-z] ?)+$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(name);
-        return matcher.matches();
-    }
-
-    /**
      * This method matches an Academic Item such as Degree,Discipline,Building Name,Dept name etc. with regex provided.
      *
      * @param item The item to be matched.
@@ -162,21 +148,6 @@ public final class ValidatorUtil {
         String regex = "^([a-zA-z0-9]+[ '.\\-]*(\\([a-zA-z0-9]+[ '.\\-]*[a-zA-z0-9]+\\))?)+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(item);
-        return matcher.matches();
-
-    }
-
-    /**
-     * This method matches an ID such as Reg.ID,roll no, course ID etc with the regex provided.
-     *
-     * @param id The ID to be matched.
-     * @return The result of the operation i.e. true or false.
-     */
-    public static boolean validateId(String id) {
-
-        String regex = "^[a-zA-z0-9]+$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(id);
         return matcher.matches();
 
     }

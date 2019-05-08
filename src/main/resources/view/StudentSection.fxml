@@ -102,7 +102,7 @@
               <columns>
                   <TableColumn fx:id="selectCol" prefWidth="43.0">
                      <graphic>
-                        <CheckBox mnemonicParsing="false" onAction="#handleSelectAllCheckBoxAction" />
+                        <CheckBox fx:id="selectAllCheckBox" mnemonicParsing="false" onAction="#handleSelectAllCheckBoxAction" />
                      </graphic>
                   </TableColumn>
                 <TableColumn fx:id="regIdCol" prefWidth="89.0" text="Reg ID." />

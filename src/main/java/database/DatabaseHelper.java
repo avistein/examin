@@ -176,7 +176,7 @@ public class DatabaseHelper {
 
 
     /**
-     * Method to execute a bunch of INSERT commands.
+     * Method to execute a bunch of INSERT, UPDATE or DELETE commands.
      *
      * @param sql  The sql command to be executed containing INSERT statements.
      * @param list The list containing list of entity attributes to be inserted.

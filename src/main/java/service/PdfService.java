@@ -16,14 +16,22 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static util.ConstantsUtil.*;
 
+/**
+ * Service class to get create pdfs.
+ *
+ * @author Avik Sarkar
+ */
 public class PdfService {
 
-
+    /**
+     * @param title
+     * @return
+     */
     private PdfPTable createPdfHeader(Phrase title) {
 
         FileHandlingService fileHandlingService = new FileHandlingService();
@@ -63,6 +71,13 @@ public class PdfService {
         return table;
     }
 
+    /**
+     * @param examRoutine
+     * @param examDates
+     * @param semestersList
+     * @param examDetails
+     * @return
+     */
     public Task<Boolean> getCreateRoutinePdfTask(List<Exam> examRoutine, List<String> examDates
             , List<String> semestersList, ExamDetails examDetails) {
 
@@ -193,12 +208,16 @@ public class PdfService {
         return createRoutinePdfTask;
     }
 
-    public Task<Boolean> getCreateRoomAllocationPdfTask(ExamDetails examDetails){
+    /**
+     * @param examDetails
+     * @return
+     */
+    public Task<Boolean> getCreateRoomAllocationPdfTask(ExamDetails examDetails) {
 
         Task<Boolean> createRoomAllocationPdfTask = new Task<>() {
 
             @Override
-            protected Boolean call(){
+            protected Boolean call() {
 
                 BatchService batchService = new BatchService();
                 ExamService examService = new ExamService();
@@ -210,7 +229,7 @@ public class PdfService {
                 Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                 String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                        + FILE_SEPARATOR + "room_allocation_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                        + FILE_SEPARATOR + "room_allocation_" + examDetails.getSemesterType().toLowerCase() + "_" +
                         examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                 Phrase pdfTitle = new Phrase("Room Allocation for " + examDetails.getExamType()
@@ -258,13 +277,13 @@ public class PdfService {
                     document.add(table1);
                     document.add(new Paragraph(" "));
 
-                    for(Batch batch : batchList){
+                    for (Batch batch : batchList) {
 
                         String additionalQuery = "and v_batch_id=? ORDER BY v_reg_id";
                         List<RoomAllocation> roomAllocationList = examService.getRoomAllocation(additionalQuery
                                 , examDetails.getExamDetailsId(), batch.getBatchId());
 
-                        for(RoomAllocation roomAllocation : roomAllocationList){
+                        for (RoomAllocation roomAllocation : roomAllocationList) {
 
                             PdfPCell c2 = new PdfPCell(new Phrase(String.valueOf(i++), BLUE_SUBTITLE_FONT));
                             c2.setPadding(5);
@@ -292,12 +311,10 @@ public class PdfService {
                     document.add(table2);
 
                     status = true;
-                }
-                catch (DocumentException | IOException e){
+                } catch (DocumentException | IOException e) {
 
                     e.printStackTrace();
-                }
-                finally {
+                } finally {
 
                     document.close();
                 }
@@ -307,7 +324,12 @@ public class PdfService {
         return createRoomAllocationPdfTask;
     }
 
-
+    /**
+     * @param roomAllocationList
+     * @param examDetails
+     * @return
+     */
+    @SuppressWarnings("Duplicates")
     public Task<Boolean> getCreateSeatArrangementPdfTask(List<RoomAllocation> roomAllocationList
             , ExamDetails examDetails) {
 
@@ -321,7 +343,7 @@ public class PdfService {
                 Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                 String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                        + FILE_SEPARATOR + "seat_arrangement_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                        + FILE_SEPARATOR + "seat_arrangement_" + examDetails.getSemesterType().toLowerCase() + "_" +
                         examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                 Phrase pdfTitle = new Phrase("Seat Arrangement for " + examDetails.getExamType()
@@ -383,12 +405,12 @@ public class PdfService {
                                 int currStudentIndex = j * rows + i;
                                 if (roomAllocationIdMap.containsKey(currStudentIndex)) {
 
-                                        Student currStudent = studentListInRoom.get(
-                                                roomAllocationIdMap.get(currStudentIndex));
+                                    Student currStudent = studentListInRoom.get(
+                                            roomAllocationIdMap.get(currStudentIndex));
 
-                                        pdfPCell = new PdfPCell(new Phrase(currStudent.getRegId(), CONTENT_FONT1));
-                                        pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                                        pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                                    pdfPCell = new PdfPCell(new Phrase(currStudent.getRegId(), CONTENT_FONT1));
+                                    pdfPCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                    pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
                                 } else {
 
@@ -431,6 +453,13 @@ public class PdfService {
         return createSeatArrangementPdfTask;
     }
 
+    /**
+     * This method is used to get a task which can be used to create the invigilation duty PDF.
+     *
+     * @param invigilationDutyList The list of invigilation duties from which the PDF will be created.
+     * @param examDetails          The details of the exam , the invigilation duties belong to.
+     * @return A task which can be used to create invigilation duty pdf in a separate thread.
+     */
     public Task<Boolean> getCreateInvigilationDutyPdfTask(List<InvigilationDuty> invigilationDutyList
             , ExamDetails examDetails) {
 
@@ -438,8 +467,10 @@ public class PdfService {
             @Override
             protected Boolean call() {
 
+                //initially pdf creation status is negative
                 boolean status = false;
 
+                //tree map to keep the order in which data is inserted into the map
                 Map<String, Map<String, List<String>>> map = new TreeMap<>();
 
                 for (InvigilationDuty invigilationDuty : invigilationDutyList) {
@@ -449,13 +480,12 @@ public class PdfService {
                     map.get(invigilationDuty.getExamDate()).putIfAbsent(invigilationDuty.getRoomNo(), new ArrayList<>());
 
                     map.get(invigilationDuty.getExamDate()).get(invigilationDuty.getRoomNo()).add(invigilationDuty.getProfId());
-
                 }
 
                 Path destDirPath = Paths.get(USER_HOME, ROOT_DIR, PDF_DIR);
 
                 String dest = USER_HOME + FILE_SEPARATOR + ROOT_DIR + FILE_SEPARATOR + PDF_DIR
-                        + FILE_SEPARATOR + "invigilation_duty_" +  examDetails.getSemesterType().toLowerCase() + "_" +
+                        + FILE_SEPARATOR + "invigilation_duty_" + examDetails.getSemesterType().toLowerCase() + "_" +
                         examDetails.getExamType().toLowerCase() + "_" + examDetails.getAcademicYear() + ".pdf";
 
                 Phrase pdfTitle = new Phrase("Invigilation Duty Chart for " + examDetails.getExamType()
@@ -523,9 +553,9 @@ public class PdfService {
                         document.add(table2);
                         document.add(new Paragraph(" "));
 
-                        for(Map.Entry<String, List<String>> entry1 : entry.getValue().entrySet()) {
+                        for (Map.Entry<String, List<String>> entry1 : entry.getValue().entrySet()) {
 
-                            for(String profId : entry1.getValue()) {
+                            for (String profId : entry1.getValue()) {
 
                                 PdfPCell c3 = new PdfPCell(new Phrase(String.valueOf(j++), BLUE_SUBTITLE_FONT));
                                 c3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -558,6 +588,4 @@ public class PdfService {
         };
         return createInvigilationDutyPdfTask;
     }
-
-
 }

@@ -302,7 +302,7 @@ public class ImportMarksCsvModalController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(marks.getRegId().trim())) {
+        if (!ValidatorUtil.validateNumber(marks.getRegId().trim())) {
 
             alert.setContentText("Invalid Registration ID in Row : " + currMarksIndex + "!");
             alert.show();

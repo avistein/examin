@@ -1674,12 +1674,6 @@ public class AcademicAdministrationController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(batchIdTextField.getText().trim())) {
-
-            alert.setContentText("Invalid Batch ID!");
-            alert.show();
-            return false;
-        }
         if (batchNameTextField.getText() == null || batchNameTextField.getText().isEmpty()) {
 
             alert.setContentText("Batch Name cannot be empty!");
@@ -2214,19 +2208,13 @@ public class AcademicAdministrationController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(subjectIdTextField.getText().trim())) {
-
-            alert.setContentText("Invalid Subject Id!");
-            alert.show();
-            return false;
-        }
         if (subjectNameTextField.getText() == null || subjectNameTextField.getText().isEmpty()) {
 
             alert.setContentText("Subject Name cannot be empty!");
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateName(subjectNameTextField.getText().trim())) {
+        if (!ValidatorUtil.validateAcademicItem(subjectNameTextField.getText().trim())) {
 
             alert.setContentText("Invalid Subject Name!");
             alert.show();

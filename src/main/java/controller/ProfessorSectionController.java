@@ -111,6 +111,8 @@ public class ProfessorSectionController {
     private TableColumn<Professor, String> contactNoCol;
     @FXML
     private TableColumn<Professor, Boolean> selectCol;
+    @FXML
+    private CheckBox selectAllCheckBox;
 
     /*-------------------End of Declaration and initialization of variables of Professor List Tab---------------------*/
 
@@ -133,8 +135,6 @@ public class ProfessorSectionController {
     private Label chosenFileLabel;
     @FXML
     private Button chooseFileButton;
-    @FXML
-    private ComboBox<String> subCsvSubNameComboBox;
     @FXML
     private ComboBox<String> subCsvDegreeComboBox;
     @FXML
@@ -242,8 +242,8 @@ public class ProfessorSectionController {
 
         if (gid == PROFESSOR_HOD_GID) {
 
-            subAllocFormDeptComboBox.setValue(deptName);
-            profDeptComboBox.setValue(deptName);
+            profDeptComboBox.setItems(FXCollections.observableArrayList(deptName));
+            subAllocFormDeptComboBox.setItems(FXCollections.observableArrayList(deptName));
         } else {
 
             //get the list of departments available in the db
@@ -367,7 +367,7 @@ public class ProfessorSectionController {
             professorTask = professorService.getProfessorTask(additionalQuery);
         } else {
             additionalQuery = "where v_dept_name=?";
-            professorTask = professorService.getProfessorTask(additionalQuery, profDeptComboBox.getValue());
+            professorTask = professorService.getProfessorTask(additionalQuery, deptName);
         }
 
 
@@ -586,11 +586,13 @@ public class ProfessorSectionController {
                             alert1.setHeaderText("Deletion of professors is successful!");
                             alert1.show();
                             populateTable();
+                            selectAllCheckBox.setSelected(false);
                         } else {
                             Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                             alert1.setHeaderText(status + " professors have been deleted successfully!");
                             alert1.show();
                             populateTable();
+                            selectAllCheckBox.setSelected(false);
                         }
                     }
                 });
@@ -625,14 +627,14 @@ public class ProfessorSectionController {
             List<String> list = CSVUtil.getColumnNames(file);
 
             //checking if all 5 columns are present in the csv file uploaded
-            if (list.size() == 5) {
+            if (list.size() == 4) {
 
                 setComboBoxes(list);
                 submitCsvButton.setDisable(false);
             } else {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("CSV file should have 5 columns!");
+                alert.setContentText("CSV file should have 4 columns!");
                 alert.show();
                 chosenFileLabel.setText("");
                 submitCsvButton.setDisable(true);
@@ -704,7 +706,6 @@ public class ProfessorSectionController {
         map.put("discipline", subCsvDisciplineComboBox.getValue());
         map.put("profId", subCsvProfIdComboBox.getValue());
         map.put("subId", subCsvSubIdComboBox.getValue());
-        map.put("subName", subCsvSubNameComboBox.getValue());
 
         //display the loading spinner and fade the background
         importCsvMainGridPane.setOpacity(0.2);
@@ -773,6 +774,7 @@ public class ProfessorSectionController {
 
                                 importCsvStatusImageView.setImage(new javafx.scene.image.Image("/png/success.png"));
                                 importCsvStatusLabel.setText("Successfully allocated subjects to professors!");
+                                populateSubAllocTable();
                             } else if (status == 0) {
 
                                 importCsvStatusImageView.setImage(new javafx.scene.image.Image("/png/error.png"));
@@ -782,6 +784,7 @@ public class ProfessorSectionController {
 
                                 importCsvStatusImageView.setImage(new Image("/png/error.png"));
                                 importCsvStatusLabel.setText(status + " subject allocations are added to the database!");
+                                populateSubAllocTable();
                             }
                         }
                     });
@@ -807,12 +810,7 @@ public class ProfessorSectionController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(subjectAllocation.getProfId().trim())) {
 
-            alert.setContentText("Invalid Prof ID in Row : " + currSubAllocIndex + "!");
-            alert.show();
-            return false;
-        }
         if (subjectAllocation.getDegree() == null || subjectAllocation.getDegree().trim().isEmpty()) {
 
             alert.setContentText("Degree of the subject cannot be empty in Row : " + currSubAllocIndex + "!");
@@ -843,24 +841,6 @@ public class ProfessorSectionController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(subjectAllocation.getSubId().trim())) {
-
-            alert.setContentText("Invalid Subject ID in Row : " + currSubAllocIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (subjectAllocation.getSubName() == null || subjectAllocation.getSubName().trim().isEmpty()) {
-
-            alert.setContentText("Subject Name cannot be empty in Row : " + currSubAllocIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!ValidatorUtil.validateAcademicItem(subjectAllocation.getSubName().trim())) {
-
-            alert.setContentText("Invalid Subject Name in Row : " + currSubAllocIndex + "!");
-            alert.show();
-            return false;
-        }
         return true;
     }
 
@@ -873,7 +853,10 @@ public class ProfessorSectionController {
     @FXML
     private void handleImportCsvStatusStackPaneMouseClickedAction() {
 
-        deactivateProgressAndStatus();
+        if(!importCsvProgressIndicator.isVisible()) {
+
+            deactivateProgressAndStatus();
+        }
     }
 
     /**
@@ -917,10 +900,6 @@ public class ProfessorSectionController {
         subCsvSubIdComboBox.setDisable(false);
         subCsvSubIdComboBox.setItems(options);
         subCsvSubIdComboBox.setValue(list.get(3));
-
-        subCsvSubNameComboBox.setDisable(false);
-        subCsvSubNameComboBox.setItems(options);
-        subCsvSubNameComboBox.setValue(list.get(4));
     }
 
     /**
@@ -940,9 +919,6 @@ public class ProfessorSectionController {
 
         subCsvSubIdComboBox.setDisable(true);
         subCsvSubIdComboBox.setValue("");
-
-        subCsvSubNameComboBox.setDisable(true);
-        subCsvSubNameComboBox.setValue("");
     }
 
     /**
@@ -1001,8 +977,16 @@ public class ProfessorSectionController {
     private void populateSubAllocTable() {
 
         String additionalQuery = "";
+        Task<List<SubjectAllocation>> subAllocTask;
+        if(!deptName.trim().isEmpty()){
 
-        Task<List<SubjectAllocation>> subAllocTask = subjectService.getSubAllocTask(additionalQuery);
+            additionalQuery = "NATURAL JOIN t_prof_dept WHERE v_dept_name=?";
+            subAllocTask = subjectService.getSubAllocTask(additionalQuery, deptName);
+        }
+        else{
+
+            subAllocTask = subjectService.getSubAllocTask(additionalQuery);
+        }
         new Thread(subAllocTask).start();
 
         subAllocTask.setOnSucceeded(new EventHandler<>() {
@@ -1157,7 +1141,7 @@ public class ProfessorSectionController {
                 }
             }
 
-            //get the subjects for that particualr course ID
+            //get the subjects for that particular course ID
             Task<List<Subject>> subjectsTask = subjectService.getSubjectsTask("where v_course_id=?"
                     , courseId);
             new Thread(subjectsTask).start();
@@ -1370,7 +1354,7 @@ public class ProfessorSectionController {
         }
         if (subAllocFormDisciplineComboBox.getValue() == null) {
 
-            alert.setHeaderText("Please choose a disicipline!");
+            alert.setHeaderText("Please choose a discipline!");
             alert.show();
             return false;
         }

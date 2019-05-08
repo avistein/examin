@@ -50,8 +50,6 @@ public class ProfessorRegistrationController {
 
     private int editOrAddProfessorChoice;
 
-    private ProfessorService professorService;
-
     private DepartmentService departmentService;
 
     private List<Department> listOfDepartment;
@@ -129,7 +127,6 @@ public class ProfessorRegistrationController {
     public void initController(int gid, String deptName){
 
         departmentService = new DepartmentService();
-        professorService = new ProfessorService();
 
         //initially adding of new student is opted
         editOrAddProfessorChoice = ADD_CHOICE;
@@ -201,6 +198,8 @@ public class ProfessorRegistrationController {
     @FXML
     private void handleSubmitButtonAction() {
 
+        ProfessorService professorService = new ProfessorService();
+
         //at first validate all the fields
         if (validate()) {
 
@@ -250,8 +249,7 @@ public class ProfessorRegistrationController {
                     professor.setProfileImagePath(this.professor.getProfileImagePath());
                 }
 
-                Task<Integer> updateProfessorTask = professorService
-                        .getUpdateProfessorTask(professor);
+                Task<Integer> updateProfessorTask = professorService.getUpdateProfessorTask(professor);
 
                 new Thread(updateProfessorTask).start();
 
@@ -385,40 +383,10 @@ public class ProfessorRegistrationController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(profIdTextField.getText().trim())) {
-
-            alert.setContentText("Invalid Professor Id!");
-            alert.show();
-            return false;
-        }
         if (firstNameTextField.getText().isEmpty()) {
             alert.setContentText("Professor's First Name cannot be empty!");
             alert.show();
             return false;
-        }
-        if (!ValidatorUtil.validateName(firstNameTextField.getText().trim())) {
-
-            alert.setContentText("Invalid Professor's First Name!");
-            alert.show();
-            return false;
-        }
-        if (!middleNameTextField.getText().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(middleNameTextField.getText().trim())) {
-
-                alert.setContentText("Invalid Professor's Middle Name!");
-                alert.show();
-                return false;
-            }
-        }
-        if (!lastNameTextField.getText().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(lastNameTextField.getText().trim())) {
-
-                alert.setContentText("Invalid Professor's Last Name!");
-                alert.show();
-                return false;
-            }
         }
         if (dobDatePicker.getValue() == null) {
             alert.setContentText("Please choose a date of birth!");

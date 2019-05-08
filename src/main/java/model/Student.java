@@ -386,14 +386,26 @@ public class Student extends Batch implements Serializable {
         this.profileImagePath.set(path);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isSelected() {
         return selected.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public SimpleBooleanProperty selectedProperty() {
         return selected;
     }
 
+    /**
+     *
+     * @param selected
+     */
     public void setSelected(boolean selected) {
         this.selected.set(selected);
     }

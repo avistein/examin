@@ -448,7 +448,7 @@ public class ImportStudentCSVModalController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(student.getRegId().trim())) {
+        if (!ValidatorUtil.validateNumber(student.getRegId().trim())) {
 
             alert.setContentText("Invalid Registration ID in Row : " + currStudentIndex + "!");
             alert.show();
@@ -460,7 +460,7 @@ public class ImportStudentCSVModalController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateId(student.getRollNo().trim())) {
+        if (!ValidatorUtil.validateNumber(student.getRollNo().trim())) {
 
             alert.setContentText("Invalid Roll No. in Row : " + currStudentIndex + "!");
             alert.show();
@@ -471,30 +471,6 @@ public class ImportStudentCSVModalController {
             alert.setContentText("Student's First Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        }
-        if (!ValidatorUtil.validateName(student.getFirstName().trim())) {
-
-            alert.setContentText("Invalid Student's First Name in Row : " + currStudentIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!student.getMiddleName().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(student.getMiddleName().trim())) {
-
-                alert.setContentText("Invalid Student's Middle Name in Row : " + currStudentIndex + "!");
-                alert.show();
-                return false;
-            }
-        }
-        if (!student.getLastName().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(student.getLastName().trim())) {
-
-                alert.setContentText("Invalid Student's Last Name in Row : " + currStudentIndex + "!");
-                alert.show();
-                return false;
-            }
         }
         if (student.getDob() == null || student.getDob().trim().isEmpty()) {
 
@@ -555,21 +531,6 @@ public class ImportStudentCSVModalController {
             alert.setContentText("Guardian/Father's Name cannot be empty in Row : " + currStudentIndex + "!");
             alert.show();
             return false;
-        }
-        if (!ValidatorUtil.validateName(student.getGuardianName().trim())) {
-
-            alert.setContentText("Invalid Guardian/Father's Name in Row : " + currStudentIndex + "!");
-            alert.show();
-            return false;
-        }
-        if (!student.getMotherName().trim().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(student.getMotherName().trim())) {
-
-                alert.setContentText("Invalid Mother's Name in Row : " + currStudentIndex + "!");
-                alert.show();
-                return false;
-            }
         }
         if (student.getGuardianContactNo() == null || student.getGuardianContactNo().trim().isEmpty()) {
 

@@ -288,30 +288,6 @@ public class ProfessorAndHodSettingsController {
             alert.show();
             return false;
         }
-        if (!ValidatorUtil.validateName(profileSettingsFirstNameTextField.getText().trim())) {
-
-            alert.setContentText("Invalid First Name!");
-            alert.show();
-            return false;
-        }
-        if (!profileSettingsMiddleNameTextFiled.getText().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(profileSettingsMiddleNameTextFiled.getText())) {
-
-                alert.setContentText("Invalid Middle Name!");
-                alert.show();
-                return false;
-            }
-        }
-        if (!profileSettingsLastNameTextField.getText().isEmpty()) {
-
-            if (!ValidatorUtil.validateName(profileSettingsLastNameTextField.getText())) {
-
-                alert.setContentText("Invalid Last Name!");
-                alert.show();
-                return false;
-            }
-        }
         if (profileSettingsContactNoTextField.getText() == null || profileSettingsContactNoTextField.getText()
                 .trim().isEmpty()) {
 

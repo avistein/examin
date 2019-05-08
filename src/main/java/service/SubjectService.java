@@ -271,7 +271,6 @@ public class SubjectService {
                 columnNameMapping.put(map.get("degree"), "degree");
                 columnNameMapping.put(map.get("discipline"), "discipline");
                 columnNameMapping.put(map.get("subId"), "subId");
-                columnNameMapping.put(map.get("subName"), "subName");
 
                 /*
                 Maps data to objects using the column names in the first row of the CSV file as reference.

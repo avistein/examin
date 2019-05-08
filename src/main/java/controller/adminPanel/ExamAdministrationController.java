@@ -301,12 +301,6 @@ public class ExamAdministrationController {
             return false;
         }
 
-        if (!ValidatorUtil.validateId(examDetailsIdTextField.getText().trim())) {
-
-            alert.setHeaderText("Invalid Exam ID!");
-            alert.show();
-            return false;
-        }
         if (examTypeChoiceBox.getValue() == null) {
 
             alert.setHeaderText("Please choose exam type!");
