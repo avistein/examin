@@ -70,7 +70,7 @@ public class MarksService {
     public List<Marks> getMarksData(String additionalQuery, String... params) {
 
         final String query = "SELECT v_reg_id, v_obtained_marks, v_sub_id, v_course_id, int_semester FROM " +
-                "t_student_marks NATURAL JOIN t_subject " + additionalQuery;
+                "t_student_marks " + additionalQuery;
 
         Map<String, List<String>> map = databaseHelper.execQuery(query, params);
 

@@ -385,7 +385,8 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id" +
                         ", v_reg_id, int_curr_semester) VALUES(?, ?, ?)";
 
-                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks) VALUES (?, ?, ?, ?)";
+                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks, int_semester) " +
+                        "VALUES (?, ?, ?, ?, ?)";
 
                 List<Subject> subjectList = subjectService.getSubjectData("WHERE v_degree=? " +
                         "AND v_discipline=?", student.getDegree(), student.getDiscipline());
@@ -399,8 +400,18 @@ public class StudentService {
                     singleStudentAssignmentInSubjects.add(student.getRegId());
                     singleStudentAssignmentInSubjects.add(subject.getCourseId());
                     singleStudentAssignmentInSubjects.add(subject.getSubId());
-                    singleStudentAssignmentInSubjects.add("TBC");
 
+                    int subjectSemester = Integer.parseInt(subject.getSemester());
+                    int studentSemester = Integer.parseInt(student.getCurrSemester());
+                    if (subjectSemester >= studentSemester) {
+
+                        singleStudentAssignmentInSubjects.add("TBC");
+                    } else{
+
+                        singleStudentAssignmentInSubjects.add("40");
+                    }
+
+                    singleStudentAssignmentInSubjects.add(subject.getSemester());
                     listOfStudentAssignmentsInSubjects.add(singleStudentAssignmentInSubjects);
                 }
 
