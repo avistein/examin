@@ -140,6 +140,12 @@ public class AddMarksModalController {
                 alert.show();
                 return false;
             }
+            if (Integer.parseInt(obtainedMarksTextField.getText().trim()) > 100) {
+
+                alert.setHeaderText("Not a valid obtained marks!");
+                alert.show();
+                return false;
+            }
         }
         return true;
     }
