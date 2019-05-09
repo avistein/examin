@@ -320,6 +320,12 @@ public class ImportMarksCsvModalController {
             alert.show();
             return false;
         }
+        if (Integer.parseInt(marks.getObtainedMarks().trim()) > 100) {
+
+            alert.setHeaderText("Not a valid obtained marks!");
+            alert.show();
+            return false;
+        }
         return true;
     }
 
