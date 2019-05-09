@@ -241,7 +241,8 @@ public class StudentService {
                 final String sql2 = "INSERT INTO t_student_enrollment_details(v_batch_id, v_reg_id, int_curr_semester)" +
                         " VALUES(?, ?, ?)";
 
-                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks) VALUES (?, ?, ?, ?)";
+                final String sql3 = "INSERT INTO t_student_marks(v_reg_id, v_course_id, v_sub_id, v_obtained_marks" +
+                        ", int_semester) VALUES (?, ?, ?, ?, ?)";
 
                 //get the list of batches
                 List<Batch> listOfBatches = batchService.getBatchData("");
@@ -300,13 +301,16 @@ public class StudentService {
                         singleStudentAssignmentInSubjects.add(subject.getCourseId());
                         singleStudentAssignmentInSubjects.add(subject.getSubId());
 
-                        if (subject.getSemester().equals(student.getCurrSemester())) {
+                        int subjectSemester = Integer.parseInt(subject.getSemester());
+                        int studentSemester = Integer.parseInt(student.getCurrSemester());
+                        if (subjectSemester >= studentSemester) {
 
                             singleStudentAssignmentInSubjects.add("TBC");
-                        } else {
+                        } else{
 
                             singleStudentAssignmentInSubjects.add("40");
                         }
+                        singleStudentAssignmentInSubjects.add(subject.getSemester());
 
                         listOfStudentAssignmentsInSubjects.add(singleStudentAssignmentInSubjects);
                     }

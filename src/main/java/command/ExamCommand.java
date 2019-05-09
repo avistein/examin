@@ -555,13 +555,14 @@ public class ExamCommand {
                      */
                     boolean[] invigilatorAssignedInTheCurrentDate = new boolean[professorList.size()];
 
-                    StringBuilder additionalQuery = new StringBuilder("WHERE v_exam_details_id=? AND v_obtained_marks='TBC' AND (");
+                    StringBuilder additionalQuery = new StringBuilder("WHERE v_exam_details_id=? AND " +
+                            "int_semester = int_curr_semester AND (");
                     for (Exam exam : entry.getValue()) {
 
                         additionalQuery.append("OR (v_course_id='").append(exam.getCourseId()).append("'").append(" AND ").append("v_sub_id='")
                                 .append(exam.getSubId()).append("'").append(")");
                     }
-                    additionalQuery.delete(58, 61);
+                    additionalQuery.delete(68, 71);
                     additionalQuery.append(")");
                     //get the list of exams happening on the particular date
                     List<ExamsOnRoom> examsOnRoomList = examService.getExamsOnRoomData(String.valueOf(additionalQuery)
