@@ -367,7 +367,7 @@ public class ProfessorSectionController {
             professorTask = professorService.getProfessorTask(additionalQuery);
         } else {
             additionalQuery = "where v_dept_name=?";
-            professorTask = professorService.getProfessorTask(additionalQuery, deptName);
+            professorTask = professorService.getProfessorTask(additionalQuery, profDeptComboBox.getValue());
         }
 
 
