@@ -634,7 +634,7 @@ public class ProfessorSectionController {
             } else {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("CSV file should have 4 columns!");
+                alert.setContentText("CSV file should have 4 columns! ");
                 alert.show();
                 chosenFileLabel.setText("");
                 submitCsvButton.setDisable(true);

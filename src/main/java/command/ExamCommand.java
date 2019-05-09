@@ -420,7 +420,7 @@ public class ExamCommand {
                                 k = col % 2 == 0 ? k + 1 : k - 1;
                                 if (k >= noOfRows) {
 
-                                    k = noOfRows - 1;
+                                    k = noOfRows % 2 == 0 ? noOfRows - 1 : noOfRows - 2;
                                     col++;
                                 } else if (k < 0) {
 
@@ -432,10 +432,19 @@ public class ExamCommand {
                             for (; col < noOfCols; col++) {
 
                                 if (lastAllocId != 0) {
-                                    if (lastAllocId % 2 == 0) {
-                                        k = col % 2 == 0 ? 1 : noOfRows - 1;
-                                    } else {
-                                        k = col % 2 == 0 ? 0 : noOfRows - 2;
+                                    if(noOfRows % 2 == 0) {
+                                        if (lastAllocId % 2 == 0) {
+                                            k = col % 2 == 0 ? 1 : noOfRows - 1;
+                                        } else {
+                                            k = col % 2 == 0 ? 0 : noOfRows - 2;
+                                        }
+                                    }
+                                    else{
+                                        if (lastAllocId % 2 == 0 ) {
+                                            k = col % 2 == 0 ? 0 : noOfRows - 2;
+                                        } else {
+                                            k = col % 2 == 0 ? 1 : noOfRows - 1;
+                                        }
                                     }
                                 }
 
