@@ -65,7 +65,7 @@ CREATE TABLE `t_course` (
   `v_dept_name` varchar(255) NOT NULL,
   PRIMARY KEY (`v_course_id`),
   KEY `fk_dept` (`v_dept_name`),
-  CONSTRAINT `fk_dept` FOREIGN KEY (`v_dept_name`) REFERENCES `t_department` (`v_dept_name`) ON DELETE CASCADE
+  CONSTRAINT `fk_dept` FOREIGN KEY (`v_dept_name`) REFERENCES `t_department` (`v_dept_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -159,7 +159,7 @@ CREATE TABLE `t_exam_time_table` (
   KEY `examDetailsId_idx` (`v_exam_details_id`),
   CONSTRAINT `examDetailsId` FOREIGN KEY (`v_exam_details_id`) REFERENCES `t_exam_details` (`v_exam_details_id`) ON DELETE CASCADE,
   CONSTRAINT `subCourseId` FOREIGN KEY (`v_course_id`, `v_sub_id`) REFERENCES `t_subject` (`v_course_id`, `v_sub_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1694 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2531 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -338,7 +338,7 @@ CREATE TABLE `t_student_enrollment_details` (
   `int_curr_semester` int(11) NOT NULL,
   PRIMARY KEY (`v_reg_id`,`v_batch_id`),
   KEY `fk_batch_id_idx` (`v_batch_id`),
-  CONSTRAINT `fk_batch_id` FOREIGN KEY (`v_batch_id`) REFERENCES `t_batch` (`v_batch_id`),
+  CONSTRAINT `fk_batch_id` FOREIGN KEY (`v_batch_id`) REFERENCES `t_batch` (`v_batch_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_reg_id` FOREIGN KEY (`v_reg_id`) REFERENCES `t_student` (`v_reg_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -355,6 +355,7 @@ CREATE TABLE `t_student_marks` (
   `v_course_id` varchar(255) NOT NULL,
   `v_sub_id` varchar(255) NOT NULL,
   `v_obtained_marks` varchar(255) DEFAULT NULL,
+  `int_semester` int(11) NOT NULL,
   PRIMARY KEY (`v_reg_id`,`v_sub_id`,`v_course_id`),
   KEY `subCourseID_idx` (`v_course_id`,`v_sub_id`),
   CONSTRAINT `studentregID` FOREIGN KEY (`v_reg_id`) REFERENCES `t_student` (`v_reg_id`) ON DELETE CASCADE,
@@ -409,4 +410,4 @@ CREATE TABLE `t_user_contact_details` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-20 21:38:05
+-- Dump completed on 2019-05-09 23:20:52
